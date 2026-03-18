@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🦘 袋鼠数学乐园</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #030712;
+  --bg2: #0a0f1e;
+  --card: rgba(255,255,255,0.03);
+  --card-border: rgba(255,255,255,0.08);
+  --card-hover-border: rgba(139,92,246,0.5);
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --purple: #8b5cf6;
+  --purple-light: #a78bfa;
+  --blue: #3b82f6;
+  --cyan: #06b6d4;
+  --pink: #ec4899;
+  --emerald: #10b981;
+  --amber: #f59e0b;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', 'Noto Sans SC', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Aurora Background ── */
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.aurora-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.18;
+  animation: auroraFloat linear infinite;
+}
+.ab1 { width: 700px; height: 700px; background: radial-gradient(circle, #8b5cf6, transparent 70%); top: -200px; left: -100px; animation-duration: 20s; }
+.ab2 { width: 600px; height: 600px; background: radial-gradient(circle, #06b6d4, transparent 70%); top: 100px; right: -150px; animation-duration: 25s; animation-delay: -8s; }
+.ab3 { width: 500px; height: 500px; background: radial-gradient(circle, #ec4899, transparent 70%); bottom: 0; left: 30%; animation-duration: 18s; animation-delay: -4s; }
+.ab4 { width: 400px; height: 400px; background: radial-gradient(circle, #10b981, transparent 70%); bottom: 200px; right: 10%; animation-duration: 22s; animation-delay: -12s; }
+
+@keyframes auroraFloat {
+  0%   { transform: translate(0,0) scale(1); }
+  33%  { transform: translate(40px,-30px) scale(1.1); }
+  66%  { transform: translate(-20px,40px) scale(0.95); }
+  100% { transform: translate(0,0) scale(1); }
+}
+
+/* Dot grid */
+.dot-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+}
+
+/* ── Layout ── */
+.page { position: relative; z-index: 1; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 24px 60px;
+  position: relative;
+}
+
+/* Spotlight */
+.spotlight {
+  position: absolute;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(139,92,246,0.1);
+  border: 1px solid rgba(139,92,246,0.3);
+  border-radius: 999px;
+  padding: 6px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--purple-light);
+  margin-bottom: 32px;
+  animation: fadeUp 0.6s ease both;
+}
+.hero-badge-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--purple-light);
+  animation: pulse 2s ease infinite;
+}
+
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
+
+.hero-title {
+  font-size: clamp(48px, 10vw, 88px);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 24px;
+  animation: fadeUp 0.6s ease 0.1s both;
+}
+
+.grad-text {
+  background: linear-gradient(135deg, #a78bfa 0%, #60a5fa 40%, #34d399 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: clamp(16px, 2.5vw, 20px);
+  color: var(--muted);
+  max-width: 540px;
+  line-height: 1.7;
+  margin-bottom: 48px;
+  animation: fadeUp 0.6s ease 0.2s both;
+}
+
+/* CTA buttons */
+.hero-btns {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 64px;
+  animation: fadeUp 0.6s ease 0.3s both;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--blue), var(--cyan));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.btn-primary:hover::before { opacity: 1; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(139,92,246,0.4); }
+.btn-primary span { position: relative; z-index: 1; }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--card-border);
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+.btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--text); transform: translateY(-2px); }
+
+/* Stats strip */
+.stats-strip {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: fadeUp 0.6s ease 0.4s both;
+}
+.stat { text-align: center; }
+.stat-num { font-size: 28px; font-weight: 800; background: linear-gradient(135deg, #a78bfa, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.stat-div { width: 1px; background: var(--card-border); align-self: stretch; }
+
+/* Scroll indicator */
+.scroll-hint {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  animation: fadeUp 1s ease 1s both;
+}
+.scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--muted), transparent); animation: scrollPulse 2s ease infinite; }
+@keyframes scrollPulse { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+/* ── MODULES SECTION ── */
+.modules-section {
+  padding: 80px 24px 120px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-label {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--purple-light);
+  margin-bottom: 16px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
+}
+.section-label.visible { opacity: 1; transform: none; }
+
+.section-title {
+  text-align: center;
+  font-size: clamp(28px, 5vw, 44px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 16px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease 0.1s;
+}
+.section-title.visible { opacity: 1; transform: none; }
+
+.section-sub {
+  text-align: center;
+  color: var(--muted);
+  font-size: 16px;
+  max-width: 500px;
+  margin: 0 auto 56px;
+  line-height: 1.7;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease 0.2s;
+}
+.section-sub.visible { opacity: 1; transform: none; }
+
+/* ── Module Grid ── */
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.module-card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 28px;
+  text-decoration: none;
+  color: var(--text);
+  display: block;
+  transition: all 0.4s cubic-bezier(0.23,1,0.32,1);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(30px);
+  cursor: pointer;
+}
+.module-card.visible { opacity: 1; transform: none; }
+.module-card.locked { cursor: default; opacity: 0; transform: translateY(30px); }
+.module-card.locked.visible { opacity: 1; transform: none; }
+
+/* Glow on hover */
+.module-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 21px;
+  padding: 1px;
+  background: var(--glow, linear-gradient(135deg, transparent, transparent));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.module-card:not(.locked):hover::before { opacity: 1; }
+.module-card:not(.locked):hover {
+  transform: translateY(-6px);
+  border-color: transparent;
+  background: rgba(255,255,255,0.05);
+}
+
+/* Noise texture */
+.module-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background: radial-gradient(ellipse at top left, var(--glow-bg, transparent) 0%, transparent 60%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.module-card:not(.locked):hover::after { opacity: 1; }
+
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+.card-icon { font-size: 36px; line-height: 1; }
+.card-num { font-size: 13px; font-weight: 700; color: var(--muted); font-family: 'Inter', monospace; letter-spacing: 0.05em; }
+.card-lock { font-size: 18px; opacity: 0.3; }
+
+.card-title { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 8px; }
+.card-sub { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 20px; }
+
+.card-footer { display: flex; align-items: center; justify-content: space-between; }
+.card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag {
+  font-size: 11px; font-weight: 600;
+  padding: 3px 10px; border-radius: 999px;
+  border: 1px solid; letter-spacing: 0.03em;
+}
+.card-arrow { font-size: 14px; color: var(--muted); transition: transform 0.3s; }
+.module-card:not(.locked):hover .card-arrow { transform: translateX(4px); color: var(--text); }
+
+/* Divider line */
+.card-divider { height: 1px; background: var(--card-border); margin: 20px 0; }
+
+/* ── Progress bar ── */
+.progress-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+.progress-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 28px 32px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
+}
+.progress-card.visible { opacity: 1; transform: none; }
+.progress-label { font-size: 14px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+.ptrack {
+  flex: 1; min-width: 120px;
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.pfill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--purple), var(--cyan));
+  border-radius: 999px;
+  width: 0%;
+  transition: width 1.2s cubic-bezier(0.23,1,0.32,1) 0.5s;
+  box-shadow: 0 0 12px rgba(139,92,246,0.5);
+}
+.progress-count { font-size: 14px; font-weight: 700; color: var(--purple-light); white-space: nowrap; }
+
+/* ── Animations ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .stats-strip { gap: 24px; }
+  .stat-div { display: none; }
+  .module-grid { grid-template-columns: 1fr; }
+  .hero-btns { flex-direction: column; align-items: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Aurora & Grid -->
+<div class="aurora">
+  <div class="aurora-blob ab1"></div>
+  <div class="aurora-blob ab2"></div>
+  <div class="aurora-blob ab3"></div>
+  <div class="aurora-blob ab4"></div>
+</div>
+<div class="dot-grid"></div>
+
+<div class="page">
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="spotlight"></div>
+
+  <div class="hero-badge">
+    <span class="hero-badge-dot"></span>
+    袋鼠数学竞赛 · 官方备考平台
+  </div>
+
+  <h1 class="hero-title">
+    让数学<br>
+    <span class="grad-text">变得有趣</span>
+  </h1>
+
+  <p class="hero-sub">
+    7 大核心模块 · 100+ 竞赛真题 · 语音讲解 · 闯关挑战<br>
+    跟着袋鼠，一步步冲击数学竞赛 🦘
+  </p>
+
+  <div class="hero-btns">
+    <a class="btn-primary" href="src/modules/module1-counting.html">
+      <span>🚀 开始学习</span>
+    </a>
+    <a class="btn-ghost" href="#modules">
+      查看全部模块 ↓
+    </a>
+  </div>
+
+  <div class="stats-strip">
+    <div class="stat">
+      <div class="stat-num">7</div>
+      <div class="stat-label">大模块</div>
+    </div>
+    <div class="stat-div"></div>
+    <div class="stat">
+      <div class="stat-num">100+</div>
+      <div class="stat-label">竞赛真题</div>
+    </div>
+    <div class="stat-div"></div>
+    <div class="stat">
+      <div class="stat-num">4</div>
+      <div class="stat-label">学习环节</div>
+    </div>
+    <div class="stat-div"></div>
+    <div class="stat">
+      <div class="stat-num">全免费</div>
+      <div class="stat-label">永久使用</div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>向下探索</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ── MODULES ── -->
+<section class="modules-section" id="modules">
+
+  <div class="progress-section" style="padding-bottom:40px">
+    <div class="progress-card" id="progressCard">
+      <span class="progress-label">📈 学习进度</span>
+      <div class="ptrack"><div class="pfill" id="pfill"></div></div>
+      <span class="progress-count" id="pcount">0 / 7 已解锁</span>
+    </div>
+  </div>
+
+  <p class="section-label" id="sl">全部课程</p>
+  <h2 class="section-title" id="st">选择你的<span class="grad-text">学习模块</span></h2>
+  <p class="section-sub" id="ss">从计数到策略，7个模块覆盖袋鼠数学竞赛全部考察方向</p>
+
+  <div class="module-grid">
+
+    <!-- M1 -->
+    <a class="module-card" id="mc0" href="src/modules/module1-counting.html"
+       style="--glow: linear-gradient(135deg,#8b5cf6,#3b82f6); --glow-bg: rgba(139,92,246,0.08)">
+      <div class="card-top">
+        <div class="card-icon">🔢</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3)">✓ 已开放</span>
+          <span class="card-num">01</span>
+        </div>
+      </div>
+      <div class="card-title">计数与数感</div>
+      <div class="card-sub">数数策略、奇偶判断、凑十法……<br>建立扎实的数字直觉与运算基础</div>
+      <div class="card-divider"></div>
+      <div class="card-footer">
+        <div class="card-tags">
+          <span class="tag" style="color:#a78bfa;border-color:rgba(167,139,250,0.3);background:rgba(139,92,246,0.08)">数感</span>
+          <span class="tag" style="color:#60a5fa;border-color:rgba(96,165,250,0.3);background:rgba(59,130,246,0.08)">加减法</span>
+        </div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- M2 -->
+    <div class="module-card locked" id="mc1"
+       style="--glow: linear-gradient(135deg,#06b6d4,#3b82f6); --glow-bg: rgba(6,182,212,0.08)">
+      <div class="card-top">
+        <div class="card-icon">🔷</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid var(--card-border)">即将开放</span>
+          <span class="card-num">02</span>
+        </div>
+      </div>
+      <div class="card-title" style="color:var(--muted)">几何与图形认知</div>
+      <div class="card-sub">旋转识别、镜像翻折、拼图补全……<br>让图形在脑海中动起来</div>
+      <div class="card-divider"></div>
+      <div class="card-footer">
+        <div class="card-tags">
+          <span class="tag" style="color:#67e8f9;border-color:rgba(103,232,249,0.2);background:rgba(6,182,212,0.06)">几何</span>
+          <span class="tag" style="color:#818cf8;border-color:rgba(129,140,248,0.2);background:rgba(99,102,241,0.06)">空间</span>
+        </div>
+        <span class="card-lock">🔒</span>
+      </div>
+    </div>
+
+    <!-- M3 -->
+    <div class="module-card locked" id="mc2"
+       style="--glow: linear-gradient(135deg,#ec4899,#8b5cf6); --glow-bg: rgba(236,72,153,0.08)">
+      <div class="card-top">
+        <div class="card-icon">🧩</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid var(--card-border)">即将开放</span>
+          <span class="card-num">03</span>
+        </div>
+      </div>
+      <div class="card-title" style="color:var(--muted)">逻辑推理与规律</div>
+      <div class="card-sub">找规律、条件推理、排列组合……<br>训练你的逻辑侦探大脑</div>
+      <div class="card-divider"></div>
+      <div class="card-footer">
+        <div class="card-tags">
+          <span class="tag" style="color:#f9a8d4;border-color:rgba(249,168,212,0.2);background:rgba(236,72,153,0.06)">逻辑</span>
+          <span class="tag" style="color:#a78bfa;border-color:rgba(167,139,250,0.2);background:rgba(139,92,246,0.06)">规律</span>
+        </div>
+        <span class="card-lock">🔒</span>
+      </div>
+    </div>
+
+    <!-- M4 -->
+    <div class="module-card locked" id="mc3"
+       style="--glow: linear-gradient(135deg,#f59e0b,#ef4444); --glow-bg: rgba(245,158,11,0.08)">
+      <div class="card-top">
+        <div class="card-icon">🎲</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid var(--card-border)">即将开放</span>
+          <span class="card-num">04</span>
+        </div>
+      </div>
+      <div class="card-title" style="color:var(--muted)">空间想象与立体</div>
+      <div class="card-sub">正方体展开图、俯视侧视……<br>在脑海里搭建 3D 世界</div>
+      <div class="card-divider"></div>
+      <div class="card-footer">
+        <div class="card-tags">
+          <span class="tag" style="color:#fcd34d;border-color:rgba(252,211,77,0.2);background:rgba(245,158,11,0.06)">3D</span>
+          <span class="tag" style="color:#fca5a5;border-color:rgba(252,165,165,0.2);background:rgba(239,68,68,0.06)">立体</span>
+        </div>
+        <span class="card-lock">🔒</span>
+      </div>
+    </div>
+
+    <!-- M5 -->
+    <div class="module-card locked" id="mc4"
+       style="--glow: linear-gradient(135deg,#10b981,#06b6d4); --glow-bg: rgba(16,185,129,0.08)">
+      <div class="card-top">
+        <div class="card-icon">🗺️</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid var(--card-border)">即将开放</span>
+          <span class="card-num">05</span>
+        </div>
+      </div>
+      <div class="card-title" style="color:var(--muted)">路径、迷宫与方向</div>
+      <div class="card-sub">最短路径、方向辨别、走迷宫……<br>成为最棒的小小导航家</div>
+      <div class="card-divider"></div>
+      <div class="card-footer">
+        <div class="card-tags">
+          <span class="tag" style="color:#6ee7b7;border-color:rgba(110,231,183,0.2);background:rgba(16,185,129,0.06)">路径</span>
+          <span class="tag" style="color:#67e8f9;border-color:rgba(103,232,249,0.2);background:rgba(6,182,212,0.06)">方向</span>
+        </div>
+        <span class="card-lock">🔒</span>
+      </div>
+    </div>
+
+    <!-- M6 -->
+    <div class="module-card locked" id="mc5"
+       style="--glow: linear-gradient(135deg,#f97316,#f59e0b); --glow-bg: rgba(249,115,22,0.08)">
+      <div class="card-top">
+        <div class="card-icon">📏</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid var(--card-border)">即将开放</span>
+          <span class="card-num">06</span>
+        </div>
+      </div>
+      <div class="card-title" style="color:var(--muted)">测量与单位</div>
+      <div class="card-sub">长度、时间、重量换算……<br>生活中的数学就在身边</div>
+      <div class="card-divider"></div>
+      <div class="card-footer">
+        <div class="card-tags">
+          <span class="tag" style="color:#fdba74;border-color:rgba(253,186,116,0.2);background:rgba(249,115,22,0.06)">测量</span>
+          <span class="tag" style="color:#fcd34d;border-color:rgba(252,211,77,0.2);background:rgba(245,158,11,0.06)">换算</span>
+        </div>
+        <span class="card-lock">🔒</span>
+      </div>
+    </div>
+
+    <!-- M7 — wide card -->
+    <div class="module-card locked" id="mc6"
+       style="--glow: linear-gradient(135deg,#8b5cf6,#ec4899); --glow-bg: rgba(139,92,246,0.08); grid-column: 1 / -1; max-width: 640px; margin: 0 auto; width: 100%">
+      <div class="card-top">
+        <div class="card-icon">♟️</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid var(--card-border)">即将开放</span>
+          <span class="card-num">07</span>
+        </div>
+      </div>
+      <div class="card-title" style="color:var(--muted)">组合与策略</div>
+      <div class="card-sub">分组搭配、博弈策略、优化方案……用数学思维赢得每一局</div>
+      <div class="card-divider"></div>
+      <div class="card-footer">
+        <div class="card-tags">
+          <span class="tag" style="color:#c4b5fd;border-color:rgba(196,181,253,0.2);background:rgba(139,92,246,0.06)">策略</span>
+          <span class="tag" style="color:#f9a8d4;border-color:rgba(249,168,212,0.2);background:rgba(236,72,153,0.06)">组合</span>
+        </div>
+        <span class="card-lock">🔒</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Bottom CTA -->
+<section style="text-align:center;padding:0 24px 120px;position:relative;z-index:1">
+  <div style="max-width:600px;margin:0 auto;background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-radius:24px;padding:48px 32px">
+    <div style="font-size:48px;margin-bottom:16px">🦘</div>
+    <h3 style="font-size:24px;font-weight:800;letter-spacing:-0.02em;margin-bottom:12px">
+      准备好出发了吗？
+    </h3>
+    <p style="color:var(--muted);font-size:15px;line-height:1.7;margin-bottom:28px">
+      从模块一开始，每天一点点<br>袋鼠数学冠军就是你 🏆
+    </p>
+    <a class="btn-primary" href="src/modules/module1-counting.html">
+      <span>🚀 立刻开始</span>
+    </a>
+  </div>
+</section>
+
+</div><!-- /page -->
+
+<script>
+// ── Intersection Observer for scroll animations ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      // Stagger module cards
+      if (e.target.classList.contains('module-card')) {
+        const idx = parseInt(e.target.id.replace('mc',''));
+        e.target.style.transitionDelay = (idx * 0.08) + 's';
+      }
+    }
+  });
+}, { threshold: 0.1 });
+
+['sl','st','ss','progressCard', ...Array.from({length:7},(_,i)=>'mc'+i)]
+  .forEach(id => { const el = document.getElementById(id); if(el) observer.observe(el); });
+
+// ── Progress ──
+const done = parseInt(localStorage.getItem('km_done') || '1');
+const pct = (done / 7 * 100).toFixed(0);
+document.getElementById('pcount').textContent = done + ' / 7 已解锁';
+// trigger fill after card becomes visible
+setTimeout(() => { document.getElementById('pfill').style.width = pct + '%'; }, 800);
+
+// ── Moving spotlight on mouse ──
+document.addEventListener('mousemove', e => {
+  const sp = document.querySelector('.spotlight');
+  if (!sp) return;
+  const x = (e.clientX / window.innerWidth - 0.5) * 60;
+  const y = (e.clientY / window.innerHeight - 0.5) * 60;
+  sp.style.transform = `translateX(calc(-50% + ${x}px)) translateY(${y}px)`;
+});
+
+// ── Card shimmer on hover ──
+document.querySelectorAll('.module-card:not(.locked)').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
+    const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(1);
+    card.style.setProperty('--mx', x + '%');
+    card.style.setProperty('--my', y + '%');
+  });
+});
+</script>
+</body>
+</html>
