@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>历年真题 · 袋鼠数学乐园</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #030712; --card: rgba(255,255,255,0.03); --card-border: rgba(255,255,255,0.08);
+  --text: #f8fafc; --muted: #94a3b8; --purple: #8b5cf6; --purple-light: #a78bfa;
+  --blue: #3b82f6; --emerald: #10b981; --amber: #f59e0b; --pink: #ec4899;
+}
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter','Noto Sans SC',sans-serif; min-height: 100vh; overflow-x: hidden; }
+
+/* Aurora */
+.aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.aurora-blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.14; animation: auroraF linear infinite; }
+.ab1 { width: 700px; height: 700px; background: radial-gradient(circle,#8b5cf6,transparent 70%); top: -200px; left: -100px; animation-duration: 22s; }
+.ab2 { width: 600px; height: 600px; background: radial-gradient(circle,#06b6d4,transparent 70%); top: 100px; right: -150px; animation-duration: 28s; animation-delay:-10s; }
+.ab3 { width: 500px; height: 500px; background: radial-gradient(circle,#ec4899,transparent 70%); bottom: 0; left: 30%; animation-duration: 20s; animation-delay:-5s; }
+@keyframes auroraF { 0%{transform:translate(0,0)} 33%{transform:translate(35px,-28px)} 66%{transform:translate(-18px,38px)} 100%{transform:translate(0,0)} }
+.dot-grid { position: fixed; inset: 0; z-index: 0; pointer-events: none; background-image: radial-gradient(rgba(255,255,255,0.05) 1px,transparent 1px); background-size: 30px 30px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%,black 40%,transparent 100%); }
+.page { position: relative; z-index: 1; }
+
+/* ── Sticky header ── */
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; gap: 16px; padding: 14px 24px;
+  background: rgba(3,7,18,0.88); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--card-border);
+}
+.back-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--muted); font-size: 13px; font-weight: 600; text-decoration: none;
+  padding: 7px 14px; border: 1px solid var(--card-border); border-radius: 8px; transition: all 0.2s; white-space: nowrap;
+}
+.back-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+.topbar-title { font-size: 16px; font-weight: 700; }
+
+/* ── Search hero ── */
+.search-hero { padding: 48px 24px 24px; text-align: center; max-width: 720px; margin: 0 auto; }
+.search-hero h1 { font-size: clamp(28px,5vw,44px); font-weight: 900; letter-spacing: -0.03em; margin-bottom: 8px; }
+.grad { background: linear-gradient(135deg,#a78bfa 0%,#60a5fa 50%,#34d399 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.search-desc { color: var(--muted); font-size: 14px; margin-bottom: 20px; line-height: 1.6; }
+.search-wrap { position: relative; max-width: 520px; margin: 0 auto 12px; }
+.search-input {
+  width: 100%; padding: 14px 50px 14px 20px;
+  background: rgba(255,255,255,0.05); border: 1.5px solid var(--card-border); border-radius: 13px;
+  color: var(--text); font-size: 16px; font-family: inherit; outline: none; transition: all 0.25s;
+}
+.search-input:focus { border-color: var(--purple); background: rgba(139,92,246,0.06); box-shadow: 0 0 0 3px rgba(139,92,246,0.12); }
+.search-input::placeholder { color: var(--muted); }
+.search-icon { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); font-size: 17px; pointer-events: none; }
+.hint-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.hint-chip {
+  font-size: 12px; color: var(--muted); background: rgba(255,255,255,0.04);
+  border: 1px solid var(--card-border); border-radius: 999px; padding: 4px 12px;
+  cursor: pointer; transition: all 0.2s;
+}
+.hint-chip:hover { color: var(--text); border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.07); }
+
+/* ── Year pills ── */
+.year-bar {
+  display: flex; gap: 8px; overflow-x: auto; padding: 8px 24px 18px;
+  max-width: 960px; margin: 0 auto; scrollbar-width: none;
+}
+.year-bar::-webkit-scrollbar { display: none; }
+.year-pill {
+  flex-shrink: 0; padding: 6px 16px; border-radius: 999px;
+  border: 1.5px solid var(--card-border); background: transparent;
+  color: var(--muted); font-size: 13px; font-weight: 600; font-family: inherit;
+  cursor: pointer; transition: all 0.2s;
+}
+.year-pill:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+.year-pill.active { background: rgba(139,92,246,0.15); border-color: rgba(139,92,246,0.45); color: var(--purple-light); }
+
+/* ── Results info ── */
+.results-info { padding: 0 24px 12px; max-width: 900px; margin: 0 auto; font-size: 13px; color: var(--muted); }
+
+/* ── Question list ── */
+.exam-list { max-width: 900px; margin: 0 auto; padding: 0 24px 100px; display: flex; flex-direction: column; gap: 20px; }
+
+/* ── Question card ── */
+.exam-card {
+  background: var(--card); border: 1.5px solid var(--card-border);
+  border-radius: 18px; overflow: hidden;
+  animation: fadeUp 0.35s ease both; transition: border-color 0.2s;
+}
+.exam-card:hover { border-color: rgba(255,255,255,0.13); }
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:none} }
+
+/* Meta bar */
+.exam-meta {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 16px 20px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.meta-year {
+  font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px;
+  background: rgba(139,92,246,0.12); color: var(--purple-light); border: 1px solid rgba(139,92,246,0.3);
+}
+.meta-qnum {
+  font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px;
+  background: rgba(59,130,246,0.1); color: #93c5fd; border: 1px solid rgba(59,130,246,0.25);
+}
+.meta-diff {
+  font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px; color: #fff;
+}
+.meta-pts { font-size: 11px; color: var(--muted); margin-left: auto; }
+
+/* Question image — the main content */
+.exam-q-img-wrap {
+  padding: 16px 20px 0;
+  background: rgba(255,255,255,0.01);
+}
+.exam-q-img {
+  display: block; width: 100%; border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.07);
+  background: #fff;  /* white bg so PDF screenshots look correct */
+}
+.no-img-placeholder {
+  display: flex; align-items: center; justify-content: center;
+  height: 80px; border-radius: 10px; border: 1px dashed rgba(255,255,255,0.12);
+  color: var(--muted); font-size: 13px;
+}
+
+/* Answer buttons area */
+.exam-answer { padding: 16px 20px 18px; }
+.answer-label { font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
+.opt-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.opt-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 48px; height: 48px; border-radius: 12px; font-size: 15px; font-weight: 800;
+  border: 1.5px solid var(--card-border); background: rgba(255,255,255,0.04);
+  color: var(--text); cursor: pointer; transition: all 0.18s; font-family: inherit;
+}
+.opt-btn:hover:not(:disabled) { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.09); transform: translateY(-1px); }
+.opt-btn.selected-correct { background: rgba(16,185,129,0.15); border-color: #10b981; color: #6ee7b7; }
+.opt-btn.selected-wrong   { background: rgba(239,68,68,0.15);   border-color: #ef4444; color: #fca5a5; }
+.opt-btn.reveal-correct   { background: rgba(16,185,129,0.08);  border-color: rgba(16,185,129,0.4); color: #6ee7b7; }
+.opt-btn.dim              { opacity: 0.35; cursor: default; }
+.opt-btn:disabled         { cursor: default; }
+
+/* Feedback */
+.exam-fb {
+  margin-top: 12px; padding: 11px 15px; border-radius: 10px;
+  font-size: 13px; line-height: 1.6; display: none;
+}
+.exam-fb.show { display: block; }
+.exam-fb.ok { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2); color: #6ee7b7; }
+.exam-fb.no { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); color: #fcd34d; }
+.exam-fb.neutral { background: rgba(148,163,184,0.08); border: 1px solid rgba(148,163,184,0.15); color: var(--muted); }
+
+/* No results */
+.no-results { text-align: center; padding: 80px 24px; color: var(--muted); }
+.no-results-icon { font-size: 52px; margin-bottom: 16px; }
+.no-results-title { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+
+@media (max-width: 480px) {
+  .opt-btn { width: 44px; height: 44px; font-size: 14px; }
+  .exam-meta { padding: 12px 16px 10px; }
+  .exam-q-img-wrap { padding: 12px 16px 0; }
+  .exam-answer { padding: 12px 16px 16px; }
+}
+</style>
+</head>
+<body>
+<div class="aurora">
+  <div class="aurora-blob ab1"></div>
+  <div class="aurora-blob ab2"></div>
+  <div class="aurora-blob ab3"></div>
+</div>
+<div class="dot-grid"></div>
+<div class="page">
+
+<!-- Header -->
+<header class="topbar">
+  <a class="back-btn" href="../index.html">← 返回首页</a>
+  <div class="topbar-title">📋 历年真题库</div>
+</header>
+
+<!-- Search hero -->
+<div class="search-hero">
+  <h1>历年<span class="grad">真题</span>库</h1>
+  <p class="search-desc">2013—2025年 袋鼠数学竞赛 · 1-2年级原卷题目<br>输入「年份 题号」精准定位，例如 <strong>2018 5</strong> · <strong>2019 10</strong></p>
+  <div class="search-wrap">
+    <input class="search-input" id="searchInput" type="text"
+      placeholder="搜索：2018 5 · 2024 · 第3题 ..." autocomplete="off" inputmode="search">
+    <span class="search-icon">🔍</span>
+  </div>
+  <div class="hint-row">
+    <span class="hint-chip" onclick="quickSearch('2013')">2013年</span>
+    <span class="hint-chip" onclick="quickSearch('2018 5')">2018·第5题</span>
+    <span class="hint-chip" onclick="quickSearch('2019 10')">2019·第10题</span>
+    <span class="hint-chip" onclick="quickSearch('2024 1')">2024·第1题</span>
+    <span class="hint-chip" onclick="quickSearch('2025')">2025年</span>
+  </div>
+</div>
+
+<!-- Year pills -->
+<div class="year-bar" id="yearBar"></div>
+
+<!-- Results count -->
+<div class="results-info" id="resultsInfo"></div>
+
+<!-- Question list -->
+<div class="exam-list" id="examList"></div>
+
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════════
+//  EXAM DATA  (auto-generated from official PDFs)
+//
+//  Fields:
+//    year  — 年份
+//    qnum  — 题号
+//    d     — 难度 ★/★★/★★★  (3分/4分/5分)
+//    dc    — 难度颜色
+//    pts   — 分值
+//    qimg  — 原题截图路径（包含题目文字+图+选项）
+//    ans   — 正确答案 0-4 (A-E)，null 表示暂未收录
+//    ok    — 答对反馈
+//    no    — 答错反馈
+// ════════════════════════════════════════════════════════════════
+</script>
+<script src="assets/exam-data.js"></script>
+<script>
+// ── State ──
+const answered = {};   // key: "year-qnum" → chosen index (0-4)
+
+// ── Search parsing ──
+function parseSearch(s) {
+  s = (s || '').trim();
+  if (!s) return {};
+  // "2018 5" / "2018-5" / "2018·5" / "2018，5"
+  const m = s.match(/^(\d{4})[\s\-·,，、]+(\d+)$/);
+  if (m) return { year: +m[1], qnum: +m[2] };
+  // Year only "2024"
+  if (/^\d{4}$/.test(s)) return { year: +s };
+  // Question only "第5题" / "5"
+  const qm = s.match(/^第?(\d{1,3})题?$/);
+  if (qm) return { qnum: +qm[1] };
+  return { text: s.toLowerCase() };
+}
+
+let activeYear = 'all';
+let searchVal = '';
+
+function getFiltered() {
+  const { year, qnum, text } = parseSearch(searchVal);
+  const yearF = activeYear !== 'all' ? +activeYear : null;
+  return examData.filter(q => {
+    if (yearF && q.year !== yearF) return false;
+    if (year && q.year !== year) return false;
+    if (qnum && q.qnum !== qnum) return false;
+    return true;
+  });
+}
+
+// ── Year bar ──
+function buildYearBar() {
+  const years = [...new Set(examData.map(q => q.year))].sort((a,b) => b-a);
+  document.getElementById('yearBar').innerHTML =
+    [{ label:'全部', value:'all' }, ...years.map(y=>({ label: y+'年', value: String(y) }))]
+    .map(p => `<button class="year-pill${activeYear===p.value?' active':''}" onclick="setYear('${p.value}')">${p.label}</button>`)
+    .join('');
+}
+
+function setYear(val) {
+  activeYear = val;
+  document.getElementById('searchInput').value = '';
+  searchVal = '';
+  buildYearBar();
+  render();
+}
+
+// ── Render ──
+const OPTS = ['A','B','C','D','E'];
+
+function renderCard(q, delay) {
+  const key = `${q.year}-${q.qnum}`;
+  const chosen = answered[key];
+  const isDone = chosen !== undefined;
+
+  // Image
+  const imgHtml = q.qimg
+    ? `<img class="exam-q-img" src="${q.qimg}" alt="${q.year}年第${q.qnum}题" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'no-img-placeholder\\'>图片加载中...</div>'">`
+    : `<div class="no-img-placeholder">📄 图片整理中</div>`;
+
+  // Option buttons
+  const optHtml = OPTS.map((letter, i) => {
+    let cls = 'opt-btn';
+    if (isDone) {
+      if (q.ans !== null) {
+        if (i === q.ans && i === chosen) cls += ' selected-correct';
+        else if (i === chosen && i !== q.ans) cls += ' selected-wrong';
+        else if (i === q.ans) cls += ' reveal-correct';
+        else cls += ' dim';
+      } else {
+        // Answer unknown — just show selected
+        if (i === chosen) cls += ' selected-correct';
+        else cls += ' dim';
+      }
+    }
+    return `<button class="${cls}" ${isDone?'disabled':''} onclick="answer('${key}',${i})">${letter}</button>`;
+  }).join('');
+
+  // Feedback
+  let fbHtml = '';
+  if (isDone) {
+    if (q.ans !== null) {
+      const ok = chosen === q.ans;
+      fbHtml = `<div class="exam-fb show ${ok?'ok':'no'}">${ok ? q.ok : q.no}</div>`;
+    } else {
+      fbHtml = `<div class="exam-fb show neutral">✅ 已记录！请对照上方原题图片核对答案。</div>`;
+    }
+  }
+
+  return `<div class="exam-card" style="animation-delay:${Math.min(delay*0.04,0.6)}s">
+    <div class="exam-meta">
+      <span class="meta-year">${q.year}</span>
+      <span class="meta-qnum">第 ${q.qnum} 题</span>
+      <span class="meta-diff" style="background:${q.dc}">${q.d}</span>
+      <span class="meta-pts">${q.pts}分题</span>
+    </div>
+    <div class="exam-q-img-wrap">${imgHtml}</div>
+    <div class="exam-answer">
+      <div class="answer-label">选择答案</div>
+      <div class="opt-row">${optHtml}</div>
+      ${fbHtml}
+    </div>
+  </div>`;
+}
+
+function render() {
+  const filtered = getFiltered();
+  const list = document.getElementById('examList');
+  const info = document.getElementById('resultsInfo');
+
+  if (!filtered.length) {
+    list.innerHTML = `<div class="no-results">
+      <div class="no-results-icon">🔍</div>
+      <div class="no-results-title">未找到相关题目</div>
+      <div style="font-size:14px;color:var(--muted)">试试 "2019 5" 或 "2024" 等格式</div>
+    </div>`;
+    info.textContent = '';
+    return;
+  }
+
+  const isFiltered = searchVal.trim() || activeYear !== 'all';
+  info.textContent = isFiltered ? `找到 ${filtered.length} 道题目` : `共收录 ${filtered.length} 道历年真题（2013—2025）`;
+  list.innerHTML = filtered.map((q, i) => renderCard(q, i)).join('');
+}
+
+// ── Answer handler ──
+function answer(key, chosen) {
+  if (answered[key] !== undefined) return;
+  answered[key] = chosen;
+  render();
+}
+
+// ── Quick search ──
+function quickSearch(val) {
+  const input = document.getElementById('searchInput');
+  input.value = val;
+  searchVal = val;
+  activeYear = 'all';
+  buildYearBar();
+  render();
+}
+
+// ── Search input ──
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchVal = e.target.value;
+  activeYear = 'all';
+  buildYearBar();
+  render();
+});
+
+// ── Init ──
+buildYearBar();
+render();
+</script>
+</body>
+</html>

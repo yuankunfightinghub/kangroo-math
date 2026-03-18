@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🔢 计数与数感 — 袋鼠数学乐园</title>
+<title>🧩 逻辑推理与规律发现 — 袋鼠数学乐园</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -39,9 +39,9 @@ body {
 /* ── Aurora ── */
 .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
 .aurora-blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.12; animation: auroraF linear infinite; }
-.ab1 { width: 600px; height: 600px; background: radial-gradient(circle,#8b5cf6,transparent 70%); top: -100px; left: -100px; animation-duration: 22s; }
-.ab2 { width: 500px; height: 500px; background: radial-gradient(circle,#06b6d4,transparent 70%); top: 50%; right: -100px; animation-duration: 28s; animation-delay:-10s; }
-.ab3 { width: 400px; height: 400px; background: radial-gradient(circle,#ec4899,transparent 70%); bottom: 10%; left: 20%; animation-duration: 20s; animation-delay:-5s; }
+.ab1 { width: 600px; height: 600px; background: radial-gradient(circle,#06b6d4,transparent 70%); top: -100px; left: -100px; animation-duration: 22s; }
+.ab2 { width: 500px; height: 500px; background: radial-gradient(circle,#3b82f6,transparent 70%); top: 50%; right: -100px; animation-duration: 28s; animation-delay:-10s; }
+.ab3 { width: 400px; height: 400px; background: radial-gradient(circle,#10b981,transparent 70%); bottom: 10%; left: 20%; animation-duration: 20s; animation-delay:-5s; }
 @keyframes auroraF { 0%{transform:translate(0,0)} 33%{transform:translate(30px,-25px)} 66%{transform:translate(-15px,35px)} 100%{transform:translate(0,0)} }
 
 .dot-grid { position: fixed; inset: 0; z-index: 0; pointer-events: none; background-image: radial-gradient(rgba(255,255,255,0.05) 1px,transparent 1px); background-size: 28px 28px; mask-image: radial-gradient(ellipse 70% 70% at 50% 50%,black 40%,transparent 100%); }
@@ -91,9 +91,9 @@ body {
 }
 .tab-pill:hover { background: rgba(255,255,255,0.06); color: var(--text); }
 .tab-pill.on {
-  background: rgba(139,92,246,0.18);
-  color: var(--purple-light);
-  box-shadow: 0 0 0 1px rgba(139,92,246,0.35);
+  background: rgba(6,182,212,0.18);
+  color: #67e8f9;
+  box-shadow: 0 0 0 1px rgba(6,182,212,0.35);
 }
 
 /* ── Hero ── */
@@ -105,9 +105,9 @@ body {
 }
 .mod-badge {
   display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.25);
+  background: rgba(6,182,212,0.1); border: 1px solid rgba(6,182,212,0.25);
   border-radius: 999px; padding: 5px 16px;
-  font-size: 12px; font-weight: 600; color: var(--purple-light);
+  font-size: 12px; font-weight: 600; color: #67e8f9;
   margin-bottom: 20px;
   animation: fadeUp .5s ease both;
 }
@@ -121,7 +121,7 @@ body {
   color: var(--muted); font-size: 16px; max-width: 480px; margin: 20px auto 0;
   animation: fadeUp .5s ease .4s both;
 }
-.grad-text { background: linear-gradient(135deg,#a78bfa,#60a5fa,#34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.grad-text { background: linear-gradient(135deg,#67e8f9,#60a5fa,#6ee7b7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 
 /* ── Tab sections ── */
 .container { max-width: 960px; margin: 0 auto; padding: 0 24px 80px; }
@@ -147,11 +147,11 @@ body {
   position: relative;
   overflow: hidden;
 }
-.gcard:hover { border-color: rgba(139,92,246,0.25); }
+.gcard:hover { border-color: rgba(6,182,212,0.25); }
 .gcard::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(139,92,246,0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgba(6,182,212,0.4), transparent);
   opacity: 0; transition: opacity .3s;
 }
 .gcard:hover::before { opacity: 1; }
@@ -160,14 +160,27 @@ body {
 .cbox {
   border-radius: 16px; padding: 20px 20px 20px 24px;
   margin: 14px 0; position: relative;
-  border-left: 3px solid var(--accent, var(--purple));
-  background: var(--accent-bg, rgba(139,92,246,0.05));
+  border-left: 3px solid var(--accent, var(--cyan));
+  background: var(--accent-bg, rgba(6,182,212,0.05));
 }
-.cbox h4 { font-size: 17px; font-weight: 700; margin-bottom: 8px; color: var(--accent, var(--purple-light)); letter-spacing: -0.01em; }
+.cbox h4 { font-size: 17px; font-weight: 700; margin-bottom: 8px; color: var(--accent, #67e8f9); letter-spacing: -0.01em; }
 .cbox p, .cbox ul, .cbox ol { font-size: 15px; color: var(--muted); line-height: 1.8; }
 .cbox ul, .cbox ol { margin-left: 20px; margin-top: 8px; }
 .cbox li { margin-bottom: 4px; }
 .cbox b, .cbox strong { color: var(--text); font-weight: 600; }
+
+/* Logic table */
+.logic-table {
+  width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px;
+}
+.logic-table th, .logic-table td {
+  padding: 8px 12px; text-align: center;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.logic-table th { background: rgba(6,182,212,0.1); color: #67e8f9; font-weight: 700; }
+.logic-table td { color: var(--muted); }
+.logic-table .yes { color: #6ee7b7; font-weight: 700; }
+.logic-table .no  { color: #fca5a5; font-weight: 700; }
 
 /* Voice btn */
 .vbtn {
@@ -192,7 +205,7 @@ body {
   cursor: pointer; transition: all .3s; overflow: hidden;
 }
 .mcard:hover { border-color: rgba(255,255,255,0.12); transform: translateY(-1px); }
-.mcard.open { border-color: rgba(139,92,246,0.3); }
+.mcard.open { border-color: rgba(6,182,212,0.3); }
 
 .mcard-head {
   padding: 20px 24px; display: flex; align-items: center; gap: 16px;
@@ -202,12 +215,12 @@ body {
 .mcard-title { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
 .mcard-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
 .mcard-chevron { font-size: 18px; color: var(--muted); transition: transform .3s; margin-left: auto; }
-.mcard.open .mcard-chevron { transform: rotate(180deg); color: var(--purple-light); }
+.mcard.open .mcard-chevron { transform: rotate(180deg); color: #67e8f9; }
 
 .mcard-body {
   max-height: 0; overflow: hidden; transition: max-height .5s cubic-bezier(0.23,1,0.32,1);
 }
-.mcard-body.open { max-height: 1000px; }
+.mcard-body.open { max-height: 1200px; }
 .mcard-body-inner {
   padding: 0 24px 24px;
   border-top: 1px solid var(--card-border);
@@ -223,12 +236,12 @@ body {
 .reveal-btn {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 8px 18px; border-radius: 10px;
-  background: rgba(139,92,246,0.1); border: 1px dashed rgba(139,92,246,0.35);
-  color: var(--purple-light); font-size: 13px; font-weight: 600;
+  background: rgba(6,182,212,0.1); border: 1px dashed rgba(6,182,212,0.35);
+  color: #67e8f9; font-size: 13px; font-weight: 600;
   cursor: pointer; transition: all .25s; margin-bottom: 12px;
   font-family: 'Noto Sans SC', sans-serif;
 }
-.reveal-btn:hover { background: rgba(139,92,246,0.18); transform: scale(1.03); }
+.reveal-btn:hover { background: rgba(6,182,212,0.18); transform: scale(1.03); }
 
 .step {
   display: flex; gap: 14px; align-items: flex-start;
@@ -239,7 +252,7 @@ body {
   width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
   font-size: 13px; font-weight: 800; color: #fff;
-  background: linear-gradient(135deg, var(--scolor1,#8b5cf6), var(--scolor2,#3b82f6));
+  background: linear-gradient(135deg, var(--scolor1,#06b6d4), var(--scolor2,#3b82f6));
 }
 .step-content {
   background: rgba(255,255,255,0.04); border-radius: 12px;
@@ -259,11 +272,11 @@ body {
   border-bottom: 1px solid var(--card-border);
   display: flex; justify-content: space-between; align-items: center;
 }
-.excard-hdr .ex-num { font-size: 14px; font-weight: 700; color: var(--purple-light); }
+.excard-hdr .ex-num { font-size: 14px; font-weight: 700; color: #67e8f9; }
 .excard-hdr .ex-tag {
   font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px;
-  background: rgba(139,92,246,0.1); color: var(--purple-light);
-  border: 1px solid rgba(139,92,246,0.25);
+  background: rgba(6,182,212,0.1); color: #67e8f9;
+  border: 1px solid rgba(6,182,212,0.25);
 }
 .excard-body { padding: 24px; }
 
@@ -281,7 +294,7 @@ body {
   font-size: 15px; font-weight: 600; cursor: pointer; transition: all .25s; text-align: center;
   color: var(--muted); font-family: 'Noto Sans SC', sans-serif;
 }
-.ex-opt:hover { border-color: rgba(139,92,246,0.4); background: rgba(139,92,246,0.08); color: var(--text); transform: translateY(-2px); }
+.ex-opt:hover { border-color: rgba(6,182,212,0.4); background: rgba(6,182,212,0.08); color: var(--text); transform: translateY(-2px); }
 .ex-opt.correct { border-color: rgba(16,185,129,0.5); background: rgba(16,185,129,0.1); color: #6ee7b7; pointer-events: none; }
 .ex-opt.wrong { border-color: rgba(239,68,68,0.5); background: rgba(239,68,68,0.08); animation: shake .4s; color: #fca5a5; }
 .ex-opt.dim { opacity: .35; pointer-events: none; }
@@ -359,7 +372,7 @@ body {
   background: rgba(255,255,255,0.1); transition: all .25s; cursor: pointer;
 }
 .qdot.done { background: var(--emerald); }
-.qdot.cur { background: var(--purple); transform: scale(1.4); }
+.qdot.cur { background: var(--cyan); transform: scale(1.4); }
 
 .q-meta { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; }
 .q-diff {
@@ -368,8 +381,8 @@ body {
 }
 .q-src {
   font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px;
-  background: rgba(139,92,246,0.1); color: var(--purple-light);
-  border: 1px solid rgba(139,92,246,0.2);
+  background: rgba(6,182,212,0.1); color: #67e8f9;
+  border: 1px solid rgba(6,182,212,0.2);
 }
 .quiz-q { font-size: 16px; font-weight: 600; line-height: 1.8; margin-bottom: 14px; color: var(--text); }
 
@@ -380,7 +393,7 @@ body {
   font-size: 14px; font-weight: 600; cursor: pointer; transition: all .25s; text-align: center;
   color: var(--muted); font-family: 'Noto Sans SC', sans-serif;
 }
-.qopt:hover { border-color: rgba(139,92,246,0.4); background: rgba(139,92,246,0.08); color: var(--text); }
+.qopt:hover { border-color: rgba(6,182,212,0.4); background: rgba(6,182,212,0.08); color: var(--text); }
 .qopt.correct { border-color: rgba(16,185,129,0.5); background: rgba(16,185,129,0.1); color: #6ee7b7; }
 .qopt.wrong { border-color: rgba(239,68,68,0.5); background: rgba(239,68,68,0.08); color: #fca5a5; animation: shake .4s; }
 .qopt.dis { pointer-events: none; opacity: .4; }
@@ -404,7 +417,7 @@ body {
 .qnbtn:hover { transform: translateY(-1px); }
 .qnbtn-prev { background: rgba(255,255,255,0.06); color: var(--muted); border: 1px solid var(--card-border); }
 .qnbtn-prev:hover { color: var(--text); }
-.qnbtn-next { background: rgba(139,92,246,0.15); color: var(--purple-light); border: 1px solid rgba(139,92,246,0.25); }
+.qnbtn-next { background: rgba(6,182,212,0.15); color: #67e8f9; border: 1px solid rgba(6,182,212,0.25); }
 
 /* Inline voice btn */
 .va-btn {
@@ -453,7 +466,7 @@ body {
   font-family: 'Noto Sans SC', sans-serif;
 }
 .mob-tab .mt-icon { font-size: 20px; }
-.mob-tab.on { color: var(--purple-light); background: rgba(139,92,246,0.1); }
+.mob-tab.on { color: #67e8f9; background: rgba(6,182,212,0.1); }
 </style>
 </head>
 <body>
@@ -473,14 +486,14 @@ body {
   <div class="topbar-inner">
     <a class="back-link" href="../../index.html">← 返回主页</a>
     <span class="topbar-sep">/</span>
-    <span class="topbar-title">计数与数感</span>
+    <span class="topbar-title">逻辑推理与规律发现</span>
   </div>
 </div>
 
 <!-- ── Hero ── -->
 <div class="mod-hero">
-  <div class="mod-badge">模块 01 · 计数与数感</div>
-  <h1 class="mod-title">建立你的<br><span class="grad-text">数字直觉</span></h1>
+  <div class="mod-badge">模块 03 · 逻辑推理与规律发现</div>
+  <h1 class="mod-title">发现规律，<br><span class="grad-text">破解逻辑</span></h1>
 
   <nav class="tab-nav">
     <button class="tab-pill on" data-s="s1">💡 概念</button>
@@ -488,7 +501,7 @@ body {
     <button class="tab-pill" data-s="s3">📖 例题</button>
     <button class="tab-pill" data-s="s4">🎮 挑战</button>
   </nav>
-  <p class="mod-sub">从数数策略到奇偶规律，把基础打得扎扎实实 🧠</p>
+  <p class="mod-sub">从数列规律到逻辑推断，训练你的侦探式思维 🔍</p>
 </div>
 
 <!-- ── Content ── -->
@@ -500,49 +513,55 @@ body {
       <div class="sec-heading">💡 核心概念</div>
 
       <!-- 概念1 -->
-      <div class="cbox" style="--accent:#a78bfa;--accent-bg:rgba(139,92,246,0.06)">
-        <button class="vbtn vbtn-v" onclick="tv(this,'数数策略，就是用有方法的方式去数东西，不重复、不漏掉。我们可以从左到右、从上到下，或者先分组，每5个一组，5、10、15、20，又快又准！')">🔊 听讲解</button>
-        <h4>🔢 数数策略</h4>
-        <p>数东西时，最重要的是<strong>不重复、不遗漏</strong>！聪明的方法：</p>
+      <div class="cbox" style="--accent:#67e8f9;--accent-bg:rgba(6,182,212,0.06)">
+        <button class="vbtn vbtn-c" onclick="tv(this,'数列规律，就是一串按照某个固定规律排列的数。常见类型有：等差数列，每次加一个固定的数，比如2、5、8、11，每次加3。等比数列，每次乘一个固定的数，比如1、2、4、8，每次乘2。还有差数规律，相邻两项的差本身也有规律，比如1、2、4、7、11，差是1、2、3、4，每次多1。')">🔊 听讲解</button>
+        <h4>📐 数列规律</h4>
+        <p>数列是按照<strong>固定规律</strong>排列的一串数，找规律要先看相邻两项的<strong>差</strong>或<strong>比</strong>：</p>
         <ul>
-          <li>📍 <strong>标记法</strong>：数过的打个勾，避免重复</li>
-          <li>📦 <strong>分组法</strong>：5 个或 10 个一组，又快又准</li>
-          <li>↗️ <strong>顺序法</strong>：从左到右、从上到下，按顺序数</li>
+          <li>➕ <strong>等差数列</strong>：每次加/减同一个数（如 3, 6, 9, 12… 差=3）</li>
+          <li>✖️ <strong>等比数列</strong>：每次乘/除同一个数（如 2, 4, 8, 16… 比=2）</li>
+          <li>🔼 <strong>差数递增</strong>：相邻差本身也有规律（如 1, 2, 4, 7, 11… 差=1,2,3,4）</li>
+          <li>🔄 <strong>循环规律</strong>：若干个一组反复出现（如 红黄蓝红黄蓝…）</li>
         </ul>
       </div>
 
       <!-- 概念2 -->
-      <div class="cbox" style="--accent:#67e8f9;--accent-bg:rgba(6,182,212,0.06)">
-        <button class="vbtn vbtn-c" onclick="tv(this,'奇数和偶数，偶数可以两两配对，没有人落单，比如2、4、6、8。奇数就不同，总有一个落单，比如1、3、5、7。记住：只看个位！个位是0、2、4、6、8就是偶数，个位是1、3、5、7、9就是奇数！')">🔊 听讲解</button>
-        <h4>🔵 奇数与偶数</h4>
-        <p>偶数可以<strong>两两配对</strong>，没有人落单；奇数则<strong>总有一个落单</strong>。</p>
-        <p>🎯 快速判断：<strong>只看个位数字！</strong></p>
+      <div class="cbox" style="--accent:#a78bfa;--accent-bg:rgba(139,92,246,0.06)">
+        <button class="vbtn vbtn-v" onclick="tv(this,'排除法是逻辑推理最常用的武器！面对多个选项，我们不急着找答案，而是先排除掉肯定不对的选项。一个一个消除不符合条件的，最后剩下的那个就是答案！就像名侦探一样：排除一切不可能，剩下的就是真相！')">🔊 听讲解</button>
+        <h4>🔍 排除法（逻辑推理核心）</h4>
+        <p>不急着找答案，先<strong>排除肯定错的</strong>选项，剩下的就是答案！</p>
         <ul>
-          <li>个位是 <strong>0、2、4、6、8</strong> → 偶数 ✅</li>
-          <li>个位是 <strong>1、3、5、7、9</strong> → 奇数 ✅</li>
+          <li>❌ 找出<strong>违反条件</strong>的选项，直接排除</li>
+          <li>🧩 将条件<strong>逐一代入</strong>检验，不满足即排除</li>
+          <li>✅ 最终剩下<strong>唯一可能</strong>，即为正确答案</li>
+          <li>💡 口诀：<strong>"不可能的排光，答案自然出来"</strong></li>
         </ul>
       </div>
 
       <!-- 概念3 -->
       <div class="cbox" style="--accent:#fcd34d;--accent-bg:rgba(245,158,11,0.06)">
-        <button class="vbtn vbtn-a" onclick="tv(this,'加减法小技巧！做加法时，把数字凑成10。比如7加8，7加3变成10，从8里借3，8变成5，所以7加8等于15。做减法时，可以在数轴上往回跳，也可以凑整十再减。')">🔊 听讲解</button>
-        <h4>➕ 加减法技巧</h4>
+        <button class="vbtn vbtn-a" onclick="tv(this,'比较排序，是把多个人或物体按照某个标准从大到小或从小到大排列。关键技巧是传递性：如果甲比乙高，乙比丙高，那么甲一定比丙高！这叫传递律。还有间接比较：甲和丙没有直接比，但通过乙可以推出甲和丙的大小关系！')">🔊 听讲解</button>
+        <h4>↕️ 比较与排序</h4>
+        <p>关键是<strong>传递律</strong>：A > B，B > C，则 A > C！</p>
         <ul>
-          <li>🎯 <strong>凑十法</strong>：把数字凑成整十，计算更快</li>
-          <li>↕️ <strong>跳数法</strong>：在数轴上跳，加法往右，减法往左</li>
-          <li>🔄 <strong>交换律</strong>：3+8 = 8+3，选更方便的顺序</li>
+          <li>📋 把所有"谁比谁大/高/重"的条件<strong>写下来</strong></li>
+          <li>🔗 用传递律<strong>连锁推导</strong>，建立完整的大小链</li>
+          <li>🏆 最终整理出<strong>从大到小</strong>的完整顺序</li>
+          <li>⚠️ 注意：条件可能有<strong>矛盾</strong>，矛盾说明某条件是假的</li>
         </ul>
       </div>
 
       <!-- 概念4 -->
       <div class="cbox" style="--accent:#6ee7b7;--accent-bg:rgba(16,185,129,0.06)">
-        <button class="vbtn vbtn-e" onclick="tv(this,'比较数的大小，先比位数，位数多的更大，100比99大，因为100有3位，99只有2位。位数相同时，从最高位开始比，哪位更大哪个数就更大！')">🔊 听讲解</button>
-        <h4>📊 数的大小比较</h4>
-        <ol>
-          <li>先比<strong>位数</strong>：位数多的数更大</li>
-          <li>位数相同时，从<strong>最高位</strong>开始逐位比</li>
-          <li>符号：<strong>&gt;（大于）、&lt;（小于）、=（等于）</strong></li>
-        </ol>
+        <button class="vbtn vbtn-e" onclick="tv(this,'逻辑真假推理，是判断哪些陈述是真话、哪些是假话的推理。关键方法是假设法：先假设某人说的是真话，把所有条件推一遍，看有没有矛盾。如果有矛盾，说明假设错了；如果没有矛盾，假设就是正确的！')">🔊 听讲解</button>
+        <h4>✅ 真假推理</h4>
+        <p>当多人说话，已知真假人数时，用<strong>假设法</strong>突破：</p>
+        <ul>
+          <li>🎯 <strong>假设某人说真话</strong>，推导所有结论</li>
+          <li>🔍 检查推导结果是否<strong>自相矛盾</strong></li>
+          <li>✅ 无矛盾 → 假设成立；❌ 有矛盾 → 假设错误</li>
+          <li>📊 常配合<strong>表格</strong>整理，避免遗漏</li>
+        </ul>
       </div>
     </div>
   </div>
@@ -553,22 +572,22 @@ body {
     <!-- 方法1 -->
     <div class="mcard" onclick="toggleMCard(this)">
       <div class="mcard-head">
-        <div class="mcard-icon">🍎</div>
+        <div class="mcard-icon">🔢</div>
         <div class="mcard-info">
-          <div class="mcard-title">分组数数法</div>
-          <div class="mcard-sub">把一堆东西分成小组，数起来又快又准</div>
+          <div class="mcard-title">作差法找数列规律</div>
+          <div class="mcard-sub">把相邻两项相减，让规律现原形！</div>
         </div>
         <div class="mcard-chevron">⌄</div>
       </div>
       <div class="mcard-body">
         <div class="mcard-body-inner">
-          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>下面有24个苹果🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎<br>你能用分组的方法，10秒内数出来吗？</div>
+          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>数列：1, 3, 7, 13, 21, ___<br>下一个数是多少？</div>
           <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms1')">👆 看解法</button>
           <div id="ms1">
-            <div class="step"><div class="step-num" style="--scolor1:#8b5cf6;--scolor2:#3b82f6">1</div><div class="step-content">把苹果 <strong>5个一组</strong> 圈起来：🍎🍎🍎🍎🍎 | 🍎🍎🍎🍎🍎 | ……</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#8b5cf6;--scolor2:#3b82f6">2</div><div class="step-content">数组数：5、10、15、20……一共 <strong>4组还多4个</strong></div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#8b5cf6;--scolor2:#3b82f6">3</div><div class="step-content">4×5 + 4 = <strong>24个</strong> ✅ 不用一个个数，超快！</div></div>
-            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'分组数数法要点：把东西分成相等小组，先数有几组，再乘每组数量，加上剩余。24个苹果，5个一组，有4组还剩4个，4乘5加4等于24！')">🔊 听讲解</button>
+            <div class="step"><div class="step-num" style="--scolor1:#06b6d4;--scolor2:#3b82f6">1</div><div class="step-content">计算相邻两项的<strong>差</strong>：3-1=<strong>2</strong>，7-3=<strong>4</strong>，13-7=<strong>6</strong>，21-13=<strong>8</strong></div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#06b6d4;--scolor2:#3b82f6">2</div><div class="step-content">差的规律：2, 4, 6, 8…每次<strong>+2</strong>，所以下一个差是 <strong>10</strong></div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#06b6d4;--scolor2:#3b82f6">3</div><div class="step-content">21 + 10 = <strong>31</strong> ✅ 答案是31！差数递增数列！</div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'作差法要点：对相邻两项做减法，得到差数列。如果差数列还有规律，就继续对差作差。差是2、4、6、8，下一个差是10，所以21加10等于31！')">🔊 听讲解</button>
           </div>
         </div>
       </div>
@@ -577,22 +596,22 @@ body {
     <!-- 方法2 -->
     <div class="mcard" onclick="toggleMCard(this)">
       <div class="mcard-head">
-        <div class="mcard-icon">🔵</div>
+        <div class="mcard-icon">❌</div>
         <div class="mcard-info">
-          <div class="mcard-title">奇偶快速判断</div>
-          <div class="mcard-sub">一眼看出是奇数还是偶数，不用算！</div>
+          <div class="mcard-title">排除法 · 逐条代入</div>
+          <div class="mcard-sub">一个条件一个条件消掉，最后的就是答案！</div>
         </div>
         <div class="mcard-chevron">⌄</div>
       </div>
       <div class="mcard-body">
         <div class="mcard-body-inner">
-          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>345、678、999、1024，哪些是奇数？哪些是偶数？3秒内判断！</div>
+          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>一个两位数，满足：① 是偶数；② 各位数字之和为9；③ 十位数字比个位数字大。这个两位数是？</div>
           <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms2')">👆 看解法</button>
           <div id="ms2">
-            <div class="step"><div class="step-num" style="--scolor1:#06b6d4;--scolor2:#3b82f6">1</div><div class="step-content"><strong>只看个位数字！</strong>其他位数根本不影响奇偶性</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#06b6d4;--scolor2:#3b82f6">2</div><div class="step-content">345 → 个位 <strong>5</strong> → 奇数；678 → 个位 <strong>8</strong> → 偶数</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#06b6d4;--scolor2:#3b82f6">3</div><div class="step-content">999 → 个位 <strong>9</strong> → 奇数；1024 → 个位 <strong>4</strong> → 偶数 ✅</div></div>
-            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'奇偶快速判断秘诀：只看个位！不管多大的数，只要看最后一位。个位是0、2、4、6、8就是偶数，个位是1、3、5、7、9就是奇数！')">🔊 听讲解</button>
+            <div class="step"><div class="step-num" style="--scolor1:#a78bfa;--scolor2:#06b6d4">1</div><div class="step-content"><strong>条件①</strong>：偶数，个位是0、2、4、6、8。各位和=9，可能的偶数：18、36、54、72、90</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#a78bfa;--scolor2:#06b6d4">2</div><div class="step-content"><strong>条件③</strong>：十位 > 个位，排除 18（1<8）、36（3<6），剩下 54、72、90</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#a78bfa;--scolor2:#06b6d4">3</div><div class="step-content">验证各位和=9：54(5+4=9)✅ 72(7+2=9)✅ 90(9+0=9)✅，还需要结合题目条件，答案是 <strong>54、72 或 90</strong></div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'排除法：把每个条件当过滤网，一个一个筛。先用偶数条件筛，再用各位和等于9筛，再用十位大于个位筛。每道筛，候选越来越少，直到剩下答案！')">🔊 听讲解</button>
           </div>
         </div>
       </div>
@@ -601,22 +620,22 @@ body {
     <!-- 方法3 -->
     <div class="mcard" onclick="toggleMCard(this)">
       <div class="mcard-head">
-        <div class="mcard-icon">🎯</div>
+        <div class="mcard-icon">📊</div>
         <div class="mcard-info">
-          <div class="mcard-title">凑十法</div>
-          <div class="mcard-sub">把数字凑成10，加法快如闪电！</div>
+          <div class="mcard-title">表格法 · 逻辑矩阵</div>
+          <div class="mcard-sub">用表格整理多个条件，一目了然！</div>
         </div>
         <div class="mcard-chevron">⌄</div>
       </div>
       <div class="mcard-body">
         <div class="mcard-body-inner">
-          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>用凑十法计算：8 + 6 = ？</div>
+          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>甲、乙、丙三人，分别是医生、老师、工程师（每人只有一个职业）。已知：① 甲不是医生；② 乙不是老师；③ 丙不是工程师。各是什么职业？</div>
           <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms3')">👆 看解法</button>
           <div id="ms3">
-            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">1</div><div class="step-content"><strong>8再加几变成10？</strong> 8 + <strong>2</strong> = 10，从6里借2给8</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">2</div><div class="step-content">6 借走2，还剩 6 - 2 = <strong>4</strong></div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">3</div><div class="step-content">10 + 4 = <strong>14</strong> ✅ 所以 8 + 6 = 14！</div></div>
-            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'凑十法核心：先把一个数凑成整十，再加剩下的部分。8加6，先问8加几等于10？加2！从6里借2给8，8变成10，6还剩4，10加4等于14！')">🔊 听讲解</button>
+            <div class="step"><div class="step-num" style="--scolor1:#06b6d4;--scolor2:#10b981">1</div><div class="step-content">画表格，打 ✅（是）或 ❌（不是）：<br>条件①甲❌医生；条件②乙❌老师；条件③丙❌工程师</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#06b6d4;--scolor2:#10b981">2</div><div class="step-content">丙不是工程师，三人中只剩丙可以是老师或医生；乙不是老师，所以<strong>乙是工程师</strong>；乙是工程师→甲和丙剩医生、老师</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#06b6d4;--scolor2:#10b981">3</div><div class="step-content">甲不是医生→<strong>甲是老师</strong>，<strong>丙是医生</strong> ✅</div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'表格法：行是人，列是职业，画出条件。乙不是老师，丙不是工程师，只剩乙是工程师。再看甲不是医生，甲是老师，丙是医生！表格法让逻辑推理变得一清二楚！')">🔊 听讲解</button>
           </div>
         </div>
       </div>
@@ -625,22 +644,22 @@ body {
     <!-- 方法4 -->
     <div class="mcard" onclick="toggleMCard(this)">
       <div class="mcard-head">
-        <div class="mcard-icon">↔️</div>
+        <div class="mcard-icon">🎭</div>
         <div class="mcard-info">
-          <div class="mcard-title">数轴跳数法</div>
-          <div class="mcard-sub">在数轴上跳格子，加减法变成游戏！</div>
+          <div class="mcard-title">假设法 · 真假推理</div>
+          <div class="mcard-sub">先假设某人说真话，推到矛盾就知道假设错了！</div>
         </div>
         <div class="mcard-chevron">⌄</div>
       </div>
       <div class="mcard-body">
         <div class="mcard-body-inner">
-          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>用数轴法计算：20 - 7 = ？</div>
+          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>小红、小明、小亮三人，有且只有一人说真话。<br>小红说："小明在说谎。"<br>小明说："小亮在说谎。"<br>小亮说："小红和小明都在说谎。"<br>谁说的是真话？</div>
           <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms4')">👆 看解法</button>
           <div id="ms4">
-            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#06b6d4">1</div><div class="step-content">从 <strong>20</strong> 出发，减法 = 往左跳，要跳 7 步</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#06b6d4">2</div><div class="step-content">20 → 19 → 18 → 17 → 16 → 15 → 14 → <strong>13</strong></div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#06b6d4">3</div><div class="step-content">20 - 7 = <strong>13</strong> ✅ 加法往右跳，减法往左跳！</div></div>
-            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'数轴跳数法就是在数字跑道上跳格子！加法往右跳，减法往左跳。从起点出发，数格子，停在哪里答案就是那个数！')">🔊 听讲解</button>
+            <div class="step"><div class="step-num" style="--scolor1:#ec4899;--scolor2:#a78bfa">1</div><div class="step-content"><strong>假设小红说真话</strong>：小明在说谎，即"小亮在说谎"是假的→小亮说真话。但小亮是真话，小亮说"小红在说谎"，矛盾！❌ 小红不是真话人</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#ec4899;--scolor2:#a78bfa">2</div><div class="step-content"><strong>假设小明说真话</strong>：小亮在说谎，小亮说"小红和小明都在说谎"是假的，即小红或小明至少有一人说真话，且只有小明说真话，符合！再验证小红说谎（小明说谎是假）→ 小明说真话确实是真 ✅</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#ec4899;--scolor2:#a78bfa">3</div><div class="step-content"><strong>小明说真话</strong>✅，小红和小亮都在说谎。完美符合"只有一人说真话"！</div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'假设法：逐一假设某人说真话，推导所有结论，看有没有矛盾。假设小红是真话，推出矛盾，否定！假设小明是真话，没有矛盾，正确！假设法是真假推理的万能钥匙！')">🔊 听讲解</button>
           </div>
         </div>
       </div>
@@ -655,23 +674,25 @@ body {
     <div class="excard">
       <div class="excard-hdr">
         <span class="ex-num">例题一</span>
-        <span class="ex-tag">2024年 · 逆向思维</span>
+        <span class="ex-tag">2023年 · 规律数列</span>
       </div>
       <div class="excard-body">
         <div class="qbox">
-          🦘 袋鼠大叔有一些苹果，他给了小袋鼠 <strong>9个</strong>，又买了 <strong>6个</strong>，现在一共有 <strong>23个</strong>。<br>请问袋鼠大叔<strong>原来</strong>有多少个苹果？
+          🔢 观察数列：<strong>2, 5, 10, 17, 26, ___</strong><br>
+          <small>（来自袋鼠数学竞赛改编，考察差数规律）</small><br><br>
+          下一项应该是哪个数？
         </div>
         <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
         <div class="ex-opts" id="ex1-opts"></div>
         <div class="ex-result" id="ex1-result"></div>
         <div class="guide-chain" id="ex1-guide"></div>
         <div class="feynman-box" id="ex1-feynman">
-          <div class="feynman-hdr">🧠 费曼讲解 — 用最简单的话说清楚！</div>
+          <div class="feynman-hdr">🧠 费曼讲解 — 差数找规律！</div>
           <div class="feynman-body">
-            <div class="fn-step"><div class="fn-num">1</div><div class="fn-content">这道题在问：<strong>最开始有多少？</strong> 先给出9个，再加进来6个，最后是23个。</div></div>
-            <div class="fn-step"><div class="fn-num">2</div><div class="fn-content">给出9个、买回6个，<strong>净减少了 9-6=3个</strong>。现在比原来少了3个。</div></div>
-            <div class="fn-step"><div class="fn-num">3</div><div class="fn-content">最后23个，比原来少了3个，所以原来有 <strong>23+3 = 26个</strong>！🎉</div></div>
-            <button class="va-btn" style="margin-top:8px" onclick="tv(this,'费曼讲解！给出9个再买回6个，净少了3个。原来的数量等于最后的23加上净减少的3，答案是26个。做这类题，先搞清楚每步是加还是减，再从结果往回推！')">🔊 听讲解</button>
+            <div class="fn-step"><div class="fn-num">1</div><div class="fn-content">对相邻项<strong>作差</strong>：5-2=<strong>3</strong>，10-5=<strong>5</strong>，17-10=<strong>7</strong>，26-17=<strong>9</strong>。差是3,5,7,9——都是奇数，每次加2！</div></div>
+            <div class="fn-step"><div class="fn-num">2</div><div class="fn-content">按规律，下一个差是 9+2 = <strong>11</strong>。所以 26 + 11 = <strong>37</strong>。</div></div>
+            <div class="fn-step"><div class="fn-num">3</div><div class="fn-content">还有个更酷的发现：这个数列其实是 <strong>n²+1</strong>（1²+1=2, 2²+1=5, 3²+1=10, 4²+1=17, 5²+1=26, 6²+1=<strong>37</strong>）！🎉</div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="tv(this,'费曼讲解！作差：3、5、7、9，奇数列，每次加2，下一个差是11，所以26加11等于37。还有隐藏规律：每项等于n的平方加1！两种方法都能得到37！')">🔊 听讲解</button>
           </div>
         </div>
       </div>
@@ -681,24 +702,29 @@ body {
     <div class="excard">
       <div class="excard-hdr">
         <span class="ex-num">例题二</span>
-        <span class="ex-tag">2023年 · 奇数规律</span>
+        <span class="ex-tag">2022年 · 逻辑推理</span>
       </div>
       <div class="excard-body">
         <div class="qbox">
-          🔢 前10个奇数分别是：1, 3, 5, 7, 9, 11, 13, 15, 17, 19<br>
-          把这10个奇数全部<strong>加在一起</strong>，总和是多少？
+          🦘 袋鼠数学竞赛真题（2022）：<br><br>
+          甲、乙、丙、丁四位同学参加比赛，成绩各不相同。<br>
+          甲说："我不是第一名。"<br>
+          乙说："我不是第一名，也不是最后一名。"<br>
+          丙说："我是第一名。"<br>
+          丁说："我是最后一名。"<br><br>
+          已知<strong>恰好有两人说真话</strong>。请问谁是第一名？
         </div>
         <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
         <div class="ex-opts" id="ex2-opts"></div>
         <div class="ex-result" id="ex2-result"></div>
         <div class="guide-chain" id="ex2-guide"></div>
         <div class="feynman-box" id="ex2-feynman">
-          <div class="feynman-hdr">🧠 费曼讲解 — 发现神奇规律！</div>
+          <div class="feynman-hdr">🧠 费曼讲解 — 假设法破局！</div>
           <div class="feynman-body">
-            <div class="fn-step"><div class="fn-num">1</div><div class="fn-content">前 n 个奇数的和，等于 <strong>n²（n的平方）</strong>！这是个超厉害的规律。</div></div>
-            <div class="fn-step"><div class="fn-num">2</div><div class="fn-content">前10个奇数的和 = 10² = <strong>100</strong>，不用一个个加！</div></div>
-            <div class="fn-step"><div class="fn-num">3</div><div class="fn-content">验证：1+3=4=2²，1+3+5=9=3²，1+3+5+7=16=4²……✅ 规律成立！</div></div>
-            <button class="va-btn" style="margin-top:8px" onclick="tv(this,'费曼讲解前n个奇数求和规律！前n个奇数的和等于n的平方。前10个奇数的和等于100。验证：前2个奇数和是4等于2的平方，前3个是9等于3的平方。用这个规律，再大的数也能秒算！')">🔊 听讲解</button>
+            <div class="fn-step"><div class="fn-num">1</div><div class="fn-content"><strong>假设丙说真话</strong>（丙是第一名）：丙说真话，还需要找另一个真话人。甲说"我不是第一"→真；乙说"不是第一也不是最后"需验证；丁说"我是最后"需验证。</div></div>
+            <div class="fn-step"><div class="fn-num">2</div><div class="fn-content">丙第一：甲说真话（甲确实不是第一） ✅。这已经两人了（甲、丙）。乙和丁必须都说假话：丁说假话→丁不是最后，矛盾分析…乙说假话→乙是第一或最后，但丙是第一，所以乙是最后。丁不是最后，丁是二或三。✅ 恰好两人（甲丙）说真话！</div></div>
+            <div class="fn-step"><div class="fn-num">3</div><div class="fn-content">结论：<strong>丙是第一名</strong>✅，甲说真话，丙说真话，乙和丁说假话。逻辑完全自洽！</div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="tv(this,'费曼讲解！假设丙是第一名，丙说真话。甲说我不是第一，也是真话。正好两人说真话！乙说假话意味着乙是第一或最后，丙是第一，所以乙是最后。丁说我是最后是假话，丁不是最后。全部逻辑自洽！丙是第一名！')">🔊 听讲解</button>
           </div>
         </div>
       </div>
@@ -779,19 +805,19 @@ function revealSteps(id) {
 // ── Example data ──
 const exData = {
   ex1: {
-    opts: [{t:'(A) 20个',v:false},{t:'(B) 26个',v:true},{t:'(C) 28个',v:false},{t:'(D) 32个',v:false}],
+    opts: [{t:'(A) 33',v:false},{t:'(B) 35',v:false},{t:'(C) 37',v:true},{t:'(D) 39',v:false}],
     guide: [
-      {q:'袋鼠大叔做了哪两件事？', a:'① 给出去 9 个苹果　② 买进来 6 个苹果', vc:'袋鼠大叔做了两件事：第一给出去9个苹果，第二买进来6个苹果。把这两步写下来，是解题的第一步！'},
-      {q:'给出9个、买回6个，苹果数量净变化了多少？', a:'净减少了 9 - 6 = 3 个苹果', vc:'给出9个，又买回6个，合在一起算，相当于总共减少了3个苹果。这叫净变化！'},
-      {q:'最后有23个，比原来少3个，那原来有多少？', a:'原来有 23 + 3 = 26 个 ✅', vc:'最后剩23个，净少了3个，所以原来是23加3等于26个！从结果往回推！'}
+      {q:'计算相邻两项的差，你看到什么规律？', a:'差是：3, 5, 7, 9 —— 每次递增 2 的奇数序列！', vc:'相邻两项作差：5减2等于3，10减5等于5，17减10等于7，26减17等于9。差是3、5、7、9，每次加2！'},
+      {q:'按这个规律，下一个差是多少？', a:'下一个差 = 9 + 2 = 11', vc:'差的规律是3、5、7、9，每次加2，所以下一个差是11！'},
+      {q:'那数列下一项是多少？有没有更酷的发现？', a:'26 + 11 = 37 ✅　隐藏规律：每项 = n² + 1（6²+1=37）', vc:'26加11等于37！还有隐藏规律：这个数列每一项都等于n的平方加1。1平方加1等于2，2平方加1等于5……6平方加1等于37！超厉害！'}
     ]
   },
   ex2: {
-    opts: [{t:'(A) 81',v:false},{t:'(B) 95',v:false},{t:'(C) 100',v:true},{t:'(D) 110',v:false}],
+    opts: [{t:'(A) 甲',v:false},{t:'(B) 乙',v:false},{t:'(C) 丙',v:true},{t:'(D) 丁',v:false}],
     guide: [
-      {q:'前10个奇数分别是什么？', a:'1, 3, 5, 7, 9, 11, 13, 15, 17, 19', vc:'前10个奇数是：1、3、5、7、9、11、13、15、17、19。相邻奇数之间差2！'},
-      {q:'前2个奇数和是多少？前3个呢？你发现了什么规律？', a:'前2个：1+3=4=2²；前3个：1+3+5=9=3²；规律：前n个 = n²！', vc:'发现规律了吗？前2个奇数和是4等于2的平方！前3个奇数和是9等于3的平方！前n个奇数的和等于n的平方！'},
-      {q:'用这个规律，前10个奇数的总和是？', a:'前10个奇数和 = 10² = 100 ✅', vc:'用规律：前10个奇数的和等于10的平方，等于100！不需要一个个加，直接用规律，快又准！'}
+      {q:'如果丙说真话（丙是第一名），其他人的话哪些是真哪些是假？', a:'甲说"我不是第一"→真话；乙和丁说假话', vc:'假设丙说真话，丙是第一名。甲说我不是第一，对，是真话。这样已经两个真话了，乙和丁必须都说假话！'},
+      {q:'乙说假话意味着什么？丁说假话意味着什么？', a:'乙说假话 → 乙是第一或最后（丙是第一，所以乙是最后）；丁说假话 → 丁不是最后', vc:'乙说不是第一也不是最后，这是假话，所以乙是第一或者是最后。丙已经是第一，所以乙是最后。丁说我是最后是假话，所以丁不是最后。没有矛盾！'},
+      {q:'最终顺序是怎样的？说真话的人是谁？', a:'丙第一，甲和丙说真话，乙和丁说假话 ✅', vc:'结论：丙是第一名！甲和丙说真话，恰好两人，完美符合题意！逻辑全部自洽！'}
     ]
   }
 };
@@ -866,110 +892,104 @@ function buildGuide(id, data) {
 initEx('ex1'); initEx('ex2');
 
 // ── Quiz ──
-// opts 格式：每项 { t: '文字', img: null 或 '图片路径' }
-// qimg：原题截图路径，null 表示暂无，示例: '../assets/exam-images/2024/q02.png'
 const quizData = [
-  {src:'2024·Q2',d:'★',dc:'#10b981',
-   q:'小明有12块糖，给了小红5块，又收到朋友送来的8块。他现在有多少块糖？',
+  {src:'2024·Q3',d:'★',dc:'#10b981',
+   q:'数列：5, 8, 11, 14, ___，下一项是多少？',
    qimg:null,
-   opts:[{t:'13块',img:null},{t:'15块',img:null},{t:'17块',img:null},{t:'20块',img:null}],
-   ans:1,ok:'🎉 正确！12 - 5 + 8 = 15块！',no:'💡 先减后加：12-5+8=15块'},
-  {src:'2024·Q5',d:'★',dc:'#10b981',
-   q:'一排数：2, 4, 6, 8, __, 12。横线上的数字是？',
+   opts:[{t:'16',img:null},{t:'17',img:null},{t:'18',img:null},{t:'19',img:null}],
+   ans:1,ok:'🎉 正确！等差数列，公差为3：14+3=17！',no:'💡 等差数列，每次加3：5→8→11→14→17'},
+  {src:'2023·Q5',d:'★',dc:'#10b981',
+   q:'红、黄、蓝三色按顺序循环排列：红黄蓝红黄蓝……第20个是什么颜色？',
    qimg:null,
-   opts:[{t:'9',img:null},{t:'10',img:null},{t:'11',img:null},{t:'7',img:null}],
-   ans:1,ok:'🎉 正确！偶数序列，每次+2！',no:'💡 偶数序列每次+2：2、4、6、8、10、12'},
-  {src:'2023·Q3',d:'★★',dc:'#f59e0b',
-   q:'从1到20的整数中，奇数有多少个？',
+   opts:[{t:'红色',img:null},{t:'黄色',img:null},{t:'蓝色',img:null},{t:'无法确定',img:null}],
+   ans:1,ok:'🎉 正确！20÷3=6余2，余2对应黄色！',no:'💡 20÷3=6余2。余1→红，余2→黄，余0→蓝。余2所以是黄色！'},
+  {src:'2023·Q8',d:'★★',dc:'#f59e0b',
+   q:'甲、乙、丙三人各拿一张牌（1、2、3各一张），已知：甲的牌不是1，乙的牌不是1也不是2。甲手里的牌是多少？',
    qimg:null,
-   opts:[{t:'8个',img:null},{t:'9个',img:null},{t:'10个',img:null},{t:'11个',img:null}],
-   ans:2,ok:'🎉 正确！1,3,5,7,9,11,13,15,17,19，共10个！',no:'💡 1到20中的奇数：1,3,5,...,19，共10个！'},
-  {src:'2023·Q7',d:'★★',dc:'#f59e0b',
-   q:'24 ÷ 6 + 8 × 2 = ？（先乘除后加减）',
+   opts:[{t:'1',img:null},{t:'2',img:null},{t:'3',img:null},{t:'无法确定',img:null}],
+   ans:1,ok:'🎉 正确！乙不是1也不是2，所以乙是3；甲不是1，剩1和2中的2；甲是2！',no:'💡 乙不是1不是2→乙是3。甲不是1，剩下1和2，丙只能是1，甲是2！'},
+  {src:'2022·Q6',d:'★★',dc:'#f59e0b',
+   q:'数列：1, 1, 2, 3, 5, 8, 13, ___（斐波那契数列），下一项是？',
    qimg:null,
-   opts:[{t:'14',img:null},{t:'20',img:null},{t:'22',img:null},{t:'28',img:null}],
-   ans:1,ok:'🎉 正确！24÷6=4，8×2=16，4+16=20！',no:'💡 先算乘除：24÷6=4，8×2=16；再加：4+16=20！'},
-  {src:'2022·Q4',d:'★★',dc:'#f59e0b',
-   q:'一个数，比50大比60小，是奇数，且能被3整除，这个数是？',
+   opts:[{t:'18',img:null},{t:'20',img:null},{t:'21',img:null},{t:'24',img:null}],
+   ans:2,ok:'🎉 正确！每项 = 前两项之和：8+13=21！',no:'💡 斐波那契规律：每项等于前两项之和。8+13=21！'},
+  {src:'2024·Q9',d:'★★',dc:'#f59e0b',
+   q:'一排6个座位，甲乙两人不能相邻，丙必须坐在首位或末位。丙坐首位时，甲乙有几种合法的坐法？',
    qimg:null,
-   opts:[{t:'51',img:null},{t:'53',img:null},{t:'57',img:null},{t:'59',img:null}],
-   ans:2,ok:'🎉 正确！57=3×19，能被3整除！',no:'💡 51-59的奇数中，57=3×19能被3整除！'},
-  {src:'2022·Q9',d:'★★★',dc:'#ec4899',
-   q:'15个方块按红黄蓝循环涂色，第13个方块是什么颜色？',
+   opts:[{t:'6种',img:null},{t:'8种',img:null},{t:'9种',img:null},{t:'12种',img:null}],
+   ans:0,ok:'🎉 正确！丙坐首位，剩5个座位，甲乙不相邻共6种排法！',no:'💡 丙坐首位，剩5位，甲乙不相邻：先排甲（5位），乙不能在甲旁边，逐一枚举得6种！'},
+  {src:'2022·Q11',d:'★★★',dc:'#ec4899',
+   q:'4人参赛，每两人之间恰好比赛一次。小明赢了3场，小红赢了2场，小亮赢了1场，小李赢了几场？',
    qimg:null,
-   opts:[{t:'红色',img:null},{t:'黄色',img:null},{t:'蓝色',img:null},{t:'绿色',img:null}],
-   ans:0,ok:'🎉 正确！13÷3=4余1，余1对应红色！',no:'💡 13÷3=4余1，余1对应第1位——红色！'},
-  {src:'2021·Q6',d:'★★',dc:'#f59e0b',
-   q:'3×3魔方阵（每行每列对角线和都等于15），中间格的数是？',
-   qimg:null,
-   opts:[{t:'3',img:null},{t:'4',img:null},{t:'5',img:null},{t:'6',img:null}],
-   ans:2,ok:'🎉 正确！3阶魔方阵中心永远是5！',no:'💡 1到9的平均数就是中心：(1+2+...+9)÷9=5！'},
-  {src:'2021·Q11',d:'★★★',dc:'#ec4899',
-   q:'数列：1, 1, 2, 3, 5, 8, 13, 21, __。横线上是什么数？',
-   qimg:null,
-   opts:[{t:'29',img:null},{t:'33',img:null},{t:'34',img:null},{t:'36',img:null}],
-   ans:2,ok:'🎉 正确！斐波那契数列，13+21=34！',no:'💡 每项=前两项之和：13+21=34！'},
-  {src:'2020·Q3',d:'★',dc:'#10b981',
-   q:'一本书100页，第一天看20页，第二天看30页，第三天看剩下的一半，第三天看了多少页？',
-   qimg:null,
-   opts:[{t:'20页',img:null},{t:'25页',img:null},{t:'30页',img:null},{t:'50页',img:null}],
-   ans:1,ok:'🎉 正确！剩50页，一半=25页！',no:'💡 前两天50页，剩50页，一半=25页！'},
-  {src:'2020·Q8',d:'★★★',dc:'#ec4899',
-   q:'用数字1-5各用一次，能组成多少个三位数？',
-   qimg:null,
-   opts:[{t:'60个',img:null},{t:'80个',img:null},{t:'100个',img:null},{t:'120个',img:null}],
-   ans:0,ok:'🎉 正确！5×4×3=60个！',no:'💡 百位5种，十位4种，个位3种：5×4×3=60！'}
+   opts:[{t:'0场',img:null},{t:'1场',img:null},{t:'2场',img:null},{t:'3场',img:null}],
+   ans:0,ok:'🎉 正确！4人总场数=C(4,2)=6场，总胜场=6。3+2+1+?=6，小李赢0场！',no:'💡 4人总赛6场，总胜数=6场。3+2+1+x=6，x=0。小李一场没赢！'},
 ];
 
-let curQ=0, starCount=0;
-let answered = new Array(quizData.length).fill(null);
+let cur = 0, scores = [];
 
-function renderStars() {
-  document.getElementById('stars').innerHTML = quizData.map((_,i) =>
-    `<span class="star${i<starCount?' on':''}">${i<starCount?'⭐':'☆'}</span>`).join('');
+function initQuiz() {
+  const stars = document.getElementById('stars');
+  stars.innerHTML = quizData.map((_,i) => `<span class="star" id="star${i}">⭐</span>`).join('');
+  scores = new Array(quizData.length).fill(null);
+  renderNav(); renderQ(0);
 }
 
 function renderNav() {
-  document.getElementById('qnav').innerHTML = quizData.map((_,i) =>
-    `<div class="qdot${answered[i]!==null?' done':''}${i===curQ?' cur':''}" onclick="goQ(${i})"></div>`).join('');
+  const nav = document.getElementById('qnav');
+  nav.innerHTML = quizData.map((_,i) => `<div class="qdot ${i===cur?'cur':scores[i]!==null?'done':''}" onclick="goQ(${i})"></div>`).join('');
 }
 
-function renderQuiz() {
-  renderStars(); renderNav();
-  const q = quizData[curQ]; const isDone = answered[curQ]!==null;
-  // 选项支持文字 + 可选图片
-  let optsHtml = q.opts.map((o,i) => {
-    let cls='qopt';
-    if(isDone){ if(i===q.ans) cls+=' correct'; else if(i===answered[curQ]) cls+=' wrong dis'; else cls+=' dis'; }
-    const imgTag = o.img ? `<img src="${o.img}" alt="选项图片" style="display:block;width:100%;margin-top:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.08)" loading="lazy">` : '';
-    return `<div class="${cls}" onclick="checkQ(${i})">${o.t}${imgTag}</div>`;
-  }).join('');
-  // 原题截图（文字下方）
-  const qimgHtml = q.qimg ? `<div style="margin:14px 0;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,0.08)"><img src="${q.qimg}" alt="原题图片" style="display:block;width:100%;max-width:560px;margin:0 auto" loading="lazy"></div>` : '';
-  let fbHtml = isDone ? `<div class="qfb show ${answered[curQ]===q.ans?'ok':'no'}">${answered[curQ]===q.ans?q.ok:q.no}</div>` : '';
-  let navHtml = isDone ? `<div class="q-nav-row">
-    ${curQ>0?`<button class="qnbtn qnbtn-prev show" onclick="goQ(${curQ-1})">← 上一题</button>`:''}
-    ${curQ<quizData.length-1?`<button class="qnbtn qnbtn-next show" onclick="goQ(${curQ+1})">下一题 →</button>`:''}
-  </div>` : '';
-  document.getElementById('quiz-content').innerHTML = `
+function renderQ(idx) {
+  cur = idx;
+  const q = quizData[idx];
+  const html = `
     <div class="q-meta">
       <span class="q-diff" style="background:${q.dc}">${q.d}</span>
       <span class="q-src">${q.src}</span>
     </div>
     <div class="quiz-q">${q.q}</div>
-    ${qimgHtml}
-    <div class="qopts">${optsHtml}</div>
-    ${fbHtml}${navHtml}`;
+    <div class="qopts" id="qopts">
+      ${q.opts.map((o,i)=>`<button class="qopt" onclick="answerQ(${i})">${o.t}</button>`).join('')}
+    </div>
+    <div class="qfb" id="qfb"></div>
+    <div class="q-nav-row">
+      <button class="qnbtn qnbtn-prev ${idx>0?'show':''}" onclick="goQ(${idx-1})">← 上一题</button>
+      <button class="qnbtn qnbtn-next" id="qnext" onclick="goQ(${idx+1})">下一题 →</button>
+    </div>`;
+  document.getElementById('quiz-content').innerHTML = html;
+  if (idx === quizData.length-1) document.getElementById('qnext').style.display='none';
+  renderNav();
 }
 
-function checkQ(idx) {
-  if (answered[curQ]!==null) return;
-  answered[curQ]=idx;
-  if(idx===quizData[curQ].ans) starCount++;
-  renderQuiz();
+function answerQ(i) {
+  const q = quizData[cur];
+  const opts = document.querySelectorAll('.qopt');
+  const fb = document.getElementById('qfb');
+  opts.forEach(o => o.classList.add('dis'));
+  if (i === q.ans) {
+    opts[i].classList.add('correct');
+    fb.className = 'qfb show ok'; fb.textContent = q.ok;
+    if (scores[cur] === null) {
+      scores[cur] = true;
+      document.getElementById('star'+cur).classList.add('on');
+    }
+  } else {
+    opts[i].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'qfb show no'; fb.textContent = q.no;
+    if (scores[cur] === null) scores[cur] = false;
+  }
+  const nx = document.getElementById('qnext');
+  if (nx && cur < quizData.length-1) nx.classList.add('show');
+  renderNav();
 }
-function goQ(idx) { curQ=idx; renderQuiz(); }
-renderQuiz();
+
+function goQ(idx) {
+  if (idx < 0 || idx >= quizData.length) return;
+  renderQ(idx);
+}
+
+initQuiz();
 </script>
 </body>
 </html>
