@@ -4,7 +4,218 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>📋 今日作业</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #030712;
+  color: #f8fafc;
+  font-family: 'Inter', 'Noto Sans SC', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.aurora {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+}
+.ab { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.08; animation: drift 18s ease-in-out infinite; }
+.ab1 { width: 600px; height: 600px; background: #f59e0b; top: -200px; right: -100px; }
+.ab2 { width: 500px; height: 500px; background: #ec4899; bottom: -150px; left: -100px; animation-delay: -9s; }
+@keyframes drift {
+  0%,100% { transform: translate(0,0); }
+  50% { transform: translate(20px,-20px); }
+}
+
+.page {
+  position: relative; z-index: 1;
+  max-width: 640px; margin: 0 auto;
+  padding: 40px 20px 80px;
+}
+
+.back-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; color: #94a3b8;
+  text-decoration: none;
+  padding: 6px 12px 6px 8px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,.07);
+  background: rgba(255,255,255,.03);
+  margin-bottom: 32px;
+  transition: color .2s, border-color .2s;
+}
+.back-btn:hover { color: #f8fafc; border-color: rgba(255,255,255,.15); }
+
+.page-title {
+  font-size: 26px; font-weight: 900; letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+.page-date { font-size: 13px; color: #64748b; margin-bottom: 36px; }
+
+/* ── Audio card ── */
+.audio-card {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 20px;
+  padding: 28px 24px;
+}
+
+.audio-label {
+  font-size: 12px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase;
+  color: #64748b; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.audio-label::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(to right, rgba(255,255,255,.06), transparent);
+}
+
+.audio-title {
+  font-size: 17px; font-weight: 700; margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+/* Custom audio player */
+.player {
+  display: flex; flex-direction: column; gap: 14px;
+}
+
+.player-controls {
+  display: flex; align-items: center; gap: 14px;
+}
+
+.play-btn {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: linear-gradient(135deg, #f59e0b, #fbbf24);
+  border: none; cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  transition: transform .15s, opacity .15s;
+  box-shadow: 0 4px 20px rgba(245,158,11,.3);
+}
+.play-btn:hover { transform: scale(1.06); }
+.play-btn:active { transform: scale(.96); }
+
+.player-info { flex: 1; min-width: 0; }
+.player-time {
+  font-size: 12px; color: #94a3b8; font-variant-numeric: tabular-nums;
+  margin-bottom: 6px;
+}
+
+.seek-bar {
+  width: 100%; height: 4px; border-radius: 2px;
+  background: rgba(255,255,255,.1);
+  cursor: pointer; position: relative; appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  accent-color: #f59e0b;
+}
+
+.volume-row {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: #64748b;
+}
+.volume-bar {
+  width: 90px; height: 3px; border-radius: 2px;
+  cursor: pointer; appearance: none; -webkit-appearance: none;
+  outline: none; accent-color: #f59e0b;
+  background: rgba(255,255,255,.1);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+.anim { animation: fadeUp .45s ease both; }
+.d1 { animation-delay: .05s; }
+.d2 { animation-delay: .15s; }
+.d3 { animation-delay: .25s; }
+
+@media (max-width: 480px) {
+  .page { padding: 28px 16px 60px; }
+  .audio-card { padding: 22px 18px; }
+}
+</style>
 </head>
 <body>
+
+<div class="aurora">
+  <div class="ab ab1"></div>
+  <div class="ab ab2"></div>
+</div>
+
+<div class="page">
+
+  <a href="home.html" class="back-btn anim d1">← 返回首页</a>
+
+  <div class="page-title anim d2">📋 今日作业</div>
+  <div class="page-date anim d2" id="pageDate"></div>
+
+  <div class="audio-card anim d3">
+    <div class="audio-label">🎧 听力作业</div>
+    <div class="audio-title">HWB P11 — Reading Polar Bears</div>
+
+    <div class="player">
+      <div class="player-controls">
+        <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+        <div class="player-info">
+          <div class="player-time">
+            <span id="curTime">0:00</span> / <span id="durTime">--:--</span>
+          </div>
+          <input type="range" class="seek-bar" id="seekBar" value="0" min="0" step="0.1" oninput="seekTo(this.value)">
+        </div>
+      </div>
+      <div class="volume-row">
+        🔊
+        <input type="range" class="volume-bar" id="volBar" value="100" min="0" max="100" oninput="setVol(this.value)">
+      </div>
+    </div>
+
+    <audio id="audio" src="src/assets/HWB P11 Reading Polar Bears. mp3.mp3" preload="metadata"></audio>
+  </div>
+
+</div>
+
+<script>
+// 日期
+(function() {
+  const d = new Date();
+  const days = ['周日','周一','周二','周三','周四','周五','周六'];
+  document.getElementById('pageDate').textContent =
+    `${d.getFullYear()} 年 ${d.getMonth()+1} 月 ${d.getDate()} 日  ${days[d.getDay()]}`;
+})();
+
+const audio = document.getElementById('audio');
+const playBtn = document.getElementById('playBtn');
+const seekBar = document.getElementById('seekBar');
+const curTime = document.getElementById('curTime');
+const durTime = document.getElementById('durTime');
+
+function fmt(s) {
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return m + ':' + String(sec).padStart(2, '0');
+}
+
+audio.addEventListener('loadedmetadata', () => {
+  seekBar.max = audio.duration;
+  durTime.textContent = fmt(audio.duration);
+});
+
+audio.addEventListener('timeupdate', () => {
+  seekBar.value = audio.currentTime;
+  curTime.textContent = fmt(audio.currentTime);
+});
+
+audio.addEventListener('ended', () => { playBtn.textContent = '▶'; });
+
+function togglePlay() {
+  if (audio.paused) { audio.play(); playBtn.textContent = '⏸'; }
+  else              { audio.pause(); playBtn.textContent = '▶'; }
+}
+
+function seekTo(v) { audio.currentTime = v; }
+function setVol(v) { audio.volume = v / 100; }
+</script>
 </body>
 </html>
