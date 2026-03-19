@@ -2,3 +2,8 @@
 node_modules/
 *.log
 .env
+
+# 历年真题 PDF（2013–2025）不提交
+exam/
+**/exam/
+*.pdf
