@@ -268,13 +268,11 @@ body {
   font-size: 13px; font-weight: 600; color: #a78bfa;
 }
 .video-section-label span { font-size: 16px; }
-.video-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-}
-@media (max-width: 700px) {
-  .video-grid { grid-template-columns: 1fr; }
+.video-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
 }
 .video-wrap {
   border-radius: 14px;
@@ -697,6 +695,32 @@ body {
   <!-- ═══════════════ S3 例题 ═══════════════ -->
   <div id="s3" class="sec">
 
+    <!-- 配套视频 -->
+    <div class="video-section-label"><span>▶</span> 先看视频，再做例题 · 支持倍速 / 全屏</div>
+    <div class="video-stack">
+      <div class="video-wrap">
+        <iframe
+          src="https://www.youtube.com/embed/eOGTgMYcaqc?rel=0&modestbranding=1"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen loading="lazy">
+        </iframe>
+      </div>
+      <div class="video-wrap">
+        <iframe
+          src="https://www.youtube.com/embed/YZ5tUkJSOXY?rel=0&modestbranding=1"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen loading="lazy">
+        </iframe>
+      </div>
+      <div class="video-wrap">
+        <iframe
+          src="https://www.youtube.com/embed/QXVt0TUqM0w?rel=0&modestbranding=1"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen loading="lazy">
+        </iframe>
+      </div>
+    </div>
+
     <!-- 例题1 -->
     <div class="excard">
       <div class="excard-hdr">
@@ -757,31 +781,6 @@ body {
       </div>
     </div>
 
-    <!-- 配套视频 -->
-    <div class="video-section-label"><span>▶</span> 配套讲解视频 · 支持倍速 / 全屏</div>
-    <div class="video-grid">
-      <div class="video-wrap">
-        <iframe
-          src="https://www.youtube.com/embed/eOGTgMYcaqc?rel=0&modestbranding=1"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen loading="lazy">
-        </iframe>
-      </div>
-      <div class="video-wrap">
-        <iframe
-          src="https://www.youtube.com/embed/YZ5tUkJSOXY?rel=0&modestbranding=1"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen loading="lazy">
-        </iframe>
-      </div>
-      <div class="video-wrap">
-        <iframe
-          src="https://www.youtube.com/embed/QXVt0TUqM0w?rel=0&modestbranding=1"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen loading="lazy">
-        </iframe>
-      </div>
-    </div>
 
   </div>
 
