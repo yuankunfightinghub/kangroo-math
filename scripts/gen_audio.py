@@ -1,0 +1,153 @@
+#!/usr/bin/env python3
+"""
+袋鼠数学 · Azure Neural TTS 音频批量生成脚本
+使用晓晓 Neural (zh-CN-XiaoxiaoNeural) · friendly 风格
+
+用法：
+  pip install requests
+  export AZURE_TTS_KEY="你的订阅Key"
+  export AZURE_TTS_REGION="eastasia"   # 或 eastus / southeastasia 等
+  python3 scripts/gen_audio.py
+"""
+
+import os
+import sys
+import requests
+import time
+from pathlib import Path
+
+# ── 配置 ───────────────────────────────────────────────────────────────────
+AZURE_KEY    = os.environ.get("AZURE_TTS_KEY", "")
+AZURE_REGION = os.environ.get("AZURE_TTS_REGION", "eastasia")
+VOICE_NAME   = "zh-CN-XiaoxiaoNeural"
+OUTPUT_DIR   = Path(__file__).parent.parent / "src" / "audio"
+
+# ── 所有需要生成的音频 ──────────────────────────────────────────────────────
+# 格式: (文件名, 讲解文字, SSML风格)
+# 风格选项: friendly / chat / affectionate / gentle
+AUDIO_TEXTS = [
+
+  # ═══ Module 1 · 计数与数感 ═══
+
+  # S2 概念卡讲解
+  ("m1_s2_v1", "数数策略，就是用有方法的方式去数东西，不重复、不漏掉。我们可以从左到右、从上到下，或者先分组——每5个一组，5、10、15、20，又快又准！", "friendly"),
+  ("m1_s2_v2", "奇数和偶数，偶数可以两两配对，没有人落单，比如2、4、6、8。奇数就不同，总有一个落单，比如1、3、5、7。记住：只看个位！个位是0、2、4、6、8就是偶数，个位是1、3、5、7、9就是奇数！", "friendly"),
+  ("m1_s2_v3", "加减法小技巧！做加法时，把数字凑成10。比如7加8，7加3变成10，从8里借3，8变成5，所以7加8等于15！做减法时，可以在数轴上往回跳，也可以凑整十再减。", "friendly"),
+  ("m1_s2_v4", "比较数的大小，先比位数，位数多的更大，100比99大，因为100有3位，99只有2位。位数相同时，从最高位开始比，哪位更大哪个数就更大！", "friendly"),
+
+  # S2 技巧步骤讲解
+  ("m1_s2_ms1", "分组数数法要点：把东西分成相等小组，先数有几组，再乘每组数量，加上剩余。24个苹果，5个一组，有4组还剩4个，4乘5加4等于24！", "chat"),
+  ("m1_s2_ms2", "奇偶快速判断秘诀：只看个位！不管多大的数，只要看最后一位。个位是0、2、4、6、8就是偶数，个位是1、3、5、7、9就是奇数！", "chat"),
+  ("m1_s2_ms3", "凑十法核心：先把一个数凑成整十，再加剩下的部分。8加6，先问8加几等于10？加2！从6里借2给8，8变成10，6还剩4，10加4等于14！", "chat"),
+  ("m1_s2_ms4", "数轴跳数法就是在数字跑道上跳格子！加法往右跳，减法往左跳。从起点出发，数格子，停在哪里答案就是那个数！", "chat"),
+
+  # S3 例题费曼讲解
+  ("m1_s3_ex1", "费曼讲解！给出9个再买回6个，净少了3个。原来的数量等于最后的23加上净减少的3，答案是26个。做这类题，先搞清楚每步是加还是减，再从结果往回推！", "affectionate"),
+  ("m1_s3_ex2", "费曼讲解前n个奇数求和规律！前n个奇数的和等于n的平方。前10个奇数的和等于100。验证：前2个奇数和是4等于2的平方，前3个是9等于3的平方。用这个规律，再大的数也能秒算！", "affectionate"),
+
+  # S4 闯关引导
+  ("m1_q1_g1", "袋鼠大叔做了两件事：第一给出去9个苹果，第二买进来6个苹果。把这两步写下来，是解题的第一步！", "gentle"),
+  ("m1_q1_g2", "给出9个，又买回6个，合在一起算，相当于总共减少了3个苹果。这叫净变化！", "gentle"),
+  ("m1_q1_g3", "最后剩23个，净少了3个，所以原来是23加3等于26个！从结果往回推！", "gentle"),
+  ("m1_q2_g1", "前10个奇数是：1、3、5、7、9、11、13、15、17、19。相邻奇数之间差2！", "gentle"),
+  ("m1_q2_g2", "发现规律了吗？前2个奇数和是4等于2的平方！前3个奇数和是9等于3的平方！前n个奇数的和等于n的平方！", "gentle"),
+  ("m1_q2_g3", "用规律：前10个奇数的和等于10的平方，等于100！不需要一个个加，直接用规律，快又准！", "gentle"),
+
+  # ═══ Module 3 · 逻辑推理 ═══
+
+  # S2 概念卡讲解
+  ("m3_s2_v1", "数列规律，就是一串按照某个固定规律排列的数。常见类型有：等差数列，每次加一个固定的数，比如2、5、8、11，每次加3。等比数列，每次乘一个固定的数，比如1、2、4、8，每次乘2。还有差数规律，相邻两项的差本身也有规律，比如1、2、4、7、11，差是1、2、3、4，每次多1。", "friendly"),
+  ("m3_s2_v2", "排除法是逻辑推理最常用的武器！面对多个选项，我们不急着找答案，而是先排除掉肯定不对的选项。一个一个消除不符合条件的，最后剩下的那个就是答案！就像名侦探一样：排除一切不可能，剩下的就是真相！", "friendly"),
+  ("m3_s2_v3", "比较排序，是把多个人或物体按照某个标准从大到小或从小到大排列。关键技巧是传递性：如果甲比乙高，乙比丙高，那么甲一定比丙高！这叫传递律。还有间接比较：甲和丙没有直接比，但通过乙可以推出甲和丙的大小关系！", "friendly"),
+  ("m3_s2_v4", "逻辑真假推理，是判断哪些陈述是真话、哪些是假话的推理。关键方法是假设法：先假设某人说的是真话，把所有条件推一遍，看有没有矛盾。如果有矛盾，说明假设错了；如果没有矛盾，假设就是正确的！", "friendly"),
+
+  # S2 技巧步骤讲解
+  ("m3_s2_ms1", "作差法要点：对相邻两项做减法，得到差数列。如果差数列还有规律，就继续对差作差。差是2、4、6、8，下一个差是10，所以21加10等于31！", "chat"),
+  ("m3_s2_ms2", "排除法：把每个条件当过滤网，一个一个筛。先用偶数条件筛，再用各位和等于9筛，再用十位大于个位筛。每道筛，候选越来越少，直到剩下答案！", "chat"),
+  ("m3_s2_ms3", "表格法：行是人，列是职业，画出条件。乙不是老师，丙不是工程师，只剩乙是工程师。再看甲不是医生，甲是老师，丙是医生！表格法让逻辑推理变得一清二楚！", "chat"),
+  ("m3_s2_ms4", "假设法：逐一假设某人说真话，推导所有结论，看有没有矛盾。假设小红是真话，推出矛盾，否定！假设小明是真话，没有矛盾，正确！假设法是真假推理的万能钥匙！", "chat"),
+
+  # S3 例题费曼讲解
+  ("m3_s3_ex1", "费曼讲解！作差：3、5、7、9，奇数列，每次加2，下一个差是11，所以26加11等于37。还有隐藏规律：每项等于n的平方加1！两种方法都能得到37！", "affectionate"),
+  ("m3_s3_ex2", "费曼讲解！假设丙是第一名，丙说真话。甲说我不是第一，也是真话，正好两人说真话！乙说假话意味着乙是第一或最后，丙是第一，所以乙是最后。丁说我是最后是假话，丁不是最后。全部逻辑自洽！丙是第一名！", "affectionate"),
+
+  # S4 闯关引导
+  ("m3_q1_g1", "相邻两项作差：5减2等于3，10减5等于5，17减10等于7，26减17等于9。差是3、5、7、9，每次加2！", "gentle"),
+  ("m3_q1_g2", "差的规律是3、5、7、9，每次加2，所以下一个差是11！", "gentle"),
+  ("m3_q1_g3", "26加11等于37！还有隐藏规律：这个数列每一项都等于n的平方加1。1平方加1等于2，2平方加1等于5，6平方加1等于37！超厉害！", "gentle"),
+  ("m3_q2_g1", "假设丙说真话，丙是第一名。甲说我不是第一，对，是真话。这样已经两个真话了，乙和丁必须都说假话！", "gentle"),
+  ("m3_q2_g2", "乙说不是第一也不是最后，这是假话，所以乙是第一或者是最后。丙已经是第一，所以乙是最后。丁说我是最后是假话，所以丁不是最后，没有矛盾！", "gentle"),
+  ("m3_q2_g3", "结论：丙是第一名！甲和丙说真话，恰好两人，完美符合题意！逻辑全部自洽！", "gentle"),
+]
+
+
+def build_ssml(text: str, style: str) -> str:
+    return f"""<speak version='1.0'
+  xmlns='http://www.w3.org/2001/10/synthesis'
+  xmlns:mstts='http://www.w3.org/2001/mstts'
+  xml:lang='zh-CN'>
+  <voice name='{VOICE_NAME}'>
+    <mstts:express-as style='{style}' styledegree='1.8'>
+      <prosody rate='-5%' pitch='+1Hz'>
+        {text}
+      </prosody>
+    </mstts:express-as>
+  </voice>
+</speak>"""
+
+
+def synthesize(filename: str, text: str, style: str) -> bool:
+    out_path = OUTPUT_DIR / f"{filename}.mp3"
+    if out_path.exists():
+        print(f"  ✓ 已存在，跳过: {filename}.mp3")
+        return True
+
+    url = f"https://{AZURE_REGION}.tts.speech.microsoft.com/cognitiveservices/v1"
+    headers = {
+        "Ocp-Apim-Subscription-Key": AZURE_KEY,
+        "Content-Type": "application/ssml+xml",
+        "X-Microsoft-OutputFormat": "audio-48khz-96kbitrate-mono-mp3",
+        "User-Agent": "KangrooMath",
+    }
+    ssml = build_ssml(text, style)
+
+    try:
+        resp = requests.post(url, headers=headers, data=ssml.encode("utf-8"), timeout=30)
+        if resp.status_code == 200:
+            out_path.write_bytes(resp.content)
+            print(f"  ✅ 生成: {filename}.mp3  ({len(resp.content)//1024}KB)")
+            return True
+        else:
+            print(f"  ❌ 失败: {filename}  HTTP {resp.status_code}  {resp.text[:120]}")
+            return False
+    except Exception as e:
+        print(f"  ❌ 异常: {filename}  {e}")
+        return False
+
+
+def main():
+    if not AZURE_KEY:
+        print("❌ 请先设置环境变量：export AZURE_TTS_KEY='你的Azure订阅Key'")
+        print("   获取方式：Azure Portal → Cognitive Services → Keys and Endpoint")
+        sys.exit(1)
+
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    print(f"🎙️  开始生成音频，共 {len(AUDIO_TEXTS)} 条，输出目录: {OUTPUT_DIR}\n")
+
+    ok = fail = 0
+    for filename, text, style in AUDIO_TEXTS:
+        result = synthesize(filename, text, style)
+        if result:
+            ok += 1
+        else:
+            fail += 1
+        time.sleep(0.3)   # 避免频率限制
+
+    print(f"\n{'='*50}")
+    print(f"✅ 成功: {ok}  ❌ 失败: {fail}  共: {len(AUDIO_TEXTS)}")
+    if fail == 0:
+        print("🎉 全部完成！现在可以在浏览器里试听 src/audio/*.mp3")
+
+
+if __name__ == "__main__":
+    main()
