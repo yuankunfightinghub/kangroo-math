@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📋 今日作业</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #030712;
+  --card: rgba(255,255,255,0.03);
+  --card-border: rgba(255,255,255,0.07);
+  --text: #f8fafc;
+  --muted: #64748b;
+  --muted2: #94a3b8;
+  --emerald: #10b981;
+  --amber: #f59e0b;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', 'Noto Sans SC', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Aurora ── */
+.aurora {
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none; overflow: hidden;
+}
+.ab {
+  position: absolute; border-radius: 50%;
+  filter: blur(120px); opacity: 0.08;
+  animation: drift 18s ease-in-out infinite;
+}
+.ab1 { width: 600px; height: 600px; background: #f59e0b; top: -200px; right: -100px; animation-delay: 0s; }
+.ab2 { width: 500px; height: 500px; background: #ec4899; bottom: -150px; left: -100px; animation-delay: -9s; }
+@keyframes drift {
+  0%,100% { transform: translate(0,0); }
+  50% { transform: translate(20px,-20px); }
+}
+
+/* ── Layout ── */
+.page { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; padding: 40px 20px 80px; }
+
+/* ── Back button ── */
+.back-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; color: var(--muted2);
+  text-decoration: none;
+  padding: 6px 12px 6px 8px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,.07);
+  background: rgba(255,255,255,.03);
+  margin-bottom: 32px;
+  transition: color .2s, border-color .2s;
+}
+.back-btn:hover { color: var(--text); border-color: rgba(255,255,255,.15); }
+
+/* ── Header ── */
+.header { margin-bottom: 32px; }
+.header-title {
+  font-size: 28px; font-weight: 900; letter-spacing: -0.02em;
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 6px;
+}
+.header-date { font-size: 13px; color: var(--muted2); }
+
+/* ── Progress summary ── */
+.progress-summary {
+  background: rgba(245,158,11,.07);
+  border: 1px solid rgba(245,158,11,.18);
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-bottom: 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px;
+}
+.prog-text { font-size: 14px; color: var(--muted2); }
+.prog-text strong { color: var(--text); font-weight: 700; }
+.prog-bar-wrap { flex: 1; max-width: 180px; }
+.prog-bar {
+  height: 6px; border-radius: 3px;
+  background: rgba(255,255,255,.08); overflow: hidden;
+}
+.prog-fill {
+  height: 100%; border-radius: 3px;
+  background: linear-gradient(to right, #f59e0b, #fcd34d);
+  transition: width .5s ease;
+}
+.prog-pct { font-size: 13px; font-weight: 700; color: #fcd34d; }
+
+/* ── Homework list ── */
+.hw-list { display: flex; flex-direction: column; gap: 12px; }
+
+.hw-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 18px 20px;
+  display: flex; align-items: center; gap: 14px;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+  text-decoration: none; color: inherit;
+}
+.hw-card:hover {
+  border-color: rgba(245,158,11,.3);
+  background: rgba(245,158,11,.04);
+}
+.hw-check {
+  width: 24px; height: 24px; border-radius: 7px;
+  border: 2px solid rgba(255,255,255,.15);
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 13px; transition: all .2s; cursor: pointer;
+}
+.hw-card.done .hw-check {
+  background: var(--emerald); border-color: var(--emerald); color: #fff;
+}
+.hw-card.done .hw-title { text-decoration: line-through; color: var(--muted); }
+.hw-info { flex: 1; min-width: 0; }
+.hw-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.hw-meta { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.hw-tag {
+  font-size: 11px; font-weight: 600; padding: 2px 9px;
+  border-radius: 20px; flex-shrink: 0;
+}
+.tag-math   { background: rgba(139,92,246,.15); color: #a78bfa; }
+.tag-logic  { background: rgba(6,182,212,.15);  color: #67e8f9; }
+.tag-exam   { background: rgba(245,158,11,.15); color: #fcd34d; }
+.hw-arrow { color: var(--muted); font-size: 16px; flex-shrink: 0; }
+
+/* ── Empty state ── */
+.hw-empty {
+  background: var(--card);
+  border: 1px dashed rgba(255,255,255,.1);
+  border-radius: 16px;
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+}
+.hw-empty .icon { font-size: 36px; margin-bottom: 12px; }
+
+/* ── Animations ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+.anim { animation: fadeUp .45s ease both; }
+.d1 { animation-delay: .05s; }
+.d2 { animation-delay: .12s; }
+.d3 { animation-delay: .18s; }
+.d4 { animation-delay: .24s; }
+.d5 { animation-delay: .30s; }
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+  .page { padding: 28px 16px 60px; }
+  .hw-card { padding: 14px 16px; }
+  .progress-summary { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<div class="aurora">
+  <div class="ab ab1"></div>
+  <div class="ab ab2"></div>
+</div>
+
+<div class="page">
+
+  <a href="home.html" class="back-btn anim d1">← 返回首页</a>
+
+  <div class="header anim d2">
+    <div class="header-title">📋 今日作业</div>
+    <div class="header-date" id="headerDate"></div>
+  </div>
+
+  <div class="progress-summary anim d2">
+    <div class="prog-text">已完成 <strong id="doneCount">0</strong> / <strong id="totalCount">0</strong> 项</div>
+    <div class="prog-bar-wrap">
+      <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+    </div>
+    <div class="prog-pct" id="progPct">0%</div>
+  </div>
+
+  <div class="hw-list anim d3" id="hwList">
+
+    <a class="hw-card" href="src/modules/module1-counting.html" onclick="toggleDone(event,this)">
+      <div class="hw-check"></div>
+      <div class="hw-info">
+        <div class="hw-title">计数与数感 — 概念 + 技巧部分</div>
+        <div class="hw-meta">
+          <span>Module 1</span><span>·</span><span>预计 20 分钟</span>
+        </div>
+      </div>
+      <span class="hw-tag tag-math">计数</span>
+      <span class="hw-arrow">›</span>
+    </a>
+
+    <a class="hw-card" href="src/modules/module3-logic.html" onclick="toggleDone(event,this)">
+      <div class="hw-check"></div>
+      <div class="hw-info">
+        <div class="hw-title">逻辑推理 — 例题 + 闯关挑战</div>
+        <div class="hw-meta">
+          <span>Module 3</span><span>·</span><span>预计 30 分钟</span>
+        </div>
+      </div>
+      <span class="hw-tag tag-logic">逻辑</span>
+      <span class="hw-arrow">›</span>
+    </a>
+
+  </div>
+
+</div>
+
+<script>
+// 日期
+(function() {
+  const d = new Date();
+  const days = ['周日','周一','周二','周三','周四','周五','周六'];
+  document.getElementById('headerDate').textContent =
+    `${d.getFullYear()} 年 ${d.getMonth()+1} 月 ${d.getDate()} 日  ${days[d.getDay()]}`;
+})();
+
+// 进度更新
+function updateProgress() {
+  const cards = document.querySelectorAll('.hw-card');
+  const done = document.querySelectorAll('.hw-card.done').length;
+  const total = cards.length;
+  const pct = total ? Math.round(done / total * 100) : 0;
+  document.getElementById('doneCount').textContent = done;
+  document.getElementById('totalCount').textContent = total;
+  document.getElementById('progFill').style.width = pct + '%';
+  document.getElementById('progPct').textContent = pct + '%';
+}
+
+// 勾选 / 跳转
+function toggleDone(e, card) {
+  const check = card.querySelector('.hw-check');
+  if (e.target === check || check.contains(e.target)) {
+    e.preventDefault();
+    card.classList.toggle('done');
+    check.textContent = card.classList.contains('done') ? '✓' : '';
+    updateProgress();
+  }
+}
+
+updateProgress();
+</script>
+</body>
+</html>

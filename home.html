@@ -10,18 +10,13 @@
 
 :root {
   --bg: #030712;
-  --card: rgba(255,255,255,0.03);
-  --card-border: rgba(255,255,255,0.07);
   --text: #f8fafc;
   --muted: #64748b;
   --muted2: #94a3b8;
   --purple: #8b5cf6;
-  --purple-light: #a78bfa;
   --blue: #3b82f6;
-  --cyan: #06b6d4;
   --emerald: #10b981;
   --amber: #f59e0b;
-  --pink: #ec4899;
 }
 
 html { scroll-behavior: smooth; }
@@ -30,6 +25,8 @@ body {
   color: var(--text);
   font-family: 'Inter', 'Noto Sans SC', sans-serif;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   overflow-x: hidden;
 }
 
@@ -40,12 +37,12 @@ body {
 }
 .ab {
   position: absolute; border-radius: 50%;
-  filter: blur(100px); opacity: 0.12;
+  filter: blur(120px); opacity: 0.1;
   animation: drift 18s ease-in-out infinite;
 }
-.ab1 { width: 600px; height: 600px; background: #7c3aed; top: -200px; left: -100px; animation-delay: 0s; }
-.ab2 { width: 500px; height: 500px; background: #2563eb; bottom: -150px; right: -100px; animation-delay: -7s; }
-.ab3 { width: 400px; height: 400px; background: #0891b2; top: 40%; left: 50%; animation-delay: -13s; }
+.ab1 { width: 700px; height: 700px; background: #7c3aed; top: -300px; left: -150px; animation-delay: 0s; }
+.ab2 { width: 600px; height: 600px; background: #2563eb; bottom: -200px; right: -150px; animation-delay: -7s; }
+.ab3 { width: 500px; height: 500px; background: #0891b2; top: 40%; left: 50%; animation-delay: -13s; }
 @keyframes drift {
   0%,100% { transform: translate(0,0); }
   33% { transform: translate(20px,-30px); }
@@ -53,190 +50,135 @@ body {
 }
 
 /* ── Layout ── */
-.page { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; padding: 40px 20px 80px; }
+.page {
+  position: relative; z-index: 1;
+  max-width: 640px; margin: 0 auto;
+  padding: 48px 24px 80px;
+  display: flex; flex-direction: column;
+  min-height: 100vh;
+}
 
-/* ── Top bar ── */
-.topbar {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 40px;
+/* ── Header ── */
+.header {
+  text-align: center;
+  margin-bottom: 56px;
 }
-.logo {
-  display: flex; align-items: center; gap: 10px;
-  font-size: 18px; font-weight: 800; letter-spacing: -0.02em;
-}
-.logo-icon { font-size: 26px; }
-.logo-grad {
+.logo-icon { font-size: 48px; display: block; margin-bottom: 12px; }
+.logo-title {
+  font-size: 28px; font-weight: 900; letter-spacing: -0.03em;
   background: linear-gradient(135deg, #a78bfa, #60a5fa);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
-.date-badge {
-  font-size: 12px; color: var(--muted2);
-  background: rgba(255,255,255,0.05);
-  border: 1px solid var(--card-border);
-  padding: 6px 14px; border-radius: 20px;
+.logo-sub {
+  font-size: 14px; color: var(--muted2); margin-top: 6px;
 }
 
-/* ── Section title ── */
-.sec-title {
-  font-size: 13px; font-weight: 600; letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--muted);
-  margin-bottom: 14px;
-  display: flex; align-items: center; gap: 8px;
+/* ── Big Cards ── */
+.cards { display: flex; flex-direction: column; gap: 20px; flex: 1; }
+
+.big-card {
+  display: flex; flex-direction: column;
+  align-items: flex-start;
+  text-decoration: none; color: inherit;
+  border-radius: 24px;
+  padding: 36px 32px;
+  flex: 1;
+  min-height: 200px;
+  position: relative; overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
 }
-.sec-title::after {
-  content: ''; flex: 1; height: 1px;
-  background: linear-gradient(to right, rgba(255,255,255,0.08), transparent);
+.big-card:hover { transform: translateY(-4px); }
+
+/* 袋鼠数学卡片 */
+.card-kangroo {
+  background: linear-gradient(135deg, rgba(139,92,246,.18) 0%, rgba(59,130,246,.12) 100%);
+  border: 1px solid rgba(139,92,246,.3);
+  box-shadow: 0 0 40px rgba(139,92,246,.08);
+}
+.card-kangroo:hover {
+  border-color: rgba(139,92,246,.55);
+  box-shadow: 0 8px 48px rgba(139,92,246,.18);
 }
 
-/* ── Section spacing ── */
-.section { margin-bottom: 40px; }
+/* 今日作业卡片 */
+.card-hw {
+  background: linear-gradient(135deg, rgba(245,158,11,.12) 0%, rgba(236,72,153,.08) 100%);
+  border: 1px solid rgba(245,158,11,.25);
+  box-shadow: 0 0 40px rgba(245,158,11,.06);
+}
+.card-hw:hover {
+  border-color: rgba(245,158,11,.5);
+  box-shadow: 0 8px 48px rgba(245,158,11,.14);
+}
 
-/* ════════════════════════════════
-   今日作业
-════════════════════════════════ */
-.hw-empty {
-  background: var(--card);
-  border: 1px dashed rgba(255,255,255,0.1);
-  border-radius: 16px;
-  padding: 32px 24px;
+/* Card content */
+.card-emoji {
+  font-size: 44px; margin-bottom: 16px; line-height: 1;
+  display: block;
+}
+.card-title {
+  font-size: 26px; font-weight: 800; letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.card-desc {
+  font-size: 14px; color: var(--muted2); line-height: 1.6;
+  flex: 1;
+}
+.card-arrow {
+  margin-top: 24px;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 20px;
+  transition: opacity .2s;
+}
+.card-kangroo .card-arrow {
+  background: rgba(139,92,246,.2);
+  color: #c4b5fd;
+  border: 1px solid rgba(139,92,246,.25);
+}
+.card-hw .card-arrow {
+  background: rgba(245,158,11,.15);
+  color: #fcd34d;
+  border: 1px solid rgba(245,158,11,.2);
+}
+.big-card:hover .card-arrow { opacity: .8; }
+
+/* Decorative circle */
+.card-deco {
+  position: absolute; right: -40px; bottom: -40px;
+  width: 160px; height: 160px; border-radius: 50%;
+  opacity: 0.06;
+}
+.card-kangroo .card-deco { background: #8b5cf6; }
+.card-hw .card-deco { background: #f59e0b; }
+
+/* ── Date ── */
+.date-footer {
   text-align: center;
-  color: var(--muted);
-  font-size: 14px;
+  margin-top: 40px;
+  font-size: 12px; color: var(--muted);
 }
-.hw-empty .hw-icon { font-size: 32px; margin-bottom: 10px; }
 
-.hw-list { display: flex; flex-direction: column; gap: 10px; }
-
-.hw-card {
-  background: var(--card);
-  border: 1px solid var(--card-border);
-  border-radius: 14px;
-  padding: 16px 18px;
-  display: flex; align-items: center; gap: 14px;
-  cursor: pointer;
-  transition: border-color .2s, background .2s;
-  text-decoration: none; color: inherit;
-}
-.hw-card:hover {
-  border-color: rgba(139,92,246,.35);
-  background: rgba(139,92,246,.05);
-}
-.hw-check {
-  width: 22px; height: 22px; border-radius: 6px;
-  border: 2px solid rgba(255,255,255,.15);
-  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-  font-size: 13px; transition: all .2s;
-}
-.hw-card.done .hw-check {
-  background: var(--emerald); border-color: var(--emerald); color: #fff;
-}
-.hw-card.done .hw-title { text-decoration: line-through; color: var(--muted); }
-.hw-info { flex: 1; min-width: 0; }
-.hw-title { font-size: 15px; font-weight: 600; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.hw-meta { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
-.hw-tag {
-  font-size: 11px; font-weight: 600; padding: 2px 8px;
-  border-radius: 20px; flex-shrink: 0;
-}
-.tag-math { background: rgba(139,92,246,.15); color: #a78bfa; }
-.tag-logic { background: rgba(6,182,212,.15); color: #67e8f9; }
-.tag-exam { background: rgba(245,158,11,.15); color: #fcd34d; }
-
-.hw-arrow { color: var(--muted); font-size: 14px; flex-shrink: 0; }
-
-/* ════════════════════════════════
-   袋鼠数学
-════════════════════════════════ */
-.module-grid { display: flex; flex-direction: column; gap: 10px; }
-
-.module-card {
-  background: var(--card);
-  border: 1px solid var(--card-border);
-  border-radius: 16px;
-  padding: 18px 20px;
-  display: flex; align-items: center; gap: 16px;
-  text-decoration: none; color: inherit;
-  transition: border-color .2s, transform .2s, background .2s;
-}
-.module-card:hover {
-  transform: translateY(-2px);
-  background: rgba(255,255,255,.04);
-}
-.module-icon-wrap {
-  width: 48px; height: 48px; border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px; flex-shrink: 0;
-}
-.module-info { flex: 1; min-width: 0; }
-.module-name { font-size: 16px; font-weight: 700; margin-bottom: 3px; }
-.module-desc { font-size: 12px; color: var(--muted2); }
-.module-badge {
-  font-size: 11px; font-weight: 600; padding: 3px 10px;
-  border-radius: 20px; flex-shrink: 0;
-}
-.badge-available { background: rgba(16,185,129,.15); color: #34d399; }
-.badge-soon { background: rgba(255,255,255,.06); color: var(--muted); }
-
-/* ── 每个模块的颜色 ── */
-.m-purple { background: rgba(139,92,246,.12); border-color: rgba(139,92,246,.2); }
-.m-purple:hover { border-color: rgba(139,92,246,.45); }
-.m-icon-purple { background: rgba(139,92,246,.15); }
-
-.m-cyan { background: rgba(6,182,212,.06); border-color: rgba(6,182,212,.15); }
-.m-cyan:hover { border-color: rgba(6,182,212,.4); }
-.m-icon-cyan { background: rgba(6,182,212,.12); }
-
-.m-emerald { background: rgba(16,185,129,.06); border-color: rgba(16,185,129,.15); }
-.m-emerald:hover { border-color: rgba(16,185,129,.4); }
-.m-icon-emerald { background: rgba(16,185,129,.12); }
-
-.m-amber { background: rgba(245,158,11,.05); border-color: rgba(245,158,11,.12); }
-.m-amber:hover { border-color: rgba(245,158,11,.35); }
-.m-icon-amber { background: rgba(245,158,11,.1); }
-
-.m-pink { background: rgba(236,72,153,.05); border-color: rgba(236,72,153,.12); }
-.m-pink:hover { border-color: rgba(236,72,153,.35); }
-.m-icon-pink { background: rgba(236,72,153,.1); }
-
-.m-blue { background: rgba(59,130,246,.05); border-color: rgba(59,130,246,.12); }
-.m-blue:hover { border-color: rgba(59,130,246,.35); }
-.m-icon-blue { background: rgba(59,130,246,.1); }
-
-/* ── 进度条 ── */
-.module-progress { margin-top: 6px; }
-.progress-bar {
-  height: 3px; border-radius: 2px;
-  background: rgba(255,255,255,.08);
-  overflow: hidden;
-}
-.progress-fill {
-  height: 100%; border-radius: 2px;
-  transition: width .6s ease;
-}
-.prog-purple { background: linear-gradient(to right, #8b5cf6, #a78bfa); }
-.prog-cyan   { background: linear-gradient(to right, #06b6d4, #67e8f9); }
-
-/* ── Enter animation ── */
+/* ── Animations ── */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(14px); }
+  from { opacity: 0; transform: translateY(18px); }
   to   { opacity: 1; transform: none; }
 }
-.anim { animation: fadeUp .45s ease both; }
+.anim { animation: fadeUp .5s ease both; }
 .d1 { animation-delay: .05s; }
-.d2 { animation-delay: .12s; }
-.d3 { animation-delay: .18s; }
-.d4 { animation-delay: .24s; }
-.d5 { animation-delay: .30s; }
-.d6 { animation-delay: .36s; }
-.d7 { animation-delay: .42s; }
-.d8 { animation-delay: .48s; }
+.d2 { animation-delay: .15s; }
+.d3 { animation-delay: .25s; }
 
 /* ── Mobile ── */
 @media (max-width: 480px) {
-  .page { padding: 28px 16px 60px; }
-  .topbar { margin-bottom: 28px; }
-  .module-card { padding: 14px 16px; }
-  .module-icon-wrap { width: 42px; height: 42px; font-size: 20px; }
+  .page { padding: 36px 16px 60px; }
+  .header { margin-bottom: 40px; }
+  .logo-icon { font-size: 40px; }
+  .logo-title { font-size: 24px; }
+  .big-card { padding: 28px 24px; min-height: 170px; }
+  .card-emoji { font-size: 36px; }
+  .card-title { font-size: 22px; }
 }
 </style>
 </head>
@@ -250,136 +192,45 @@ body {
 
 <div class="page">
 
-  <!-- Top bar -->
-  <div class="topbar anim d1">
-    <div class="logo">
-      <span class="logo-icon">🦘</span>
-      <span class="logo-grad">袋鼠数学</span>
-    </div>
-    <div class="date-badge" id="dateBadge"></div>
+  <div class="header anim d1">
+    <span class="logo-icon">🦘</span>
+    <div class="logo-title">袋鼠数学</div>
+    <div class="logo-sub">每天进步一点点</div>
   </div>
 
-  <!-- ══════════════════════════════
-       今日作业
-  ══════════════════════════════ -->
-  <div class="section anim d2">
-    <div class="sec-title">📋 今日作业</div>
+  <div class="cards">
 
-    <div class="hw-list" id="hwList">
-      <!-- 作业卡片示例，后续可动态管理 -->
-      <a class="hw-card" href="src/modules/module1-counting.html" onclick="toggleDone(event,this)">
-        <div class="hw-check">✓</div>
-        <div class="hw-info">
-          <div class="hw-title">计数与数感 — 概念 + 技巧部分</div>
-          <div class="hw-meta">
-            <span>module 1</span>
-            <span>·</span>
-            <span>预计 20 分钟</span>
-          </div>
-        </div>
-        <span class="hw-tag tag-math">计数</span>
-        <span class="hw-arrow">›</span>
-      </a>
+    <a href="https://yuankunfightinghub.github.io/kangroo-math/index.html"
+       class="big-card card-kangroo anim d2"
+       target="_blank" rel="noopener">
+      <span class="card-emoji">🦘</span>
+      <div class="card-title">袋鼠数学</div>
+      <div class="card-desc">系统课程 · 模块学习<br>计数 · 逻辑 · 几何 · 应用题</div>
+      <div class="card-arrow">进入课程 →</div>
+      <div class="card-deco"></div>
+    </a>
 
-      <a class="hw-card" href="src/modules/module3-logic.html" onclick="toggleDone(event,this)">
-        <div class="hw-check"></div>
-        <div class="hw-info">
-          <div class="hw-title">逻辑推理 — 例题 + 闯关挑战</div>
-          <div class="hw-meta">
-            <span>module 3</span>
-            <span>·</span>
-            <span>预计 30 分钟</span>
-          </div>
-        </div>
-        <span class="hw-tag tag-logic">逻辑</span>
-        <span class="hw-arrow">›</span>
-      </a>
-    </div>
+    <a href="homework.html" class="big-card card-hw anim d3">
+      <span class="card-emoji">📋</span>
+      <div class="card-title">今日作业</div>
+      <div class="card-desc">查看当天任务 · 打卡完成情况<br>跟踪每日学习进度</div>
+      <div class="card-arrow">查看作业 →</div>
+      <div class="card-deco"></div>
+    </a>
+
   </div>
 
-  <!-- ══════════════════════════════
-       袋鼠数学
-  ══════════════════════════════ -->
-  <div class="section">
-    <div class="sec-title anim d3">🦘 袋鼠数学</div>
-
-    <div class="module-grid">
-
-      <a href="src/modules/module1-counting.html" class="module-card m-purple anim d4">
-        <div class="module-icon-wrap m-icon-purple">🔢</div>
-        <div class="module-info">
-          <div class="module-name">计数与数感</div>
-          <div class="module-desc">数数策略 · 奇偶 · 加减法技巧</div>
-          <div class="module-progress">
-            <div class="progress-bar"><div class="progress-fill prog-purple" style="width:60%"></div></div>
-          </div>
-        </div>
-        <span class="module-badge badge-available">进行中</span>
-      </a>
-
-      <a href="#" class="module-card m-blue anim d5">
-        <div class="module-icon-wrap m-icon-blue">🔷</div>
-        <div class="module-info">
-          <div class="module-name">几何与图形</div>
-          <div class="module-desc">形状 · 面积 · 对称 · 空间感知</div>
-        </div>
-        <span class="module-badge badge-soon">即将上线</span>
-      </a>
-
-      <a href="src/modules/module3-logic.html" class="module-card m-cyan anim d6">
-        <div class="module-icon-wrap m-icon-cyan">🧩</div>
-        <div class="module-info">
-          <div class="module-name">逻辑推理</div>
-          <div class="module-desc">数列规律 · 排除法 · 真假推理</div>
-          <div class="module-progress">
-            <div class="progress-bar"><div class="progress-fill prog-cyan" style="width:35%"></div></div>
-          </div>
-        </div>
-        <span class="module-badge badge-available">进行中</span>
-      </a>
-
-      <a href="#" class="module-card m-emerald anim d7">
-        <div class="module-icon-wrap m-icon-emerald">📊</div>
-        <div class="module-info">
-          <div class="module-name">数据与统计</div>
-          <div class="module-desc">图表 · 平均数 · 可能性</div>
-        </div>
-        <span class="module-badge badge-soon">即将上线</span>
-      </a>
-
-      <a href="#" class="module-card m-amber anim d8">
-        <div class="module-icon-wrap m-icon-amber">⚡</div>
-        <div class="module-info">
-          <div class="module-name">应用题专项</div>
-          <div class="module-desc">行程 · 工程 · 鸡兔同笼</div>
-        </div>
-        <span class="module-badge badge-soon">即将上线</span>
-      </a>
-
-    </div>
-  </div>
+  <div class="date-footer anim d3" id="dateBadge"></div>
 
 </div>
 
 <script>
-// ── 日期 ──
 (function() {
   const d = new Date();
   const days = ['周日','周一','周二','周三','周四','周五','周六'];
-  const s = `${d.getMonth()+1}月${d.getDate()}日 ${days[d.getDay()]}`;
-  document.getElementById('dateBadge').textContent = s;
+  document.getElementById('dateBadge').textContent =
+    `${d.getFullYear()} 年 ${d.getMonth()+1} 月 ${d.getDate()} 日  ${days[d.getDay()]}`;
 })();
-
-// ── 作业打勾（仅本地临时状态，点勾切换，点卡片跳转）──
-function toggleDone(e, card) {
-  const check = card.querySelector('.hw-check');
-  // 点击 check 区域才切换，点其他区域跳转
-  if (e.target === check || check.contains(e.target)) {
-    e.preventDefault();
-    card.classList.toggle('done');
-    check.textContent = card.classList.contains('done') ? '✓' : '';
-  }
-}
 </script>
 </body>
 </html>
