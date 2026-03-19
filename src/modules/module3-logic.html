@@ -191,8 +191,7 @@ body {
   font-family: 'Noto Sans SC', sans-serif;
 }
 .vbtn:hover { transform: scale(1.06); }
-.vbtn.playing { animation: pulseBtn 1.2s ease infinite; }
-@keyframes pulseBtn { 0%,100%{opacity:1} 50%{opacity:.5} }
+.vbtn.playing { opacity: .75; }
 .vbtn-v { background: rgba(139,92,246,0.15); color: var(--purple-light); border: 1px solid rgba(139,92,246,0.25); }
 .vbtn-c { background: rgba(6,182,212,0.12); color: #67e8f9; border: 1px solid rgba(6,182,212,0.25); }
 .vbtn-e { background: rgba(16,185,129,0.12); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.25); }
@@ -454,7 +453,7 @@ body {
   border: 1px solid rgba(96,165,250,0.25);
 }
 .va-btn:hover { background: rgba(96,165,250,0.2); }
-.va-btn.playing { animation: pulseBtn 1.2s ease infinite; }
+.va-btn.playing { opacity: .75; }
 
 /* ── Animations ── */
 @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
@@ -814,9 +813,10 @@ let cAudio = null, cBtn = null;
 const AUDIO_BASE = '../../src/audio/';
 
 function tv(btn, fallbackText, audioFile) {
-  if (cAudio) { cAudio.pause(); cAudio.currentTime = 0; }
-  if (cBtn) { cBtn.classList.remove('playing'); cBtn.innerHTML = cBtn.dataset.o || '🔊 听讲解'; }
-  if (btn === cBtn && btn.classList.contains('playing')) { cBtn = null; cAudio = null; return; }
+  const isSame = btn === cBtn;
+  if (cAudio) { cAudio.pause(); cAudio.currentTime = 0; cAudio = null; }
+  if (cBtn) { cBtn.classList.remove('playing'); cBtn.innerHTML = cBtn.dataset.o || '🔊 听讲解'; cBtn = null; }
+  if (isSame) return;
 
   btn.dataset.o = btn.innerHTML;
   btn.innerHTML = '⏹ 停止';
