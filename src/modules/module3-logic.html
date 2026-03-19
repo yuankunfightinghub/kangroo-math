@@ -261,6 +261,28 @@ body {
 }
 .step-content strong, .step-content b { color: var(--text); }
 
+/* ── YouTube Video ── */
+.video-wrap {
+  margin-top: 28px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(167,139,250,.2);
+  background: #0d0d14;
+  box-shadow: 0 0 32px rgba(96,165,250,.08);
+}
+.video-label {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 16px;
+  font-size: 13px; font-weight: 600; color: #a78bfa;
+  border-bottom: 1px solid rgba(167,139,250,.15);
+  background: rgba(167,139,250,.05);
+}
+.video-label span { font-size: 16px; }
+.video-wrap iframe {
+  width: 100%; aspect-ratio: 16/9;
+  display: block; border: none;
+}
+
 /* ── Example Cards ── */
 .excard {
   background: var(--card); border: 1px solid var(--card-border);
@@ -728,6 +750,17 @@ body {
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- 配套视频 -->
+    <div class="video-wrap">
+      <div class="video-label"><span>▶</span> 配套讲解视频 · 支持倍速 / 全屏</div>
+      <iframe
+        src="https://www.youtube.com/embed/YZ5tUkJSOXY?rel=0&modestbranding=1"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+        loading="lazy">
+      </iframe>
     </div>
 
   </div>
