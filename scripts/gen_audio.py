@@ -1,30 +1,42 @@
 #!/usr/bin/env python3
 """
-袋鼠数学 · Azure Neural TTS 音频批量生成脚本
-使用晓晓 Neural (zh-CN-XiaoxiaoNeural) · friendly 风格
+袋鼠数学 · edge-tts 音频批量生成脚本
+使用晓晓 Neural (zh-CN-XiaoxiaoNeural) — 完全免费，无需 API Key
 
 用法：
-  pip install requests
-  export AZURE_TTS_KEY="你的订阅Key"
-  export AZURE_TTS_REGION="eastasia"   # 或 eastus / southeastasia 等
+  pip3 install edge-tts
   python3 scripts/gen_audio.py
 """
 
-import os
-import sys
-import requests
+import asyncio
 import time
 from pathlib import Path
 
+try:
+    import edge_tts
+except ImportError:
+    print("❌ 请先安装：pip3 install edge-tts")
+    raise SystemExit(1)
+
 # ── 配置 ───────────────────────────────────────────────────────────────────
-AZURE_KEY    = os.environ.get("AZURE_TTS_KEY", "")
-AZURE_REGION = os.environ.get("AZURE_TTS_REGION", "eastasia")
-VOICE_NAME   = "zh-CN-XiaoxiaoNeural"
-OUTPUT_DIR   = Path(__file__).parent.parent / "src" / "audio"
+# 风格通过不同声音模拟（edge-tts 用角色切换代替 style 参数）
+VOICE_FRIENDLY     = "zh-CN-XiaoxiaoNeural"   # 概念讲解：活泼友好
+VOICE_CHAT         = "zh-CN-XiaoxiaoNeural"   # 技巧讲解：轻松对话
+VOICE_AFFECTIONATE = "zh-CN-XiaoxiaoNeural"   # 费曼讲解：亲切有温度
+VOICE_GENTLE       = "zh-CN-XiaoxiaoNeural"   # 引导步骤：温柔耐心
+
+OUTPUT_DIR = Path(__file__).parent.parent / "src" / "audio"
+
+# 语速映射（edge-tts 用 rate 参数，如 "-10%" 慢一点）
+RATE_MAP = {
+    "friendly":     "-5%",
+    "chat":         "+0%",
+    "affectionate": "-8%",
+    "gentle":       "-10%",
+}
 
 # ── 所有需要生成的音频 ──────────────────────────────────────────────────────
-# 格式: (文件名, 讲解文字, SSML风格)
-# 风格选项: friendly / chat / affectionate / gentle
+# 格式: (文件名, 讲解文字, 风格)
 AUDIO_TEXTS = [
 
   # ═══ Module 1 · 计数与数感 ═══
@@ -81,73 +93,42 @@ AUDIO_TEXTS = [
 ]
 
 
-def build_ssml(text: str, style: str) -> str:
-    return f"""<speak version='1.0'
-  xmlns='http://www.w3.org/2001/10/synthesis'
-  xmlns:mstts='http://www.w3.org/2001/mstts'
-  xml:lang='zh-CN'>
-  <voice name='{VOICE_NAME}'>
-    <mstts:express-as style='{style}' styledegree='1.8'>
-      <prosody rate='-5%' pitch='+1Hz'>
-        {text}
-      </prosody>
-    </mstts:express-as>
-  </voice>
-</speak>"""
-
-
-def synthesize(filename: str, text: str, style: str) -> bool:
+async def synthesize_one(filename: str, text: str, style: str) -> bool:
     out_path = OUTPUT_DIR / f"{filename}.mp3"
     if out_path.exists():
         print(f"  ✓ 已存在，跳过: {filename}.mp3")
         return True
 
-    url = f"https://{AZURE_REGION}.tts.speech.microsoft.com/cognitiveservices/v1"
-    headers = {
-        "Ocp-Apim-Subscription-Key": AZURE_KEY,
-        "Content-Type": "application/ssml+xml",
-        "X-Microsoft-OutputFormat": "audio-48khz-96kbitrate-mono-mp3",
-        "User-Agent": "KangrooMath",
-    }
-    ssml = build_ssml(text, style)
-
+    rate = RATE_MAP.get(style, "-5%")
     try:
-        resp = requests.post(url, headers=headers, data=ssml.encode("utf-8"), timeout=30)
-        if resp.status_code == 200:
-            out_path.write_bytes(resp.content)
-            print(f"  ✅ 生成: {filename}.mp3  ({len(resp.content)//1024}KB)")
-            return True
-        else:
-            print(f"  ❌ 失败: {filename}  HTTP {resp.status_code}  {resp.text[:120]}")
-            return False
+        communicate = edge_tts.Communicate(text, VOICE_FRIENDLY, rate=rate, volume="+0%")
+        await communicate.save(str(out_path))
+        size = out_path.stat().st_size // 1024
+        print(f"  ✅ 生成: {filename}.mp3  ({size}KB)")
+        return True
     except Exception as e:
-        print(f"  ❌ 异常: {filename}  {e}")
+        print(f"  ❌ 失败: {filename}  {e}")
         return False
 
 
-def main():
-    if not AZURE_KEY:
-        print("❌ 请先设置环境变量：export AZURE_TTS_KEY='你的Azure订阅Key'")
-        print("   获取方式：Azure Portal → Cognitive Services → Keys and Endpoint")
-        sys.exit(1)
-
+async def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    print(f"🎙️  开始生成音频，共 {len(AUDIO_TEXTS)} 条，输出目录: {OUTPUT_DIR}\n")
+    print(f"🎙️  edge-tts · 晓晓Neural  共 {len(AUDIO_TEXTS)} 条\n")
 
     ok = fail = 0
     for filename, text, style in AUDIO_TEXTS:
-        result = synthesize(filename, text, style)
+        result = await synthesize_one(filename, text, style)
         if result:
             ok += 1
         else:
             fail += 1
-        time.sleep(0.3)   # 避免频率限制
+        await asyncio.sleep(0.2)
 
     print(f"\n{'='*50}")
     print(f"✅ 成功: {ok}  ❌ 失败: {fail}  共: {len(AUDIO_TEXTS)}")
     if fail == 0:
-        print("🎉 全部完成！现在可以在浏览器里试听 src/audio/*.mp3")
+        print("🎉 全部完成！运行 git add src/audio && git push 即可上线")
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
