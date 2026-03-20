@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔷 几何与图形 — 袋鼠数学乐园</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #030712;
+  --bg2: #0a0f1e;
+  --card: rgba(255,255,255,0.03);
+  --card-border: rgba(255,255,255,0.08);
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --muted2: #64748b;
+  --blue: #3b82f6;
+  --blue-light: #93c5fd;
+  --cyan: #06b6d4;
+  --purple: #8b5cf6;
+  --purple-light: #a78bfa;
+  --emerald: #10b981;
+  --amber: #f59e0b;
+  --pink: #ec4899;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', 'Noto Sans SC', sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Aurora ── */
+.aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.aurora-blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.12; animation: auroraF linear infinite; }
+.ab1 { width: 600px; height: 600px; background: radial-gradient(circle,#3b82f6,transparent 70%); top: -100px; left: -100px; animation-duration: 22s; }
+.ab2 { width: 500px; height: 500px; background: radial-gradient(circle,#8b5cf6,transparent 70%); top: 50%; right: -100px; animation-duration: 28s; animation-delay:-10s; }
+.ab3 { width: 400px; height: 400px; background: radial-gradient(circle,#06b6d4,transparent 70%); bottom: 10%; left: 20%; animation-duration: 20s; animation-delay:-5s; }
+@keyframes auroraF { 0%{transform:translate(0,0)} 33%{transform:translate(30px,-25px)} 66%{transform:translate(-15px,35px)} 100%{transform:translate(0,0)} }
+
+.dot-grid { position: fixed; inset: 0; z-index: 0; pointer-events: none; background-image: radial-gradient(rgba(255,255,255,0.05) 1px,transparent 1px); background-size: 28px 28px; mask-image: radial-gradient(ellipse 70% 70% at 50% 50%,black 40%,transparent 100%); }
+
+.page { position: relative; z-index: 1; }
+
+/* ── Top bar ── */
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(3,7,18,0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--card-border);
+  padding: 0 24px;
+}
+.topbar-inner {
+  max-width: 960px; margin: 0 auto;
+  display: flex; align-items: center; gap: 16px; height: 60px;
+}
+.back-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--muted); font-size: 13px; font-weight: 500;
+  text-decoration: none; transition: color .2s;
+  padding: 6px 12px; border-radius: 8px;
+}
+.back-link:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+.topbar-sep { color: var(--muted2); font-size: 14px; }
+.topbar-title { font-size: 14px; font-weight: 600; color: var(--muted); }
+
+/* ── Hero Tab Nav ── */
+.tab-nav {
+  display: inline-flex; gap: 6px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 6px;
+  margin-top: 24px;
+  margin-bottom: 0;
+  animation: fadeUp .5s ease .3s both;
+}
+.tab-pill {
+  padding: 10px 22px; border-radius: 10px;
+  font-size: 14px; font-weight: 600; border: none;
+  background: transparent; color: var(--muted);
+  cursor: pointer; transition: all .25s; white-space: nowrap;
+  font-family: 'Noto Sans SC', sans-serif;
+  display: flex; align-items: center; gap: 6px;
+}
+.tab-pill:hover { background: rgba(255,255,255,0.06); color: var(--text); }
+.tab-pill.on {
+  background: rgba(59,130,246,0.18);
+  color: #93c5fd;
+  box-shadow: 0 0 0 1px rgba(59,130,246,0.35);
+}
+
+/* ── Hero ── */
+.mod-hero {
+  padding: 60px 24px 56px;
+  text-align: center;
+  position: relative;
+  max-width: 960px; margin: 0 auto;
+}
+.mod-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25);
+  border-radius: 999px; padding: 5px 16px;
+  font-size: 12px; font-weight: 600; color: #93c5fd;
+  margin-bottom: 20px;
+  animation: fadeUp .5s ease both;
+}
+.mod-title {
+  font-size: clamp(32px, 6vw, 56px); font-weight: 900;
+  letter-spacing: -0.03em; line-height: 1.1;
+  margin-bottom: 14px;
+  animation: fadeUp .5s ease .1s both;
+}
+.mod-sub {
+  color: var(--muted); font-size: 16px; max-width: 480px; margin: 20px auto 0;
+  animation: fadeUp .5s ease .4s both;
+}
+.grad-text { background: linear-gradient(135deg,#93c5fd,#a78bfa,#67e8f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+/* ── Tab sections ── */
+.container { max-width: 960px; margin: 0 auto; padding: 0 24px 80px; }
+.sec { display: none; animation: fadeUp .4s ease; }
+.sec.on { display: block; }
+
+/* ── Section title ── */
+.sec-heading {
+  font-size: 22px; font-weight: 800; letter-spacing: -0.02em;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--card-border);
+}
+
+/* ── Glass Card ── */
+.gcard {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 28px;
+  margin-bottom: 16px;
+  transition: border-color .3s;
+  position: relative;
+  overflow: hidden;
+}
+.gcard:hover { border-color: rgba(59,130,246,0.25); }
+.gcard::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(59,130,246,0.4), transparent);
+  opacity: 0; transition: opacity .3s;
+}
+.gcard:hover::before { opacity: 1; }
+
+/* Concept box */
+.cbox {
+  border-radius: 16px; padding: 20px 20px 20px 24px;
+  margin: 14px 0; position: relative;
+  border-left: 3px solid var(--accent, var(--blue));
+  background: var(--accent-bg, rgba(59,130,246,0.05));
+}
+.cbox h4 { font-size: 17px; font-weight: 700; margin-bottom: 8px; color: var(--accent, #93c5fd); letter-spacing: -0.01em; }
+.cbox p, .cbox ul, .cbox ol { font-size: 15px; color: var(--muted); line-height: 1.8; }
+.cbox ul, .cbox ol { margin-left: 20px; margin-top: 8px; }
+.cbox li { margin-bottom: 4px; }
+.cbox b, .cbox strong { color: var(--text); font-weight: 600; }
+
+/* Shape grid */
+.shape-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 10px; margin: 14px 0;
+}
+.shape-item {
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px; padding: 14px 8px; text-align: center;
+}
+.shape-item .s-icon { font-size: 28px; display: block; margin-bottom: 6px; }
+.shape-item .s-name { font-size: 12px; font-weight: 600; color: var(--muted); }
+.shape-item .s-desc { font-size: 11px; color: var(--muted2); margin-top: 3px; }
+
+/* Voice btn */
+.vbtn {
+  position: absolute; top: 14px; right: 14px;
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: 8px; border: none;
+  font-size: 12px; font-weight: 600; cursor: pointer; transition: all .25s;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.vbtn:hover { transform: scale(1.06); }
+.vbtn.playing { opacity: .75; }
+.vbtn-b { background: rgba(59,130,246,0.12); color: #93c5fd; border: 1px solid rgba(59,130,246,0.25); }
+.vbtn-v { background: rgba(139,92,246,0.15); color: var(--purple-light); border: 1px solid rgba(139,92,246,0.25); }
+.vbtn-e { background: rgba(16,185,129,0.12); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.25); }
+.vbtn-a { background: rgba(245,158,11,0.12); color: #fcd34d; border: 1px solid rgba(245,158,11,0.25); }
+
+/* ── Method Cards ── */
+.mcard {
+  background: var(--card); border: 1px solid var(--card-border);
+  border-radius: 16px; margin-bottom: 12px;
+  cursor: pointer; transition: all .3s; overflow: hidden;
+}
+.mcard:hover { border-color: rgba(255,255,255,0.12); transform: translateY(-1px); }
+.mcard.open { border-color: rgba(59,130,246,0.3); }
+
+.mcard-head {
+  padding: 20px 24px; display: flex; align-items: center; gap: 16px;
+}
+.mcard-icon { font-size: 28px; flex-shrink: 0; }
+.mcard-info { flex: 1; }
+.mcard-title { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
+.mcard-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.mcard-chevron { font-size: 18px; color: var(--muted); transition: transform .3s; margin-left: auto; }
+.mcard.open .mcard-chevron { transform: rotate(180deg); color: #93c5fd; }
+
+.mcard-body {
+  max-height: 0; overflow: hidden; transition: max-height .5s cubic-bezier(0.23,1,0.32,1);
+}
+.mcard-body.open { max-height: 1200px; }
+.mcard-body-inner {
+  padding: 0 24px 24px;
+  border-top: 1px solid var(--card-border);
+}
+.mcard-challenge {
+  background: rgba(255,255,255,0.03); border-radius: 12px;
+  padding: 14px 16px; font-size: 14px; color: var(--muted);
+  margin: 16px 0 12px; line-height: 1.7;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.mcard-challenge strong { color: var(--text); }
+
+.reveal-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 18px; border-radius: 10px;
+  background: rgba(59,130,246,0.1); border: 1px dashed rgba(59,130,246,0.35);
+  color: #93c5fd; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all .25s; margin-bottom: 12px;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.reveal-btn:hover { background: rgba(59,130,246,0.18); transform: scale(1.03); }
+
+.step {
+  display: flex; gap: 14px; align-items: flex-start;
+  margin-bottom: 12px; opacity: 0; transform: translateX(-16px); transition: all .4s;
+}
+.step.show { opacity: 1; transform: none; }
+.step-num {
+  width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800; color: #fff;
+  background: linear-gradient(135deg, var(--scolor1,#3b82f6), var(--scolor2,#8b5cf6));
+}
+.step-content {
+  background: rgba(255,255,255,0.04); border-radius: 12px;
+  padding: 10px 14px; flex: 1; font-size: 14px; line-height: 1.75;
+  color: var(--muted); border: 1px solid rgba(255,255,255,0.06);
+}
+.step-content strong, .step-content b { color: var(--text); }
+
+/* ── YouTube Video ── */
+.video-section-label {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 28px; margin-bottom: 12px;
+  font-size: 13px; font-weight: 600; color: #93c5fd;
+}
+.video-section-label span { font-size: 16px; }
+.video-stack {
+  display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px;
+}
+.video-wrap {
+  border-radius: 14px; overflow: hidden;
+  border: 1px solid rgba(59,130,246,.2);
+  background: #0d0d14;
+  box-shadow: 0 0 24px rgba(59,130,246,.07);
+}
+.video-label {
+  padding: 10px 16px;
+  font-size: 12px; font-weight: 600; color: #93c5fd;
+  background: rgba(59,130,246,0.08);
+  border-bottom: 1px solid rgba(59,130,246,0.15);
+}
+.video-wrap iframe {
+  width: 100%; aspect-ratio: 16/9;
+  display: block; border: none;
+}
+
+/* ── Example Cards ── */
+.excard {
+  background: var(--card); border: 1px solid var(--card-border);
+  border-radius: 20px; overflow: hidden; margin-bottom: 24px;
+}
+.excard-hdr {
+  padding: 16px 24px;
+  background: rgba(255,255,255,0.02);
+  border-bottom: 1px solid var(--card-border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.excard-hdr .ex-num { font-size: 14px; font-weight: 700; color: #93c5fd; }
+.excard-hdr .ex-tag {
+  font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px;
+  background: rgba(59,130,246,0.1); color: #93c5fd;
+  border: 1px solid rgba(59,130,246,0.25);
+}
+.excard-body { padding: 24px; }
+
+.qbox {
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px; padding: 18px; margin-bottom: 20px;
+  font-size: 16px; line-height: 1.8; color: var(--text);
+}
+.qbox small { color: var(--muted); font-size: 13px; }
+
+.ex-opts { display: grid; grid-template-columns: repeat(auto-fit,minmax(140px,1fr)); gap: 8px; margin-bottom: 14px; }
+.ex-opt {
+  padding: 12px 16px; border-radius: 12px;
+  border: 1px solid var(--card-border); background: rgba(255,255,255,0.03);
+  font-size: 15px; font-weight: 600; cursor: pointer; transition: all .25s; text-align: center;
+  color: var(--muted); font-family: 'Noto Sans SC', sans-serif;
+}
+.ex-opt:hover { border-color: rgba(59,130,246,0.4); background: rgba(59,130,246,0.08); color: var(--text); transform: translateY(-2px); }
+.ex-opt.correct { border-color: rgba(16,185,129,0.5); background: rgba(16,185,129,0.1); color: #6ee7b7; pointer-events: none; }
+.ex-opt.wrong { border-color: rgba(239,68,68,0.5); background: rgba(239,68,68,0.08); animation: shake .4s; color: #fca5a5; }
+.ex-opt.dim { opacity: .35; pointer-events: none; }
+
+.ex-result {
+  border-radius: 12px; padding: 14px 16px;
+  font-size: 14px; font-weight: 600; line-height: 1.7;
+  display: none;
+}
+
+/* Guide chain */
+.guide-chain { margin-top: 16px; display: none; }
+.guide-item {
+  margin-bottom: 10px; border-radius: 14px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06); transition: border-color .3s;
+}
+.guide-item.unlocked { border-color: rgba(59,130,246,0.3); }
+.guide-q {
+  padding: 13px 18px; font-size: 14px; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center; gap: 10px;
+  color: var(--muted2); transition: all .25s;
+}
+.guide-item.unlocked .guide-q { color: var(--text); background: rgba(59,130,246,0.05); }
+.guide-item.unlocked .guide-q:hover { background: rgba(59,130,246,0.1); }
+.guide-lock { margin-left: auto; font-size: 11px; font-weight: 600; color: var(--muted2); }
+.guide-a {
+  max-height: 0; overflow: hidden; transition: max-height .4s;
+  font-size: 14px; line-height: 1.8; color: var(--muted);
+  background: rgba(0,0,0,0.2);
+}
+.guide-a.open { max-height: 300px; padding: 14px 18px; }
+.guide-a .va-btn { margin-top: 10px; }
+
+/* Feynman */
+.feynman-box {
+  margin-top: 16px; border-radius: 16px; overflow: hidden;
+  border: 1px solid rgba(16,185,129,0.3); display: none;
+}
+.feynman-box.show { display: block; animation: fadeUp .5s ease; }
+.feynman-hdr {
+  background: linear-gradient(135deg,rgba(16,185,129,0.15),rgba(59,130,246,0.1));
+  border-bottom: 1px solid rgba(16,185,129,0.2);
+  padding: 14px 20px; font-size: 14px; font-weight: 700; color: #6ee7b7;
+}
+.feynman-body { padding: 20px; }
+.fn-step { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+.fn-num {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  background: rgba(16,185,129,0.2); border: 1px solid rgba(16,185,129,0.35);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800; color: #6ee7b7;
+}
+.fn-content {
+  background: rgba(16,185,129,0.05); border-radius: 12px;
+  padding: 10px 14px; flex: 1; font-size: 14px; line-height: 1.75; color: var(--muted);
+  border: 1px solid rgba(16,185,129,0.1);
+}
+.fn-content strong { color: var(--text); }
+
+/* ── Quiz ── */
+.quiz-wrap {
+  background: var(--card); border: 1px solid var(--card-border);
+  border-radius: 20px; padding: 28px; margin-bottom: 16px;
+}
+.quiz-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+.quiz-title { font-size: 18px; font-weight: 800; letter-spacing: -0.02em; }
+.stars { display: flex; gap: 4px; }
+.star { font-size: 18px; transition: all .3s; opacity: .3; }
+.star.on { opacity: 1; animation: starPop .4s ease; }
+@keyframes starPop { 0%{transform:scale(0)} 60%{transform:scale(1.3)} 100%{transform:scale(1)} }
+
+.qnav { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 20px; }
+.qdot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: rgba(255,255,255,0.1); transition: all .25s; cursor: pointer;
+}
+.qdot.done { background: var(--emerald); }
+.qdot.cur { background: var(--blue); transform: scale(1.4); }
+
+.q-meta { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; }
+.q-diff {
+  font-size: 11px; font-weight: 700; padding: 3px 10px;
+  border-radius: 999px; color: #fff;
+}
+.q-src {
+  font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px;
+  background: rgba(59,130,246,0.1); color: #93c5fd;
+  border: 1px solid rgba(59,130,246,0.2);
+}
+.quiz-q { font-size: 16px; font-weight: 600; line-height: 1.8; margin-bottom: 14px; color: var(--text); }
+
+.qopts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.qopt {
+  padding: 12px 16px; border-radius: 12px;
+  border: 1px solid var(--card-border); background: rgba(255,255,255,0.03);
+  font-size: 14px; font-weight: 600; cursor: pointer; transition: all .25s; text-align: center;
+  color: var(--muted); font-family: 'Noto Sans SC', sans-serif;
+}
+.qopt:hover { border-color: rgba(59,130,246,0.4); background: rgba(59,130,246,0.08); color: var(--text); }
+.qopt.correct { border-color: rgba(16,185,129,0.5); background: rgba(16,185,129,0.1); color: #6ee7b7; }
+.qopt.wrong { border-color: rgba(239,68,68,0.5); background: rgba(239,68,68,0.08); color: #fca5a5; animation: shake .4s; }
+.qopt.dis { pointer-events: none; opacity: .4; }
+
+.qfb {
+  margin-top: 12px; padding: 12px 16px; border-radius: 12px;
+  font-size: 13px; font-weight: 600; line-height: 1.7;
+  display: none; animation: fadeUp .3s ease;
+}
+.qfb.show { display: block; }
+.qfb.ok { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2); color: #6ee7b7; }
+.qfb.no { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); color: #fcd34d; }
+
+.q-nav-row { display: flex; gap: 8px; margin-top: 14px; }
+.qnbtn {
+  display: none; padding: 8px 20px; border-radius: 10px; border: none;
+  font-size: 13px; font-weight: 700; cursor: pointer; transition: all .25s;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.qnbtn.show { display: inline-flex; align-items: center; gap: 5px; }
+.qnbtn:hover { transform: translateY(-1px); }
+.qnbtn-prev { background: rgba(255,255,255,0.06); color: var(--muted); border: 1px solid var(--card-border); }
+.qnbtn-prev:hover { color: var(--text); }
+.qnbtn-next { background: rgba(59,130,246,0.15); color: #93c5fd; border: 1px solid rgba(59,130,246,0.25); }
+
+/* Inline voice btn */
+.va-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: 8px; border: none;
+  font-size: 12px; font-weight: 600; cursor: pointer; transition: all .25s;
+  font-family: 'Noto Sans SC', sans-serif;
+  background: rgba(59,130,246,0.12); color: #93c5fd;
+  border: 1px solid rgba(59,130,246,0.25);
+}
+.va-btn:hover { background: rgba(59,130,246,0.2); }
+.va-btn.playing { opacity: .75; }
+
+/* ── Animations ── */
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .tab-nav { gap: 4px; padding: 4px; }
+  .tab-pill { padding: 8px 14px; font-size: 13px; }
+  .qopts, .ex-opts { grid-template-columns: 1fr; }
+  .gcard, .excard-body { padding: 20px; }
+  .mod-title { font-size: 28px; }
+  .shape-grid { grid-template-columns: repeat(3,1fr); }
+}
+
+/* Mobile bottom nav */
+.mob-tabs {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(3,7,18,0.95); backdrop-filter: blur(20px);
+  border-top: 1px solid var(--card-border);
+  padding: 8px 8px 20px;
+  gap: 4px;
+}
+@media (max-width: 640px) {
+  .mob-tabs { display: flex; }
+  .container { padding-bottom: 100px; }
+}
+.mob-tab {
+  flex: 1; padding: 8px 4px; border-radius: 10px;
+  font-size: 11px; font-weight: 600; border: none;
+  background: transparent; color: var(--muted2);
+  cursor: pointer; transition: all .25s;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.mob-tab .mt-icon { font-size: 20px; }
+.mob-tab.on { color: #93c5fd; background: rgba(59,130,246,0.1); }
+</style>
+</head>
+<body>
+
+<!-- Aurora -->
+<div class="aurora">
+  <div class="aurora-blob ab1"></div>
+  <div class="aurora-blob ab2"></div>
+  <div class="aurora-blob ab3"></div>
+</div>
+<div class="dot-grid"></div>
+
+<div class="page">
+
+<!-- ── Top Bar ── -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="back-link" href="../../index.html">← 返回主页</a>
+    <span class="topbar-sep">/</span>
+    <span class="topbar-title">几何与图形</span>
+  </div>
+</div>
+
+<!-- ── Hero ── -->
+<div class="mod-hero">
+  <div class="mod-badge">模块 02 · 几何与图形</div>
+  <h1 class="mod-title">看懂形状，<br><span class="grad-text">发现美丽</span></h1>
+
+  <nav class="tab-nav">
+    <button class="tab-pill on" data-s="s1">💡 概念</button>
+    <button class="tab-pill" data-s="s2">🛠 技巧</button>
+    <button class="tab-pill" data-s="s3">📖 例题</button>
+    <button class="tab-pill" data-s="s4">🎮 挑战</button>
+  </nav>
+  <p class="mod-sub">从基本形状到面积对称，用眼睛探索数学的美丽 🔷</p>
+</div>
+
+<!-- ── Content ── -->
+<div class="container">
+
+  <!-- ═══════════════ S1 概念 ═══════════════ -->
+  <div id="s1" class="sec on">
+    <div class="gcard">
+      <div class="sec-heading">💡 核心概念</div>
+
+      <!-- 概念1 -->
+      <div class="cbox" style="--accent:#93c5fd;--accent-bg:rgba(59,130,246,0.06)">
+        <button class="vbtn vbtn-b" onclick="tv(this,'认识平面图形！我们生活中有很多图形：三角形有三条边三个角，正方形四条边都一样长，长方形四条边两两一样长，圆形没有边没有角，五边形有五条边……认识图形最简单的方法就是数边！三角形三条边，正方形四条边，五边形五条边，六边形六条边，边越多图形越圆！')">🔊 听讲解</button>
+        <h4>🔷 认识平面图形</h4>
+        <p>我们身边藏着很多形状！认识图形最重要的是<strong>数边和角</strong>：</p>
+        <div class="shape-grid">
+          <div class="shape-item"><span class="s-icon">🔺</span><span class="s-name">三角形</span><span class="s-desc">3条边·3个角</span></div>
+          <div class="shape-item"><span class="s-icon">⬛</span><span class="s-name">正方形</span><span class="s-desc">4条边·边等长</span></div>
+          <div class="shape-item"><span class="s-icon">▬</span><span class="s-name">长方形</span><span class="s-desc">4条边·对边相等</span></div>
+          <div class="shape-item"><span class="s-icon">⬡</span><span class="s-name">六边形</span><span class="s-desc">6条边·6个角</span></div>
+          <div class="shape-item"><span class="s-icon">⭕</span><span class="s-name">圆形</span><span class="s-desc">没有边和角</span></div>
+          <div class="shape-item"><span class="s-icon">💠</span><span class="s-name">菱形</span><span class="s-desc">4条边·边等长</span></div>
+        </div>
+        <p style="margin-top:8px">💡 小口诀：<strong>"边越多，越接近圆"</strong></p>
+      </div>
+
+      <!-- 概念2 -->
+      <div class="cbox" style="--accent:#a78bfa;--accent-bg:rgba(139,92,246,0.06)">
+        <button class="vbtn vbtn-v" onclick="tv(this,'角是怎么来的？两条直线从同一个点出发，就形成了一个角！角的大小用度数来表示。直角是90度，就像书本的角一样。锐角比90度小，比如三角形里尖尖的角。钝角比90度大，但比180度小，看起来很"宽"。正方形和长方形的四个角都是直角！')">🔊 听讲解</button>
+        <h4>📐 角的认识</h4>
+        <p>两条直线从<strong>同一个点出发</strong>就形成了角！</p>
+        <ul>
+          <li>📏 <strong>直角</strong>：恰好 90°，像书本的角（正方形、长方形的角）</li>
+          <li>🔪 <strong>锐角</strong>：小于 90°，尖尖的角（三角形里常见）</li>
+          <li>↗️ <strong>钝角</strong>：大于 90° 小于 180°，宽宽的角</li>
+          <li>➡️ <strong>平角</strong>：恰好 180°，一条直线</li>
+        </ul>
+        <p style="margin-top:8px">💡 判断技巧：<strong>用直角作参照</strong>，比它小是锐角，比它大是钝角！</p>
+      </div>
+
+      <!-- 概念3 -->
+      <div class="cbox" style="--accent:#6ee7b7;--accent-bg:rgba(16,185,129,0.06)">
+        <button class="vbtn vbtn-e" onclick="tv(this,'对称图形！如果把一个图形沿着一条线折叠，两边完全重合，这个图形就是对称图形，那条线叫对称轴。蝴蝶是对称的，树叶是对称的，字母A是对称的！正方形有4条对称轴，长方形有2条，等边三角形有3条，圆有无数条！找对称轴的方法：想象用眼睛把图形分成左右完全一样的两半！')">🔊 听讲解</button>
+        <h4>🦋 对称图形</h4>
+        <p>沿一条线折叠后<strong>两边完全重合</strong>，就是对称图形！那条线叫<strong>对称轴</strong>。</p>
+        <ul>
+          <li>⬛ <strong>正方形</strong>：4 条对称轴（水平、垂直、两条对角线）</li>
+          <li>▬ <strong>长方形</strong>：2 条对称轴（水平、垂直）</li>
+          <li>🔺 <strong>等边三角形</strong>：3 条对称轴</li>
+          <li>⭕ <strong>圆形</strong>：无数条对称轴！</li>
+        </ul>
+        <p style="margin-top:8px">💡 生活中的对称：<strong>蝴蝶、树叶、人脸、汉字"中"</strong></p>
+      </div>
+
+      <!-- 概念4 -->
+      <div class="cbox" style="--accent:#fcd34d;--accent-bg:rgba(245,158,11,0.06)">
+        <button class="vbtn vbtn-a" onclick="tv(this,'面积是什么？面积就是一个图形所占地方的大小！比较两个图形哪个大，可以把它们放在格子纸上，数一数各自占了几个小方格。正方形的面积等于边长乘以边长，长方形的面积等于长乘以宽！格子数越多，面积越大！')">🔊 听讲解</button>
+        <h4>📊 面积初步</h4>
+        <p><strong>面积</strong>是图形所占地方的大小，用<strong>小方格</strong>来数是最直观的方法！</p>
+        <ul>
+          <li>⬛ <strong>正方形面积</strong> = 边长 × 边长（如边长3，面积=9格）</li>
+          <li>▬ <strong>长方形面积</strong> = 长 × 宽（如 4×3，面积=12格）</li>
+          <li>🔢 <strong>方格计数法</strong>：放在格纸上，整格数完整的，半格算半个</li>
+          <li>🔍 <strong>比较大小</strong>：同一格子纸上，格子多的面积大</li>
+        </ul>
+        <p style="margin-top:8px">💡 口诀：<strong>"长乘宽，格来算，数一数，就知道！"</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ S2 技巧 ═══════════════ -->
+  <div id="s2" class="sec">
+
+    <!-- 方法1 -->
+    <div class="mcard" onclick="toggleMCard(this)">
+      <div class="mcard-head">
+        <div class="mcard-icon">🔢</div>
+        <div class="mcard-info">
+          <div class="mcard-title">数边认形法</div>
+          <div class="mcard-sub">数一数有几条边，图形名字马上知道！</div>
+        </div>
+        <div class="mcard-chevron">⌄</div>
+      </div>
+      <div class="mcard-body">
+        <div class="mcard-body-inner">
+          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>一个图形有 6 条相等的边和 6 个角，它叫什么名字？每个角是多少度？</div>
+          <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms1')">👆 看解法</button>
+          <div id="ms1">
+            <div class="step"><div class="step-num" style="--scolor1:#3b82f6;--scolor2:#8b5cf6">1</div><div class="step-content">数边：<strong>6 条边</strong> → 六边形！6 条边都相等 → 正六边形（像蜂巢的格子！🐝）</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#3b82f6;--scolor2:#8b5cf6">2</div><div class="step-content">正六边形每个角都相等：6 个角的度数总和 = (6-2) × 180° = <strong>720°</strong></div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#3b82f6;--scolor2:#8b5cf6">3</div><div class="step-content">每个角 = 720° ÷ 6 = <strong>120°</strong> ✅ 正六边形，每角 120°！</div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'数边法：看到6条等边，知道是正六边形。多边形内角和公式：边数减2再乘180度。6减2等于4，4乘180等于720度，除以6等于120度。每个角120度！')">🔊 听讲解</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 方法2 -->
+    <div class="mcard" onclick="toggleMCard(this)">
+      <div class="mcard-head">
+        <div class="mcard-icon">⬜</div>
+        <div class="mcard-info">
+          <div class="mcard-title">方格计数法</div>
+          <div class="mcard-sub">用小方格数出图形的面积，又准又快！</div>
+        </div>
+        <div class="mcard-chevron">⌄</div>
+      </div>
+      <div class="mcard-body">
+        <div class="mcard-body-inner">
+          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>一个 L 形图案，放在格子纸上，整格有 8 个，半格有 4 个。它的面积是几个方格？</div>
+          <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms2')">👆 看解法</button>
+          <div id="ms2">
+            <div class="step"><div class="step-num" style="--scolor1:#06b6d4;--scolor2:#3b82f6">1</div><div class="step-content">整格直接算：<strong>8 个</strong>完整方格 = 8 格面积</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#06b6d4;--scolor2:#3b82f6">2</div><div class="step-content">半格算一半：<strong>4 个</strong>半格 = 4 ÷ 2 = <strong>2 格</strong>面积</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#06b6d4;--scolor2:#3b82f6">3</div><div class="step-content">总面积 = 8 + 2 = <strong>10 格</strong> ✅ 如果每格代表 1 cm²，面积就是 10 cm²！</div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'方格计数法：先数完整的方格，再数半格。半格除以2算面积。8个整格加上4个半格等于2格，一共10格！不规则图形也能用这个方法算面积！')">🔊 听讲解</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 方法3 -->
+    <div class="mcard" onclick="toggleMCard(this)">
+      <div class="mcard-head">
+        <div class="mcard-icon">🦋</div>
+        <div class="mcard-info">
+          <div class="mcard-title">折叠验证对称法</div>
+          <div class="mcard-sub">用"脑内折纸"快速判断对称轴！</div>
+        </div>
+        <div class="mcard-chevron">⌄</div>
+      </div>
+      <div class="mcard-body">
+        <div class="mcard-body-inner">
+          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>字母 "H" 有几条对称轴？</div>
+          <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms3')">👆 看解法</button>
+          <div id="ms3">
+            <div class="step"><div class="step-num" style="--scolor1:#8b5cf6;--scolor2:#06b6d4">1</div><div class="step-content"><strong>水平折叠</strong>：沿水平中线折，上下两半完全重合 ✅ → 第一条对称轴！</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#8b5cf6;--scolor2:#06b6d4">2</div><div class="step-content"><strong>垂直折叠</strong>：沿垂直中线折，左右两半完全重合 ✅ → 第二条对称轴！</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#8b5cf6;--scolor2:#06b6d4">3</div><div class="step-content"><strong>斜线折叠</strong>：沿对角线折，不重合 ❌ → 没有斜对称轴。结论：字母 H 有 <strong>2 条</strong>对称轴！</div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'折叠法找对称轴：想象把字母H折叠。水平折，上下重合，有一条。垂直折，左右重合，又一条。斜着折，不重合，没有。所以H有2条对称轴！')">🔊 听讲解</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 方法4 -->
+    <div class="mcard" onclick="toggleMCard(this)">
+      <div class="mcard-head">
+        <div class="mcard-icon">✂️</div>
+        <div class="mcard-info">
+          <div class="mcard-title">图形分割法</div>
+          <div class="mcard-sub">把复杂图形切成简单的小块，分别算！</div>
+        </div>
+        <div class="mcard-chevron">⌄</div>
+      </div>
+      <div class="mcard-body">
+        <div class="mcard-body-inner">
+          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>一个 T 形图案，上方长方形 6×2，下方长方形 2×4，总面积是多少？</div>
+          <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms4')">👆 看解法</button>
+          <div id="ms4">
+            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#3b82f6">1</div><div class="step-content"><strong>分割</strong>：把 T 形切成两个长方形：上方 6×2，下方 2×4</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#3b82f6">2</div><div class="step-content"><strong>分别计算</strong>：上方面积 = 6×2 = <strong>12</strong>；下方面积 = 2×4 = <strong>8</strong></div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#3b82f6">3</div><div class="step-content"><strong>合并</strong>：总面积 = 12 + 8 = <strong>20</strong> ✅ 化繁为简，分割是关键！</div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'分割法：把T形切成两个长方形。上面6乘2等于12，下面2乘4等于8，加起来等于20！复杂图形不怕，切一切，分别算，再加起来就好！')">🔊 听讲解</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════ S3 例题 ═══════════════ -->
+  <div id="s3" class="sec">
+
+    <!-- 配套视频 -->
+    <div class="video-section-label"><span>▶</span> 先看视频，再做例题 · 支持倍速 / 全屏</div>
+    <div class="video-stack">
+      <div class="video-wrap">
+        <div class="video-label">▶ 视频一 — 图形识别与边角关系</div>
+        <iframe
+          src="https://www.youtube.com/embed/r1CIrODL4xA?rel=0&modestbranding=1"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen loading="lazy">
+        </iframe>
+      </div>
+      <div class="video-wrap">
+        <div class="video-label">▶ 视频二 — 对称图形与对称轴</div>
+        <iframe
+          src="https://www.youtube.com/embed/HQ-X8z4EMp8?rel=0&modestbranding=1"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen loading="lazy">
+        </iframe>
+      </div>
+      <div class="video-wrap">
+        <div class="video-label">▶ 视频三 — 面积与周长</div>
+        <iframe
+          src="https://www.youtube.com/embed/5pnB5V1P7i8?rel=0&modestbranding=1"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen loading="lazy">
+        </iframe>
+      </div>
+    </div>
+
+    <!-- 例题1 -->
+    <div class="excard">
+      <div class="excard-hdr">
+        <span class="ex-num">例题一</span>
+        <span class="ex-tag">2023年 · 图形识别</span>
+      </div>
+      <div class="excard-body">
+        <div class="qbox">
+          🔷 一个图形满足以下条件：<br>
+          ① 有 4 条边；② 所有边都相等；③ 有 4 个直角。<br><br>
+          <small>（来自袋鼠数学竞赛改编，考察图形属性综合判断）</small><br><br>
+          这个图形是什么？
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
+        <div class="ex-opts" id="ex1-opts"></div>
+        <div class="ex-result" id="ex1-result"></div>
+        <div class="guide-chain" id="ex1-guide"></div>
+        <div class="feynman-box" id="ex1-feynman">
+          <div class="feynman-hdr">🧠 费曼讲解 — 三个条件缺一不可！</div>
+          <div class="feynman-body">
+            <div class="fn-step"><div class="fn-num">1</div><div class="fn-content">条件①"4条边"：排除圆形、三角形，留下四边形（正方形、长方形、菱形等）。</div></div>
+            <div class="fn-step"><div class="fn-num">2</div><div class="fn-content">条件②"所有边相等"：长方形的边不一定相等，排除！剩下正方形和菱形（都是四边等长）。</div></div>
+            <div class="fn-step"><div class="fn-num">3</div><div class="fn-content">条件③"4个直角"：菱形的角不一定是直角，排除！只有<strong>正方形</strong>满足全部三个条件 ✅</div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="tv(this,'费曼讲解！4条边排除圆和三角形。所有边相等排除长方形。4个直角排除菱形。三个条件同时满足，只有正方形！用条件一个一个过滤，就能锁定答案！')">🔊 听讲解</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 例题2 -->
+    <div class="excard">
+      <div class="excard-hdr">
+        <span class="ex-num">例题二</span>
+        <span class="ex-tag">2022年 · 对称图形</span>
+      </div>
+      <div class="excard-body">
+        <div class="qbox">
+          🦋 下面哪个字母是轴对称图形，且恰好只有<strong>一条</strong>对称轴？<br><br>
+          <small>（袋鼠数学竞赛改编，考察轴对称的准确识别）</small>
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
+        <div class="ex-opts" id="ex2-opts"></div>
+        <div class="ex-result" id="ex2-result"></div>
+        <div class="guide-chain" id="ex2-guide"></div>
+        <div class="feynman-box" id="ex2-feynman">
+          <div class="feynman-hdr">🧠 费曼讲解 — 逐个折叠检验！</div>
+          <div class="feynman-body">
+            <div class="fn-step"><div class="fn-num">1</div><div class="fn-content"><strong>字母 H</strong>：水平折重合✅，垂直折重合✅ → 2条对称轴，不符合"只有一条"。</div></div>
+            <div class="fn-step"><div class="fn-num">2</div><div class="fn-content"><strong>字母 X</strong>：水平折✅，垂直折✅，对角线折✅ → 4条对称轴，不符合。</div></div>
+            <div class="fn-step"><div class="fn-num">3</div><div class="fn-content"><strong>字母 A</strong>：只有垂直中线折后两边重合✅，水平折不重合❌ → 恰好 <strong>1条</strong>对称轴！答案是 A ✅</div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="tv(this,'费曼讲解！H有2条对称轴，X有4条，只有字母A只有一条对称轴，就是从A的尖顶到底边中点的垂直线！一条对称轴就是A！')">🔊 听讲解</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 例题3 -->
+    <div class="excard">
+      <div class="excard-hdr">
+        <span class="ex-num">例题三</span>
+        <span class="ex-tag">2024年 · 面积比较</span>
+      </div>
+      <div class="excard-body">
+        <div class="qbox">
+          📊 一块长方形草地，长 8 米，宽 5 米。<br>
+          从中间剪去一个边长为 2 米的正方形。<br><br>
+          <small>（袋鼠数学竞赛改编，考察图形面积加减）</small><br><br>
+          剩余草地的面积是多少平方米？
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
+        <div class="ex-opts" id="ex3-opts"></div>
+        <div class="ex-result" id="ex3-result"></div>
+        <div class="guide-chain" id="ex3-guide"></div>
+        <div class="feynman-box" id="ex3-feynman">
+          <div class="feynman-hdr">🧠 费曼讲解 — 大的减去小的！</div>
+          <div class="feynman-body">
+            <div class="fn-step"><div class="fn-num">1</div><div class="fn-content">先算<strong>整块草地</strong>面积：长方形面积 = 长 × 宽 = 8 × 5 = <strong>40 平方米</strong></div></div>
+            <div class="fn-step"><div class="fn-num">2</div><div class="fn-content">再算<strong>剪去部分</strong>面积：正方形面积 = 边长 × 边长 = 2 × 2 = <strong>4 平方米</strong></div></div>
+            <div class="fn-step"><div class="fn-num">3</div><div class="fn-content">剩余面积 = 40 - 4 = <strong>36 平方米</strong> ✅ 组合图形：大面积减去挖去的部分！</div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="tv(this,'费曼讲解！整块草地8乘5等于40平方米。剪去的正方形2乘2等于4平方米。40减4等于36平方米！组合图形就是大的减小的，超简单！')">🔊 听讲解</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════ S4 闯关 ═══════════════ -->
+  <div id="s4" class="sec">
+    <div class="quiz-wrap">
+      <div class="quiz-top">
+        <div class="quiz-title">🎮 闯关挑战</div>
+        <div class="stars" id="stars"></div>
+      </div>
+      <div class="qnav" id="qnav"></div>
+      <div id="quiz-content"></div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- Mobile bottom nav -->
+<div class="mob-tabs">
+  <button class="mob-tab on" data-s="s1"><span class="mt-icon">💡</span>概念</button>
+  <button class="mob-tab" data-s="s2"><span class="mt-icon">🛠</span>技巧</button>
+  <button class="mob-tab" data-s="s3"><span class="mt-icon">📖</span>例题</button>
+  <button class="mob-tab" data-s="s4"><span class="mt-icon">🎮</span>挑战</button>
+</div>
+
+</div><!-- /page -->
+
+<script>
+// ── 语音播放 ──
+let cAudio = null, cBtn = null;
+
+function tv(btn, text) {
+  const isSame = btn === cBtn;
+  if (cAudio) { cAudio.pause(); cAudio.currentTime = 0; cAudio = null; }
+  if (cBtn) { cBtn.classList.remove('playing'); cBtn.innerHTML = cBtn.dataset.o || '🔊 听讲解'; cBtn = null; }
+  if (isSame) return;
+
+  btn.dataset.o = btn.innerHTML;
+  btn.innerHTML = '⏹ 停止';
+  btn.classList.add('playing');
+  cBtn = btn;
+
+  if (!('speechSynthesis' in window)) return;
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'zh-CN'; u.rate = 0.84; u.pitch = 1.1;
+  const v = speechSynthesis.getVoices();
+  const zh = v.find(x=>x.name.includes('Tingting')||x.name.includes('Xiaoxiao')) || v.find(x=>x.lang.startsWith('zh'));
+  if (zh) u.voice = zh;
+  u.onend = () => { btn.classList.remove('playing'); btn.innerHTML = btn.dataset.o; cBtn = null; };
+  speechSynthesis.speak(u);
+}
+if ('speechSynthesis' in window) { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices(); }
+
+// ── Tabs ──
+function switchTab(s) {
+  document.querySelectorAll('.tab-pill,.mob-tab').forEach(x => x.classList.toggle('on', x.dataset.s === s));
+  document.querySelectorAll('.sec').forEach(x => x.classList.toggle('on', x.id === s));
+  speechSynthesis.cancel();
+  if (cBtn) { cBtn.classList.remove('playing'); cBtn.innerHTML = cBtn.dataset.o; cBtn = null; }
+}
+document.querySelectorAll('.tab-pill, .mob-tab').forEach(p => p.addEventListener('click', () => switchTab(p.dataset.s)));
+
+// ── Method cards ──
+function toggleMCard(card) {
+  const body = card.querySelector('.mcard-body');
+  const open = body.classList.contains('open');
+  document.querySelectorAll('.mcard-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.mcard').forEach(c => c.classList.remove('open'));
+  if (!open) { body.classList.add('open'); card.classList.add('open'); }
+}
+
+// ── Reveal steps ──
+function revealSteps(id) {
+  const c = document.getElementById(id);
+  c.querySelectorAll('.step').forEach((s, i) => setTimeout(() => s.classList.add('show'), i * 380));
+  const rb = c.previousElementSibling;
+  if (rb && rb.classList.contains('reveal-btn')) rb.style.display = 'none';
+}
+
+// ── Example data ──
+const exData = {
+  ex1: {
+    opts: [{t:'(A) 长方形',v:false},{t:'(B) 菱形',v:false},{t:'(C) 正方形',v:true},{t:'(D) 平行四边形',v:false}],
+    guide: [
+      {q:'条件①有4条边，排除了哪些图形？', a:'排除圆形、三角形等，只留下四边形这个大类（正方形、长方形、菱形、梯形等）', vc:'4条边排除圆形和三角形，只剩下四边形这一大类！'},
+      {q:'条件②所有边都相等，又能排除哪些？', a:'长方形的长和宽不一定相等，被排除！剩下正方形和菱形（都是四边等长）', vc:'所有边相等，长方形不行，排除！剩下正方形和菱形，这两个都是四边等长的！'},
+      {q:'条件③4个直角，最终答案是什么？', a:'菱形的角不一定是直角，排除！只有正方形同时满足全部3个条件 ✅', vc:'4个直角，菱形不行！菱形虽然四边等长，但角不是直角。只有正方形同时满足四边等长且四个角都是直角！'}
+    ]
+  },
+  ex2: {
+    opts: [{t:'(A) 字母 A',v:true},{t:'(B) 字母 H',v:false},{t:'(C) 字母 X',v:false},{t:'(D) 字母 O',v:false}],
+    guide: [
+      {q:'字母 H 有几条对称轴？', a:'字母 H 有 2 条对称轴：水平中线和垂直中线，不符合"只有一条"', vc:'字母H，水平折两半重合，垂直折也重合，所以有2条对称轴，题目要求只有一条，H不对！'},
+      {q:'字母 X 和 O 分别有几条对称轴？', a:'X 有 4 条（水平、垂直、两条斜线）；O 近似圆形，有无数条，都不符合', vc:'字母X有4条对称轴，字母O像圆形有无数条，都不符合只有一条的要求！'},
+      {q:'字母 A 有几条对称轴？为什么只有一条？', a:'字母 A 只有垂直中线是对称轴，从顶点到底边中点。水平折不重合，所以恰好 1 条 ✅', vc:'字母A只有一条对称轴，就是从顶部尖点到底边中点的那条垂直线。水平折不重合，所以只有一条！答案是A！'}
+    ]
+  },
+  ex3: {
+    opts: [{t:'(A) 32 平方米',v:false},{t:'(B) 34 平方米',v:false},{t:'(C) 36 平方米',v:true},{t:'(D) 38 平方米',v:false}],
+    guide: [
+      {q:'第一步：整块长方形草地的面积是多少？', a:'长方形面积 = 长 × 宽 = 8 × 5 = 40 平方米', vc:'先算整块草地。长方形面积等于长乘宽，8乘5等于40平方米！'},
+      {q:'第二步：剪去的正方形面积是多少？', a:'正方形面积 = 边长 × 边长 = 2 × 2 = 4 平方米', vc:'剪去的正方形边长2米，面积等于2乘2等于4平方米！'},
+      {q:'第三步：剩余草地面积是多少？', a:'剩余面积 = 40 - 4 = 36 平方米 ✅', vc:'整块40平方米减去剪去的4平方米，剩余36平方米！组合图形就是大减小！'}
+    ]
+  }
+};
+
+function initEx(id) {
+  exData[id].opts.forEach((o, i) => {
+    const btn = document.createElement('div');
+    btn.className = 'ex-opt'; btn.textContent = o.t;
+    btn.onclick = () => handleEx(id, i);
+    document.getElementById(id+'-opts').appendChild(btn);
+  });
+}
+
+function handleEx(id, idx) {
+  const data = exData[id];
+  const opts = document.querySelectorAll('#'+id+'-opts .ex-opt');
+  const res = document.getElementById(id+'-result');
+  if (data.opts[idx].v) {
+    opts.forEach((o,i) => { o.classList.add('dim'); if(data.opts[i].v) o.classList.add('correct'); });
+    res.style.cssText = 'display:block;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);color:#6ee7b7';
+    res.innerHTML = '🎉 答对了！你真棒！一起看看解题思路——';
+    setTimeout(() => buildGuide(id, data), 700);
+  } else {
+    opts[idx].classList.add('wrong');
+    res.style.cssText = 'display:block;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);color:#fcd34d';
+    res.innerHTML = `<div style="margin-bottom:10px">💡 这个答案不太对哦，没关系！</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button onclick="retryEx('${id}',${idx})" style="padding:7px 16px;border-radius:8px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);color:#6ee7b7;font-size:13px;font-weight:600;cursor:pointer;font-family:'Noto Sans SC',sans-serif">🔄 再试试</button>
+        <button onclick="learnEx('${id}')" style="padding:7px 16px;border-radius:8px;background:rgba(96,165,250,0.12);border:1px solid rgba(96,165,250,0.25);color:#93c5fd;font-size:13px;font-weight:600;cursor:pointer;font-family:'Noto Sans SC',sans-serif">📖 看解法</button>
+      </div>`;
+  }
+}
+
+function retryEx(id, wrongIdx) {
+  document.querySelectorAll('#'+id+'-opts .ex-opt')[wrongIdx].classList.remove('wrong');
+  document.getElementById(id+'-result').style.display = 'none';
+}
+
+function learnEx(id) {
+  const data = exData[id];
+  document.querySelectorAll('#'+id+'-opts .ex-opt').forEach((o,i) => { o.classList.add('dim'); if(data.opts[i].v) o.classList.add('correct'); });
+  const res = document.getElementById(id+'-result');
+  res.style.cssText = 'display:block;background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.2);color:#93c5fd';
+  res.innerHTML = '📖 没关系！正确答案已标出，我们一起来看——';
+  setTimeout(() => buildGuide(id, data), 700);
+}
+
+function buildGuide(id, data) {
+  const chain = document.getElementById(id+'-guide');
+  chain.style.display = 'block';
+  chain.scrollIntoView({behavior:'smooth',block:'center'});
+  data.guide.forEach((g, i) => {
+    const item = document.createElement('div'); item.className = 'guide-item'; item.id = id+'-g'+i;
+    if (i===0) item.classList.add('unlocked');
+    const qd = document.createElement('div'); qd.className = 'guide-q';
+    qd.innerHTML = `<span>${i<data.guide.length-1?'💬':'🚀'}</span>${g.q}<span class="guide-lock">${i===0?'👆 点击':'🔒'}</span>`;
+    const ad = document.createElement('div'); ad.className = 'guide-a';
+    ad.innerHTML = `<p>${g.a}</p><button class="va-btn" onclick="event.stopPropagation();tv(this,'${g.vc.replace(/'/g,"\\'")}')">🔊 听解析</button>`;
+    qd.onclick = () => {
+      if (!item.classList.contains('unlocked')||ad.classList.contains('open')) return;
+      ad.classList.add('open'); qd.querySelector('.guide-lock').textContent = '✅';
+      setTimeout(() => {
+        const nxt = document.getElementById(id+'-g'+(i+1));
+        if (nxt) { nxt.classList.add('unlocked'); nxt.querySelector('.guide-lock').textContent='👆 点击'; nxt.scrollIntoView({behavior:'smooth',block:'center'}); }
+        else { const fb = document.getElementById(id+'-feynman'); fb.classList.add('show'); fb.scrollIntoView({behavior:'smooth',block:'center'}); }
+      }, 500);
+    };
+    item.appendChild(qd); item.appendChild(ad); chain.appendChild(item);
+  });
+}
+
+initEx('ex1'); initEx('ex2'); initEx('ex3');
+
+// ── Quiz ──
+const quizData = [
+  {src:'2024·Q2',d:'★',dc:'#10b981',
+   q:'一个图形有 5 条边，每条边都相等，每个角也都相等，叫什么图形？',
+   opts:[{t:'四边形'},{t:'正五边形'},{t:'五角星'},{t:'梯形'}],
+   ans:1,ok:'🎉 正确！5条等边等角，就是正五边形！',no:'💡 5条边 → 五边形；所有边等长且等角 → 正五边形！'},
+  {src:'2023·Q3',d:'★',dc:'#10b981',
+   q:'下列图形中，有 4 条对称轴的是哪个？',
+   opts:[{t:'长方形'},{t:'等边三角形'},{t:'正方形'},{t:'菱形'}],
+   ans:2,ok:'🎉 正确！正方形有4条对称轴：水平、垂直、两条对角线！',no:'💡 正方形：水平轴、垂直轴、左斜轴、右斜轴，共4条！'},
+  {src:'2023·Q6',d:'★',dc:'#10b981',
+   q:'一个长方形长 6 cm，宽 4 cm，它的面积是多少平方厘米？',
+   opts:[{t:'20 cm²'},{t:'24 cm²'},{t:'28 cm²'},{t:'10 cm²'}],
+   ans:1,ok:'🎉 正确！长方形面积 = 6 × 4 = 24 cm²！',no:'💡 长方形面积 = 长 × 宽 = 6 × 4 = 24 cm²！'},
+  {src:'2022·Q5',d:'★★',dc:'#f59e0b',
+   q:'一个正方形边长为 3 cm，从中挖去一个边长为 1 cm 的正方形。剩余面积是多少？',
+   opts:[{t:'6 cm²'},{t:'7 cm²'},{t:'8 cm²'},{t:'9 cm²'}],
+   ans:2,ok:'🎉 正确！大正方形 3×3=9，小正方形 1×1=1，剩余 9-1=8 cm²！',no:'💡 大正方形面积9，小正方形面积1，9-1=8 cm²！'},
+  {src:'2024·Q7',d:'★★',dc:'#f59e0b',
+   q:'用 12 个边长为 1 cm 的小正方形可以拼成几种不同的长方形（包括正方形）？',
+   opts:[{t:'2种'},{t:'3种'},{t:'4种'},{t:'5种'}],
+   ans:1,ok:'🎉 正确！12=1×12=2×6=3×4，共3种长方形！',no:'💡 找12的因子对：1×12、2×6、3×4，共3种！'},
+  {src:'2022·Q9',d:'★★',dc:'#f59e0b',
+   q:'一个三角形三个角的度数之和是多少度？',
+   opts:[{t:'90°'},{t:'180°'},{t:'270°'},{t:'360°'}],
+   ans:1,ok:'🎉 正确！三角形三个内角之和恒等于 180°！',no:'💡 三角形内角和固定是180°，这是几何的基本定理！'},
+  {src:'2023·Q10',d:'★★★',dc:'#ec4899',
+   q:'一个长方形长 10 cm，宽 6 cm。将它沿长边的中线折叠，得到的新长方形面积是多少？',
+   opts:[{t:'30 cm²'},{t:'60 cm²'},{t:'15 cm²'},{t:'20 cm²'}],
+   ans:0,ok:'🎉 正确！沿长边中线折叠，宽变为原来一半：10 × (6÷2) = 10 × 3 = 30 cm²！',no:'💡 沿长边中线折，宽减半。新长方形 = 10 × 3 = 30 cm²！'},
+  {src:'2024·Q11',d:'★★★',dc:'#ec4899',
+   q:'正六边形被分成 6 个等边三角形。如果正六边形面积为 24 cm²，每个等边三角形的面积是多少？',
+   opts:[{t:'3 cm²'},{t:'4 cm²'},{t:'6 cm²'},{t:'8 cm²'}],
+   ans:1,ok:'🎉 正确！正六边形被等分成6份：24 ÷ 6 = 4 cm²！',no:'💡 6等分，每份 = 24 ÷ 6 = 4 cm²！'},
+];
+
+let cur = 0, scores = [];
+
+function initQuiz() {
+  const stars = document.getElementById('stars');
+  stars.innerHTML = quizData.map((_,i) => `<span class="star" id="star${i}">⭐</span>`).join('');
+  scores = new Array(quizData.length).fill(null);
+  renderNav(); renderQ(0);
+}
+
+function renderNav() {
+  const nav = document.getElementById('qnav');
+  nav.innerHTML = quizData.map((_,i) => `<div class="qdot ${i===cur?'cur':scores[i]!==null?'done':''}" onclick="goQ(${i})"></div>`).join('');
+}
+
+function renderQ(idx) {
+  cur = idx;
+  const q = quizData[idx];
+  const html = `
+    <div class="q-meta">
+      <span class="q-diff" style="background:${q.dc}">${q.d}</span>
+      <span class="q-src">${q.src}</span>
+    </div>
+    <div class="quiz-q">${q.q}</div>
+    <div class="qopts" id="qopts">
+      ${q.opts.map((o,i)=>`<button class="qopt" onclick="answerQ(${i})">${o.t}</button>`).join('')}
+    </div>
+    <div class="qfb" id="qfb"></div>
+    <div class="q-nav-row">
+      <button class="qnbtn qnbtn-prev ${idx>0?'show':''}" onclick="goQ(${idx-1})">← 上一题</button>
+      <button class="qnbtn qnbtn-next" id="qnext" onclick="goQ(${idx+1})">下一题 →</button>
+    </div>`;
+  document.getElementById('quiz-content').innerHTML = html;
+  if (idx === quizData.length-1) document.getElementById('qnext').style.display='none';
+  renderNav();
+}
+
+function answerQ(i) {
+  const q = quizData[cur];
+  const opts = document.querySelectorAll('.qopt');
+  const fb = document.getElementById('qfb');
+  opts.forEach(o => o.classList.add('dis'));
+  if (i === q.ans) {
+    opts[i].classList.add('correct');
+    fb.className = 'qfb show ok'; fb.textContent = q.ok;
+    if (scores[cur] === null) {
+      scores[cur] = true;
+      document.getElementById('star'+cur).classList.add('on');
+    }
+  } else {
+    opts[i].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'qfb show no'; fb.textContent = q.no;
+    if (scores[cur] === null) scores[cur] = false;
+  }
+  const nx = document.getElementById('qnext');
+  if (nx && cur < quizData.length-1) nx.classList.add('show');
+  renderNav();
+}
+
+function goQ(idx) {
+  if (idx < 0 || idx >= quizData.length) return;
+  renderQ(idx);
+}
+
+initQuiz();
+</script>
+</body>
+</html>
