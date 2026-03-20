@@ -458,6 +458,60 @@ body {
 .va-btn:hover { background: rgba(59,130,246,0.2); }
 .va-btn.playing { opacity: .75; }
 
+/* ── 角的认识 交互组件 ── */
+.angle-preset {
+  padding: 8px 14px; border-radius: 10px; border: none; cursor: pointer;
+  font-size: 13px; font-weight: 700; font-family: 'Noto Sans SC', sans-serif;
+  background: rgba(255,255,255,0.05); color: var(--muted);
+  border: 1px solid rgba(255,255,255,0.08); transition: all .2s;
+}
+.angle-preset:hover { background: rgba(255,255,255,0.1); color: var(--text); transform: translateY(-1px); }
+.angle-info-card {
+  border-radius: 12px; padding: 12px 14px;
+  background: var(--bg); border: 1px solid var(--bc);
+  background: var(--bg);
+}
+.aic-name { font-size: 14px; font-weight: 700; color: var(--bc); margin-bottom: 2px; }
+.aic-range { font-size: 13px; color: var(--muted); }
+.aic-eg { font-size: 11px; color: var(--muted2); margin-top: 2px; }
+
+/* ── 对称图形 交互组件 ── */
+.sym-btn {
+  padding: 8px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03); color: var(--muted);
+  font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.sym-btn:hover { border-color: rgba(16,185,129,0.3); color: var(--text); }
+.sym-btn.active { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.4); color: #6ee7b7; }
+.axis-toggle {
+  padding: 6px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.07);
+  background: rgba(255,255,255,0.03); color: var(--muted2);
+  font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.axis-toggle.on { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.35); color: #6ee7b7; }
+
+/* ── 面积方格 交互组件 ── */
+.area-btn {
+  padding: 8px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03); color: var(--muted);
+  font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.area-btn:hover { border-color: rgba(245,158,11,0.3); color: var(--text); }
+.area-btn.active { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.4); color: #fcd34d; }
+.ag-cell {
+  width: 36px; height: 36px; border-radius: 6px; cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: all .15s; display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+}
+.ag-cell.filled       { background: rgba(245,158,11,0.25); border-color: rgba(245,158,11,0.5); color: #fcd34d; }
+.ag-cell.filled-half  { background: linear-gradient(135deg, rgba(245,158,11,0.25) 50%, rgba(255,255,255,0.03) 50%); border-color: rgba(245,158,11,0.35); color: #fcd34d; font-size:10px; }
+.ag-cell.empty        { background: rgba(255,255,255,0.03); }
+.ag-cell:hover        { transform: scale(1.1); border-color: rgba(245,158,11,0.3); }
+
 /* ── Animations ── */
 @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
 @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
@@ -537,67 +591,98 @@ body {
 
   <!-- ═══════════════ S1 概念 ═══════════════ -->
   <div id="s1" class="sec on">
-    <div class="gcard">
-      <div class="sec-heading">💡 核心概念</div>
 
-      <!-- 概念1 -->
-      <div class="cbox" style="--accent:#93c5fd;--accent-bg:rgba(59,130,246,0.06)">
-        <button class="vbtn vbtn-b" onclick="tv(this,'认识平面图形！我们生活中有很多图形：三角形有三条边三个角，正方形四条边都一样长，长方形四条边两两一样长，圆形没有边没有角，五边形有五条边……认识图形最简单的方法就是数边！三角形三条边，正方形四条边，五边形五条边，六边形六条边，边越多图形越圆！')">🔊 听讲解</button>
-        <h4>🔷 认识平面图形</h4>
-        <p>我们身边藏着很多形状！认识图形最重要的是<strong>数边和角</strong>：</p>
-        <div class="shape-grid">
-          <div class="shape-item"><span class="s-icon">🔺</span><span class="s-name">三角形</span><span class="s-desc">3条边·3个角</span></div>
-          <div class="shape-item"><span class="s-icon">⬛</span><span class="s-name">正方形</span><span class="s-desc">4条边·边等长</span></div>
-          <div class="shape-item"><span class="s-icon">▬</span><span class="s-name">长方形</span><span class="s-desc">4条边·对边相等</span></div>
-          <div class="shape-item"><span class="s-icon">⬡</span><span class="s-name">六边形</span><span class="s-desc">6条边·6个角</span></div>
-          <div class="shape-item"><span class="s-icon">⭕</span><span class="s-name">圆形</span><span class="s-desc">没有边和角</span></div>
-          <div class="shape-item"><span class="s-icon">💠</span><span class="s-name">菱形</span><span class="s-desc">4条边·边等长</span></div>
+    <!-- ① 角的认识 -->
+    <div class="gcard" style="border-color:rgba(139,92,246,0.2)">
+      <div class="sec-heading" style="color:#a78bfa">📐 角的认识 <span style="font-size:13px;font-weight:500;color:var(--muted)">— 拖动蓝点，改变角度</span></div>
+      <p style="font-size:14px;color:var(--muted);margin-bottom:16px">两条射线从<strong style="color:var(--text)">同一个顶点</strong>出发，就形成了一个角。拖动蓝色圆点，观察角度如何变化！</p>
+
+      <div style="display:flex;flex-direction:column;align-items:center;gap:16px">
+        <!-- Canvas -->
+        <div style="position:relative;width:100%;max-width:380px">
+          <canvas id="angleCanvas" width="380" height="240"
+            style="width:100%;border-radius:16px;background:rgba(255,255,255,0.03);border:1px solid rgba(139,92,246,0.2);cursor:grab;touch-action:none"></canvas>
+          <!-- 角度大卡片 -->
+          <div id="angleBadge" style="position:absolute;top:12px;right:12px;border-radius:12px;padding:8px 16px;font-size:22px;font-weight:900;letter-spacing:-0.03em;transition:all .25s;background:rgba(139,92,246,0.18);border:1px solid rgba(139,92,246,0.35);color:#a78bfa"></div>
         </div>
-        <p style="margin-top:8px">💡 小口诀：<strong>"边越多，越接近圆"</strong></p>
-      </div>
 
-      <!-- 概念2 -->
-      <div class="cbox" style="--accent:#a78bfa;--accent-bg:rgba(139,92,246,0.06)">
-        <button class="vbtn vbtn-v" onclick="tv(this,'角是怎么来的？两条直线从同一个点出发，就形成了一个角！角的大小用度数来表示。直角是90度，就像书本的角一样。锐角比90度小，比如三角形里尖尖的角。钝角比90度大，但比180度小，看起来很"宽"。正方形和长方形的四个角都是直角！')">🔊 听讲解</button>
-        <h4>📐 角的认识</h4>
-        <p>两条直线从<strong>同一个点出发</strong>就形成了角！</p>
-        <ul>
-          <li>📏 <strong>直角</strong>：恰好 90°，像书本的角（正方形、长方形的角）</li>
-          <li>🔪 <strong>锐角</strong>：小于 90°，尖尖的角（三角形里常见）</li>
-          <li>↗️ <strong>钝角</strong>：大于 90° 小于 180°，宽宽的角</li>
-          <li>➡️ <strong>平角</strong>：恰好 180°，一条直线</li>
-        </ul>
-        <p style="margin-top:8px">💡 判断技巧：<strong>用直角作参照</strong>，比它小是锐角，比它大是钝角！</p>
-      </div>
+        <!-- 类型标签 -->
+        <div id="angleType" style="font-size:16px;font-weight:700;padding:10px 24px;border-radius:12px;transition:all .3s;text-align:center"></div>
 
-      <!-- 概念3 -->
-      <div class="cbox" style="--accent:#6ee7b7;--accent-bg:rgba(16,185,129,0.06)">
-        <button class="vbtn vbtn-e" onclick="tv(this,'对称图形！如果把一个图形沿着一条线折叠，两边完全重合，这个图形就是对称图形，那条线叫对称轴。蝴蝶是对称的，树叶是对称的，字母A是对称的！正方形有4条对称轴，长方形有2条，等边三角形有3条，圆有无数条！找对称轴的方法：想象用眼睛把图形分成左右完全一样的两半！')">🔊 听讲解</button>
-        <h4>🦋 对称图形</h4>
-        <p>沿一条线折叠后<strong>两边完全重合</strong>，就是对称图形！那条线叫<strong>对称轴</strong>。</p>
-        <ul>
-          <li>⬛ <strong>正方形</strong>：4 条对称轴（水平、垂直、两条对角线）</li>
-          <li>▬ <strong>长方形</strong>：2 条对称轴（水平、垂直）</li>
-          <li>🔺 <strong>等边三角形</strong>：3 条对称轴</li>
-          <li>⭕ <strong>圆形</strong>：无数条对称轴！</li>
-        </ul>
-        <p style="margin-top:8px">💡 生活中的对称：<strong>蝴蝶、树叶、人脸、汉字"中"</strong></p>
-      </div>
+        <!-- 快速预设按钮 -->
+        <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+          <button onclick="setAngle(45)"  class="angle-preset" style="--ac:#93c5fd">🔪 锐角 45°</button>
+          <button onclick="setAngle(90)"  class="angle-preset" style="--ac:#6ee7b7">📐 直角 90°</button>
+          <button onclick="setAngle(135)" class="angle-preset" style="--ac:#fcd34d">↗️ 钝角 135°</button>
+          <button onclick="setAngle(180)" class="angle-preset" style="--ac:#fca5a5">➡️ 平角 180°</button>
+        </div>
 
-      <!-- 概念4 -->
-      <div class="cbox" style="--accent:#fcd34d;--accent-bg:rgba(245,158,11,0.06)">
-        <button class="vbtn vbtn-a" onclick="tv(this,'面积是什么？面积就是一个图形所占地方的大小！比较两个图形哪个大，可以把它们放在格子纸上，数一数各自占了几个小方格。正方形的面积等于边长乘以边长，长方形的面积等于长乘以宽！格子数越多，面积越大！')">🔊 听讲解</button>
-        <h4>📊 面积初步</h4>
-        <p><strong>面积</strong>是图形所占地方的大小，用<strong>小方格</strong>来数是最直观的方法！</p>
-        <ul>
-          <li>⬛ <strong>正方形面积</strong> = 边长 × 边长（如边长3，面积=9格）</li>
-          <li>▬ <strong>长方形面积</strong> = 长 × 宽（如 4×3，面积=12格）</li>
-          <li>🔢 <strong>方格计数法</strong>：放在格纸上，整格数完整的，半格算半个</li>
-          <li>🔍 <strong>比较大小</strong>：同一格子纸上，格子多的面积大</li>
-        </ul>
-        <p style="margin-top:8px">💡 口诀：<strong>"长乘宽，格来算，数一数，就知道！"</strong></p>
+        <!-- 说明卡片 -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:380px">
+          <div class="angle-info-card" style="--bc:#93c5fd;--bg:rgba(59,130,246,0.08)"><div class="aic-name">🔪 锐角</div><div class="aic-range">0° ~ 89°</div><div class="aic-eg">三角形的角</div></div>
+          <div class="angle-info-card" style="--bc:#6ee7b7;--bg:rgba(16,185,129,0.08)"><div class="aic-name">📐 直角</div><div class="aic-range">= 90°</div><div class="aic-eg">书本的角</div></div>
+          <div class="angle-info-card" style="--bc:#fcd34d;--bg:rgba(245,158,11,0.08)"><div class="aic-name">↗️ 钝角</div><div class="aic-range">91° ~ 179°</div><div class="aic-eg">宽宽的角</div></div>
+          <div class="angle-info-card" style="--bc:#fca5a5;--bg:rgba(239,68,68,0.08)"><div class="aic-name">➡️ 平角</div><div class="aic-range">= 180°</div><div class="aic-eg">一条直线</div></div>
+        </div>
       </div>
     </div>
+
+    <!-- ② 对称图形 -->
+    <div class="gcard" style="border-color:rgba(16,185,129,0.2)">
+      <div class="sec-heading" style="color:#6ee7b7">🦋 对称图形 <span style="font-size:13px;font-weight:500;color:var(--muted)">— 点击图形，查看对称轴</span></div>
+      <p style="font-size:14px;color:var(--muted);margin-bottom:16px">沿<strong style="color:var(--text)">对称轴</strong>折叠，两边完全重合的图形就是对称图形。点击下方图形，看对称轴动态出现！</p>
+
+      <!-- 图形选择 -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="sym-btn active" onclick="selectShape('square')"    data-shape="square">⬛ 正方形</button>
+        <button class="sym-btn"        onclick="selectShape('rect')"      data-shape="rect">▬ 长方形</button>
+        <button class="sym-btn"        onclick="selectShape('triangle')"  data-shape="triangle">🔺 等边三角形</button>
+        <button class="sym-btn"        onclick="selectShape('circle')"    data-shape="circle">⭕ 圆形</button>
+      </div>
+
+      <!-- SVG 演示区 -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+        <svg id="symSvg" viewBox="0 0 320 220" style="width:100%;max-width:380px;border-radius:16px;background:rgba(255,255,255,0.03);border:1px solid rgba(16,185,129,0.15)"></svg>
+
+        <!-- 对称轴计数 + 折叠按钮 -->
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center">
+          <div id="symAxisCount" style="font-size:15px;font-weight:700;padding:8px 18px;border-radius:10px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);color:#6ee7b7"></div>
+          <button id="foldBtn" onclick="animateFold()" style="padding:8px 18px;border-radius:10px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);color:#6ee7b7;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif">🔄 演示折叠</button>
+        </div>
+
+        <!-- 对称轴控制 -->
+        <div id="axisControls" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center"></div>
+      </div>
+    </div>
+
+    <!-- ③ 面积初步 -->
+    <div class="gcard" style="border-color:rgba(245,158,11,0.2)">
+      <div class="sec-heading" style="color:#fcd34d">📊 面积初步 <span style="font-size:13px;font-weight:500;color:var(--muted)">— 点击方格，亲手数面积</span></div>
+      <p style="font-size:14px;color:var(--muted);margin-bottom:16px"><strong style="color:var(--text)">面积</strong>是图形占的地方大小。选一个图形，看它占了几个方格，就是它的面积！</p>
+
+      <!-- 图形选择 -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="area-btn active" onclick="selectAreaShape('square3')"  data-as="square3">⬛ 正方形 3×3</button>
+        <button class="area-btn"        onclick="selectAreaShape('rect43')"   data-as="rect43">▬ 长方形 4×3</button>
+        <button class="area-btn"        onclick="selectAreaShape('rect52')"   data-as="rect52">▭ 长方形 5×2</button>
+        <button class="area-btn"        onclick="selectAreaShape('tri')"      data-as="tri">🔺 直角三角形</button>
+      </div>
+
+      <!-- 方格区 -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:14px">
+        <div id="areaGrid" style="display:inline-grid;gap:3px;padding:16px;border-radius:14px;background:rgba(255,255,255,0.02);border:1px solid rgba(245,158,11,0.12)"></div>
+
+        <!-- 面积显示 -->
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center">
+          <div id="areaCount" style="font-size:18px;font-weight:900;padding:10px 24px;border-radius:12px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);color:#fcd34d;letter-spacing:-0.02em"></div>
+          <div id="areaFormula" style="font-size:13px;color:var(--muted);padding:8px 14px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07)"></div>
+        </div>
+
+        <!-- 提示 -->
+        <p style="font-size:12px;color:var(--muted2);text-align:center">💡 点击方格可以手动涂色，试着数一数！</p>
+      </div>
+    </div>
+
   </div>
 
   <!-- ═══════════════ S2 技巧 ═══════════════ -->
@@ -992,6 +1077,420 @@ function buildGuide(id, data) {
 }
 
 initEx('ex1'); initEx('ex2'); initEx('ex3');
+
+// ══════════════════════════════════════════════
+//  📐 角的认识 — Canvas 拖拽组件
+// ══════════════════════════════════════════════
+(function() {
+  const canvas = document.getElementById('angleCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const DPR = window.devicePixelRatio || 1;
+
+  // 实际渲染分辨率
+  const W = 380, H = 240;
+  canvas.width  = W * DPR;
+  canvas.height = H * DPR;
+  ctx.scale(DPR, DPR);
+
+  const CX = 90, CY = 150;   // 顶点
+  const ARM = 130;            // 臂长
+  let angleDeg = 55;          // 初始角度
+
+  function degToRad(d) { return d * Math.PI / 180; }
+
+  function angleInfo(deg) {
+    if (deg < 1)   return { label:'零角', color:'#94a3b8', bg:'rgba(148,163,184,0.1)', border:'rgba(148,163,184,0.3)' };
+    if (deg < 90)  return { label:'锐角', color:'#93c5fd', bg:'rgba(59,130,246,0.12)', border:'rgba(59,130,246,0.4)' };
+    if (deg === 90) return { label:'直角', color:'#6ee7b7', bg:'rgba(16,185,129,0.12)', border:'rgba(16,185,129,0.4)' };
+    if (deg < 180) return { label:'钝角', color:'#fcd34d', bg:'rgba(245,158,11,0.12)', border:'rgba(245,158,11,0.4)' };
+    return                  { label:'平角', color:'#fca5a5', bg:'rgba(239,68,68,0.12)', border:'rgba(239,68,68,0.4)' };
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    const rad = degToRad(angleDeg);
+    // 固定臂（水平向右）
+    const ax2 = CX + ARM, ay2 = CY;
+    // 拖动臂（逆时针）
+    const bx2 = CX + ARM * Math.cos(-rad);
+    const by2 = CY + ARM * Math.sin(-rad);
+
+    const info = angleInfo(Math.round(angleDeg));
+
+    // ── 扇形填充 ──
+    ctx.beginPath();
+    ctx.moveTo(CX, CY);
+    ctx.arc(CX, CY, ARM * 0.88, 0, -rad, true);
+    ctx.closePath();
+    ctx.fillStyle = info.bg;
+    ctx.fill();
+
+    // ── 直角标记 ──
+    if (Math.abs(angleDeg - 90) < 2) {
+      const sq = 16;
+      ctx.beginPath();
+      ctx.moveTo(CX + sq, CY);
+      ctx.lineTo(CX + sq, CY - sq);
+      ctx.lineTo(CX, CY - sq);
+      ctx.strokeStyle = '#6ee7b7';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+
+    // ── 固定臂 ──
+    ctx.beginPath(); ctx.moveTo(CX, CY); ctx.lineTo(ax2, ay2);
+    ctx.strokeStyle = 'rgba(255,255,255,0.35)'; ctx.lineWidth = 2.5;
+    ctx.lineCap = 'round'; ctx.stroke();
+
+    // ── 拖动臂 ──
+    ctx.beginPath(); ctx.moveTo(CX, CY); ctx.lineTo(bx2, by2);
+    ctx.strokeStyle = info.color; ctx.lineWidth = 2.5; ctx.stroke();
+
+    // ── 弧线 ──
+    const arcR = 38;
+    ctx.beginPath();
+    ctx.arc(CX, CY, arcR, 0, -rad, true);
+    ctx.strokeStyle = info.color; ctx.lineWidth = 2; ctx.stroke();
+
+    // ── 顶点 ──
+    ctx.beginPath(); ctx.arc(CX, CY, 6, 0, Math.PI * 2);
+    ctx.fillStyle = info.color; ctx.fill();
+
+    // ── 拖拽圆点 ──
+    ctx.beginPath(); ctx.arc(bx2, by2, 10, 0, Math.PI * 2);
+    ctx.fillStyle = '#3b82f6'; ctx.fill();
+    ctx.strokeStyle = '#93c5fd'; ctx.lineWidth = 2; ctx.stroke();
+
+    // ── 度数标注（弧旁）──
+    const labelR = 56;
+    const labelAngle = -rad / 2;
+    const lx = CX + labelR * Math.cos(labelAngle);
+    const ly = CY + labelR * Math.sin(labelAngle);
+    ctx.font = `bold 13px Inter, sans-serif`;
+    ctx.fillStyle = info.color;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(Math.round(angleDeg) + '°', lx, ly);
+
+    // 提示文字
+    ctx.font = `12px "Noto Sans SC", sans-serif`;
+    ctx.fillStyle = 'rgba(148,163,184,0.6)';
+    ctx.textAlign = 'left';
+    ctx.fillText('← 拖动蓝点改变角度', CX + 2, H - 14);
+
+    // 更新外部 badge
+    const badge = document.getElementById('angleBadge');
+    const typeEl = document.getElementById('angleType');
+    if (badge) badge.textContent = Math.round(angleDeg) + '°';
+    if (typeEl) {
+      typeEl.textContent = info.label;
+      typeEl.style.background = info.bg;
+      typeEl.style.border = `1px solid ${info.border}`;
+      typeEl.style.color = info.color;
+    }
+    if (badge) {
+      badge.style.background = info.bg;
+      badge.style.border = `1px solid ${info.border}`;
+      badge.style.color = info.color;
+    }
+  }
+
+  function getAngleFromEvent(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = W / rect.width;
+    const scaleY = H / rect.height;
+    const cx = (('touches' in e ? e.touches[0].clientX : e.clientX) - rect.left) * scaleX;
+    const cy = (('touches' in e ? e.touches[0].clientY : e.clientY) - rect.top) * scaleY;
+    const dx = cx - CX, dy = cy - CY;
+    let angle = -Math.atan2(dy, dx) * 180 / Math.PI;
+    if (angle < 0) angle += 360;
+    if (angle > 180) angle = 180;
+    return Math.round(Math.max(1, Math.min(180, angle)));
+  }
+
+  let dragging = false;
+  canvas.addEventListener('mousedown',  e => { dragging = true; angleDeg = getAngleFromEvent(e); draw(); });
+  canvas.addEventListener('mousemove',  e => { if (!dragging) return; angleDeg = getAngleFromEvent(e); draw(); });
+  canvas.addEventListener('mouseup',    () => dragging = false);
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); dragging = true; angleDeg = getAngleFromEvent(e); draw(); }, {passive:false});
+  canvas.addEventListener('touchmove',  e => { e.preventDefault(); if (!dragging) return; angleDeg = getAngleFromEvent(e); draw(); }, {passive:false});
+  canvas.addEventListener('touchend',   () => dragging = false);
+
+  window.setAngle = function(deg) { angleDeg = deg; draw(); };
+  draw();
+})();
+
+// ══════════════════════════════════════════════
+//  🦋 对称图形 — SVG 动态演示
+// ══════════════════════════════════════════════
+(function() {
+  const shapes = {
+    square: {
+      name: '正方形',
+      axes: [
+        { x1:160, y1:30,  x2:160, y2:190, label:'垂直轴' },
+        { x1:60,  y1:110, x2:260, y2:110, label:'水平轴' },
+        { x1:60,  y1:30,  x2:260, y2:190, label:'对角线1' },
+        { x1:260, y1:30,  x2:60,  y2:190, label:'对角线2' },
+      ],
+      axisCount: '4 条对称轴',
+      draw(svg, fold, activeAxes) {
+        const s = 80, cx = 160, cy = 110;
+        const col = fold ? 'rgba(16,185,129,0.6)' : 'rgba(16,185,129,0.85)';
+        if (fold) {
+          // 右半折叠动画用 transform
+          svg.innerHTML += `<rect x="${cx}" y="${cy-s/2}" width="${s/2}" height="${s}"
+            fill="rgba(16,185,129,0.15)" stroke="${col}" stroke-width="2" rx="2"
+            style="transform-origin:${cx}px ${cy}px;transform:scaleX(-1);opacity:0.4"/>`;
+        }
+        svg.innerHTML += `<rect x="${cx-s/2}" y="${cy-s/2}" width="${s}" height="${s}"
+          fill="rgba(16,185,129,0.1)" stroke="${col}" stroke-width="2.5" rx="2"/>`;
+      }
+    },
+    rect: {
+      name: '长方形',
+      axes: [
+        { x1:160, y1:30,  x2:160, y2:190, label:'垂直轴' },
+        { x1:55,  y1:110, x2:265, y2:110, label:'水平轴' },
+      ],
+      axisCount: '2 条对称轴',
+      draw(svg, fold) {
+        const w = 120, h = 70, cx = 160, cy = 110;
+        const col = fold ? 'rgba(16,185,129,0.6)' : 'rgba(16,185,129,0.85)';
+        if (fold) {
+          svg.innerHTML += `<rect x="${cx}" y="${cy-h/2}" width="${w/2}" height="${h}"
+            fill="rgba(16,185,129,0.15)" stroke="${col}" stroke-width="2" rx="2"
+            style="transform-origin:${cx}px ${cy}px;transform:scaleX(-1);opacity:0.4"/>`;
+        }
+        svg.innerHTML += `<rect x="${cx-w/2}" y="${cy-h/2}" width="${w}" height="${h}"
+          fill="rgba(16,185,129,0.1)" stroke="${col}" stroke-width="2.5" rx="2"/>`;
+      }
+    },
+    triangle: {
+      name: '等边三角形',
+      axes: [
+        { x1:160, y1:30, x2:160, y2:190, label:'中线1' },
+        { x1:82,  y1:58, x2:238, y2:162, label:'中线2' },
+        { x1:238, y1:58, x2:82,  y2:162, label:'中线3' },
+      ],
+      axisCount: '3 条对称轴',
+      draw(svg, fold) {
+        const r = 80, cx = 160, cy = 120;
+        const pts = [0,1,2].map(i => {
+          const a = -Math.PI/2 + i * 2*Math.PI/3;
+          return [cx + r*Math.cos(a), cy + r*Math.sin(a)];
+        });
+        const col = fold ? 'rgba(16,185,129,0.6)' : 'rgba(16,185,129,0.85)';
+        if (fold) {
+          const half = `${pts[0][0]},${pts[0][1]} ${pts[1][0]},${pts[1][1]} ${cx},${cy+r*0.15}`;
+          svg.innerHTML += `<polygon points="${half}" fill="rgba(16,185,129,0.15)" stroke="${col}" stroke-width="2" style="transform-origin:${cx}px ${cy}px;transform:scaleX(-1);opacity:0.4"/>`;
+        }
+        svg.innerHTML += `<polygon points="${pts.map(p=>p.join(',')).join(' ')}"
+          fill="rgba(16,185,129,0.1)" stroke="${col}" stroke-width="2.5"/>`;
+      }
+    },
+    circle: {
+      name: '圆形',
+      axes: [
+        { x1:160, y1:25,  x2:160, y2:195, label:'垂直轴' },
+        { x1:55,  y1:110, x2:265, y2:110, label:'水平轴' },
+        { x1:83,  y1:33,  x2:237, y2:187, label:'斜轴1' },
+        { x1:237, y1:33,  x2:83,  y2:187, label:'斜轴2' },
+      ],
+      axisCount: '无数条对称轴',
+      draw(svg, fold) {
+        const col = fold ? 'rgba(16,185,129,0.6)' : 'rgba(16,185,129,0.85)';
+        if (fold) {
+          svg.innerHTML += `<path d="M160,25 A85,85 0 0,1 160,195" fill="rgba(16,185,129,0.15)" stroke="${col}" stroke-width="2" style="transform-origin:160px 110px;transform:scaleX(-1);opacity:0.4"/>`;
+        }
+        svg.innerHTML += `<circle cx="160" cy="110" r="85" fill="rgba(16,185,129,0.1)" stroke="${col}" stroke-width="2.5"/>`;
+      }
+    }
+  };
+
+  let curShape = 'square';
+  let activeAxes = new Set([0]);
+  let folding = false;
+
+  function render(fold) {
+    const svg = document.getElementById('symSvg');
+    if (!svg) return;
+    const s = shapes[curShape];
+    svg.innerHTML = '';
+
+    // 底部网格点
+    for (let x = 20; x < 320; x += 30)
+      for (let y = 20; y < 220; y += 30)
+        svg.innerHTML += `<circle cx="${x}" cy="${y}" r="1" fill="rgba(255,255,255,0.04)"/>`;
+
+    // 画形状
+    s.draw(svg, fold);
+
+    // 画对称轴
+    s.axes.forEach((ax, i) => {
+      if (!activeAxes.has(i)) return;
+      svg.innerHTML += `
+        <line x1="${ax.x1}" y1="${ax.y1}" x2="${ax.x2}" y2="${ax.y2}"
+          stroke="#6ee7b7" stroke-width="1.8" stroke-dasharray="6 4" opacity="0.85"
+          class="sym-axis-line" style="animation:axisAppear .4s ease ${i*0.12}s both"/>
+        <text x="${(ax.x1+ax.x2)/2+4}" y="${(ax.y1+ax.y2)/2-6}"
+          fill="#6ee7b7" font-size="10" font-weight="600" opacity="0.7">${ax.label}</text>`;
+    });
+
+    // 动态刷新控制按钮
+    const ctrl = document.getElementById('axisControls');
+    if (ctrl) {
+      ctrl.innerHTML = s.axes.map((ax, i) =>
+        `<button class="axis-toggle ${activeAxes.has(i)?'on':''}" onclick="toggleAxis(${i})">${ax.label}</button>`
+      ).join('');
+    }
+
+    const cnt = document.getElementById('symAxisCount');
+    if (cnt) cnt.textContent = s.axisCount;
+  }
+
+  window.selectShape = function(name) {
+    curShape = name;
+    activeAxes = new Set([0]);
+    folding = false;
+    document.querySelectorAll('.sym-btn').forEach(b => b.classList.toggle('active', b.dataset.shape === name));
+    render(false);
+  };
+
+  window.toggleAxis = function(i) {
+    if (activeAxes.has(i)) activeAxes.delete(i); else activeAxes.add(i);
+    render(false);
+  };
+
+  window.animateFold = function() {
+    folding = !folding;
+    render(folding);
+    const btn = document.getElementById('foldBtn');
+    if (btn) btn.textContent = folding ? '🔄 取消折叠' : '🔄 演示折叠';
+  };
+
+  // SVG 动画
+  const svgStyle = document.createElement('style');
+  svgStyle.textContent = `@keyframes axisAppear { from{opacity:0;stroke-dashoffset:40} to{opacity:0.85;stroke-dashoffset:0} }`;
+  document.head.appendChild(svgStyle);
+
+  render(false);
+})();
+
+// ══════════════════════════════════════════════
+//  📊 面积初步 — 方格交互组件
+// ══════════════════════════════════════════════
+(function() {
+  // 每种形状的方格定义：[row][col] => 'filled' | 'filled-half' | 'empty'
+  const shapes = {
+    square3: {
+      cols: 5, rows: 5,
+      label: '正方形 3×3',
+      formula: '面积 = 3 × 3 = 9 格',
+      cells: (r,c) => (r>=1&&r<=3&&c>=1&&c<=3) ? 'filled' : 'empty',
+      count: 9
+    },
+    rect43: {
+      cols: 6, rows: 5,
+      label: '长方形 4×3',
+      formula: '面积 = 4 × 3 = 12 格',
+      cells: (r,c) => (r>=1&&r<=3&&c>=1&&c<=4) ? 'filled' : 'empty',
+      count: 12
+    },
+    rect52: {
+      cols: 7, rows: 4,
+      label: '长方形 5×2',
+      formula: '面积 = 5 × 2 = 10 格',
+      cells: (r,c) => (r>=1&&r<=2&&c>=1&&c<=5) ? 'filled' : 'empty',
+      count: 10
+    },
+    tri: {
+      cols: 6, rows: 6,
+      label: '直角三角形',
+      formula: '面积 = 整格5 + 半格4÷2 = 7 格',
+      cells: (r,c) => {
+        // 5×5 区域内画直角三角形
+        if (r<1||r>5||c<1||c>5) return 'empty';
+        // 底边在row5，直角在(5,1)，斜边从(1,1)到(5,5)
+        const inFull = (r >= c+1); // 严格在斜线左下
+        const onDiag = (r === c+1) ? false : (r === c); // 斜线格为半格
+        if (r > c) return 'filled';      // 完整格
+        if (r === c) return 'filled-half'; // 斜边半格
+        return 'empty';
+      },
+      count: 7
+    }
+  };
+
+  let curShape = 'square3';
+  let overrides = {}; // 用户手动点击覆盖
+
+  function renderGrid() {
+    const grid = document.getElementById('areaGrid');
+    if (!grid) return;
+    const s = shapes[curShape];
+    grid.style.gridTemplateColumns = `repeat(${s.cols}, 36px)`;
+    grid.innerHTML = '';
+    overrides = {};
+    let count = 0;
+
+    for (let r = 0; r < s.rows; r++) {
+      for (let c = 0; c < s.cols; c++) {
+        const key = `${r}_${c}`;
+        const defaultState = s.cells(r, c);
+        const state = overrides[key] || defaultState;
+        const cell = document.createElement('div');
+        cell.className = `ag-cell ${state}`;
+        cell.dataset.key = key;
+        cell.dataset.default = defaultState;
+        if (state === 'filled') cell.textContent = '✓';
+        if (state === 'filled-half') cell.textContent = '½';
+        cell.addEventListener('click', () => {
+          const k = cell.dataset.key;
+          const cur = overrides[k] || cell.dataset.default;
+          overrides[k] = cur === 'empty' ? 'filled' : 'empty';
+          updateGrid();
+        });
+        grid.appendChild(cell);
+        if (state === 'filled') count++;
+        if (state === 'filled-half') count += 0.5;
+      }
+    }
+    updateCount(count);
+  }
+
+  function updateGrid() {
+    const s = shapes[curShape];
+    let count = 0;
+    document.querySelectorAll('#areaGrid .ag-cell').forEach(cell => {
+      const key = cell.dataset.key;
+      const state = overrides[key] || cell.dataset.default;
+      cell.className = `ag-cell ${state}`;
+      cell.textContent = state === 'filled' ? '✓' : state === 'filled-half' ? '½' : '';
+      if (state === 'filled') count++;
+      if (state === 'filled-half') count += 0.5;
+    });
+    updateCount(count);
+  }
+
+  function updateCount(n) {
+    const el = document.getElementById('areaCount');
+    const fe = document.getElementById('areaFormula');
+    if (el) el.textContent = `面积 = ${n} 格`;
+    if (fe) fe.textContent = shapes[curShape].formula;
+  }
+
+  window.selectAreaShape = function(name) {
+    curShape = name;
+    document.querySelectorAll('.area-btn').forEach(b => b.classList.toggle('active', b.dataset.as === name));
+    renderGrid();
+  };
+
+  renderGrid();
+  document.getElementById('areaCount').textContent = `面积 = ${shapes.square3.count} 格`;
+  document.getElementById('areaFormula').textContent = shapes.square3.formula;
+})();
 
 // ── Quiz ──
 const quizData = [
