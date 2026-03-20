@@ -181,20 +181,32 @@ body {
   font-family: 'Noto Sans SC', sans-serif;
 }
 .reveal-btn:hover { background: rgba(16,185,129,0.18); transform: scale(1.03); }
+/* ── 技巧步骤（横向平铺卡片） ── */
+[id^="ms"] { display:flex; gap:10px; flex-wrap:wrap; align-items:stretch; margin-bottom:4px; }
 .step {
-  display: flex; gap: 14px; align-items: flex-start;
-  margin-bottom: 12px; opacity: 0; transform: translateX(-16px); transition: all .4s;
+  flex:1; min-width:130px; display:flex; flex-direction:column; align-items:center;
+  gap:8px; padding:12px 10px; background:rgba(255,255,255,0.03);
+  border-radius:14px; border:1px solid rgba(255,255,255,0.07);
+  opacity:0; transform:translateY(14px); transition:all .45s cubic-bezier(.23,1,.32,1);
 }
-.step.show { opacity: 1; transform: none; }
-.step-num {
-  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 800;
-  background: linear-gradient(135deg, var(--scolor1,#10b981), var(--scolor2,#06b6d4));
-  color: #fff;
-}
-.step-content { font-size: 14px; color: var(--muted); line-height: 1.7; padding-top: 4px; }
-.step-content strong { color: var(--text); }
+.step.show { opacity:1; transform:translateY(0); }
+.step-vis { width:100%; }
+.step-vis svg { width:100%; height:auto; display:block; border-radius:8px; overflow:visible; }
+.step-label { font-size:13px; line-height:1.6; color:var(--muted); text-align:center; }
+.step-label strong, .step-label b { color:var(--text); }
+/* SVG 动画 */
+.sv { opacity:0; }
+.step.show .sv { animation:svFade .5s ease forwards; }
+.sv-draw { stroke-dashoffset:1; stroke-dasharray:1; }
+.step.show .sv-draw { animation:svLine .6s ease forwards; }
+.step.show .sv.pop { animation:svPop .4s cubic-bezier(.34,1.56,.64,1) forwards; }
+@keyframes svFade { to { opacity:1; } }
+@keyframes svLine { to { stroke-dashoffset:0; } }
+@keyframes svPop  { from { opacity:0; transform:scale(.4); } to { opacity:1; transform:scale(1); } }
+/* 挑战图形区 */
+.mcard-figure { text-align:center; margin-bottom:12px; padding:12px; background:rgba(255,255,255,0.04); border-radius:12px; border:1px solid rgba(255,255,255,0.08); }
+.mcard-figure svg { overflow:visible; }
+.fig-label { font-size:13px; color:var(--muted); margin-bottom:8px; }
 .va-btn {
   display: inline-flex; align-items: center; gap: 5px;
   padding: 5px 12px; border-radius: 8px; border: none;
@@ -501,7 +513,7 @@ body {
   <!-- ═══════════════ S2 技巧 ═══════════════ -->
   <div id="s2" class="sec">
 
-    <!-- 方法1 -->
+    <!-- 方法1: 加法规则数路径 -->
     <div class="mcard" onclick="toggleMCard(this)">
       <div class="mcard-head">
         <div class="mcard-icon">➕</div>
@@ -513,19 +525,128 @@ body {
       </div>
       <div class="mcard-body">
         <div class="mcard-body-inner">
-          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>从左上角走到右下角，只能向右或向下，一个 3×3 的格子共有多少条最短路径？</div>
+          <div class="mcard-figure">
+            <div class="fig-label">🎯 小挑战：只能向右或向下，从A走到B有多少条最短路径？</div>
+            <svg viewBox="0 0 240 178" width="100%" style="max-width:300px">
+              <!-- grid lines: 3×3 nodes -->
+              <!-- horizontal lines -->
+              <line x1="45" y1="30" x2="145" y2="30" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+              <line x1="45" y1="80" x2="145" y2="80" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+              <line x1="45" y1="130" x2="145" y2="130" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+              <!-- vertical lines -->
+              <line x1="45" y1="30" x2="45" y2="130" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+              <line x1="95" y1="30" x2="95" y2="130" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+              <line x1="145" y1="30" x2="145" y2="130" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+              <!-- 9 nodes -->
+              <circle cx="45" cy="30" r="5" fill="#10b981" stroke="#6ee7b7" stroke-width="1.5"/>
+              <circle cx="95" cy="30" r="4" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+              <circle cx="145" cy="30" r="4" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+              <circle cx="45" cy="80" r="4" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+              <circle cx="95" cy="80" r="4" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+              <circle cx="145" cy="80" r="4" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+              <circle cx="45" cy="130" r="4" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+              <circle cx="95" cy="130" r="4" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+              <circle cx="145" cy="130" r="6" fill="rgba(245,158,11,0.3)" stroke="#f59e0b" stroke-width="2"/>
+              <!-- A / B labels -->
+              <text x="45" y="22" text-anchor="middle" font-size="12" font-weight="700" fill="#10b981">A</text>
+              <text x="145" y="148" text-anchor="middle" font-size="12" font-weight="700" fill="#f59e0b">B</text>
+              <!-- direction arrows -->
+              <text x="170" y="34" font-size="13" fill="#06b6d4">→</text>
+              <text x="172" y="52" font-size="11" fill="#06b6d4">或</text>
+              <text x="170" y="70" font-size="13" fill="#06b6d4">↓</text>
+              <!-- question -->
+              <text x="145" y="138" text-anchor="middle" font-size="22" fill="#f59e0b">?</text>
+              <text x="110" y="165" text-anchor="middle" font-size="11" fill="#64748b">共有几条最短路径？</text>
+            </svg>
+          </div>
           <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms1')">👆 看解法</button>
           <div id="ms1">
-            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#06b6d4">1</div><div class="step-content"><strong>第一行和第一列</strong>全部填 1（只有一种走法，一直往右或一直往下）</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#06b6d4">2</div><div class="step-content"><strong>逐格填写</strong>：每格 = 上方格数 + 左方格数<br>第2行第2格 = 1+1 = 2；第2行第3格 = 1+2 = 3</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#06b6d4">3</div><div class="step-content"><strong>右下角</strong>就是答案：1,1,1 / 1,2,3 / 1,3,<strong>6</strong> → 共 <strong>6</strong> 条最短路径 ✅</div></div>
-            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'加法规则：第一行第一列全填1，其余每格等于上面格子加左边格子。3乘3的格子，右下角答案是6。')">🔊 听讲解</button>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 128" width="100%">
+                  <text x="80" y="14" text-anchor="middle" font-size="11" fill="#94a3b8">第一行、第一列全填 1</text>
+                  <!-- grid -->
+                  <line x1="25" y1="28" x2="135" y2="28" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                  <line x1="25" y1="68" x2="135" y2="68" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                  <line x1="25" y1="108" x2="135" y2="108" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                  <line x1="25" y1="28" x2="25" y2="108" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                  <line x1="80" y1="28" x2="80" y2="108" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                  <line x1="135" y1="28" x2="135" y2="108" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                  <!-- row 1: 1,1,1 -->
+                  <text class="sv" x="25" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#10b981" style="animation-delay:0s">1</text>
+                  <text class="sv" x="80" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#10b981" style="animation-delay:.15s">1</text>
+                  <text class="sv" x="135" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#10b981" style="animation-delay:.3s">1</text>
+                  <!-- col 1: 1,1 (row 2,3) -->
+                  <text class="sv" x="25" y="64" text-anchor="middle" font-size="13" font-weight="700" fill="#10b981" style="animation-delay:.45s">1</text>
+                  <text class="sv" x="25" y="104" text-anchor="middle" font-size="13" font-weight="700" fill="#10b981" style="animation-delay:.6s">1</text>
+                  <text class="sv" x="80" y="118" text-anchor="middle" font-size="11" fill="#94a3b8" style="animation-delay:.75s">→ 只有一种走法</text>
+                </svg>
+              </div>
+              <div class="step-label">① 第一行、第一列全部填 <strong>1</strong></div>
+            </div>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 128" width="100%">
+                  <text x="80" y="14" text-anchor="middle" font-size="11" fill="#94a3b8">每格 = 上 + 左</text>
+                  <line x1="25" y1="28" x2="135" y2="28" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                  <line x1="25" y1="68" x2="135" y2="68" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                  <line x1="25" y1="108" x2="135" y2="108" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                  <line x1="25" y1="28" x2="25" y2="108" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                  <line x1="80" y1="28" x2="80" y2="108" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                  <line x1="135" y1="28" x2="135" y2="108" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                  <!-- dim: row1 + col1 -->
+                  <text x="25" y="24" text-anchor="middle" font-size="12" fill="rgba(16,185,129,0.4)">1</text>
+                  <text x="80" y="24" text-anchor="middle" font-size="12" fill="rgba(16,185,129,0.4)">1</text>
+                  <text x="135" y="24" text-anchor="middle" font-size="12" fill="rgba(16,185,129,0.4)">1</text>
+                  <text x="25" y="64" text-anchor="middle" font-size="12" fill="rgba(16,185,129,0.4)">1</text>
+                  <text x="25" y="104" text-anchor="middle" font-size="12" fill="rgba(16,185,129,0.4)">1</text>
+                  <!-- (80,68): 1+1=2 -->
+                  <line class="sv sv-draw" pathLength="1" x1="80" y1="28" x2="80" y2="58" stroke="#06b6d4" stroke-width="1.5" style="animation-delay:.1s"/>
+                  <line class="sv sv-draw" pathLength="1" x1="25" y1="68" x2="68" y2="68" stroke="#06b6d4" stroke-width="1.5" style="animation-delay:.2s"/>
+                  <text class="sv pop" x="80" y="64" text-anchor="middle" font-size="14" font-weight="700" fill="#06b6d4" style="animation-delay:.35s">2</text>
+                  <!-- (135,68): 1+2=3 -->
+                  <line class="sv sv-draw" pathLength="1" x1="135" y1="28" x2="135" y2="58" stroke="#a78bfa" stroke-width="1.5" style="animation-delay:.5s"/>
+                  <line class="sv sv-draw" pathLength="1" x1="80" y1="68" x2="123" y2="68" stroke="#a78bfa" stroke-width="1.5" style="animation-delay:.6s"/>
+                  <text class="sv pop" x="135" y="64" text-anchor="middle" font-size="14" font-weight="700" fill="#a78bfa" style="animation-delay:.75s">3</text>
+                  <text class="sv" x="80" y="118" text-anchor="middle" font-size="11" fill="#94a3b8" style="animation-delay:.9s">1+1=2，1+2=3</text>
+                </svg>
+              </div>
+              <div class="step-label">② 每格 = <strong>上 + 左</strong>，依次填入</div>
+            </div>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 128" width="100%">
+                  <text x="80" y="14" text-anchor="middle" font-size="11" fill="#94a3b8">完整填表</text>
+                  <line x1="25" y1="28" x2="135" y2="28" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                  <line x1="25" y1="68" x2="135" y2="68" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                  <line x1="25" y1="108" x2="135" y2="108" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                  <line x1="25" y1="28" x2="25" y2="108" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                  <line x1="80" y1="28" x2="80" y2="108" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                  <line x1="135" y1="28" x2="135" y2="108" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                  <!-- full grid numbers -->
+                  <text x="25" y="24" text-anchor="middle" font-size="12" fill="rgba(16,185,129,0.5)">1</text>
+                  <text x="80" y="24" text-anchor="middle" font-size="12" fill="rgba(16,185,129,0.5)">1</text>
+                  <text x="135" y="24" text-anchor="middle" font-size="12" fill="rgba(16,185,129,0.5)">1</text>
+                  <text x="25" y="64" text-anchor="middle" font-size="12" fill="rgba(16,185,129,0.5)">1</text>
+                  <text x="25" y="104" text-anchor="middle" font-size="12" fill="rgba(16,185,129,0.5)">1</text>
+                  <text x="80" y="64" text-anchor="middle" font-size="12" fill="rgba(6,182,212,0.7)">2</text>
+                  <text x="135" y="64" text-anchor="middle" font-size="12" fill="rgba(167,139,250,0.7)">3</text>
+                  <text x="80" y="104" text-anchor="middle" font-size="12" fill="rgba(6,182,212,0.7)">3</text>
+                  <!-- answer: bottom-right = 6 -->
+                  <circle class="sv pop" cx="135" cy="108" r="16" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="2" style="animation-delay:.3s"/>
+                  <text class="sv" x="135" y="113" text-anchor="middle" font-size="16" font-weight="800" fill="#f59e0b" style="animation-delay:.4s">6</text>
+                  <text class="sv" x="80" y="124" text-anchor="middle" font-size="11" fill="#f59e0b" style="animation-delay:.55s">右下角 = 6 条 ✅</text>
+                </svg>
+              </div>
+              <div class="step-label">③ 右下角即答案：<strong>6 条</strong>最短路径 ✅</div>
+            </div>
+            <button class="va-btn" style="flex-basis:100%;margin-top:4px" onclick="event.stopPropagation();tv(this,'加法规则：第一行第一列全填1，其余每格等于上面格子加左边格子。一个3乘3节点的格子，右下角答案是6。这是最短路径数的快速算法！')">🔊 听讲解</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 方法2 -->
+    <!-- 方法2: 方向转换口诀法 -->
     <div class="mcard" onclick="toggleMCard(this)">
       <div class="mcard-head">
         <div class="mcard-icon">🧭</div>
@@ -537,19 +658,90 @@ body {
       </div>
       <div class="mcard-body">
         <div class="mcard-body-inner">
-          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>小明面朝南站立，他的右手边是哪个方向？</div>
+          <div class="mcard-figure">
+            <div class="fig-label">🎯 小挑战：小明面朝南站立，他的右手边是哪个方向？</div>
+            <svg viewBox="0 0 240 145" width="100%" style="max-width:300px">
+              <!-- compass circle -->
+              <circle cx="100" cy="72" r="52" fill="rgba(6,182,212,0.05)" stroke="rgba(6,182,212,0.2)" stroke-width="1.5"/>
+              <!-- N/S/E/W labels -->
+              <text x="100" y="16" text-anchor="middle" font-size="13" font-weight="700" fill="#06b6d4">北</text>
+              <text x="100" y="134" text-anchor="middle" font-size="13" font-weight="700" fill="#06b6d4">南</text>
+              <text x="157" y="77" text-anchor="middle" font-size="13" font-weight="700" fill="#06b6d4">东</text>
+              <text x="40" y="77" text-anchor="middle" font-size="13" font-weight="700" fill="#06b6d4">西</text>
+              <!-- compass cross lines -->
+              <line x1="100" y1="22" x2="100" y2="122" stroke="rgba(6,182,212,0.2)" stroke-width="1" stroke-dasharray="4 3"/>
+              <line x1="50" y1="72" x2="150" y2="72" stroke="rgba(6,182,212,0.2)" stroke-width="1" stroke-dasharray="4 3"/>
+              <!-- person icon facing south (triangle pointing down) -->
+              <polygon points="100,52 90,88 110,88" fill="rgba(245,158,11,0.3)" stroke="#f59e0b" stroke-width="2"/>
+              <circle cx="100" cy="45" r="8" fill="rgba(245,158,11,0.25)" stroke="#f59e0b" stroke-width="1.5"/>
+              <!-- right hand question -->
+              <rect x="168" y="60" width="62" height="28" rx="7" fill="rgba(239,68,68,0.15)" stroke="#ef4444" stroke-width="1"/>
+              <text x="199" y="72" text-anchor="middle" font-size="11" fill="#ef4444">右手</text>
+              <text x="199" y="84" text-anchor="middle" font-size="11" fill="#ef4444">= 哪方？</text>
+              <line x1="110" y1="70" x2="166" y2="70" stroke="rgba(239,68,68,0.4)" stroke-width="1" stroke-dasharray="4 3"/>
+            </svg>
+          </div>
           <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms2')">👆 看解法</button>
           <div id="ms2">
-            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#06b6d4">1</div><div class="step-content"><strong>画出方向图</strong>：地图上北上南下，东右西左（这是地图视角）</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#06b6d4">2</div><div class="step-content"><strong>小明面朝南</strong>（背朝北）→ 他的前方是南，后方是北</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#06b6d4">3</div><div class="step-content">面朝南时：<strong>右手边 = 西</strong>（东西互换了！）✅ 口诀：<strong>"面南背北，左东右西"</strong></div></div>
-            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'方向口诀：面北背南，左西右东。面南背北，左东右西。面东背西，左北右南。面西背东，左南右北！')">🔊 听讲解</button>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 120" width="100%">
+                  <text x="80" y="14" text-anchor="middle" font-size="11" fill="#94a3b8">地图标准方向</text>
+                  <circle cx="80" cy="65" r="44" fill="rgba(6,182,212,0.05)" stroke="rgba(6,182,212,0.2)" stroke-width="1"/>
+                  <line x1="80" y1="22" x2="80" y2="108" stroke="rgba(6,182,212,0.25)" stroke-width="1" stroke-dasharray="3 3"/>
+                  <line x1="36" y1="65" x2="124" y2="65" stroke="rgba(6,182,212,0.25)" stroke-width="1" stroke-dasharray="3 3"/>
+                  <text class="sv" x="80" y="20" text-anchor="middle" font-size="13" font-weight="700" fill="#06b6d4" style="animation-delay:0s">北↑</text>
+                  <text class="sv" x="80" y="112" text-anchor="middle" font-size="13" font-weight="700" fill="#06b6d4" style="animation-delay:.1s">南↓</text>
+                  <text class="sv" x="128" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#06b6d4" style="animation-delay:.2s">东→</text>
+                  <text class="sv" x="30" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#06b6d4" style="animation-delay:.3s">←西</text>
+                </svg>
+              </div>
+              <div class="step-label">① 地图视角：<strong>上北下南，左西右东</strong></div>
+            </div>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 120" width="100%">
+                  <text x="80" y="14" text-anchor="middle" font-size="11" fill="#94a3b8">小明面朝南</text>
+                  <!-- person facing south -->
+                  <polygon cx="80" cy="65" points="80,40 68,72 92,72" fill="rgba(245,158,11,0.25)" stroke="#f59e0b" stroke-width="2"/>
+                  <circle cx="80" cy="33" r="9" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="1.5"/>
+                  <!-- facing arrow -->
+                  <line class="sv sv-draw" pathLength="1" x1="80" y1="72" x2="80" y2="98" stroke="#f59e0b" stroke-width="2" marker-end="url(#m5arr)" style="animation-delay:.2s"/>
+                  <text class="sv" x="80" y="112" text-anchor="middle" font-size="11" fill="#f59e0b" style="animation-delay:.35s">面朝南方 ↓</text>
+                  <!-- left/right sides -->
+                  <text class="sv" x="20" y="60" text-anchor="middle" font-size="11" fill="#a78bfa" style="animation-delay:.5s">左</text>
+                  <text class="sv" x="140" y="60" text-anchor="middle" font-size="11" fill="#10b981" style="animation-delay:.5s">右</text>
+                </svg>
+              </div>
+              <div class="step-label">② 人面朝南：<strong>前=南，后=北</strong>，左右颠倒</div>
+            </div>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 120" width="100%">
+                  <text x="80" y="14" text-anchor="middle" font-size="11" fill="#94a3b8">面南时的左右</text>
+                  <!-- horizontal axis: east-west -->
+                  <line x1="20" y1="55" x2="140" y2="55" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+                  <!-- East label (person's LEFT when facing south) -->
+                  <rect x="5" y="40" width="40" height="22" rx="5" fill="rgba(167,139,250,0.2)" stroke="#a78bfa" stroke-width="1.5"/>
+                  <text x="25" y="55" text-anchor="middle" font-size="12" font-weight="700" fill="#a78bfa">东←左</text>
+                  <!-- West label (person's RIGHT when facing south) -->
+                  <rect class="sv pop" x="115" y="40" width="40" height="22" rx="5" fill="rgba(16,185,129,0.2)" stroke="#10b981" stroke-width="2" style="animation-delay:.3s"/>
+                  <text class="sv" x="135" y="55" text-anchor="middle" font-size="12" font-weight="700" fill="#10b981" style="animation-delay:.35s">西→右</text>
+                  <!-- mnemonic -->
+                  <rect class="sv pop" x="15" y="76" width="130" height="34" rx="7" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="1" style="animation-delay:.5s"/>
+                  <text class="sv" x="80" y="91" text-anchor="middle" font-size="11" font-weight="700" fill="#f59e0b" style="animation-delay:.6s">口诀：面南背北</text>
+                  <text class="sv" x="80" y="104" text-anchor="middle" font-size="11" font-weight="700" fill="#f59e0b" style="animation-delay:.65s">左东右西 ✅</text>
+                </svg>
+              </div>
+              <div class="step-label">③ 右手 = <strong>西</strong>！口诀：<strong>面南背北，左东右西</strong></div>
+            </div>
+            <button class="va-btn" style="flex-basis:100%;margin-top:4px" onclick="event.stopPropagation();tv(this,'方向口诀：面北背南，左西右东。面南背北，左东右西。面东背西，左北右南。面西背东，左南右北！小明面朝南，右手边是西！')">🔊 听讲解</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 方法3 -->
+    <!-- 方法3: 走迷宫·右手法则 -->
     <div class="mcard" onclick="toggleMCard(this)">
       <div class="mcard-head">
         <div class="mcard-icon">🌀</div>
@@ -561,17 +753,116 @@ body {
       </div>
       <div class="mcard-body">
         <div class="mcard-body-inner">
-          <div class="mcard-challenge"><strong>🎯 挑战：</strong>遇到复杂迷宫，怎样保证一定能走出去，不会原地打转？</div>
+          <div class="mcard-figure">
+            <div class="fig-label">🎯 小挑战：遇到复杂迷宫，怎样保证一定能走出去？</div>
+            <svg viewBox="0 0 240 168" width="100%" style="max-width:300px">
+              <!-- maze outer border (left wall has entrance gap at top, right wall has exit gap at bottom) -->
+              <!-- top wall: full -->
+              <line x1="30" y1="18" x2="170" y2="18" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
+              <!-- bottom wall: full -->
+              <line x1="30" y1="138" x2="170" y2="138" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
+              <!-- left wall: with entrance gap (y=18 to y=48, skip y=48–78, then y=78–138) -->
+              <line x1="30" y1="18" x2="30" y2="48" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
+              <line x1="30" y1="78" x2="30" y2="138" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
+              <!-- right wall: with exit gap (y=18–108, skip y=108–138) -->
+              <line x1="170" y1="18" x2="170" y2="108" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
+              <!-- internal walls -->
+              <line x1="30" y1="58" x2="110" y2="58" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="110" y1="18" x2="110" y2="58" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="90" y1="58" x2="90" y2="98" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="90" y1="98" x2="170" y2="98" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="50" y1="98" x2="50" y2="138" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+              <!-- entrance/exit labels -->
+              <text x="18" y="66" text-anchor="middle" font-size="11" font-weight="700" fill="#10b981">入</text>
+              <text x="185" y="126" text-anchor="middle" font-size="11" font-weight="700" fill="#f59e0b">出</text>
+              <!-- entrance arrow -->
+              <line x1="10" y1="63" x2="24" y2="63" stroke="#10b981" stroke-width="1.5"/>
+              <!-- exit arrow -->
+              <line x1="176" y1="123" x2="192" y2="123" stroke="#f59e0b" stroke-width="1.5"/>
+              <!-- question mark in center -->
+              <text x="130" y="80" text-anchor="middle" font-size="28" fill="rgba(255,255,255,0.15)">?</text>
+              <text x="120" y="156" text-anchor="middle" font-size="11" fill="#64748b">如何保证走出去？</text>
+            </svg>
+          </div>
           <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms3')">👆 看解法</button>
           <div id="ms3">
-            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#06b6d4">1</div><div class="step-content"><strong>右手法则</strong>：进入迷宫后，右手始终保持贴着右边的墙壁行走</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#06b6d4">2</div><div class="step-content"><strong>遇到岔路</strong>：优先向右转；右边是墙就直走；直走也是墙就向左；全堵就掉头</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#06b6d4">3</div><div class="step-content"><strong>科学原理</strong>：对于与外墙连通的迷宫，右手法则100%有效！适合没有"环形"路段的迷宫 ✅</div></div>
-            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'右手法则：进迷宫后，右手始终贴着右边的墙。优先右转，不行直走，再不行左转，全堵就掉头。对于没有环形路段的迷宫，一定能走出去！')">🔊 听讲解</button>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 120" width="100%">
+                  <text x="80" y="14" text-anchor="middle" font-size="11" fill="#94a3b8">右手法则</text>
+                  <!-- person icon -->
+                  <circle cx="55" cy="48" r="10" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="1.5"/>
+                  <text x="55" y="53" text-anchor="middle" font-size="14">🧍</text>
+                  <!-- right wall -->
+                  <rect x="90" y="30" width="8" height="70" rx="3" fill="rgba(16,185,129,0.25)" stroke="#10b981" stroke-width="1.5"/>
+                  <!-- right hand touching wall -->
+                  <line class="sv sv-draw" pathLength="1" x1="68" y1="55" x2="88" y2="55" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" style="animation-delay:.2s"/>
+                  <text class="sv" x="55" y="88" text-anchor="middle" font-size="11" fill="#f59e0b" style="animation-delay:.4s">右手</text>
+                  <text class="sv" x="99" y="112" text-anchor="middle" font-size="11" fill="#10b981" style="animation-delay:.5s">始终贴右墙</text>
+                </svg>
+              </div>
+              <div class="step-label">① 进入迷宫，<strong>右手始终贴右侧墙</strong>行走</div>
+            </div>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 128" width="100%">
+                  <text x="80" y="14" text-anchor="middle" font-size="11" fill="#94a3b8">遇到岔路的优先级</text>
+                  <!-- priority boxes -->
+                  <rect class="sv" x="8" y="24" width="34" height="26" rx="6" fill="rgba(16,185,129,0.2)" stroke="#10b981" stroke-width="1.5" style="animation-delay:0s"/>
+                  <text class="sv" x="25" y="33" text-anchor="middle" font-size="11" fill="#10b981" style="animation-delay:.05s">①</text>
+                  <text class="sv" x="25" y="45" text-anchor="middle" font-size="11" fill="#10b981" style="animation-delay:.05s">右转</text>
+                  <rect class="sv" x="48" y="24" width="34" height="26" rx="6" fill="rgba(6,182,212,0.2)" stroke="#06b6d4" stroke-width="1.5" style="animation-delay:.15s"/>
+                  <text class="sv" x="65" y="33" text-anchor="middle" font-size="11" fill="#06b6d4" style="animation-delay:.2s">②</text>
+                  <text class="sv" x="65" y="45" text-anchor="middle" font-size="11" fill="#06b6d4" style="animation-delay:.2s">直走</text>
+                  <rect class="sv" x="88" y="24" width="34" height="26" rx="6" fill="rgba(167,139,250,0.2)" stroke="#a78bfa" stroke-width="1.5" style="animation-delay:.3s"/>
+                  <text class="sv" x="105" y="33" text-anchor="middle" font-size="11" fill="#a78bfa" style="animation-delay:.35s">③</text>
+                  <text class="sv" x="105" y="45" text-anchor="middle" font-size="11" fill="#a78bfa" style="animation-delay:.35s">左转</text>
+                  <rect class="sv" x="128" y="24" width="28" height="26" rx="6" fill="rgba(239,68,68,0.2)" stroke="#ef4444" stroke-width="1.5" style="animation-delay:.45s"/>
+                  <text class="sv" x="142" y="33" text-anchor="middle" font-size="11" fill="#ef4444" style="animation-delay:.5s">④</text>
+                  <text class="sv" x="142" y="45" text-anchor="middle" font-size="11" fill="#ef4444" style="animation-delay:.5s">回头</text>
+                  <!-- arrows between -->
+                  <text class="sv" x="43" y="40" text-anchor="middle" font-size="10" fill="#475569" style="animation-delay:.1s">→</text>
+                  <text class="sv" x="83" y="40" text-anchor="middle" font-size="10" fill="#475569" style="animation-delay:.25s">→</text>
+                  <text class="sv" x="123" y="40" text-anchor="middle" font-size="10" fill="#475569" style="animation-delay:.4s">→</text>
+                  <!-- condition labels -->
+                  <text class="sv" x="25" y="62" text-anchor="middle" font-size="9" fill="#64748b" style="animation-delay:.6s">能右就右</text>
+                  <text class="sv" x="65" y="62" text-anchor="middle" font-size="9" fill="#64748b" style="animation-delay:.65s">右堵直走</text>
+                  <text class="sv" x="105" y="62" text-anchor="middle" font-size="9" fill="#64748b" style="animation-delay:.7s">右直堵左</text>
+                  <text class="sv" x="142" y="62" text-anchor="middle" font-size="9" fill="#64748b" style="animation-delay:.75s">全堵回头</text>
+                  <text class="sv" x="80" y="90" text-anchor="middle" font-size="11" fill="#94a3b8" style="animation-delay:.9s">按优先级决策方向</text>
+                </svg>
+              </div>
+              <div class="step-label">② 优先级：<strong>右转→直走→左转→回头</strong></div>
+            </div>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 128" width="100%">
+                  <text x="80" y="14" text-anchor="middle" font-size="11" fill="#94a3b8">路径示意</text>
+                  <!-- mini maze walls -->
+                  <line x1="20" y1="24" x2="90" y2="24" stroke="rgba(16,185,129,0.4)" stroke-width="2"/>
+                  <line x1="90" y1="24" x2="90" y2="64" stroke="rgba(16,185,129,0.4)" stroke-width="2"/>
+                  <line x1="40" y1="64" x2="140" y2="64" stroke="rgba(16,185,129,0.4)" stroke-width="2"/>
+                  <line x1="20" y1="104" x2="140" y2="104" stroke="rgba(16,185,129,0.4)" stroke-width="2"/>
+                  <!-- path traced (animated) -->
+                  <path class="sv sv-draw" pathLength="1" d="M20,44 L40,44 L40,84 L120,84 L120,104" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation-delay:.1s"/>
+                  <!-- entry and exit dots -->
+                  <circle cx="20" cy="44" r="5" fill="#10b981"/>
+                  <circle class="sv pop" cx="120" cy="104" r="5" fill="#f59e0b" style="animation-delay:.8s"/>
+                  <text class="sv" x="14" y="39" font-size="10" fill="#10b981" style="animation-delay:0s">入</text>
+                  <text class="sv" x="124" y="100" font-size="10" fill="#f59e0b" style="animation-delay:.85s">出</text>
+                  <!-- conclusion -->
+                  <rect class="sv pop" x="20" y="108" width="120" height="16" rx="5" fill="rgba(16,185,129,0.2)" stroke="#10b981" stroke-width="1" style="animation-delay:1.0s"/>
+                  <text class="sv" x="80" y="120" text-anchor="middle" font-size="11" font-weight="700" fill="#10b981" style="animation-delay:1.1s">100% 走出去 ✅</text>
+                </svg>
+              </div>
+              <div class="step-label">③ 贴右墙走，路径自然延伸到<strong>出口 ✅</strong></div>
+            </div>
+            <button class="va-btn" style="flex-basis:100%;margin-top:4px" onclick="event.stopPropagation();tv(this,'右手法则：进迷宫后，右手始终贴着右边的墙。遇到岔路，优先右转，不行直走，再不行左转，全堵就掉头。对于没有环形路段的迷宫，右手法则一定能走出去！')">🔊 听讲解</button>
           </div>
         </div>
       </div>
     </div>
+
   </div>
 
   <!-- ═══════════════ S3 例题 ═══════════════ -->
@@ -759,8 +1050,11 @@ function toggleMCard(card) {
   if (!isOpen) { card.classList.add('open'); card.querySelector('.mcard-body').classList.add('open'); }
 }
 function revealSteps(id) {
-  const steps = document.querySelectorAll(`#${id} .step`);
-  steps.forEach((s, i) => setTimeout(() => s.classList.add('show'), i * 400));
+  const c = document.getElementById(id);
+  c.querySelectorAll('.step').forEach(s => { s.classList.remove('show'); void s.offsetHeight; });
+  c.querySelectorAll('.step').forEach((s, i) => setTimeout(() => s.classList.add('show'), i * 520));
+  const rb = c.previousElementSibling;
+  if (rb && rb.classList.contains('reveal-btn')) rb.style.display = 'none';
 }
 
 /* ── Example problem flow ── */

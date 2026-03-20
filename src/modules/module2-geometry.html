@@ -243,23 +243,48 @@ body {
 }
 .reveal-btn:hover { background: rgba(59,130,246,0.18); transform: scale(1.03); }
 
+/* 步骤容器：横向平铺 */
+[id^="ms"] { display:flex; gap:10px; flex-wrap:wrap; align-items:stretch; margin-bottom:4px; }
+/* 每步：竖向卡片 */
 .step {
-  display: flex; gap: 14px; align-items: flex-start;
-  margin-bottom: 12px; opacity: 0; transform: translateX(-16px); transition: all .4s;
+  flex: 1; min-width: 140px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 12px 10px;
+  background: rgba(255,255,255,0.03); border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.07);
+  opacity: 0; transform: translateY(14px);
+  transition: all .45s cubic-bezier(.23,1,.32,1);
 }
 .step.show { opacity: 1; transform: none; }
 .step-num {
-  width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
   font-size: 13px; font-weight: 800; color: #fff;
   background: linear-gradient(135deg, var(--scolor1,#3b82f6), var(--scolor2,#8b5cf6));
 }
+.step-vis { width: 100%; }
+.step-vis svg { width: 100%; height: auto; display: block; border-radius: 8px; overflow: visible; }
 .step-content {
-  background: rgba(255,255,255,0.04); border-radius: 12px;
-  padding: 10px 14px; flex: 1; font-size: 14px; line-height: 1.75;
-  color: var(--muted); border: 1px solid rgba(255,255,255,0.06);
+  width: 100%; font-size: 13px; line-height: 1.65;
+  color: var(--muted); text-align: left;
 }
 .step-content strong, .step-content b { color: var(--text); }
+/* ─── S2 step visual panel ─── */
+/* 听讲解按钮独占一行 */
+[id^="ms"] > .va-btn { flex-basis: 100%; margin-top: 4px; }
+.mcard-figure { display:flex; justify-content:center; margin:12px 0 14px; }
+.mcard-figure svg { border-radius:14px; background:rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.07); width:100%; max-width:320px; height:auto; display:block; overflow:visible; }
+/* Animated SVG elements — start hidden */
+.sv { opacity:0; }
+.sv-draw { stroke-dasharray:400; stroke-dashoffset:400; }
+/* Trigger on step show */
+.step.show .sv       { animation: svFade .45s ease         forwards; }
+.step.show .sv.pop   { animation: svPop  .5s  cubic-bezier(.34,1.56,.64,1) forwards; }
+.step.show .sv-draw  { animation: svLine .8s  ease         forwards; }
+@keyframes svFade { to { opacity:1; } }
+@keyframes svPop  { from { opacity:0; transform:scale(.4); } to { opacity:1; transform:scale(1); } }
+@keyframes svLine { to { stroke-dashoffset:0; } }
+.sv.pop { transform-box:fill-box; transform-origin:center; }
 
 /* ── YouTube Video ── */
 .video-section-label {
@@ -688,7 +713,7 @@ body {
   <!-- ═══════════════ S2 技巧 ═══════════════ -->
   <div id="s2" class="sec">
 
-    <!-- 方法1 -->
+    <!-- ── 方法1：数边认形法 ── -->
     <div class="mcard" onclick="toggleMCard(this)">
       <div class="mcard-head">
         <div class="mcard-icon">🔢</div>
@@ -700,19 +725,119 @@ body {
       </div>
       <div class="mcard-body">
         <div class="mcard-body-inner">
-          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>一个图形有 6 条相等的边和 6 个角，它叫什么名字？每个角是多少度？</div>
+          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>一个图形有 <strong>6 条相等的边</strong>和 6 个角，它叫什么名字？每个角是多少度？</div>
+          <!-- 挑战题图形 -->
+          <div class="mcard-figure">
+            <svg viewBox="0 0 130 122" width="130" height="122">
+              <!-- 正六边形（平顶）center(65,57) r=44 -->
+              <polygon points="109,57 87,95 43,95 21,57 43,19 87,19"
+                fill="rgba(59,130,246,0.08)" stroke="rgba(59,130,246,0.35)" stroke-width="2" stroke-linejoin="round"/>
+              <!-- 边数标注 -->
+              <text x="65" y="112" text-anchor="middle" fill="#93c5fd" font-size="11" font-family="'Noto Sans SC',sans-serif">6 条相等的边 → 这是什么图形？</text>
+              <!-- 角标记 -->
+              <text x="112" y="61" fill="#a78bfa" font-size="10" font-family="'Noto Sans SC',sans-serif">?°</text>
+              <text x="17" y="61" fill="#a78bfa" font-size="10" font-family="'Noto Sans SC',sans-serif">?°</text>
+              <text x="41" y="15" fill="#a78bfa" font-size="10" font-family="'Noto Sans SC',sans-serif">?°</text>
+              <text x="86" y="15" fill="#a78bfa" font-size="10" font-family="'Noto Sans SC',sans-serif">?°</text>
+              <text x="41" y="107" fill="#a78bfa" font-size="10" font-family="'Noto Sans SC',sans-serif">?°</text>
+              <text x="86" y="107" fill="#a78bfa" font-size="10" font-family="'Noto Sans SC',sans-serif">?°</text>
+            </svg>
+          </div>
           <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms1')">👆 看解法</button>
           <div id="ms1">
-            <div class="step"><div class="step-num" style="--scolor1:#3b82f6;--scolor2:#8b5cf6">1</div><div class="step-content">数边：<strong>6 条边</strong> → 六边形！6 条边都相等 → 正六边形（像蜂巢的格子！🐝）</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#3b82f6;--scolor2:#8b5cf6">2</div><div class="step-content">正六边形每个角都相等：6 个角的度数总和 = (6-2) × 180° = <strong>720°</strong></div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#3b82f6;--scolor2:#8b5cf6">3</div><div class="step-content">每个角 = 720° ÷ 6 = <strong>120°</strong> ✅ 正六边形，每角 120°！</div></div>
+
+            <!-- 步骤1：数边 -->
+            <div class="step">
+              <div class="step-num" style="--scolor1:#3b82f6;--scolor2:#8b5cf6">1</div>
+              <div class="step-vis">
+                <svg viewBox="0 0 92 80" width="92" height="80">
+                  <!-- 六边形底色 -->
+                  <polygon points="76,40 63,64 37,64 24,40 37,16 63,16"
+                    fill="rgba(59,130,246,0.06)" stroke="rgba(59,130,246,0.2)" stroke-width="1.5"/>
+                  <!-- 6条边逐条亮起，每条用 sv-draw + 延迟 -->
+                  <line class="sv-draw" x1="76" y1="40" x2="63" y2="64" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" style="animation-delay:.05s"/>
+                  <line class="sv-draw" x1="63" y1="64" x2="37" y2="64" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round" style="animation-delay:.22s"/>
+                  <line class="sv-draw" x1="37" y1="64" x2="24" y2="40" stroke="#818cf8" stroke-width="2.5" stroke-linecap="round" style="animation-delay:.39s"/>
+                  <line class="sv-draw" x1="24" y1="40" x2="37" y2="16" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" style="animation-delay:.56s"/>
+                  <line class="sv-draw" x1="37" y1="16" x2="63" y2="16" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round" style="animation-delay:.73s"/>
+                  <line class="sv-draw" x1="63" y1="16" x2="76" y2="40" stroke="#818cf8" stroke-width="2.5" stroke-linecap="round" style="animation-delay:.90s"/>
+                  <!-- 数字标注 1-6 -->
+                  <text class="sv" x="82" y="54" fill="#93c5fd" font-size="9" font-weight="700" style="animation-delay:.15s">①</text>
+                  <text class="sv" x="47" y="72" fill="#93c5fd" font-size="9" font-weight="700" style="animation-delay:.32s">②</text>
+                  <text class="sv" x="16" y="54" fill="#93c5fd" font-size="9" font-weight="700" style="animation-delay:.49s">③</text>
+                  <text class="sv" x="16" y="28" fill="#93c5fd" font-size="9" font-weight="700" style="animation-delay:.66s">④</text>
+                  <text class="sv" x="47" y="10" fill="#93c5fd" font-size="9" font-weight="700" style="animation-delay:.83s">⑤</text>
+                  <text class="sv" x="77" y="28" fill="#93c5fd" font-size="9" font-weight="700" style="animation-delay:1.0s">⑥</text>
+                  <!-- 结论标签 -->
+                  <rect class="sv pop" x="20" y="30" width="52" height="18" rx="5" fill="rgba(59,130,246,0.25)" style="animation-delay:1.15s"/>
+                  <text class="sv pop" x="46" y="43" text-anchor="middle" fill="#93c5fd" font-size="11" font-weight="800" style="animation-delay:1.15s">= 六边形</text>
+                </svg>
+              </div>
+              <div class="step-content">数边：<strong>6 条边</strong> → 六边形！6 条边全部相等 → <strong>正六边形</strong>（像蜂巢的格子 🐝）</div>
+            </div>
+
+            <!-- 步骤2：内角和公式 -->
+            <div class="step">
+              <div class="step-num" style="--scolor1:#3b82f6;--scolor2:#8b5cf6">2</div>
+              <div class="step-vis">
+                <svg viewBox="0 0 92 80" width="92" height="80">
+                  <!-- 公式分解可视化 -->
+                  <rect class="sv" x="4" y="10" width="30" height="22" rx="5" fill="rgba(59,130,246,0.2)" stroke="#3b82f6" stroke-width="1" style="animation-delay:.0s"/>
+                  <text class="sv" x="19" y="25" text-anchor="middle" fill="#93c5fd" font-size="11" font-weight="700" style="animation-delay:.0s">(6-2)</text>
+
+                  <text class="sv" x="38" y="24" text-anchor="middle" fill="#64748b" font-size="13" font-weight="700" style="animation-delay:.2s">×</text>
+
+                  <rect class="sv" x="44" y="10" width="44" height="22" rx="5" fill="rgba(139,92,246,0.2)" stroke="#8b5cf6" stroke-width="1" style="animation-delay:.2s"/>
+                  <text class="sv" x="66" y="25" text-anchor="middle" fill="#a78bfa" font-size="11" font-weight="700" style="animation-delay:.2s">180°</text>
+
+                  <!-- = 箭头 -->
+                  <line class="sv-draw" x1="4" y1="42" x2="88" y2="42" stroke="rgba(255,255,255,0.15)" stroke-width="1" stroke-dasharray="3,3" style="animation-delay:.4s"/>
+
+                  <!-- 计算过程 -->
+                  <text class="sv" x="19" y="56" text-anchor="middle" fill="#93c5fd" font-size="10" style="animation-delay:.45s">= 4</text>
+                  <text class="sv" x="38" y="56" text-anchor="middle" fill="#64748b" font-size="12" style="animation-delay:.45s">×</text>
+                  <text class="sv" x="62" y="56" text-anchor="middle" fill="#a78bfa" font-size="10" style="animation-delay:.45s">180°</text>
+
+                  <!-- 结果 -->
+                  <rect class="sv pop" x="14" y="62" width="64" height="16" rx="5" fill="rgba(251,191,36,0.2)" style="animation-delay:.65s"/>
+                  <text class="sv pop" x="46" y="74" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="800" style="animation-delay:.65s">= 720°</text>
+                </svg>
+              </div>
+              <div class="step-content">内角和公式：<strong>(边数 − 2) × 180°</strong><br>→ (6 − 2) × 180° = 4 × 180° = <strong>720°</strong></div>
+            </div>
+
+            <!-- 步骤3：每个角 -->
+            <div class="step">
+              <div class="step-num" style="--scolor1:#3b82f6;--scolor2:#8b5cf6">3</div>
+              <div class="step-vis">
+                <svg viewBox="0 0 92 80" width="92" height="80">
+                  <!-- 六边形 -->
+                  <polygon points="76,40 63,64 37,64 24,40 37,16 63,16"
+                    fill="rgba(59,130,246,0.08)" stroke="#3b82f6" stroke-width="1.5"/>
+                  <!-- 各顶点的角弧 -->
+                  <path class="sv-draw" d="M76,32 A9,9 0 0,1 68,46" fill="none" stroke="#fbbf24" stroke-width="2" style="animation-delay:.05s"/>
+                  <path class="sv-draw" d="M55,70 A9,9 0 0,1 45,70" fill="none" stroke="#fbbf24" stroke-width="2" style="animation-delay:.15s"/>
+                  <path class="sv-draw" d="M24,48 A9,9 0 0,1 24,32" fill="none" stroke="#fbbf24" stroke-width="2" style="animation-delay:.25s"/>
+                  <path class="sv-draw" d="M37,10 A9,9 0 0,1 24,32" fill="none" stroke="#fbbf24" stroke-width="2" style="animation-delay:.35s"/>
+                  <path class="sv-draw" d="M63,10 A9,9 0 0,0 37,10" fill="none" stroke="#fbbf24" stroke-width="2" style="animation-delay:.45s"/>
+                  <path class="sv-draw" d="M76,32 A9,9 0 0,0 63,10" fill="none" stroke="#fbbf24" stroke-width="2" style="animation-delay:.55s"/>
+                  <!-- 120° 标注 -->
+                  <rect class="sv pop" x="25" y="62" width="42" height="16" rx="5" fill="rgba(251,191,36,0.25)" style="animation-delay:.75s"/>
+                  <text class="sv pop" x="46" y="74" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="800" style="animation-delay:.75s">每角 120°</text>
+                  <!-- 除法提示 -->
+                  <text class="sv" x="46" y="10" text-anchor="middle" fill="#64748b" font-size="9" style="animation-delay:.9s">720° ÷ 6 = 120°</text>
+                </svg>
+              </div>
+              <div class="step-content">每个角 = 720° ÷ 6 = <strong>120°</strong> ✅<br>正六边形，6 个角都是 <strong>120°</strong>！</div>
+            </div>
+
             <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'数边法：看到6条等边，知道是正六边形。多边形内角和公式：边数减2再乘180度。6减2等于4，4乘180等于720度，除以6等于120度。每个角120度！')">🔊 听讲解</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 方法2 -->
+    <!-- ── 方法2：方格计数法 ── -->
     <div class="mcard" onclick="toggleMCard(this)">
       <div class="mcard-head">
         <div class="mcard-icon">⬜</div>
@@ -724,19 +849,125 @@ body {
       </div>
       <div class="mcard-body">
         <div class="mcard-body-inner">
-          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>一个 L 形图案，放在格子纸上，整格有 8 个，半格有 4 个。它的面积是几个方格？</div>
+          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>一个直角三角形放在格子纸上，<strong>整格有 6 个，半格有 4 个</strong>（斜边穿过的格子）。它的面积是几个方格？</div>
+          <!-- 挑战题图形：4×4格子上的直角三角形 -->
+          <div class="mcard-figure">
+            <svg viewBox="-6 -6 108 108" width="108" height="108">
+              <!-- 格线 -->
+              <defs><pattern id="g2" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20,0 L0,0 0,20" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width=".8"/></pattern></defs>
+              <rect x="-6" y="-6" width="108" height="108" fill="url(#g2)"/>
+              <!-- 6个整格（绿色）: (0,0),(1,0),(2,0),(0,1),(1,1),(0,2) -->
+              <rect x="0" y="0" width="20" height="20" rx="2" fill="rgba(16,185,129,0.28)" stroke="#10b981" stroke-width="1"/>
+              <rect x="20" y="0" width="20" height="20" rx="2" fill="rgba(16,185,129,0.28)" stroke="#10b981" stroke-width="1"/>
+              <rect x="40" y="0" width="20" height="20" rx="2" fill="rgba(16,185,129,0.28)" stroke="#10b981" stroke-width="1"/>
+              <rect x="0" y="20" width="20" height="20" rx="2" fill="rgba(16,185,129,0.28)" stroke="#10b981" stroke-width="1"/>
+              <rect x="20" y="20" width="20" height="20" rx="2" fill="rgba(16,185,129,0.28)" stroke="#10b981" stroke-width="1"/>
+              <rect x="0" y="40" width="20" height="20" rx="2" fill="rgba(16,185,129,0.28)" stroke="#10b981" stroke-width="1"/>
+              <!-- 4个半格（黄色三角）: 斜边切过的格子 -->
+              <polygon points="60,0 80,0 60,20" fill="rgba(251,191,36,0.35)" stroke="#f59e0b" stroke-width="1"/>
+              <polygon points="40,20 60,20 40,40" fill="rgba(251,191,36,0.35)" stroke="#f59e0b" stroke-width="1"/>
+              <polygon points="20,40 40,40 20,60" fill="rgba(251,191,36,0.35)" stroke="#f59e0b" stroke-width="1"/>
+              <polygon points="0,60 20,60 0,80" fill="rgba(251,191,36,0.35)" stroke="#f59e0b" stroke-width="1"/>
+              <!-- 三角形轮廓 -->
+              <polygon points="0,0 80,0 0,80" fill="none" stroke="#6ee7b7" stroke-width="2" stroke-linejoin="round"/>
+              <!-- 直角标记 -->
+              <rect x="0" y="0" width="8" height="8" fill="none" stroke="#6ee7b7" stroke-width="1.5"/>
+              <!-- 图例 -->
+              <rect x="0" y="86" width="10" height="10" rx="2" fill="rgba(16,185,129,0.35)"/>
+              <text x="14" y="95" fill="#6ee7b7" font-size="9" font-family="'Noto Sans SC',sans-serif">整格 ×6</text>
+              <polygon points="56,86 66,86 56,96" fill="rgba(251,191,36,0.45)"/>
+              <text x="70" y="95" fill="#fbbf24" font-size="9" font-family="'Noto Sans SC',sans-serif">半格 ×4</text>
+            </svg>
+          </div>
           <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms2')">👆 看解法</button>
           <div id="ms2">
-            <div class="step"><div class="step-num" style="--scolor1:#06b6d4;--scolor2:#3b82f6">1</div><div class="step-content">整格直接算：<strong>8 个</strong>完整方格 = 8 格面积</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#06b6d4;--scolor2:#3b82f6">2</div><div class="step-content">半格算一半：<strong>4 个</strong>半格 = 4 ÷ 2 = <strong>2 格</strong>面积</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#06b6d4;--scolor2:#3b82f6">3</div><div class="step-content">总面积 = 8 + 2 = <strong>10 格</strong> ✅ 如果每格代表 1 cm²，面积就是 10 cm²！</div></div>
-            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'方格计数法：先数完整的方格，再数半格。半格除以2算面积。8个整格加上4个半格等于2格，一共10格！不规则图形也能用这个方法算面积！')">🔊 听讲解</button>
+
+            <!-- 步骤1：数整格 -->
+            <div class="step">
+              <div class="step-num" style="--scolor1:#06b6d4;--scolor2:#3b82f6">1</div>
+              <div class="step-vis">
+                <svg viewBox="-4 -4 88 88" width="88" height="88">
+                  <defs><pattern id="g3" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M16,0 L0,0 0,16" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width=".7"/></pattern></defs>
+                  <rect x="-4" y="-4" width="88" height="88" fill="url(#g3)"/>
+                  <!-- 三角形淡色底 -->
+                  <polygon points="0,0 64,0 0,64" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+                  <!-- 整格逐个亮起 -->
+                  <rect class="sv" x="0" y="0" width="16" height="16" rx="2" fill="rgba(16,185,129,0.5)" stroke="#10b981" stroke-width="1.2" style="animation-delay:.05s"/>
+                  <rect class="sv" x="16" y="0" width="16" height="16" rx="2" fill="rgba(16,185,129,0.5)" stroke="#10b981" stroke-width="1.2" style="animation-delay:.15s"/>
+                  <rect class="sv" x="32" y="0" width="16" height="16" rx="2" fill="rgba(16,185,129,0.5)" stroke="#10b981" stroke-width="1.2" style="animation-delay:.25s"/>
+                  <rect class="sv" x="0" y="16" width="16" height="16" rx="2" fill="rgba(16,185,129,0.5)" stroke="#10b981" stroke-width="1.2" style="animation-delay:.35s"/>
+                  <rect class="sv" x="16" y="16" width="16" height="16" rx="2" fill="rgba(16,185,129,0.5)" stroke="#10b981" stroke-width="1.2" style="animation-delay:.45s"/>
+                  <rect class="sv" x="0" y="32" width="16" height="16" rx="2" fill="rgba(16,185,129,0.5)" stroke="#10b981" stroke-width="1.2" style="animation-delay:.55s"/>
+                  <!-- 计数角标 -->
+                  <rect class="sv pop" x="34" y="50" width="34" height="16" rx="5" fill="rgba(16,185,129,0.3)" style="animation-delay:.75s"/>
+                  <text class="sv pop" x="51" y="62" text-anchor="middle" fill="#6ee7b7" font-size="11" font-weight="800" style="animation-delay:.75s">×6 格</text>
+                </svg>
+              </div>
+              <div class="step-content"><strong>整格直接算</strong>：数绿色方格，共 <strong>6 个</strong>完整格 <br>→ 面积 = 6 格</div>
+            </div>
+
+            <!-- 步骤2：数半格 -->
+            <div class="step">
+              <div class="step-num" style="--scolor1:#06b6d4;--scolor2:#3b82f6">2</div>
+              <div class="step-vis">
+                <svg viewBox="-4 -4 88 88" width="88" height="88">
+                  <defs><pattern id="g4" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M16,0 L0,0 0,16" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width=".7"/></pattern></defs>
+                  <rect x="-4" y="-4" width="88" height="88" fill="url(#g4)"/>
+                  <polygon points="0,0 64,0 0,64" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+                  <!-- 整格（暗色） -->
+                  <rect x="0" y="0" width="16" height="16" rx="2" fill="rgba(16,185,129,0.15)" stroke="rgba(16,185,129,0.3)" stroke-width="1"/>
+                  <rect x="16" y="0" width="16" height="16" rx="2" fill="rgba(16,185,129,0.15)" stroke="rgba(16,185,129,0.3)" stroke-width="1"/>
+                  <rect x="32" y="0" width="16" height="16" rx="2" fill="rgba(16,185,129,0.15)" stroke="rgba(16,185,129,0.3)" stroke-width="1"/>
+                  <rect x="0" y="16" width="16" height="16" rx="2" fill="rgba(16,185,129,0.15)" stroke="rgba(16,185,129,0.3)" stroke-width="1"/>
+                  <rect x="16" y="16" width="16" height="16" rx="2" fill="rgba(16,185,129,0.15)" stroke="rgba(16,185,129,0.3)" stroke-width="1"/>
+                  <rect x="0" y="32" width="16" height="16" rx="2" fill="rgba(16,185,129,0.15)" stroke="rgba(16,185,129,0.3)" stroke-width="1"/>
+                  <!-- 半格三角亮起 -->
+                  <polygon class="sv" points="48,0 64,0 48,16" fill="rgba(251,191,36,0.6)" stroke="#f59e0b" stroke-width="1.2" style="animation-delay:.05s"/>
+                  <polygon class="sv" points="32,16 48,16 32,32" fill="rgba(251,191,36,0.6)" stroke="#f59e0b" stroke-width="1.2" style="animation-delay:.2s"/>
+                  <polygon class="sv" points="16,32 32,32 16,48" fill="rgba(251,191,36,0.6)" stroke="#f59e0b" stroke-width="1.2" style="animation-delay:.35s"/>
+                  <polygon class="sv" points="0,48 16,48 0,64" fill="rgba(251,191,36,0.6)" stroke="#f59e0b" stroke-width="1.2" style="animation-delay:.5s"/>
+                  <!-- 每个半格标½ -->
+                  <text class="sv" x="57" y="10" text-anchor="middle" fill="#fbbf24" font-size="8" font-weight="700" style="animation-delay:.1s">½</text>
+                  <text class="sv" x="41" y="26" text-anchor="middle" fill="#fbbf24" font-size="8" font-weight="700" style="animation-delay:.25s">½</text>
+                  <text class="sv" x="25" y="42" text-anchor="middle" fill="#fbbf24" font-size="8" font-weight="700" style="animation-delay:.4s">½</text>
+                  <text class="sv" x="9" y="58" text-anchor="middle" fill="#fbbf24" font-size="8" font-weight="700" style="animation-delay:.55s">½</text>
+                  <!-- 小计 -->
+                  <rect class="sv pop" x="30" y="66" width="46" height="16" rx="5" fill="rgba(251,191,36,0.25)" style="animation-delay:.75s"/>
+                  <text class="sv pop" x="53" y="78" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="800" style="animation-delay:.75s">4×½ = 2格</text>
+                </svg>
+              </div>
+              <div class="step-content"><strong>半格算一半</strong>：斜边穿过 <strong>4 个</strong>三角形格<br>→ 4 × ½ = <strong>2 格</strong></div>
+            </div>
+
+            <!-- 步骤3：合计 -->
+            <div class="step">
+              <div class="step-num" style="--scolor1:#06b6d4;--scolor2:#3b82f6">3</div>
+              <div class="step-vis">
+                <svg viewBox="0 0 92 82" width="92" height="82">
+                  <!-- 6格色条 -->
+                  <rect class="sv" x="4" y="10" width="52" height="18" rx="4" fill="rgba(16,185,129,0.3)" stroke="#10b981" stroke-width="1.5" style="animation-delay:.0s"/>
+                  <text class="sv" x="30" y="23" text-anchor="middle" fill="#6ee7b7" font-size="11" font-weight="700" style="animation-delay:.0s">整格 6</text>
+                  <!-- + -->
+                  <text class="sv" x="60" y="23" fill="#94a3b8" font-size="14" font-weight="700" style="animation-delay:.2s">+</text>
+                  <!-- 2格色条 -->
+                  <rect class="sv" x="4" y="34" width="24" height="18" rx="4" fill="rgba(251,191,36,0.3)" stroke="#f59e0b" stroke-width="1.5" style="animation-delay:.35s"/>
+                  <text class="sv" x="16" y="47" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="700" style="animation-delay:.35s">半格 2</text>
+                  <!-- = 结果 -->
+                  <line class="sv-draw" x1="4" y1="58" x2="88" y2="58" stroke="rgba(255,255,255,0.2)" stroke-width="1" style="animation-delay:.55s"/>
+                  <rect class="sv pop" x="20" y="61" width="52" height="16" rx="4" fill="rgba(99,102,241,0.3)" style="animation-delay:.7s"/>
+                  <text class="sv pop" x="46" y="74" text-anchor="middle" fill="#a5b4fc" font-size="14" font-weight="900" style="animation-delay:.7s">= 8 格 ✅</text>
+                </svg>
+              </div>
+              <div class="step-content"><strong>合计</strong>：6 + 2 = <strong>8 格</strong> ✅<br>底 × 高 ÷ 2 = 4×4÷2 = <strong>8</strong> 验证正确！</div>
+            </div>
+
+            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'方格计数法：先数完整的绿色方格，一共6个。再数斜边切过的黄色半格，一共4个，每个算半格，等于2格。6加2等于8格！直角三角形面积等于底乘高除以2，4乘4除以2也等于8，完全正确！')">🔊 听讲解</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 方法3 -->
+    <!-- ── 方法3：折叠验证对称法 ── -->
     <div class="mcard" onclick="toggleMCard(this)">
       <div class="mcard-head">
         <div class="mcard-icon">🦋</div>
@@ -748,19 +979,98 @@ body {
       </div>
       <div class="mcard-body">
         <div class="mcard-body-inner">
-          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>字母 "H" 有几条对称轴？</div>
+          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>字母 <strong>"H"</strong> 有几条对称轴？试着折一折！</div>
+          <!-- 挑战题：字母H -->
+          <div class="mcard-figure">
+            <svg viewBox="0 0 120 110" width="120" height="110">
+              <!-- 字母 H -->
+              <rect x="14" y="12" width="24" height="86" rx="4" fill="rgba(139,92,246,0.2)" stroke="#8b5cf6" stroke-width="2"/>
+              <rect x="82" y="12" width="24" height="86" rx="4" fill="rgba(139,92,246,0.2)" stroke="#8b5cf6" stroke-width="2"/>
+              <rect x="38" y="44" width="44" height="22" rx="4" fill="rgba(139,92,246,0.2)" stroke="#8b5cf6" stroke-width="2"/>
+              <!-- 问题标注 -->
+              <text x="60" y="104" text-anchor="middle" fill="#a78bfa" font-size="11" font-family="'Noto Sans SC',sans-serif">有几条对称轴？</text>
+            </svg>
+          </div>
           <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms3')">👆 看解法</button>
           <div id="ms3">
-            <div class="step"><div class="step-num" style="--scolor1:#8b5cf6;--scolor2:#06b6d4">1</div><div class="step-content"><strong>水平折叠</strong>：沿水平中线折，上下两半完全重合 ✅ → 第一条对称轴！</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#8b5cf6;--scolor2:#06b6d4">2</div><div class="step-content"><strong>垂直折叠</strong>：沿垂直中线折，左右两半完全重合 ✅ → 第二条对称轴！</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#8b5cf6;--scolor2:#06b6d4">3</div><div class="step-content"><strong>斜线折叠</strong>：沿对角线折，不重合 ❌ → 没有斜对称轴。结论：字母 H 有 <strong>2 条</strong>对称轴！</div></div>
+
+            <!-- 步骤1：水平折叠 -->
+            <div class="step">
+              <div class="step-num" style="--scolor1:#8b5cf6;--scolor2:#06b6d4">1</div>
+              <div class="step-vis">
+                <svg viewBox="0 0 92 80" width="92" height="80">
+                  <!-- 字母H底色 -->
+                  <rect x="10" y="6" width="16" height="60" rx="3" fill="rgba(139,92,246,0.15)" stroke="rgba(139,92,246,0.3)" stroke-width="1.5"/>
+                  <rect x="66" y="6" width="16" height="60" rx="3" fill="rgba(139,92,246,0.15)" stroke="rgba(139,92,246,0.3)" stroke-width="1.5"/>
+                  <rect x="26" y="30" width="40" height="14" rx="3" fill="rgba(139,92,246,0.15)" stroke="rgba(139,92,246,0.3)" stroke-width="1.5"/>
+                  <!-- 水平对称轴（红线从左穿到右） -->
+                  <line class="sv-draw" x1="0" y1="37" x2="92" y2="37" stroke="#ec4899" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="400" stroke-dashoffset="400" style="animation-delay:.1s"/>
+                  <!-- 上半部叠折效果：上半逐渐变色 -->
+                  <rect class="sv" x="10" y="6" width="16" height="31" rx="3" fill="rgba(236,72,153,0.25)" stroke="none" style="animation-delay:.5s"/>
+                  <rect class="sv" x="66" y="6" width="16" height="31" rx="3" fill="rgba(236,72,153,0.25)" stroke="none" style="animation-delay:.5s"/>
+                  <rect class="sv" x="26" y="30" width="40" height="7" rx="3" fill="rgba(236,72,153,0.25)" stroke="none" style="animation-delay:.5s"/>
+                  <!-- 折叠箭头 -->
+                  <text class="sv" x="4" y="32" fill="#ec4899" font-size="12" style="animation-delay:.6s">↓</text>
+                  <text class="sv" x="4" y="52" fill="#ec4899" font-size="12" style="animation-delay:.6s">↑</text>
+                  <!-- ✅ -->
+                  <rect class="sv pop" x="26" y="66" width="40" height="14" rx="5" fill="rgba(16,185,129,0.25)" style="animation-delay:.8s"/>
+                  <text class="sv pop" x="46" y="77" text-anchor="middle" fill="#6ee7b7" font-size="12" font-weight="800" style="animation-delay:.8s">重合 ✅</text>
+                </svg>
+              </div>
+              <div class="step-content"><strong>水平折叠</strong>：沿<span style="color:#ec4899">水平中线</span>折叠，上下两半<strong>完全重合</strong> ✅<br>→ 第 <strong>1</strong> 条对称轴！</div>
+            </div>
+
+            <!-- 步骤2：垂直折叠 -->
+            <div class="step">
+              <div class="step-num" style="--scolor1:#8b5cf6;--scolor2:#06b6d4">2</div>
+              <div class="step-vis">
+                <svg viewBox="0 0 92 80" width="92" height="80">
+                  <rect x="10" y="6" width="16" height="60" rx="3" fill="rgba(139,92,246,0.15)" stroke="rgba(139,92,246,0.3)" stroke-width="1.5"/>
+                  <rect x="66" y="6" width="16" height="60" rx="3" fill="rgba(139,92,246,0.15)" stroke="rgba(139,92,246,0.3)" stroke-width="1.5"/>
+                  <rect x="26" y="30" width="40" height="14" rx="3" fill="rgba(139,92,246,0.15)" stroke="rgba(139,92,246,0.3)" stroke-width="1.5"/>
+                  <!-- 垂直对称轴 -->
+                  <line class="sv-draw" x1="46" y1="0" x2="46" y2="80" stroke="#06b6d4" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="400" stroke-dashoffset="400" style="animation-delay:.1s"/>
+                  <!-- 左半叠折颜色 -->
+                  <rect class="sv" x="10" y="6" width="16" height="60" rx="3" fill="rgba(6,182,212,0.22)" stroke="none" style="animation-delay:.5s"/>
+                  <rect class="sv" x="26" y="30" width="20" height="14" rx="3" fill="rgba(6,182,212,0.22)" stroke="none" style="animation-delay:.5s"/>
+                  <!-- 折叠箭头 -->
+                  <text class="sv" x="28" y="22" fill="#06b6d4" font-size="12" style="animation-delay:.6s">→</text>
+                  <text class="sv" x="55" y="22" fill="#06b6d4" font-size="12" style="animation-delay:.6s">←</text>
+                  <!-- ✅ -->
+                  <rect class="sv pop" x="26" y="66" width="40" height="14" rx="5" fill="rgba(16,185,129,0.25)" style="animation-delay:.8s"/>
+                  <text class="sv pop" x="46" y="77" text-anchor="middle" fill="#6ee7b7" font-size="12" font-weight="800" style="animation-delay:.8s">重合 ✅</text>
+                </svg>
+              </div>
+              <div class="step-content"><strong>垂直折叠</strong>：沿<span style="color:#06b6d4">垂直中线</span>折叠，左右两半<strong>完全重合</strong> ✅<br>→ 第 <strong>2</strong> 条对称轴！</div>
+            </div>
+
+            <!-- 步骤3：斜线尝试 -->
+            <div class="step">
+              <div class="step-num" style="--scolor1:#8b5cf6;--scolor2:#06b6d4">3</div>
+              <div class="step-vis">
+                <svg viewBox="0 0 92 80" width="92" height="80">
+                  <rect x="10" y="6" width="16" height="60" rx="3" fill="rgba(139,92,246,0.15)" stroke="rgba(139,92,246,0.3)" stroke-width="1.5"/>
+                  <rect x="66" y="6" width="16" height="60" rx="3" fill="rgba(139,92,246,0.15)" stroke="rgba(139,92,246,0.3)" stroke-width="1.5"/>
+                  <rect x="26" y="30" width="40" height="14" rx="3" fill="rgba(139,92,246,0.15)" stroke="rgba(139,92,246,0.3)" stroke-width="1.5"/>
+                  <!-- 斜线（虚线） -->
+                  <line class="sv-draw" x1="8" y1="4" x2="84" y2="74" stroke="#fca5a5" stroke-width="2" stroke-dasharray="5,4" style="animation-delay:.1s"/>
+                  <!-- 不重合：错位影 -->
+                  <rect class="sv" x="15" y="12" width="12" height="55" rx="3" fill="rgba(239,68,68,0.18)" stroke="none" style="animation-delay:.55s" transform="translate(8,0)"/>
+                  <!-- ❌ -->
+                  <rect class="sv pop" x="20" y="60" width="52" height="18" rx="5" fill="rgba(239,68,68,0.2)" style="animation-delay:.75s"/>
+                  <text class="sv pop" x="46" y="73" text-anchor="middle" fill="#fca5a5" font-size="13" font-weight="800" style="animation-delay:.75s">不重合 ❌</text>
+                </svg>
+              </div>
+              <div class="step-content"><strong>斜线折叠</strong>：沿对角线折，两半<strong>不重合</strong> ❌<br>→ 没有斜对称轴。<br>结论：字母 H 共有 <strong>2 条</strong>对称轴 🎉</div>
+            </div>
+
             <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'折叠法找对称轴：想象把字母H折叠。水平折，上下重合，有一条。垂直折，左右重合，又一条。斜着折，不重合，没有。所以H有2条对称轴！')">🔊 听讲解</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 方法4 -->
+    <!-- ── 方法4：图形分割法 ── -->
     <div class="mcard" onclick="toggleMCard(this)">
       <div class="mcard-head">
         <div class="mcard-icon">✂️</div>
@@ -772,12 +1082,84 @@ body {
       </div>
       <div class="mcard-body">
         <div class="mcard-body-inner">
-          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>一个 T 形图案，上方长方形 6×2，下方长方形 2×4，总面积是多少？</div>
+          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>一个 <strong>T 形</strong>图案，上方横条 6×2，下方竖条 2×4，总面积是多少？</div>
+          <!-- 挑战题：T形图 -->
+          <div class="mcard-figure">
+            <svg viewBox="0 0 150 118" width="150" height="118">
+              <!-- T形：上横6×2，下竖2×4，缩放比例10px=1单位 -->
+              <!-- 上横 60×20 at (15,10) -->
+              <rect x="15" y="10" width="120" height="30" rx="4" fill="rgba(16,185,129,0.12)" stroke="rgba(16,185,129,0.4)" stroke-width="1.8"/>
+              <!-- 下竖 20×50 at (65,40) -->
+              <rect x="65" y="40" width="20" height="55" rx="4" fill="rgba(16,185,129,0.12)" stroke="rgba(16,185,129,0.4)" stroke-width="1.8"/>
+              <!-- 尺寸标注 -->
+              <text x="75" y="28" text-anchor="middle" fill="#6ee7b7" font-size="12" font-weight="700" font-family="'Noto Sans SC',sans-serif">6</text>
+              <text x="8" y="28" fill="#94a3b8" font-size="10" font-family="'Noto Sans SC',sans-serif">2</text>
+              <text x="140" y="68" fill="#94a3b8" font-size="10" font-family="'Noto Sans SC',sans-serif">4</text>
+              <text x="72" y="102" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="'Noto Sans SC',sans-serif">2</text>
+              <!-- 问题 -->
+              <text x="75" y="108" text-anchor="middle" fill="#10b981" font-size="9" font-family="'Noto Sans SC',sans-serif">面积 = ?</text>
+            </svg>
+          </div>
           <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms4')">👆 看解法</button>
           <div id="ms4">
-            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#3b82f6">1</div><div class="step-content"><strong>分割</strong>：把 T 形切成两个长方形：上方 6×2，下方 2×4</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#3b82f6">2</div><div class="step-content"><strong>分别计算</strong>：上方面积 = 6×2 = <strong>12</strong>；下方面积 = 2×4 = <strong>8</strong></div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#3b82f6">3</div><div class="step-content"><strong>合并</strong>：总面积 = 12 + 8 = <strong>20</strong> ✅ 化繁为简，分割是关键！</div></div>
+
+            <!-- 步骤1：分割线 -->
+            <div class="step">
+              <div class="step-num" style="--scolor1:#10b981;--scolor2:#3b82f6">1</div>
+              <div class="step-vis">
+                <svg viewBox="0 0 92 80" width="92" height="80">
+                  <!-- T形 -->
+                  <rect x="6" y="6" width="80" height="18" rx="3" fill="rgba(16,185,129,0.18)" stroke="#10b981" stroke-width="1.5"/>
+                  <rect x="36" y="24" width="20" height="46" rx="3" fill="rgba(16,185,129,0.18)" stroke="#10b981" stroke-width="1.5"/>
+                  <!-- 分割虚线 从左到右穿过T形横条和竖条交界处 -->
+                  <line class="sv-draw" x1="6" y1="24" x2="86" y2="24" stroke="#fbbf24" stroke-width="2" stroke-dasharray="5,4" style="animation-delay:.2s"/>
+                  <!-- 剪刀符号 -->
+                  <text class="sv pop" x="0" y="28" fill="#fbbf24" font-size="14" style="animation-delay:.7s">✂</text>
+                  <!-- 区域标注 -->
+                  <text class="sv" x="46" y="18" text-anchor="middle" fill="#6ee7b7" font-size="10" font-weight="700" style="animation-delay:.9s">上</text>
+                  <text class="sv" x="46" y="50" text-anchor="middle" fill="#6ee7b7" font-size="10" font-weight="700" style="animation-delay:.9s">下</text>
+                </svg>
+              </div>
+              <div class="step-content"><strong>分割</strong>：沿横条与竖条的交接线切开<br>→ T 形 = <strong>上方横条</strong> ＋ <strong>下方竖条</strong></div>
+            </div>
+
+            <!-- 步骤2：分别计算 -->
+            <div class="step">
+              <div class="step-num" style="--scolor1:#10b981;--scolor2:#3b82f6">2</div>
+              <div class="step-vis">
+                <svg viewBox="0 0 92 80" width="92" height="80">
+                  <!-- 上横（绿色） -->
+                  <rect class="sv" x="2" y="4" width="88" height="22" rx="4" fill="rgba(16,185,129,0.35)" stroke="#10b981" stroke-width="1.8" style="animation-delay:.0s"/>
+                  <text class="sv" x="46" y="19" text-anchor="middle" fill="#6ee7b7" font-size="11" font-weight="700" style="animation-delay:.15s">6 × 2 = 12</text>
+                  <!-- 下竖（蓝色） -->
+                  <rect class="sv" x="32" y="32" width="28" height="44" rx="4" fill="rgba(59,130,246,0.35)" stroke="#3b82f6" stroke-width="1.8" style="animation-delay:.5s"/>
+                  <text class="sv" x="46" y="56" text-anchor="middle" fill="#93c5fd" font-size="11" font-weight="700" style="animation-delay:.65s">2 × 4 = 8</text>
+                </svg>
+              </div>
+              <div class="step-content"><strong>分别计算</strong>：<br>上横 = 6 × 2 = <strong>12</strong><br>下竖 = 2 × 4 = <strong>8</strong></div>
+            </div>
+
+            <!-- 步骤3：合计 -->
+            <div class="step">
+              <div class="step-num" style="--scolor1:#10b981;--scolor2:#3b82f6">3</div>
+              <div class="step-vis">
+                <svg viewBox="0 0 92 82" width="92" height="82">
+                  <!-- 12格条 -->
+                  <rect class="sv" x="4" y="8" width="60" height="18" rx="4" fill="rgba(16,185,129,0.3)" stroke="#10b981" stroke-width="1.5" style="animation-delay:.0s"/>
+                  <text class="sv" x="34" y="21" text-anchor="middle" fill="#6ee7b7" font-size="11" font-weight="700" style="animation-delay:.0s">12</text>
+                  <text class="sv" x="68" y="21" fill="#94a3b8" font-size="14" font-weight="700" style="animation-delay:.2s">+</text>
+                  <!-- 8格条 -->
+                  <rect class="sv" x="4" y="32" width="40" height="18" rx="4" fill="rgba(59,130,246,0.3)" stroke="#3b82f6" stroke-width="1.5" style="animation-delay:.35s"/>
+                  <text class="sv" x="24" y="45" text-anchor="middle" fill="#93c5fd" font-size="11" font-weight="700" style="animation-delay:.35s">8</text>
+                  <!-- 结果 -->
+                  <line class="sv-draw" x1="4" y1="56" x2="88" y2="56" stroke="rgba(255,255,255,0.18)" stroke-width="1" style="animation-delay:.55s"/>
+                  <rect class="sv pop" x="20" y="59" width="52" height="16" rx="4" fill="rgba(16,185,129,0.35)" style="animation-delay:.7s"/>
+                  <text class="sv pop" x="46" y="73" text-anchor="middle" fill="#6ee7b7" font-size="14" font-weight="900" style="animation-delay:.7s">= 20 ✅</text>
+                </svg>
+              </div>
+              <div class="step-content"><strong>合并</strong>：12 + 8 = <strong>20</strong> ✅<br>化繁为简，<strong>先分割，再相加</strong>！</div>
+            </div>
+
             <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'分割法：把T形切成两个长方形。上面6乘2等于12，下面2乘4等于8，加起来等于20！复杂图形不怕，切一切，分别算，再加起来就好！')">🔊 听讲解</button>
           </div>
         </div>
@@ -976,7 +1358,15 @@ function toggleMCard(card) {
 // ── Reveal steps ──
 function revealSteps(id) {
   const c = document.getElementById(id);
-  c.querySelectorAll('.step').forEach((s, i) => setTimeout(() => s.classList.add('show'), i * 380));
+  // Reset all steps so animations replay
+  c.querySelectorAll('.step').forEach(s => {
+    s.classList.remove('show');
+    void s.offsetHeight; // force reflow to restart CSS animations
+  });
+  // Reveal each step sequentially with 520ms gap
+  c.querySelectorAll('.step').forEach((s, i) =>
+    setTimeout(() => s.classList.add('show'), i * 520)
+  );
   const rb = c.previousElementSibling;
   if (rb && rb.classList.contains('reveal-btn')) rb.style.display = 'none';
 }

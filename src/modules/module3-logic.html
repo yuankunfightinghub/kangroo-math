@@ -242,23 +242,32 @@ body {
 }
 .reveal-btn:hover { background: rgba(6,182,212,0.18); transform: scale(1.03); }
 
+/* ── 技巧步骤（横向平铺卡片） ── */
+[id^="ms"] { display:flex; gap:10px; flex-wrap:wrap; align-items:stretch; margin-bottom:4px; }
 .step {
-  display: flex; gap: 14px; align-items: flex-start;
-  margin-bottom: 12px; opacity: 0; transform: translateX(-16px); transition: all .4s;
+  flex:1; min-width:130px; display:flex; flex-direction:column; align-items:center;
+  gap:8px; padding:12px 10px; background:rgba(255,255,255,0.03);
+  border-radius:14px; border:1px solid rgba(255,255,255,0.07);
+  opacity:0; transform:translateY(14px); transition:all .45s cubic-bezier(.23,1,.32,1);
 }
-.step.show { opacity: 1; transform: none; }
-.step-num {
-  width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 800; color: #fff;
-  background: linear-gradient(135deg, var(--scolor1,#06b6d4), var(--scolor2,#3b82f6));
-}
-.step-content {
-  background: rgba(255,255,255,0.04); border-radius: 12px;
-  padding: 10px 14px; flex: 1; font-size: 14px; line-height: 1.75;
-  color: var(--muted); border: 1px solid rgba(255,255,255,0.06);
-}
-.step-content strong, .step-content b { color: var(--text); }
+.step.show { opacity:1; transform:translateY(0); }
+.step-vis { width:100%; }
+.step-vis svg { width:100%; height:auto; display:block; border-radius:8px; overflow:visible; }
+.step-label { font-size:13px; line-height:1.6; color:var(--muted); text-align:center; }
+.step-label strong, .step-label b { color:var(--text); }
+/* SVG 动画 */
+.sv { opacity:0; }
+.step.show .sv { animation:svFade .5s ease forwards; }
+.sv-draw { stroke-dashoffset:1; stroke-dasharray:1; }
+.step.show .sv-draw { animation:svLine .6s ease forwards; }
+.step.show .sv.pop { animation:svPop .4s cubic-bezier(.34,1.56,.64,1) forwards; }
+@keyframes svFade { to { opacity:1; } }
+@keyframes svLine { to { stroke-dashoffset:0; } }
+@keyframes svPop  { from { opacity:0; transform:scale(.4); } to { opacity:1; transform:scale(1); } }
+/* 挑战图形区 */
+.mcard-figure { text-align:center; margin-bottom:12px; padding:12px; background:rgba(255,255,255,0.04); border-radius:12px; border:1px solid rgba(255,255,255,0.08); }
+.mcard-figure svg { overflow:visible; }
+.fig-label { font-size:13px; color:var(--muted); margin-bottom:8px; }
 
 /* ── YouTube Video ── */
 .video-section-label {
@@ -707,7 +716,7 @@ body {
   <!-- ═══════════════ S2 技巧 ═══════════════ -->
   <div id="s2" class="sec">
 
-    <!-- 方法1 -->
+    <!-- 方法1: 作差法 -->
     <div class="mcard" onclick="toggleMCard(this)">
       <div class="mcard-head">
         <div class="mcard-icon">🔢</div>
@@ -719,19 +728,98 @@ body {
       </div>
       <div class="mcard-body">
         <div class="mcard-body-inner">
-          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>数列：1, 3, 7, 13, 21, ___<br>下一个数是多少？</div>
+          <div class="mcard-figure">
+            <div class="fig-label">🎯 小挑战：数列下一个数是多少？</div>
+            <svg viewBox="0 0 300 82" width="100%" style="max-width:340px">
+              <rect x="3" y="14" width="38" height="30" rx="7" fill="rgba(6,182,212,0.15)" stroke="#06b6d4" stroke-width="1.5"/>
+              <text x="22" y="35" text-anchor="middle" font-size="15" font-weight="700" fill="#e2e8f0">1</text>
+              <rect x="53" y="14" width="38" height="30" rx="7" fill="rgba(6,182,212,0.15)" stroke="#06b6d4" stroke-width="1.5"/>
+              <text x="72" y="35" text-anchor="middle" font-size="15" font-weight="700" fill="#e2e8f0">3</text>
+              <rect x="103" y="14" width="38" height="30" rx="7" fill="rgba(6,182,212,0.15)" stroke="#06b6d4" stroke-width="1.5"/>
+              <text x="122" y="35" text-anchor="middle" font-size="15" font-weight="700" fill="#e2e8f0">7</text>
+              <rect x="153" y="14" width="42" height="30" rx="7" fill="rgba(6,182,212,0.15)" stroke="#06b6d4" stroke-width="1.5"/>
+              <text x="174" y="35" text-anchor="middle" font-size="15" font-weight="700" fill="#e2e8f0">13</text>
+              <rect x="207" y="14" width="42" height="30" rx="7" fill="rgba(6,182,212,0.15)" stroke="#06b6d4" stroke-width="1.5"/>
+              <text x="228" y="35" text-anchor="middle" font-size="15" font-weight="700" fill="#e2e8f0">21</text>
+              <rect x="261" y="14" width="36" height="30" rx="7" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="5 3"/>
+              <text x="279" y="35" text-anchor="middle" font-size="18" font-weight="700" fill="#f59e0b">?</text>
+              <text x="44" y="75" text-anchor="middle" font-size="11" fill="#64748b">+2</text>
+              <text x="94" y="75" text-anchor="middle" font-size="11" fill="#64748b">+4</text>
+              <text x="144" y="75" text-anchor="middle" font-size="11" fill="#64748b">+6</text>
+              <text x="198" y="75" text-anchor="middle" font-size="11" fill="#64748b">+8</text>
+              <text x="252" y="75" text-anchor="middle" font-size="11" fill="#f59e0b">+?</text>
+            </svg>
+          </div>
           <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms1')">👆 看解法</button>
           <div id="ms1">
-            <div class="step"><div class="step-num" style="--scolor1:#06b6d4;--scolor2:#3b82f6">1</div><div class="step-content">计算相邻两项的<strong>差</strong>：3-1=<strong>2</strong>，7-3=<strong>4</strong>，13-7=<strong>6</strong>，21-13=<strong>8</strong></div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#06b6d4;--scolor2:#3b82f6">2</div><div class="step-content">差的规律：2, 4, 6, 8…每次<strong>+2</strong>，所以下一个差是 <strong>10</strong></div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#06b6d4;--scolor2:#3b82f6">3</div><div class="step-content">21 + 10 = <strong>31</strong> ✅ 答案是31！差数递增数列！</div></div>
-            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'作差法要点：对相邻两项做减法，得到差数列。如果差数列还有规律，就继续对差作差。差是2、4、6、8，下一个差是10，所以21加10等于31！','m3_s2_ms1')">🔊 听讲解</button>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 110" width="100%">
+                  <rect x="5" y="8" width="26" height="22" rx="5" fill="rgba(6,182,212,0.2)" stroke="#06b6d4" stroke-width="1.5"/>
+                  <text x="18" y="24" text-anchor="middle" font-size="12" font-weight="700" fill="#e2e8f0">1</text>
+                  <rect x="37" y="8" width="26" height="22" rx="5" fill="rgba(6,182,212,0.2)" stroke="#06b6d4" stroke-width="1.5"/>
+                  <text x="50" y="24" text-anchor="middle" font-size="12" font-weight="700" fill="#e2e8f0">3</text>
+                  <rect x="69" y="8" width="26" height="22" rx="5" fill="rgba(6,182,212,0.2)" stroke="#06b6d4" stroke-width="1.5"/>
+                  <text x="82" y="24" text-anchor="middle" font-size="12" font-weight="700" fill="#e2e8f0">7</text>
+                  <rect x="101" y="8" width="28" height="22" rx="5" fill="rgba(6,182,212,0.2)" stroke="#06b6d4" stroke-width="1.5"/>
+                  <text x="115" y="24" text-anchor="middle" font-size="12" font-weight="700" fill="#e2e8f0">13</text>
+                  <rect x="135" y="8" width="26" height="22" rx="5" fill="rgba(6,182,212,0.2)" stroke="#06b6d4" stroke-width="1.5"/>
+                  <text x="148" y="24" text-anchor="middle" font-size="12" font-weight="700" fill="#e2e8f0">21</text>
+                  <line class="sv sv-draw" pathLength="1" x1="31" y1="38" x2="43" y2="55" stroke="#06b6d4" stroke-width="1.5"/>
+                  <text class="sv" x="30" y="68" text-anchor="middle" font-size="12" fill="#06b6d4" style="animation-delay:.1s">2</text>
+                  <line class="sv sv-draw" pathLength="1" x1="63" y1="38" x2="75" y2="55" stroke="#06b6d4" stroke-width="1.5" style="animation-delay:.15s"/>
+                  <text class="sv" x="62" y="68" text-anchor="middle" font-size="12" fill="#06b6d4" style="animation-delay:.2s">4</text>
+                  <line class="sv sv-draw" pathLength="1" x1="95" y1="38" x2="107" y2="55" stroke="#06b6d4" stroke-width="1.5" style="animation-delay:.3s"/>
+                  <text class="sv" x="94" y="68" text-anchor="middle" font-size="12" fill="#06b6d4" style="animation-delay:.35s">6</text>
+                  <line class="sv sv-draw" pathLength="1" x1="129" y1="38" x2="141" y2="55" stroke="#06b6d4" stroke-width="1.5" style="animation-delay:.45s"/>
+                  <text class="sv" x="128" y="68" text-anchor="middle" font-size="12" fill="#06b6d4" style="animation-delay:.5s">8</text>
+                  <text class="sv" x="80" y="90" text-anchor="middle" font-size="11" fill="#94a3b8" style="animation-delay:.6s">差：2, 4, 6, 8…</text>
+                </svg>
+              </div>
+              <div class="step-label">① 计算每组相邻数的<strong>差</strong></div>
+            </div>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 150 100" width="100%">
+                  <rect x="8" y="15" width="26" height="26" rx="6" fill="rgba(6,182,212,0.2)" stroke="#06b6d4" stroke-width="1.5"/>
+                  <text x="21" y="33" text-anchor="middle" font-size="14" font-weight="700" fill="#06b6d4">2</text>
+                  <rect x="42" y="15" width="26" height="26" rx="6" fill="rgba(6,182,212,0.2)" stroke="#06b6d4" stroke-width="1.5"/>
+                  <text x="55" y="33" text-anchor="middle" font-size="14" font-weight="700" fill="#06b6d4">4</text>
+                  <rect x="76" y="15" width="26" height="26" rx="6" fill="rgba(6,182,212,0.2)" stroke="#06b6d4" stroke-width="1.5"/>
+                  <text x="89" y="33" text-anchor="middle" font-size="14" font-weight="700" fill="#06b6d4">6</text>
+                  <rect x="110" y="15" width="26" height="26" rx="6" fill="rgba(6,182,212,0.2)" stroke="#06b6d4" stroke-width="1.5"/>
+                  <text x="123" y="33" text-anchor="middle" font-size="14" font-weight="700" fill="#06b6d4">8</text>
+                  <text class="sv" x="35" y="11" text-anchor="middle" font-size="10" fill="#f59e0b" style="animation-delay:0s">+2</text>
+                  <text class="sv" x="69" y="11" text-anchor="middle" font-size="10" fill="#f59e0b" style="animation-delay:.1s">+2</text>
+                  <text class="sv" x="103" y="11" text-anchor="middle" font-size="10" fill="#f59e0b" style="animation-delay:.2s">+2</text>
+                  <rect class="sv pop" x="15" y="55" width="120" height="28" rx="7" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="1.5" style="animation-delay:.4s"/>
+                  <text class="sv" x="75" y="74" text-anchor="middle" font-size="13" font-weight="700" fill="#f59e0b" style="animation-delay:.5s">下一个差 = 10</text>
+                </svg>
+              </div>
+              <div class="step-label">② 差每次 <strong>+2</strong>，下一差 <strong>= 10</strong></div>
+            </div>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 150 100" width="100%">
+                  <rect x="8" y="20" width="38" height="30" rx="7" fill="rgba(6,182,212,0.2)" stroke="#06b6d4" stroke-width="1.5"/>
+                  <text x="27" y="40" text-anchor="middle" font-size="16" font-weight="700" fill="#e2e8f0">21</text>
+                  <text x="58" y="40" text-anchor="middle" font-size="18" font-weight="700" fill="#64748b">+</text>
+                  <rect x="68" y="20" width="38" height="30" rx="7" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="1.5"/>
+                  <text x="87" y="40" text-anchor="middle" font-size="16" font-weight="700" fill="#f59e0b">10</text>
+                  <text x="116" y="40" text-anchor="middle" font-size="18" font-weight="700" fill="#64748b">=</text>
+                  <rect class="sv pop" x="20" y="65" width="110" height="28" rx="9" fill="rgba(16,185,129,0.2)" stroke="#10b981" stroke-width="2" style="animation-delay:.3s"/>
+                  <text class="sv" x="75" y="84" text-anchor="middle" font-size="18" font-weight="800" fill="#10b981" style="animation-delay:.4s">31 ✅</text>
+                </svg>
+              </div>
+              <div class="step-label">③ <strong>21 + 10 = 31</strong>，答案是 31！</div>
+            </div>
+            <button class="va-btn" style="flex-basis:100%;margin-top:4px" onclick="event.stopPropagation();tv(this,'作差法要点：对相邻两项做减法，得到差数列。差是2、4、6、8，每次加2，下一个差是10，所以21加10等于31！','m3_s2_ms1')">🔊 听讲解</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 方法2 -->
+    <!-- 方法2: 排除法 -->
     <div class="mcard" onclick="toggleMCard(this)">
       <div class="mcard-head">
         <div class="mcard-icon">❌</div>
@@ -743,19 +831,81 @@ body {
       </div>
       <div class="mcard-body">
         <div class="mcard-body-inner">
-          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>一个两位数，满足：① 是偶数；② 各位数字之和为9；③ 十位数字比个位数字大。这个两位数是？</div>
+          <div class="mcard-figure">
+            <div class="fig-label">🎯 小挑战：满足三个条件的两位数是？</div>
+            <svg viewBox="0 0 260 90" width="100%" style="max-width:300px">
+              <rect x="5" y="8" width="250" height="25" rx="6" fill="rgba(167,139,250,0.12)" stroke="#a78bfa" stroke-width="1"/>
+              <text x="14" y="26" font-size="12" fill="#a78bfa">① 是偶数</text>
+              <rect x="5" y="37" width="250" height="25" rx="6" fill="rgba(6,182,212,0.12)" stroke="#06b6d4" stroke-width="1"/>
+              <text x="14" y="55" font-size="12" fill="#06b6d4">② 各位数字之和 = 9</text>
+              <rect x="5" y="66" width="250" height="25" rx="6" fill="rgba(16,185,129,0.12)" stroke="#10b981" stroke-width="1"/>
+              <text x="14" y="84" font-size="12" fill="#10b981">③ 十位数字 &gt; 个位数字</text>
+            </svg>
+          </div>
           <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms2')">👆 看解法</button>
           <div id="ms2">
-            <div class="step"><div class="step-num" style="--scolor1:#a78bfa;--scolor2:#06b6d4">1</div><div class="step-content"><strong>条件①</strong>：偶数，个位是0、2、4、6、8。各位和=9，可能的偶数：18、36、54、72、90</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#a78bfa;--scolor2:#06b6d4">2</div><div class="step-content"><strong>条件③</strong>：十位 > 个位，排除 18（1<8）、36（3<6），剩下 54、72、90</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#a78bfa;--scolor2:#06b6d4">3</div><div class="step-content">验证各位和=9：54(5+4=9)✅ 72(7+2=9)✅ 90(9+0=9)✅，还需要结合题目条件，答案是 <strong>54、72 或 90</strong></div></div>
-            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'排除法：把每个条件当过滤网，一个一个筛。先用偶数条件筛，再用各位和等于9筛，再用十位大于个位筛。每道筛，候选越来越少，直到剩下答案！','m3_s2_ms2')">🔊 听讲解</button>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 110" width="100%">
+                  <text x="80" y="16" text-anchor="middle" font-size="11" fill="#a78bfa">条件①② 筛选</text>
+                  <rect class="sv" x="5" y="24" width="32" height="22" rx="5" fill="rgba(167,139,250,0.2)" stroke="#a78bfa" stroke-width="1.5" style="animation-delay:0s"/>
+                  <text class="sv" x="21" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#e2e8f0" style="animation-delay:.05s">18</text>
+                  <rect class="sv" x="43" y="24" width="32" height="22" rx="5" fill="rgba(167,139,250,0.2)" stroke="#a78bfa" stroke-width="1.5" style="animation-delay:.1s"/>
+                  <text class="sv" x="59" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#e2e8f0" style="animation-delay:.15s">36</text>
+                  <rect class="sv" x="81" y="24" width="32" height="22" rx="5" fill="rgba(167,139,250,0.2)" stroke="#a78bfa" stroke-width="1.5" style="animation-delay:.2s"/>
+                  <text class="sv" x="97" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#e2e8f0" style="animation-delay:.25s">54</text>
+                  <rect class="sv" x="5" y="54" width="32" height="22" rx="5" fill="rgba(167,139,250,0.2)" stroke="#a78bfa" stroke-width="1.5" style="animation-delay:.3s"/>
+                  <text class="sv" x="21" y="70" text-anchor="middle" font-size="12" font-weight="700" fill="#e2e8f0" style="animation-delay:.35s">72</text>
+                  <rect class="sv" x="43" y="54" width="32" height="22" rx="5" fill="rgba(167,139,250,0.2)" stroke="#a78bfa" stroke-width="1.5" style="animation-delay:.4s"/>
+                  <text class="sv" x="59" y="70" text-anchor="middle" font-size="12" font-weight="700" fill="#e2e8f0" style="animation-delay:.45s">90</text>
+                  <text class="sv" x="80" y="100" text-anchor="middle" font-size="11" fill="#94a3b8" style="animation-delay:.55s">5个候选数字</text>
+                </svg>
+              </div>
+              <div class="step-label">① 偶数且各位和=9：<strong>18, 36, 54, 72, 90</strong></div>
+            </div>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 110" width="100%">
+                  <text x="80" y="16" text-anchor="middle" font-size="11" fill="#06b6d4">条件③ 再筛</text>
+                  <rect x="5" y="24" width="32" height="22" rx="5" fill="rgba(100,116,139,0.2)" stroke="#475569" stroke-width="1"/>
+                  <text x="21" y="40" text-anchor="middle" font-size="12" fill="#475569" text-decoration="line-through">18</text>
+                  <line class="sv sv-draw" pathLength="1" x1="5" y1="35" x2="37" y2="35" stroke="#ef4444" stroke-width="2" style="animation-delay:0s"/>
+                  <rect x="43" y="24" width="32" height="22" rx="5" fill="rgba(100,116,139,0.2)" stroke="#475569" stroke-width="1"/>
+                  <text x="59" y="40" text-anchor="middle" font-size="12" fill="#475569">36</text>
+                  <line class="sv sv-draw" pathLength="1" x1="43" y1="35" x2="75" y2="35" stroke="#ef4444" stroke-width="2" style="animation-delay:.15s"/>
+                  <rect class="sv" x="5" y="54" width="32" height="22" rx="5" fill="rgba(6,182,212,0.2)" stroke="#06b6d4" stroke-width="1.5" style="animation-delay:.3s"/>
+                  <text class="sv" x="21" y="70" text-anchor="middle" font-size="12" font-weight="700" fill="#e2e8f0" style="animation-delay:.35s">54</text>
+                  <rect class="sv" x="43" y="54" width="32" height="22" rx="5" fill="rgba(6,182,212,0.2)" stroke="#06b6d4" stroke-width="1.5" style="animation-delay:.4s"/>
+                  <text class="sv" x="59" y="70" text-anchor="middle" font-size="12" font-weight="700" fill="#e2e8f0" style="animation-delay:.45s">72</text>
+                  <rect class="sv" x="81" y="54" width="32" height="22" rx="5" fill="rgba(6,182,212,0.2)" stroke="#06b6d4" stroke-width="1.5" style="animation-delay:.5s"/>
+                  <text class="sv" x="97" y="70" text-anchor="middle" font-size="12" font-weight="700" fill="#e2e8f0" style="animation-delay:.55s">90</text>
+                  <text class="sv" x="80" y="100" text-anchor="middle" font-size="11" fill="#94a3b8" style="animation-delay:.65s">排除 18、36</text>
+                </svg>
+              </div>
+              <div class="step-label">② 十位>个位：排除18、36，剩 <strong>54、72、90</strong></div>
+            </div>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 100" width="100%">
+                  <rect class="sv pop" x="5" y="10" width="45" height="32" rx="8" fill="rgba(16,185,129,0.2)" stroke="#10b981" stroke-width="1.5" style="animation-delay:0s"/>
+                  <text class="sv" x="27" y="31" text-anchor="middle" font-size="15" font-weight="700" fill="#10b981" style="animation-delay:.05s">54</text>
+                  <rect class="sv pop" x="58" y="10" width="45" height="32" rx="8" fill="rgba(16,185,129,0.2)" stroke="#10b981" stroke-width="1.5" style="animation-delay:.2s"/>
+                  <text class="sv" x="80" y="31" text-anchor="middle" font-size="15" font-weight="700" fill="#10b981" style="animation-delay:.25s">72</text>
+                  <rect class="sv pop" x="111" y="10" width="45" height="32" rx="8" fill="rgba(16,185,129,0.2)" stroke="#10b981" stroke-width="1.5" style="animation-delay:.4s"/>
+                  <text class="sv" x="133" y="31" text-anchor="middle" font-size="15" font-weight="700" fill="#10b981" style="animation-delay:.45s">90</text>
+                  <text class="sv" x="80" y="65" text-anchor="middle" font-size="11" fill="#10b981" style="animation-delay:.6s">三个都满足 ✅</text>
+                  <text class="sv" x="80" y="82" text-anchor="middle" font-size="11" fill="#94a3b8" style="animation-delay:.7s">（各位和均=9）</text>
+                </svg>
+              </div>
+              <div class="step-label">③ 验证全部条件：<strong>54、72、90</strong> 都是答案 ✅</div>
+            </div>
+            <button class="va-btn" style="flex-basis:100%;margin-top:4px" onclick="event.stopPropagation();tv(this,'排除法：把每个条件当过滤网，一个一个筛。先用偶数加各位和等于9筛出5个候选，再用十位大于个位排除18和36，剩下54、72、90都满足！','m3_s2_ms2')">🔊 听讲解</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 方法3 -->
+    <!-- 方法3: 表格法 -->
     <div class="mcard" onclick="toggleMCard(this)">
       <div class="mcard-head">
         <div class="mcard-icon">📊</div>
@@ -767,19 +917,98 @@ body {
       </div>
       <div class="mcard-body">
         <div class="mcard-body-inner">
-          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>甲、乙、丙三人，分别是医生、老师、工程师（每人只有一个职业）。已知：① 甲不是医生；② 乙不是老师；③ 丙不是工程师。各是什么职业？</div>
+          <div class="mcard-figure">
+            <div class="fig-label">🎯 小挑战：甲乙丙各是什么职业？</div>
+            <svg viewBox="0 0 260 110" width="100%" style="max-width:300px">
+              <!-- table header -->
+              <rect x="60" y="5" width="60" height="26" rx="4" fill="rgba(6,182,212,0.15)" stroke="#06b6d4" stroke-width="1"/>
+              <text x="90" y="23" text-anchor="middle" font-size="12" fill="#06b6d4">医生</text>
+              <rect x="125" y="5" width="60" height="26" rx="4" fill="rgba(6,182,212,0.15)" stroke="#06b6d4" stroke-width="1"/>
+              <text x="155" y="23" text-anchor="middle" font-size="12" fill="#06b6d4">老师</text>
+              <rect x="190" y="5" width="65" height="26" rx="4" fill="rgba(6,182,212,0.15)" stroke="#06b6d4" stroke-width="1"/>
+              <text x="222" y="23" text-anchor="middle" font-size="12" fill="#06b6d4">工程师</text>
+              <!-- rows -->
+              <rect x="5" y="35" width="50" height="24" rx="4" fill="rgba(167,139,250,0.12)" stroke="#a78bfa" stroke-width="1"/>
+              <text x="30" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="#a78bfa">甲</text>
+              <rect x="60" y="35" width="60" height="24" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <rect x="125" y="35" width="60" height="24" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <rect x="190" y="35" width="65" height="24" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <rect x="5" y="63" width="50" height="24" rx="4" fill="rgba(167,139,250,0.12)" stroke="#a78bfa" stroke-width="1"/>
+              <text x="30" y="80" text-anchor="middle" font-size="13" font-weight="700" fill="#a78bfa">乙</text>
+              <rect x="60" y="63" width="60" height="24" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <rect x="125" y="63" width="60" height="24" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <rect x="190" y="63" width="65" height="24" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <rect x="5" y="91" width="50" height="24" rx="4" fill="rgba(167,139,250,0.12)" stroke="#a78bfa" stroke-width="1"/>
+              <text x="30" y="108" text-anchor="middle" font-size="13" font-weight="700" fill="#a78bfa">丙</text>
+              <rect x="60" y="91" width="60" height="24" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <rect x="125" y="91" width="60" height="24" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <rect x="190" y="91" width="65" height="24" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <text x="255" y="52" text-anchor="middle" font-size="11" fill="#64748b">?</text>
+              <text x="255" y="80" text-anchor="middle" font-size="11" fill="#64748b">?</text>
+              <text x="255" y="108" text-anchor="middle" font-size="11" fill="#64748b">?</text>
+            </svg>
+          </div>
           <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms3')">👆 看解法</button>
           <div id="ms3">
-            <div class="step"><div class="step-num" style="--scolor1:#06b6d4;--scolor2:#10b981">1</div><div class="step-content">画表格，打 ✅（是）或 ❌（不是）：<br>条件①甲❌医生；条件②乙❌老师；条件③丙❌工程师</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#06b6d4;--scolor2:#10b981">2</div><div class="step-content">丙不是工程师，三人中只剩丙可以是老师或医生；乙不是老师，所以<strong>乙是工程师</strong>；乙是工程师→甲和丙剩医生、老师</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#06b6d4;--scolor2:#10b981">3</div><div class="step-content">甲不是医生→<strong>甲是老师</strong>，<strong>丙是医生</strong> ✅</div></div>
-            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'表格法：行是人，列是职业，画出条件。乙不是老师，丙不是工程师，只剩乙是工程师。再看甲不是医生，甲是老师，丙是医生！表格法让逻辑推理变得一清二楚！','m3_s2_ms3')">🔊 听讲解</button>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 200 120" width="100%">
+                  <text x="100" y="14" text-anchor="middle" font-size="11" fill="#94a3b8">根据三个条件填入 ❌</text>
+                  <!-- table: col headers -->
+                  <text x="70" y="30" text-anchor="middle" font-size="10" fill="#06b6d4">医生</text>
+                  <text x="110" y="30" text-anchor="middle" font-size="10" fill="#06b6d4">老师</text>
+                  <text x="158" y="30" text-anchor="middle" font-size="10" fill="#06b6d4">工程师</text>
+                  <!-- row 甲 -->
+                  <text x="28" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="#a78bfa">甲</text>
+                  <rect x="52" y="38" width="36" height="22" rx="4" fill="rgba(239,68,68,0.15)" stroke="#ef4444" stroke-width="1"/>
+                  <text class="sv" x="70" y="53" text-anchor="middle" font-size="14" fill="#ef4444" style="animation-delay:0s">❌</text>
+                  <!-- row 乙 -->
+                  <text x="28" y="80" text-anchor="middle" font-size="13" font-weight="700" fill="#a78bfa">乙</text>
+                  <rect x="90" y="66" width="36" height="22" rx="4" fill="rgba(239,68,68,0.15)" stroke="#ef4444" stroke-width="1"/>
+                  <text class="sv" x="108" y="81" text-anchor="middle" font-size="14" fill="#ef4444" style="animation-delay:.2s">❌</text>
+                  <!-- row 丙 -->
+                  <text x="28" y="108" text-anchor="middle" font-size="13" font-weight="700" fill="#a78bfa">丙</text>
+                  <rect x="138" y="94" width="42" height="22" rx="4" fill="rgba(239,68,68,0.15)" stroke="#ef4444" stroke-width="1"/>
+                  <text class="sv" x="159" y="109" text-anchor="middle" font-size="14" fill="#ef4444" style="animation-delay:.4s">❌</text>
+                </svg>
+              </div>
+              <div class="step-label">① 条件填表：甲❌医生，乙❌老师，丙❌工程师</div>
+            </div>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 110" width="100%">
+                  <text x="80" y="14" text-anchor="middle" font-size="11" fill="#94a3b8">推理</text>
+                  <text x="80" y="34" text-anchor="middle" font-size="12" fill="#e2e8f0">丙❌工程师</text>
+                  <text x="80" y="52" text-anchor="middle" font-size="12" fill="#e2e8f0">乙❌老师</text>
+                  <line class="sv sv-draw" pathLength="1" x1="80" y1="58" x2="80" y2="72" stroke="#06b6d4" stroke-width="1.5" style="animation-delay:.2s"/>
+                  <rect class="sv pop" x="20" y="75" width="120" height="28" rx="7" fill="rgba(6,182,212,0.2)" stroke="#06b6d4" stroke-width="1.5" style="animation-delay:.35s"/>
+                  <text class="sv" x="80" y="94" text-anchor="middle" font-size="13" font-weight="800" fill="#06b6d4" style="animation-delay:.45s">⇒ 乙是工程师 ✅</text>
+                </svg>
+              </div>
+              <div class="step-label">② 排除推导：只有<strong>乙</strong>能是工程师</div>
+            </div>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 110" width="100%">
+                  <text x="80" y="14" text-anchor="middle" font-size="11" fill="#94a3b8">完成推理</text>
+                  <text x="80" y="34" text-anchor="middle" font-size="12" fill="#e2e8f0">甲❌医生</text>
+                  <line class="sv sv-draw" pathLength="1" x1="80" y1="38" x2="80" y2="50" stroke="#10b981" stroke-width="1.5" style="animation-delay:.15s"/>
+                  <rect class="sv pop" x="8" y="53" width="68" height="22" rx="6" fill="rgba(16,185,129,0.2)" stroke="#10b981" stroke-width="1.5" style="animation-delay:.25s"/>
+                  <text class="sv" x="42" y="68" text-anchor="middle" font-size="12" font-weight="700" fill="#10b981" style="animation-delay:.35s">甲=老师</text>
+                  <rect class="sv pop" x="84" y="53" width="68" height="22" rx="6" fill="rgba(16,185,129,0.2)" stroke="#10b981" stroke-width="1.5" style="animation-delay:.45s"/>
+                  <text class="sv" x="118" y="68" text-anchor="middle" font-size="12" font-weight="700" fill="#10b981" style="animation-delay:.55s">丙=医生</text>
+                  <text class="sv" x="80" y="95" text-anchor="middle" font-size="11" fill="#10b981" style="animation-delay:.65s">全部确定 ✅</text>
+                </svg>
+              </div>
+              <div class="step-label">③ <strong>甲=老师，乙=工程师，丙=医生</strong> ✅</div>
+            </div>
+            <button class="va-btn" style="flex-basis:100%;margin-top:4px" onclick="event.stopPropagation();tv(this,'表格法：行是人，列是职业，画出每个条件。乙不是老师，丙不是工程师，只剩乙能是工程师。甲不是医生，甲是老师，丙是医生！','m3_s2_ms3')">🔊 听讲解</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 方法4 -->
+    <!-- 方法4: 假设法 -->
     <div class="mcard" onclick="toggleMCard(this)">
       <div class="mcard-head">
         <div class="mcard-icon">🎭</div>
@@ -791,13 +1020,71 @@ body {
       </div>
       <div class="mcard-body">
         <div class="mcard-body-inner">
-          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>小红、小明、小亮三人，有且只有一人说真话。<br>小红说："小明在说谎。"<br>小明说："小亮在说谎。"<br>小亮说："小红和小明都在说谎。"<br>谁说的是真话？</div>
+          <div class="mcard-figure">
+            <div class="fig-label">🎯 小挑战：有且只有一人说真话，谁是？</div>
+            <svg viewBox="0 0 280 90" width="100%" style="max-width:320px">
+              <!-- 小红 -->
+              <circle cx="40" cy="35" r="16" fill="rgba(244,167,187,0.2)" stroke="#F4A7BB" stroke-width="1.5"/>
+              <text x="40" y="40" text-anchor="middle" font-size="13">😊</text>
+              <text x="40" y="60" text-anchor="middle" font-size="11" fill="#F4A7BB">小红</text>
+              <rect x="60" y="20" width="70" height="22" rx="8" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+              <text x="95" y="35" text-anchor="middle" font-size="10" fill="#94a3b8">"小明在说谎"</text>
+              <!-- 小明 -->
+              <circle cx="140" cy="35" r="16" fill="rgba(167,139,250,0.2)" stroke="#a78bfa" stroke-width="1.5"/>
+              <text x="140" y="40" text-anchor="middle" font-size="13">😊</text>
+              <text x="140" y="60" text-anchor="middle" font-size="11" fill="#a78bfa">小明</text>
+              <rect x="160" y="20" width="70" height="22" rx="8" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+              <text x="195" y="35" text-anchor="middle" font-size="10" fill="#94a3b8">"小亮在说谎"</text>
+              <!-- 小亮 -->
+              <circle cx="240" cy="35" r="16" fill="rgba(6,182,212,0.2)" stroke="#06b6d4" stroke-width="1.5"/>
+              <text x="240" y="40" text-anchor="middle" font-size="13">😊</text>
+              <text x="240" y="60" text-anchor="middle" font-size="11" fill="#06b6d4">小亮</text>
+              <text x="140" y="82" text-anchor="middle" font-size="11" fill="#64748b">只有一人说真话</text>
+            </svg>
+          </div>
           <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms4')">👆 看解法</button>
           <div id="ms4">
-            <div class="step"><div class="step-num" style="--scolor1:#ec4899;--scolor2:#a78bfa">1</div><div class="step-content"><strong>假设小红说真话</strong>：小明在说谎，即"小亮在说谎"是假的→小亮说真话。但小亮是真话，小亮说"小红在说谎"，矛盾！❌ 小红不是真话人</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#ec4899;--scolor2:#a78bfa">2</div><div class="step-content"><strong>假设小明说真话</strong>：小亮在说谎，小亮说"小红和小明都在说谎"是假的，即小红或小明至少有一人说真话，且只有小明说真话，符合！再验证小红说谎（小明说谎是假）→ 小明说真话确实是真 ✅</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#ec4899;--scolor2:#a78bfa">3</div><div class="step-content"><strong>小明说真话</strong>✅，小红和小亮都在说谎。完美符合"只有一人说真话"！</div></div>
-            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'假设法：逐一假设某人说真话，推导所有结论，看有没有矛盾。假设小红是真话，推出矛盾，否定！假设小明是真话，没有矛盾，正确！假设法是真假推理的万能钥匙！','m3_s2_ms4')">🔊 听讲解</button>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 118" width="100%">
+                  <rect x="5" y="5" width="150" height="22" rx="5" fill="rgba(244,167,187,0.15)" stroke="#F4A7BB" stroke-width="1"/>
+                  <text x="80" y="20" text-anchor="middle" font-size="11" fill="#F4A7BB">假设小红说真话</text>
+                  <line class="sv sv-draw" pathLength="1" x1="80" y1="30" x2="80" y2="44" stroke="#94a3b8" stroke-width="1.2" style="animation-delay:.15s"/>
+                  <text class="sv" x="80" y="58" text-anchor="middle" font-size="11" fill="#94a3b8" style="animation-delay:.2s">→ 小明说谎</text>
+                  <text class="sv" x="80" y="74" text-anchor="middle" font-size="11" fill="#94a3b8" style="animation-delay:.3s">→ 小亮说真话</text>
+                  <text class="sv" x="80" y="90" text-anchor="middle" font-size="11" fill="#94a3b8" style="animation-delay:.4s">→ 小红也说谎？</text>
+                  <rect class="sv pop" x="20" y="97" width="120" height="16" rx="4" fill="rgba(239,68,68,0.2)" stroke="#ef4444" stroke-width="1" style="animation-delay:.55s"/>
+                  <text class="sv" x="80" y="110" text-anchor="middle" font-size="11" font-weight="700" fill="#ef4444" style="animation-delay:.6s">矛盾！❌</text>
+                </svg>
+              </div>
+              <div class="step-label">① 假设小红真话 → 推出<strong>矛盾 ❌</strong></div>
+            </div>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 110" width="100%">
+                  <rect x="5" y="5" width="150" height="22" rx="5" fill="rgba(167,139,250,0.15)" stroke="#a78bfa" stroke-width="1"/>
+                  <text x="80" y="20" text-anchor="middle" font-size="11" fill="#a78bfa">假设小明说真话</text>
+                  <line class="sv sv-draw" pathLength="1" x1="80" y1="30" x2="80" y2="44" stroke="#94a3b8" stroke-width="1.2" style="animation-delay:.15s"/>
+                  <text class="sv" x="80" y="58" text-anchor="middle" font-size="11" fill="#94a3b8" style="animation-delay:.2s">→ 小亮说谎 ✓</text>
+                  <text class="sv" x="80" y="74" text-anchor="middle" font-size="11" fill="#94a3b8" style="animation-delay:.3s">→ 小红也说谎 ✓</text>
+                  <rect class="sv pop" x="20" y="82" width="120" height="22" rx="7" fill="rgba(16,185,129,0.2)" stroke="#10b981" stroke-width="1.5" style="animation-delay:.45s"/>
+                  <text class="sv" x="80" y="97" text-anchor="middle" font-size="12" font-weight="700" fill="#10b981" style="animation-delay:.55s">无矛盾！✅</text>
+                </svg>
+              </div>
+              <div class="step-label">② 假设小明真话 → <strong>无矛盾 ✅</strong></div>
+            </div>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 100" width="100%">
+                  <circle cx="80" cy="32" r="22" fill="rgba(167,139,250,0.2)" stroke="#a78bfa" stroke-width="2"/>
+                  <text x="80" y="37" text-anchor="middle" font-size="18">😊</text>
+                  <rect class="sv pop" x="10" y="62" width="140" height="30" rx="9" fill="rgba(167,139,250,0.2)" stroke="#a78bfa" stroke-width="1.5" style="animation-delay:.3s"/>
+                  <text class="sv" x="80" y="82" text-anchor="middle" font-size="13" font-weight="800" fill="#a78bfa" style="animation-delay:.4s">小明说真话 ✅</text>
+                </svg>
+              </div>
+              <div class="step-label">③ 结论：<strong>小明</strong>说真话，其余说谎</div>
+            </div>
+            <button class="va-btn" style="flex-basis:100%;margin-top:4px" onclick="event.stopPropagation();tv(this,'假设法：逐一假设某人说真话，推导所有结论看有没有矛盾。假设小红是真话，推出矛盾，否定！假设小明是真话，没有矛盾，正确！小明说真话！','m3_s2_ms4')">🔊 听讲解</button>
           </div>
         </div>
       </div>
@@ -807,32 +1094,6 @@ body {
 
   <!-- ═══════════════ S3 例题 ═══════════════ -->
   <div id="s3" class="sec">
-
-    <!-- 配套视频 -->
-    <div class="video-section-label"><span>▶</span> 先看视频，再做例题 · 支持倍速 / 全屏</div>
-    <div class="video-stack">
-      <div class="video-wrap">
-        <iframe
-          src="https://www.youtube.com/embed/eOGTgMYcaqc?rel=0&modestbranding=1"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen loading="lazy">
-        </iframe>
-      </div>
-      <div class="video-wrap">
-        <iframe
-          src="https://www.youtube.com/embed/YZ5tUkJSOXY?rel=0&modestbranding=1"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen loading="lazy">
-        </iframe>
-      </div>
-      <div class="video-wrap">
-        <iframe
-          src="https://www.youtube.com/embed/QXVt0TUqM0w?rel=0&modestbranding=1"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen loading="lazy">
-        </iframe>
-      </div>
-    </div>
 
     <!-- 例题1 -->
     <div class="excard">
@@ -894,6 +1155,89 @@ body {
       </div>
     </div>
 
+    <!-- 例题3 -->
+    <div class="excard">
+      <div class="excard-hdr">
+        <span class="ex-num">例题三</span>
+        <span class="ex-tag">2022年 · 符号与数字</span>
+      </div>
+      <div class="excard-body">
+        <div class="qbox">
+          🦘 <strong>袋鼠数学竞赛真题（2022年 第9题）</strong><br><br>
+          <img src="../assets/exam-images/2022/q09.png" alt="2022年第9题" style="width:100%;border-radius:10px;margin:8px 0 4px">
+          <small>提示：题目中共有5个形状，观察哪几个位置的形状相同。</small>
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
+        <div class="ex-opts" id="ex3-opts"></div>
+        <div class="ex-result" id="ex3-result"></div>
+        <div class="guide-chain" id="ex3-guide"></div>
+        <div class="feynman-box" id="ex3-feynman">
+          <div class="feynman-hdr">🧠 费曼讲解 — 形状对应数字！</div>
+          <div class="feynman-body">
+            <div class="fn-step"><div class="fn-num">1</div><div class="fn-content">题目给出5个形状，<strong>相同形状 = 相同数字，不同形状 = 不同数字</strong>。找到哪两个位置是同一形状，那两位数字就必须相同！</div></div>
+            <div class="fn-step"><div class="fn-num">2</div><div class="fn-content">逐一检验选项，找出哪个5位数字在对应位置上数字相同，其余位置数字各不相同。只有 <strong>(A) 34426</strong> 满足条件（第2、3位均为4）。</div></div>
+            <div class="fn-step"><div class="fn-num">3</div><div class="fn-content">验证A=34426：4个不同形状对应4个不同数字（3, 4, 2, 6），全部不重复 ✅ 答案是 <strong>(A) 34426</strong>！</div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="tv(this,'费曼讲解！看题目5个形状，找到哪两个位置是同一形状，那两位数字必须相同。检查所有选项，A的34426，中间两个数字都是4，相同！再验证四个不同形状对应四个不同数字，完全符合！答案是A，34426！','m3_s3_ex3')">🔊 听讲解</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 例题4 -->
+    <div class="excard">
+      <div class="excard-hdr">
+        <span class="ex-num">例题四</span>
+        <span class="ex-tag">2024年 · 符号代数</span>
+      </div>
+      <div class="excard-body">
+        <div class="qbox">
+          🦘 <strong>袋鼠数学竞赛真题（2024年 第11题）</strong><br><br>
+          <img src="../assets/exam-images/2024/q16.png" alt="2024年第11题" style="width:100%;border-radius:10px;margin:8px 0 4px">
+          <small>提示：每种图案代表一个不同的数字，请找出⭐的值。</small>
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
+        <div class="ex-opts" id="ex4-opts"></div>
+        <div class="ex-result" id="ex4-result"></div>
+        <div class="guide-chain" id="ex4-guide"></div>
+        <div class="feynman-box" id="ex4-feynman">
+          <div class="feynman-hdr">🧠 费曼讲解 — 代入消元！</div>
+          <div class="feynman-body">
+            <div class="fn-step"><div class="fn-num">1</div><div class="fn-content">每种图案代表不同数字。先找<strong>最简单的行或列</strong>——哪一行/列图案最少，或者能直接确定某图案的值。</div></div>
+            <div class="fn-step"><div class="fn-num">2</div><div class="fn-content">利用已知图案的值，<strong>代入</strong>其他行/列，依次求出剩余图案的值。这和解方程组的思路一模一样！</div></div>
+            <div class="fn-step"><div class="fn-num">3</div><div class="fn-content">算出 ⭐ = <strong>4</strong>。代入所有行/列验证，和均正确 ✅ 答案是 <strong>(C) 4</strong>！</div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="tv(this,'费曼讲解！这道题每个图案代表不同数字，用代入消元法。先找最简单的行，算出一个图案的值，再代入其他行，一步步解出所有图案。最终星星等于4，答案是C！','m3_s3_ex4')">🔊 听讲解</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 例题5 -->
+    <div class="excard">
+      <div class="excard-hdr">
+        <span class="ex-num">例题五</span>
+        <span class="ex-tag">2025年 · 逻辑推理</span>
+      </div>
+      <div class="excard-body">
+        <div class="qbox">
+          🦘 <strong>袋鼠数学竞赛真题（2025年 第12题）</strong><br><br>
+          <img src="../assets/exam-images/2025/q12.png" alt="2025年第12题" style="width:100%;border-radius:10px;margin:8px 0 4px">
+          <small>提示：两张图的区别是什么？差了多少重量？</small>
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
+        <div class="ex-opts" id="ex5-opts"></div>
+        <div class="ex-result" id="ex5-result"></div>
+        <div class="guide-chain" id="ex5-guide"></div>
+        <div class="feynman-box" id="ex5-feynman">
+          <div class="feynman-hdr">🧠 费曼讲解 — 差量法！</div>
+          <div class="feynman-body">
+            <div class="fn-step"><div class="fn-num">1</div><div class="fn-content">第一张图：大狗 + 1只小狗 = 14千克。第二张图：大狗 + 2只小狗 = 18千克。两图的<strong>差</strong>恰好是1只小狗的重量！</div></div>
+            <div class="fn-step"><div class="fn-num">2</div><div class="fn-content">1只小狗 = 18 − 14 = <strong>4千克</strong>。</div></div>
+            <div class="fn-step"><div class="fn-num">3</div><div class="fn-content">大狗 = 14 − 4 = <strong>10千克</strong> ✅ 答案是 <strong>(B) 10千克</strong>！</div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="tv(this,'费曼讲解！差量法！第二张图比第一张图多一只小狗，重量多了4千克，所以一只小狗重4千克。大狗等于14减4等于10千克！答案是B！','m3_s3_ex5')">🔊 听讲解</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </div>
 
@@ -979,7 +1323,8 @@ function toggleMCard(card) {
 // ── Reveal steps ──
 function revealSteps(id) {
   const c = document.getElementById(id);
-  c.querySelectorAll('.step').forEach((s, i) => setTimeout(() => s.classList.add('show'), i * 380));
+  c.querySelectorAll('.step').forEach(s => { s.classList.remove('show'); void s.offsetHeight; });
+  c.querySelectorAll('.step').forEach((s, i) => setTimeout(() => s.classList.add('show'), i * 520));
   const rb = c.previousElementSibling;
   if (rb && rb.classList.contains('reveal-btn')) rb.style.display = 'none';
 }
@@ -1000,6 +1345,30 @@ const exData = {
       {q:'如果丙说真话（丙是第一名），其他人的话哪些是真哪些是假？', a:'甲说"我不是第一"→真话；乙和丁说假话', vc:'假设丙说真话，丙是第一名。甲说我不是第一，对，是真话。这样已经两个真话了，乙和丁必须都说假话！', va:'m3_q2_g1'},
       {q:'乙说假话意味着什么？丁说假话意味着什么？', a:'乙说假话 → 乙是第一或最后（丙是第一，所以乙是最后）；丁说假话 → 丁不是最后', vc:'乙说不是第一也不是最后，这是假话，所以乙是第一或者是最后。丙已经是第一，所以乙是最后。丁说我是最后是假话，所以丁不是最后。没有矛盾！', va:'m3_q2_g2'},
       {q:'最终顺序是怎样的？说真话的人是谁？', a:'丙第一，甲和丙说真话，乙和丁说假话 ✅', vc:'结论：丙是第一名！甲和丙说真话，恰好两人，完美符合题意！逻辑全部自洽！', va:'m3_q2_g3'}
+    ]
+  },
+  ex3: {
+    opts: [{t:'(A) 34426',v:true},{t:'(B) 34526',v:false},{t:'(C) 34423',v:false},{t:'(D) 34424',v:false},{t:'(E) 32446',v:false}],
+    guide: [
+      {q:'题目中5个形状，哪几个位置用了相同的形状？', a:'找到相同形状的位置 → 那两位数字必须相同！', vc:'仔细看题目中的5个形状符号，找出哪两个位置是同一个形状。相同形状的位置，数字必须相同！', va:'m3_q3_g1'},
+      {q:'逐一检验选项，哪个5位数在对应位置上数字相同？', a:'(A) 34426：中间两位均为4，相同 ✅；其余选项不满足 ❌', vc:'检查每个选项，找哪个数字在相同形状的位置上数字一致。只有A的34426，中间两位都是4，符合！', va:'m3_q3_g2'},
+      {q:'验证A=34426：4个不同形状是否对应4个不同数字？', a:'3, 4, 2, 6 —— 互不相同 ✅ 答案是 (A) 34426！', vc:'验证：34426中出现的不同数字是3、4、2、6，四个数字各不相同，完美符合题意！答案是A！', va:'m3_q3_g3'}
+    ]
+  },
+  ex4: {
+    opts: [{t:'(A) 2',v:false},{t:'(B) 3',v:false},{t:'(C) 4',v:true},{t:'(D) 5',v:false},{t:'(E) 6',v:false}],
+    guide: [
+      {q:'从哪一行或列入手最简单？怎样快速确定第一个图案的值？', a:'找行和最小、或图案种类最少的行，直接算出某图案的值！', vc:'看每一行和每一列，找最简单的那个——图案种类最少，或者有重复图案，让我们能直接确定某个值！', va:'m3_q4_g1'},
+      {q:'知道了第一个图案的值，怎么代入求其他图案？', a:'代入到含已知图案的其他行/列，像解方程一样依次求出其余值！', vc:'把已知的图案值代入其他行，就能消去一个未知量，依次解出所有图案的值，方法和解方程组一样！', va:'m3_q4_g2'},
+      {q:'最终⭐等于多少？代入验证所有行/列是否正确？', a:'⭐ = 4，代入所有行/列，和均正确 ✅ 答案是 (C) 4！', vc:'算出星星等于4，代入图中所有行和列验算，每个和都对！答案确认是C，等于4！', va:'m3_q4_g3'}
+    ]
+  },
+  ex5: {
+    opts: [{t:'(A) 9千克',v:false},{t:'(B) 10千克',v:true},{t:'(C) 11千克',v:false},{t:'(D) 12千克',v:false},{t:'(E) 13千克',v:false}],
+    guide: [
+      {q:'仔细看两张图，两张图的区别是什么？', a:'第二张图比第一张图多了1只小狗，所以重量差 = 1只小狗的重量！', vc:'对比两张图：第一张大狗加一只小狗，第二张大狗加两只小狗。多出来的那只小狗就是重量差的原因！', va:'m3_q5_g1'},
+      {q:'1只小狗重多少千克？', a:'18 − 14 = 4千克', vc:'18减14等于4，所以一只小狗重4千克！', va:'m3_q5_g2'},
+      {q:'知道小狗的重量，怎么求大狗的重量？', a:'大狗 = 14 − 4 = 10千克 ✅ 答案是 (B) 10千克！', vc:'大狗加一只小狗等于14，小狗是4千克，所以大狗等于14减4等于10千克！答案是B！', va:'m3_q5_g3'}
     ]
   }
 };
@@ -1071,7 +1440,7 @@ function buildGuide(id, data) {
   });
 }
 
-initEx('ex1'); initEx('ex2');
+initEx('ex1'); initEx('ex2'); initEx('ex3'); initEx('ex4'); initEx('ex5');
 
 // ── Quiz ──
 const quizData = [

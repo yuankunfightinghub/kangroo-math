@@ -197,20 +197,32 @@ body {
   font-family: 'Noto Sans SC', sans-serif;
 }
 .reveal-btn:hover { background: rgba(245,158,11,0.18); transform: scale(1.03); }
-.step { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 12px; opacity: 0; transform: translateX(-16px); transition: all .4s; }
-.step.show { opacity: 1; transform: none; }
-.step-num {
-  width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 800; color: #fff;
-  background: linear-gradient(135deg, var(--scolor1,#f59e0b), var(--scolor2,#ef4444));
+/* ── 技巧步骤（横向平铺卡片） ── */
+[id^="ms"] { display:flex; gap:10px; flex-wrap:wrap; align-items:stretch; margin-bottom:4px; }
+.step {
+  flex:1; min-width:130px; display:flex; flex-direction:column; align-items:center;
+  gap:8px; padding:12px 10px; background:rgba(255,255,255,0.03);
+  border-radius:14px; border:1px solid rgba(255,255,255,0.07);
+  opacity:0; transform:translateY(14px); transition:all .45s cubic-bezier(.23,1,.32,1);
 }
-.step-content {
-  background: rgba(255,255,255,0.04); border-radius: 12px; padding: 10px 14px;
-  flex: 1; font-size: 14px; line-height: 1.75; color: var(--muted);
-  border: 1px solid rgba(255,255,255,0.06);
-}
-.step-content strong, .step-content b { color: var(--text); }
+.step.show { opacity:1; transform:translateY(0); }
+.step-vis { width:100%; }
+.step-vis svg { width:100%; height:auto; display:block; border-radius:8px; overflow:visible; }
+.step-label { font-size:13px; line-height:1.6; color:var(--muted); text-align:center; }
+.step-label strong, .step-label b { color:var(--text); }
+/* SVG 动画 */
+.sv { opacity:0; }
+.step.show .sv { animation:svFade .5s ease forwards; }
+.sv-draw { stroke-dashoffset:1; stroke-dasharray:1; }
+.step.show .sv-draw { animation:svLine .6s ease forwards; }
+.step.show .sv.pop { animation:svPop .4s cubic-bezier(.34,1.56,.64,1) forwards; }
+@keyframes svFade { to { opacity:1; } }
+@keyframes svLine { to { stroke-dashoffset:0; } }
+@keyframes svPop  { from { opacity:0; transform:scale(.4); } to { opacity:1; transform:scale(1); } }
+/* 挑战图形区 */
+.mcard-figure { text-align:center; margin-bottom:12px; padding:12px; background:rgba(255,255,255,0.04); border-radius:12px; border:1px solid rgba(255,255,255,0.08); }
+.mcard-figure svg { overflow:visible; }
+.fig-label { font-size:13px; color:var(--muted); margin-bottom:8px; }
 
 /* ── Example Cards ── */
 .excard { background: var(--card); border: 1px solid var(--card-border); border-radius: 20px; overflow: hidden; margin-bottom: 24px; }
@@ -405,6 +417,12 @@ body {
 }
 .cube-cell:hover { background: rgba(139,92,246,0.2); transform: scale(1.05); }
 .cube-cell.empty { color: var(--muted2); border-style: dashed; }
+.cube-ctrl-btn {
+  padding: 5px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer;
+  border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.08); color: #a78bfa;
+  font-family: 'Noto Sans SC', sans-serif; transition: all .18s;
+}
+.cube-ctrl-btn:hover { background: rgba(139,92,246,0.18); }
 @keyframes s1FadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
 </style>
 </head>
@@ -512,58 +530,93 @@ body {
         </div>
       </div>
 
-      <!-- ── 概念3：三视图 ── Canvas 等轴测 + 视角切换 -->
+      <!-- ── 概念3：三视图 ── 实心积木 + 视角切换 -->
       <div class="cbox" style="--accent:#6ee7b7;--accent-bg:rgba(16,185,129,0.06)">
-        <button class="vbtn vbtn-e" onclick="tv(this,'三视图就是从三个方向看立体图形画出来的图。正视图从正前方看，侧视图从左边看，俯视图从上面往下看。点击三个按钮，分别看正方体从三个方向的样子，你发现了什么规律？')">🔊 听讲解</button>
+        <button class="vbtn vbtn-e" onclick="tv(this,'三视图就是从三个方向看立体图形画出来的图。正视图从正前方看，侧视图从左边看，俯视图从上面往下看。点击三个按钮，看看L形积木从不同方向看各是什么形状，你发现了什么规律？')">🔊 听讲解</button>
         <h4>👁️ 三视图 — 点击切换观察方向</h4>
 
-        <div style="display:flex;gap:8px;margin:10px 0 14px;flex-wrap:wrap">
-          <button class="view-btn active" onclick="selectView(this,'front')">⬛ 正视图（从前面看）</button>
-          <button class="view-btn" onclick="selectView(this,'side')">◀️ 侧视图（从左面看）</button>
-          <button class="view-btn" onclick="selectView(this,'top')">⬆️ 俯视图（从上面看）</button>
-        </div>
-
-        <!-- 切换形体 -->
-        <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
+        <!-- 形体选择 -->
+        <div style="display:flex;gap:6px;margin:10px 0 12px;flex-wrap:wrap">
           <span style="font-size:12px;color:var(--muted2);align-self:center">选形体：</span>
-          <button class="shape-view-btn active" data-sv="cube" onclick="selectViewShape(this,'cube')">正方体</button>
-          <button class="shape-view-btn" data-sv="cylinder" onclick="selectViewShape(this,'cylinder')">圆柱</button>
-          <button class="shape-view-btn" data-sv="cone" onclick="selectViewShape(this,'cone')">圆锥</button>
-          <button class="shape-view-btn" data-sv="lshape" onclick="selectViewShape(this,'lshape')">L形积木</button>
+          <button class="shape-view-btn active" data-sv="cube"     onclick="selectViewShape(this,'cube')">正方体</button>
+          <button class="shape-view-btn"         data-sv="cylinder" onclick="selectViewShape(this,'cylinder')">圆柱</button>
+          <button class="shape-view-btn"         data-sv="cone"     onclick="selectViewShape(this,'cone')">圆锥</button>
+          <button class="shape-view-btn"         data-sv="lshape"   onclick="selectViewShape(this,'lshape')">L形积木</button>
         </div>
 
-        <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
-          <canvas id="view-canvas-3d" width="140" height="140" style="border-radius:12px;background:rgba(16,185,129,0.05);border:1px solid rgba(16,185,129,0.15);flex-shrink:0"></canvas>
+        <!-- 主体：3D + 2D 并排 -->
+        <div style="display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap">
+
+          <!-- 左：3D 立体预览 -->
+          <div style="flex-shrink:0">
+            <div style="font-size:11px;color:var(--muted2);margin-bottom:6px;text-align:center">立体图形</div>
+            <canvas id="view-canvas-3d" width="260" height="190"
+              style="border-radius:12px;background:rgba(16,185,129,0.05);border:1px solid rgba(16,185,129,0.18);display:block"></canvas>
+            <!-- 当前视角指示 -->
+            <div id="view-dir-indicator" style="margin-top:8px;display:flex;gap:6px;justify-content:center;font-size:12px;color:var(--muted2)"></div>
+          </div>
+
+          <!-- 右：视角切换 + 2D 投影 -->
           <div style="flex:1;min-width:160px">
-            <div style="font-size:12px;color:var(--muted2);margin-bottom:6px">👇 从该方向看到的样子：</div>
-            <canvas id="view-canvas-2d" width="140" height="140" style="border-radius:12px;background:rgba(16,185,129,0.04);border:1px solid rgba(16,185,129,0.2)"></canvas>
-            <div id="view-label" style="font-size:13px;color:#6ee7b7;font-weight:700;margin-top:6px"></div>
+            <!-- 观察方向按钮 -->
+            <div style="font-size:11px;color:var(--muted2);margin-bottom:6px">选择观察方向：</div>
+            <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
+              <button class="view-btn active" onclick="selectView(this,'front')">⬛ 正视图</button>
+              <button class="view-btn"        onclick="selectView(this,'side')">◀ 侧视图</button>
+              <button class="view-btn"        onclick="selectView(this,'top')">▲ 俯视图</button>
+            </div>
+
+            <div style="font-size:11px;color:var(--muted2);margin-bottom:6px">从该方向看到的形状：</div>
+            <canvas id="view-canvas-2d" width="160" height="160"
+              style="border-radius:12px;background:rgba(16,185,129,0.04);border:1px solid rgba(16,185,129,0.2);display:block"></canvas>
+            <div id="view-label" style="font-size:13px;color:#6ee7b7;font-weight:700;margin-top:8px;line-height:1.5"></div>
           </div>
         </div>
       </div>
 
-      <!-- ── 概念4：数立方块 ── 俯视图格子 + 实时统计 -->
+      <!-- ── 概念4：数立方块 ── -->
       <div class="cbox" style="--accent:#a78bfa;--accent-bg:rgba(139,92,246,0.06)">
-        <button class="vbtn vbtn-v" onclick="tv(this,'数立方块！把小正方体堆起来，俯视图每个格子里的数字就是那个位置叠了几层。把所有格子的数字加起来，就是总块数。你来点击格子改变层数，试试看能数对吗！')">🔊 听讲解</button>
-        <h4>🔢 数立方块 — 点击格子改变层数，数出总块数</h4>
-        <p style="font-size:13px;color:var(--muted);margin:6px 0 12px">俯视图中每格的数字 = 该位置叠了几层。点击格子可以 <strong style="color:#a78bfa">+1层</strong>（最多4层），长按清零。</p>
+        <button class="vbtn vbtn-v" onclick="tv(this,'数立方块！把小正方体堆起来，一层一层地数。先数第一层，所有有方块的位置各1块；再数第二层，叠了两层以上的位置各再加1块……依次累加，就能数出总块数！')">🔊 听讲解</button>
+        <h4>🔢 数立方块 — 旋转看全貌，逐层数清楚</h4>
 
-        <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+        <!-- 题目选择 -->
+        <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
           <button class="cube-preset-btn active" onclick="cubeLoadPreset(this,0)">🎯 题目一</button>
           <button class="cube-preset-btn" onclick="cubeLoadPreset(this,1)">🎯 题目二</button>
-          <button class="cube-preset-btn" onclick="cubeLoadPreset(this,2)">✏️ 自由模式</button>
+          <button class="cube-preset-btn" onclick="cubeLoadPreset(this,2)">🎯 题目三</button>
+          <button class="cube-preset-btn" onclick="cubeLoadPreset(this,3)">✏️ 自由搭建</button>
         </div>
 
-        <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
-          <!-- isometric preview canvas -->
-          <canvas id="cube-iso" width="160" height="160" style="border-radius:12px;background:rgba(139,92,246,0.05);border:1px solid rgba(139,92,246,0.15);flex-shrink:0"></canvas>
+        <!-- 主体：3D 画布（全宽居顶） -->
+        <canvas id="cube-iso" width="420" height="260"
+          style="border-radius:14px;background:rgba(139,92,246,0.05);border:1px solid rgba(139,92,246,0.18);display:block;width:100%;max-width:420px;margin:0 auto"></canvas>
 
+        <!-- 旋转控制 -->
+        <div style="display:flex;gap:10px;justify-content:center;align-items:center;margin-top:10px">
+          <button class="cube-ctrl-btn" onclick="cubeRotate(-1)">◀ 旋转</button>
+          <span id="cube-rot-label" style="font-size:13px;color:var(--muted2);min-width:72px;text-align:center">正面视角</span>
+          <button class="cube-ctrl-btn" onclick="cubeRotate(1)">旋转 ▶</button>
+        </div>
+
+        <!-- 层级选择按钮（动态生成） -->
+        <div style="margin-top:10px">
+          <span style="font-size:12px;color:var(--muted2);margin-right:8px">显示层级：</span>
+          <div id="cube-layer-btns" style="display:inline-flex;gap:6px;flex-wrap:wrap;vertical-align:middle"></div>
+        </div>
+
+        <!-- 底部：俯视图 + 计数说明 -->
+        <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;margin-top:14px">
+          <div>
+            <div style="font-size:12px;color:var(--muted2);margin-bottom:6px">俯视图（数字 = 该位置叠了几层）</div>
+            <div id="cube-topgrid" style="display:inline-grid;grid-template-columns:repeat(3,52px);gap:4px"></div>
+          </div>
           <div style="flex:1;min-width:160px">
-            <div style="font-size:12px;color:var(--muted2);margin-bottom:8px">👇 俯视图（点击格子改层数）：</div>
-            <div id="cube-topgrid" style="display:inline-grid;grid-template-columns:repeat(3,52px);gap:4px;margin-bottom:12px"></div>
-            <div style="font-size:14px;color:var(--muted);margin-top:4px">总块数：<strong id="cube-total" style="font-size:22px;color:#a78bfa">0</strong> 块</div>
+            <div id="cube-step-panel" style="background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-radius:10px;padding:10px;font-size:13px;line-height:2"></div>
+            <div style="margin-top:10px;font-size:14px;color:var(--muted)">
+              总块数：<strong id="cube-total" style="font-size:24px;color:#a78bfa">0</strong> 块
+            </div>
             <div id="cube-answer" style="margin-top:8px;font-size:13px;font-weight:700;display:none"></div>
-            <button style="margin-top:10px;padding:7px 14px;border-radius:9px;background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.3);color:#a78bfa;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit" onclick="cubeCheckAnswer()">✅ 检验答案</button>
+            <button style="margin-top:10px;padding:7px 16px;border-radius:9px;background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.3);color:#a78bfa;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit" onclick="cubeCheckAnswer()">✅ 检验答案</button>
           </div>
         </div>
       </div>
@@ -574,7 +627,7 @@ body {
   <!-- ═══════════════ S2 技巧 ═══════════════ -->
   <div id="s2" class="sec">
 
-    <!-- 方法1 -->
+    <!-- 方法1: 展开图折叠法 -->
     <div class="mcard" onclick="toggleMCard(this)">
       <div class="mcard-head">
         <div class="mcard-icon">✂️</div>
@@ -586,19 +639,89 @@ body {
       </div>
       <div class="mcard-body">
         <div class="mcard-body-inner">
-          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>一个展开图：T字形，上方1格，中间一排4格，下方1格（共6格）。能折成正方体吗？</div>
+          <div class="mcard-figure">
+            <div class="fig-label">🎯 小挑战：这个T字展开图能折成正方体吗？</div>
+            <svg viewBox="0 0 220 140" width="100%" style="max-width:260px">
+              <!-- T-shape: middle row of 4, top 1, bottom 1 -->
+              <!-- middle row: y=55, x: 10,55,100,145 -->
+              <rect x="10" y="55" width="42" height="42" rx="4" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="1.5"/>
+              <text x="31" y="81" text-anchor="middle" font-size="11" fill="#f59e0b">前</text>
+              <rect x="57" y="55" width="42" height="42" rx="4" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="1.5"/>
+              <text x="78" y="81" text-anchor="middle" font-size="11" fill="#f59e0b">左</text>
+              <rect x="104" y="55" width="42" height="42" rx="4" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="1.5"/>
+              <text x="125" y="81" text-anchor="middle" font-size="11" fill="#f59e0b">后</text>
+              <rect x="151" y="55" width="42" height="42" rx="4" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="1.5"/>
+              <text x="172" y="81" text-anchor="middle" font-size="11" fill="#f59e0b">右</text>
+              <!-- top: above 2nd cell (x=57) -->
+              <rect x="57" y="8" width="42" height="42" rx="4" fill="rgba(239,68,68,0.15)" stroke="#ef4444" stroke-width="1.5"/>
+              <text x="78" y="34" text-anchor="middle" font-size="11" fill="#ef4444">上</text>
+              <!-- bottom: below 2nd cell (x=57) -->
+              <rect x="57" y="102" width="42" height="42" rx="4" fill="rgba(16,185,129,0.15)" stroke="#10b981" stroke-width="1.5"/>
+              <text x="78" y="128" text-anchor="middle" font-size="11" fill="#10b981">下</text>
+              <text x="205" y="80" text-anchor="middle" font-size="22" fill="#94a3b8">?</text>
+            </svg>
+          </div>
           <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms1')">👆 看解法</button>
           <div id="ms1">
-            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">1</div><div class="step-content"><strong>数格子</strong>：共 6 格 ✅（正方体恰好 6 个面，数量正确）</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">2</div><div class="step-content"><strong>标对面</strong>：中间一排从左到右标为前、左、后、右；上方是上，下方是下。前↔后，左↔右，上↔下，没有矛盾 ✅</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">3</div><div class="step-content"><strong>结论</strong>：T字形（上+中4+下）是 11 种展开图之一，<strong>可以折成正方体</strong> ✅</div></div>
-            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'展开图折叠法：先数格子，6个才对。再标对面，前对后，左对右，上对下。没有矛盾就能折叠。T字形是合法展开图，可以折成正方体！')">🔊 听讲解</button>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 100" width="100%">
+                  <text x="80" y="14" text-anchor="middle" font-size="11" fill="#94a3b8">第一步：数格子</text>
+                  <!-- 6 small squares -->
+                  <rect class="sv" x="10" y="24" width="22" height="22" rx="4" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="1.5" style="animation-delay:0s"/>
+                  <rect class="sv" x="36" y="24" width="22" height="22" rx="4" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="1.5" style="animation-delay:.08s"/>
+                  <rect class="sv" x="62" y="24" width="22" height="22" rx="4" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="1.5" style="animation-delay:.16s"/>
+                  <rect class="sv" x="88" y="24" width="22" height="22" rx="4" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="1.5" style="animation-delay:.24s"/>
+                  <rect class="sv" x="114" y="24" width="22" height="22" rx="4" fill="rgba(239,68,68,0.2)" stroke="#ef4444" stroke-width="1.5" style="animation-delay:.32s"/>
+                  <rect class="sv" x="140" y="24" width="22" height="22" rx="4" fill="rgba(16,185,129,0.2)" stroke="#10b981" stroke-width="1.5" style="animation-delay:.4s"/>
+                  <rect class="sv pop" x="30" y="62" width="100" height="26" rx="7" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="1.5" style="animation-delay:.55s"/>
+                  <text class="sv" x="80" y="79" text-anchor="middle" font-size="14" font-weight="700" fill="#f59e0b" style="animation-delay:.65s">共 6 格 ✅</text>
+                </svg>
+              </div>
+              <div class="step-label">① 数格子：共 <strong>6 格</strong>，正方体有 6 个面 ✅</div>
+            </div>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 110" width="100%">
+                  <text x="80" y="14" text-anchor="middle" font-size="11" fill="#94a3b8">第二步：标对面</text>
+                  <!-- horizontal row: 前左后右 -->
+                  <rect x="5" y="25" width="30" height="25" rx="4" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="1"/>
+                  <text x="20" y="42" text-anchor="middle" font-size="10" fill="#f59e0b">前</text>
+                  <rect x="40" y="25" width="30" height="25" rx="4" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="1"/>
+                  <text x="55" y="42" text-anchor="middle" font-size="10" fill="#f59e0b">左</text>
+                  <rect x="75" y="25" width="30" height="25" rx="4" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="1"/>
+                  <text x="90" y="42" text-anchor="middle" font-size="10" fill="#f59e0b">后</text>
+                  <rect x="110" y="25" width="30" height="25" rx="4" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="1"/>
+                  <text x="125" y="42" text-anchor="middle" font-size="10" fill="#f59e0b">右</text>
+                  <!-- arrows: 前↔后 -->
+                  <line class="sv sv-draw" pathLength="1" x1="35" y1="60" x2="75" y2="60" stroke="#ef4444" stroke-width="1.5" marker-end="url(#a4)" style="animation-delay:.1s"/>
+                  <text class="sv" x="55" y="72" text-anchor="middle" font-size="10" fill="#ef4444" style="animation-delay:.2s">前↔后</text>
+                  <line class="sv sv-draw" pathLength="1" x1="55" y1="80" x2="125" y2="80" stroke="#a78bfa" stroke-width="1.5" style="animation-delay:.3s"/>
+                  <text class="sv" x="90" y="95" text-anchor="middle" font-size="10" fill="#a78bfa" style="animation-delay:.4s">左↔右，上↔下</text>
+                </svg>
+              </div>
+              <div class="step-label">② 标对面：前↔后，左↔右，上↔下，<strong>无矛盾</strong></div>
+            </div>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 100" width="100%">
+                  <!-- 3D cube outline (simple isometric) -->
+                  <polygon points="80,15 120,35 120,75 80,55" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="1.5"/>
+                  <polygon points="80,15 40,35 40,75 80,55" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1.5"/>
+                  <polygon points="40,35 80,15 120,35 80,55" fill="rgba(245,158,11,0.3)" stroke="#f59e0b" stroke-width="1.5"/>
+                  <rect class="sv pop" x="25" y="75" width="110" height="22" rx="7" fill="rgba(16,185,129,0.2)" stroke="#10b981" stroke-width="1.5" style="animation-delay:.3s"/>
+                  <text class="sv" x="80" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="#10b981" style="animation-delay:.4s">可以折成正方体 ✅</text>
+                </svg>
+              </div>
+              <div class="step-label">③ 结论：T字形是合法展开图，<strong>可以折叠 ✅</strong></div>
+            </div>
+            <button class="va-btn" style="flex-basis:100%;margin-top:4px" onclick="event.stopPropagation();tv(this,'展开图折叠法：先数格子，6个才对。再标对面，前对后，左对右，上对下。没有矛盾就能折叠。T字形是合法展开图，可以折成正方体！')">🔊 听讲解</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 方法2 -->
+    <!-- 方法2: 三视图还原法 -->
     <div class="mcard" onclick="toggleMCard(this)">
       <div class="mcard-head">
         <div class="mcard-icon">👁️</div>
@@ -610,19 +733,68 @@ body {
       </div>
       <div class="mcard-body">
         <div class="mcard-body-inner">
-          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>正视图是圆形，侧视图是圆形，俯视图也是圆形。这是什么立体图形？</div>
+          <div class="mcard-figure">
+            <div class="fig-label">🎯 小挑战：三个视图都是圆，是什么立体图形？</div>
+            <svg viewBox="0 0 260 90" width="100%" style="max-width:300px">
+              <!-- 3 view frames -->
+              <rect x="5" y="10" width="70" height="70" rx="8" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1"/>
+              <circle cx="40" cy="45" r="26" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="1.5"/>
+              <text x="40" y="84" text-anchor="middle" font-size="10" fill="#f59e0b">正视图</text>
+              <rect x="95" y="10" width="70" height="70" rx="8" fill="rgba(239,68,68,0.1)" stroke="#ef4444" stroke-width="1"/>
+              <circle cx="130" cy="45" r="26" fill="rgba(239,68,68,0.15)" stroke="#ef4444" stroke-width="1.5"/>
+              <text x="130" y="84" text-anchor="middle" font-size="10" fill="#ef4444">侧视图</text>
+              <rect x="185" y="10" width="70" height="70" rx="8" fill="rgba(16,185,129,0.1)" stroke="#10b981" stroke-width="1"/>
+              <circle cx="220" cy="45" r="26" fill="rgba(16,185,129,0.15)" stroke="#10b981" stroke-width="1.5"/>
+              <text x="220" y="84" text-anchor="middle" font-size="10" fill="#10b981">俯视图</text>
+            </svg>
+          </div>
           <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms2')">👆 看解法</button>
           <div id="ms2">
-            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">1</div><div class="step-content"><strong>正视图是圆</strong>：从正面看是圆，说明正面的轮廓是圆形</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">2</div><div class="step-content"><strong>三个方向都是圆</strong>：无论从哪个角度看都是圆 → 每个方向的截面都是圆形</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">3</div><div class="step-content">唯一满足"三视图都是圆"的立体图形就是 <strong>球体</strong> ⚽ ✅</div></div>
-            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'三视图还原：正面、侧面、上面看都是圆形，说明每个方向截面都是圆。只有球体才能做到！三个方向全是圆，答案就是球！')">🔊 听讲解</button>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 100" width="100%">
+                  <text x="80" y="14" text-anchor="middle" font-size="11" fill="#94a3b8">正视图 = 圆</text>
+                  <rect x="30" y="22" width="100" height="50" rx="6" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1"/>
+                  <circle class="sv" cx="80" cy="47" r="20" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="2" style="animation-delay:.1s"/>
+                  <text class="sv" x="80" y="85" text-anchor="middle" font-size="11" fill="#f59e0b" style="animation-delay:.25s">正面轮廓是圆形</text>
+                </svg>
+              </div>
+              <div class="step-label">① 正视图是圆：正面轮廓<strong>是圆</strong></div>
+            </div>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 110" width="100%">
+                  <text x="80" y="14" text-anchor="middle" font-size="11" fill="#94a3b8">三个方向全是圆</text>
+                  <circle class="sv" cx="35" cy="50" r="18" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="1.5" style="animation-delay:0s"/>
+                  <text class="sv" x="35" y="78" text-anchor="middle" font-size="9" fill="#f59e0b" style="animation-delay:.05s">正</text>
+                  <circle class="sv" cx="80" cy="50" r="18" fill="rgba(239,68,68,0.15)" stroke="#ef4444" stroke-width="1.5" style="animation-delay:.2s"/>
+                  <text class="sv" x="80" y="78" text-anchor="middle" font-size="9" fill="#ef4444" style="animation-delay:.25s">侧</text>
+                  <circle class="sv" cx="125" cy="50" r="18" fill="rgba(16,185,129,0.15)" stroke="#10b981" stroke-width="1.5" style="animation-delay:.4s"/>
+                  <text class="sv" x="125" y="78" text-anchor="middle" font-size="9" fill="#10b981" style="animation-delay:.45s">俯</text>
+                  <text class="sv" x="80" y="100" text-anchor="middle" font-size="11" fill="#94a3b8" style="animation-delay:.6s">每方向截面都是圆</text>
+                </svg>
+              </div>
+              <div class="step-label">② 三个方向看都是圆 → 每方向截面都是圆</div>
+            </div>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 100" width="100%">
+                  <circle class="sv" cx="80" cy="42" r="32" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="2" style="animation-delay:.1s"/>
+                  <circle class="sv" cx="80" cy="42" r="20" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1" style="animation-delay:.2s"/>
+                  <circle class="sv" cx="80" cy="42" r="8" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="1" style="animation-delay:.3s"/>
+                  <rect class="sv pop" x="20" y="80" width="120" height="18" rx="6" fill="rgba(16,185,129,0.2)" stroke="#10b981" stroke-width="1.5" style="animation-delay:.45s"/>
+                  <text class="sv" x="80" y="93" text-anchor="middle" font-size="12" font-weight="700" fill="#10b981" style="animation-delay:.55s">⚽ 球体 ✅</text>
+                </svg>
+              </div>
+              <div class="step-label">③ 唯一满足三圆的立体：<strong>球体 ⚽</strong></div>
+            </div>
+            <button class="va-btn" style="flex-basis:100%;margin-top:4px" onclick="event.stopPropagation();tv(this,'三视图还原：正面、侧面、上面看都是圆形，说明每个方向截面都是圆。只有球体才能做到！三个方向全是圆，答案就是球！')">🔊 听讲解</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 方法3 -->
+    <!-- 方法3: 分层计数法 -->
     <div class="mcard" onclick="toggleMCard(this)">
       <div class="mcard-head">
         <div class="mcard-icon">🔢</div>
@@ -634,19 +806,85 @@ body {
       </div>
       <div class="mcard-body">
         <div class="mcard-body-inner">
-          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>用小正方体搭一个楼梯形状：第一层 3 个，第二层 2 个（叠在右边2格上），第三层 1 个（叠在最右边）。共几个小正方体？</div>
+          <div class="mcard-figure">
+            <div class="fig-label">🎯 小挑战：楼梯形状共有几个小正方体？</div>
+            <svg viewBox="0 0 200 130" width="100%" style="max-width:240px">
+              <!-- staircase side view: 3 columns of height 3, 2, 1 -->
+              <!-- column 1 (left): 3 high -->
+              <rect x="10" y="10" width="40" height="40" rx="3" fill="rgba(239,68,68,0.15)" stroke="#ef4444" stroke-width="1.5"/>
+              <rect x="10" y="54" width="40" height="40" rx="3" fill="rgba(239,68,68,0.2)" stroke="#ef4444" stroke-width="1.5"/>
+              <rect x="10" y="98" width="40" height="40" rx="3" fill="rgba(239,68,68,0.25)" stroke="#ef4444" stroke-width="1.5"/>
+              <text x="25" y="122" text-anchor="middle" font-size="10" fill="#ef4444">第1列</text>
+              <!-- column 2: 2 high -->
+              <rect x="54" y="54" width="40" height="40" rx="3" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="1.5"/>
+              <rect x="54" y="98" width="40" height="40" rx="3" fill="rgba(245,158,11,0.25)" stroke="#f59e0b" stroke-width="1.5"/>
+              <text x="74" y="122" text-anchor="middle" font-size="10" fill="#f59e0b">第2列</text>
+              <!-- column 3: 1 high -->
+              <rect x="98" y="98" width="40" height="40" rx="3" fill="rgba(16,185,129,0.25)" stroke="#10b981" stroke-width="1.5"/>
+              <text x="118" y="122" text-anchor="middle" font-size="10" fill="#10b981">第3列</text>
+              <!-- labels -->
+              <text x="160" y="30" font-size="11" fill="#ef4444">第1层</text>
+              <text x="160" y="75" font-size="11" fill="#f59e0b">第2层</text>
+              <text x="160" y="118" font-size="11" fill="#10b981">第3层</text>
+              <line x1="155" y1="25" x2="152" y2="25" stroke="#64748b" stroke-width="1"/>
+            </svg>
+          </div>
           <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms3')">👆 看解法</button>
           <div id="ms3">
-            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">1</div><div class="step-content"><strong>第一层</strong>（底层）：3 个小正方体，横排放置</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">2</div><div class="step-content"><strong>第二层</strong>：叠在右边 2 个格子上方 → 2 个小正方体</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">3</div><div class="step-content"><strong>第三层</strong>：叠在最右边 1 个格子上方 → 1 个小正方体<br>总计：3 + 2 + 1 = <strong>6 个</strong> ✅</div></div>
-            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'分层计数：底层3个，第二层2个，第三层1个，加起来3加2加1等于6个！楼梯形状，每层少一个，这是三角数的规律！')">🔊 听讲解</button>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 100" width="100%">
+                  <text x="80" y="14" text-anchor="middle" font-size="11" fill="#94a3b8">第一层（底层）</text>
+                  <!-- 3 cubes in a row highlighted -->
+                  <rect class="sv" x="15" y="28" width="36" height="36" rx="5" fill="rgba(16,185,129,0.25)" stroke="#10b981" stroke-width="2" style="animation-delay:0s"/>
+                  <rect class="sv" x="55" y="28" width="36" height="36" rx="5" fill="rgba(16,185,129,0.25)" stroke="#10b981" stroke-width="2" style="animation-delay:.12s"/>
+                  <rect class="sv" x="95" y="28" width="36" height="36" rx="5" fill="rgba(16,185,129,0.25)" stroke="#10b981" stroke-width="2" style="animation-delay:.24s"/>
+                  <text class="sv" x="33" y="52" text-anchor="middle" font-size="14" font-weight="700" fill="#10b981" style="animation-delay:.05s">1</text>
+                  <text class="sv" x="73" y="52" text-anchor="middle" font-size="14" font-weight="700" fill="#10b981" style="animation-delay:.17s">2</text>
+                  <text class="sv" x="113" y="52" text-anchor="middle" font-size="14" font-weight="700" fill="#10b981" style="animation-delay:.29s">3</text>
+                  <rect class="sv pop" x="40" y="74" width="80" height="22" rx="6" fill="rgba(16,185,129,0.2)" stroke="#10b981" stroke-width="1.5" style="animation-delay:.45s"/>
+                  <text class="sv" x="80" y="89" text-anchor="middle" font-size="13" font-weight="700" fill="#10b981" style="animation-delay:.55s">= 3 个</text>
+                </svg>
+              </div>
+              <div class="step-label">① 第一层（底层）：<strong>3 个</strong>小正方体</div>
+            </div>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 100" width="100%">
+                  <text x="80" y="14" text-anchor="middle" font-size="11" fill="#94a3b8">第二层</text>
+                  <!-- 2 cubes -->
+                  <rect x="15" y="28" width="36" height="36" rx="5" fill="rgba(100,116,139,0.15)" stroke="#475569" stroke-width="1" stroke-dasharray="4 3"/>
+                  <rect x="55" y="28" width="36" height="36" rx="5" fill="rgba(100,116,139,0.15)" stroke="#475569" stroke-width="1" stroke-dasharray="4 3"/>
+                  <rect x="95" y="28" width="36" height="36" rx="5" fill="rgba(100,116,139,0.15)" stroke="#475569" stroke-width="1" stroke-dasharray="4 3"/>
+                  <rect class="sv" x="55" y="28" width="36" height="36" rx="5" fill="rgba(245,158,11,0.25)" stroke="#f59e0b" stroke-width="2" style="animation-delay:0s"/>
+                  <rect class="sv" x="95" y="28" width="36" height="36" rx="5" fill="rgba(245,158,11,0.25)" stroke="#f59e0b" stroke-width="2" style="animation-delay:.15s"/>
+                  <rect class="sv pop" x="40" y="74" width="80" height="22" rx="6" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="1.5" style="animation-delay:.35s"/>
+                  <text class="sv" x="80" y="89" text-anchor="middle" font-size="13" font-weight="700" fill="#f59e0b" style="animation-delay:.45s">= 2 个</text>
+                </svg>
+              </div>
+              <div class="step-label">② 第二层（右侧叠）：<strong>2 个</strong></div>
+            </div>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 100" width="100%">
+                  <text x="80" y="14" text-anchor="middle" font-size="11" fill="#94a3b8">第三层 + 合计</text>
+                  <!-- 1 cube top right + sum -->
+                  <rect class="sv" x="95" y="24" width="36" height="36" rx="5" fill="rgba(239,68,68,0.25)" stroke="#ef4444" stroke-width="2" style="animation-delay:0s"/>
+                  <text class="sv" x="113" y="46" text-anchor="middle" font-size="14" font-weight="700" fill="#ef4444" style="animation-delay:.1s">1</text>
+                  <text class="sv" x="80" y="72" text-anchor="middle" font-size="12" fill="#94a3b8" style="animation-delay:.25s">3 + 2 + 1 =</text>
+                  <rect class="sv pop" x="25" y="80" width="110" height="18" rx="6" fill="rgba(16,185,129,0.2)" stroke="#10b981" stroke-width="1.5" style="animation-delay:.4s"/>
+                  <text class="sv" x="80" y="93" text-anchor="middle" font-size="14" font-weight="800" fill="#10b981" style="animation-delay:.5s">共 6 个 ✅</text>
+                </svg>
+              </div>
+              <div class="step-label">③ 第三层 1 个，合计 <strong>3+2+1 = 6 个 ✅</strong></div>
+            </div>
+            <button class="va-btn" style="flex-basis:100%;margin-top:4px" onclick="event.stopPropagation();tv(this,'分层计数：底层3个，第二层2个，第三层1个，加起来3加2加1等于6个！楼梯形状，每层少一个，这是三角数的规律！')">🔊 听讲解</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 方法4 -->
+    <!-- 方法4: 对面识别法 -->
     <div class="mcard" onclick="toggleMCard(this)">
       <div class="mcard-head">
         <div class="mcard-icon">🎲</div>
@@ -658,13 +896,85 @@ body {
       </div>
       <div class="mcard-body">
         <div class="mcard-body-inner">
-          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>一个正方体的 6 个面标 1~6，掷骰子时，1 的对面是 6，2 的对面是 5，3 的对面是 4。在十字形展开图中，如何快速找对面？</div>
+          <div class="mcard-figure">
+            <div class="fig-label">🎯 小挑战：十字展开图中，哪些面互为对面？</div>
+            <svg viewBox="0 0 220 150" width="100%" style="max-width:260px">
+              <!-- cross shape: middle row 4 + top + bottom -->
+              <!-- middle row -->
+              <rect x="5" y="55" width="40" height="40" rx="4" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="1.5"/>
+              <text x="25" y="80" text-anchor="middle" font-size="14" font-weight="700" fill="#f59e0b">1</text>
+              <rect x="50" y="55" width="40" height="40" rx="4" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="1.5"/>
+              <text x="70" y="80" text-anchor="middle" font-size="14" font-weight="700" fill="#f59e0b">2</text>
+              <rect x="95" y="55" width="40" height="40" rx="4" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="1.5"/>
+              <text x="115" y="80" text-anchor="middle" font-size="14" font-weight="700" fill="#f59e0b">3</text>
+              <rect x="140" y="55" width="40" height="40" rx="4" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="1.5"/>
+              <text x="160" y="80" text-anchor="middle" font-size="14" font-weight="700" fill="#f59e0b">4</text>
+              <!-- top: above 2nd -->
+              <rect x="50" y="10" width="40" height="40" rx="4" fill="rgba(239,68,68,0.15)" stroke="#ef4444" stroke-width="1.5"/>
+              <text x="70" y="35" text-anchor="middle" font-size="14" font-weight="700" fill="#ef4444">5</text>
+              <!-- bottom: below 2nd -->
+              <rect x="50" y="100" width="40" height="40" rx="4" fill="rgba(16,185,129,0.15)" stroke="#10b981" stroke-width="1.5"/>
+              <text x="70" y="125" text-anchor="middle" font-size="14" font-weight="700" fill="#10b981">6</text>
+              <text x="195" y="80" text-anchor="middle" font-size="28" fill="#64748b">?</text>
+            </svg>
+          </div>
           <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms4')">👆 看解法</button>
           <div id="ms4">
-            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">1</div><div class="step-content"><strong>十字形展开图规律</strong>：中间一横排（4个面）中，<strong>相隔一格的两个面是对面</strong>（第1和第3，第2和第4互为对面）</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">2</div><div class="step-content"><strong>上下延伸的面</strong>：与中间横排的上下各一格，<strong>与延伸出来的格子对面</strong>是横排中间那个格子</div></div>
-            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">3</div><div class="step-content">口诀：<strong>"横排间隔是对面，上下突出找中间"</strong> ✅ 掌握这个，展开图题不怕了！</div></div>
-            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'对面识别口诀：横排中间隔一个就是对面。上方突出的面，对面是横排正中那个。下方突出同理。记住这个口诀，遇到展开图找对面，秒解！')">🔊 听讲解</button>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 110" width="100%">
+                  <text x="80" y="14" text-anchor="middle" font-size="11" fill="#94a3b8">横排规律</text>
+                  <!-- row of 4 -->
+                  <rect x="5" y="22" width="28" height="28" rx="4" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="1.5"/>
+                  <text x="19" y="40" text-anchor="middle" font-size="14" font-weight="700" fill="#f59e0b">1</text>
+                  <rect x="37" y="22" width="28" height="28" rx="4" fill="rgba(100,116,139,0.15)" stroke="#475569" stroke-width="1"/>
+                  <text x="51" y="40" text-anchor="middle" font-size="14" fill="#64748b">2</text>
+                  <rect x="69" y="22" width="28" height="28" rx="4" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="1.5"/>
+                  <text x="83" y="40" text-anchor="middle" font-size="14" font-weight="700" fill="#f59e0b">3</text>
+                  <rect x="101" y="22" width="28" height="28" rx="4" fill="rgba(100,116,139,0.15)" stroke="#475569" stroke-width="1"/>
+                  <text x="115" y="40" text-anchor="middle" font-size="14" fill="#64748b">4</text>
+                  <!-- arc connecting 1 and 3 -->
+                  <path class="sv sv-draw" pathLength="1" d="M19,22 Q51,5 83,22" fill="none" stroke="#ef4444" stroke-width="1.5" style="animation-delay:.1s"/>
+                  <text class="sv" x="51" y="10" text-anchor="middle" font-size="10" fill="#ef4444" style="animation-delay:.25s">对面</text>
+                  <text class="sv" x="80" y="75" text-anchor="middle" font-size="11" fill="#94a3b8" style="animation-delay:.4s">间隔一格 = 对面</text>
+                  <text class="sv" x="80" y="92" text-anchor="middle" font-size="11" fill="#f59e0b" style="animation-delay:.5s">1↔3，2↔4</text>
+                </svg>
+              </div>
+              <div class="step-label">① 横排中，<strong>间隔一格</strong>的两面互为对面（1↔3，2↔4）</div>
+            </div>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 110" width="100%">
+                  <text x="80" y="14" text-anchor="middle" font-size="11" fill="#94a3b8">上下突出规律</text>
+                  <!-- mini cross -->
+                  <rect x="52" y="22" width="28" height="28" rx="4" fill="rgba(239,68,68,0.2)" stroke="#ef4444" stroke-width="1.5"/>
+                  <text x="66" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#ef4444">5</text>
+                  <rect x="5" y="54" width="28" height="28" rx="4" fill="rgba(100,116,139,0.1)" stroke="#475569" stroke-width="1"/>
+                  <text x="19" y="72" text-anchor="middle" font-size="12" fill="#64748b">1</text>
+                  <rect x="37" y="54" width="28" height="28" rx="4" fill="rgba(245,158,11,0.25)" stroke="#f59e0b" stroke-width="2"/>
+                  <text x="51" y="72" text-anchor="middle" font-size="13" font-weight="700" fill="#f59e0b">2</text>
+                  <rect x="69" y="54" width="28" height="28" rx="4" fill="rgba(100,116,139,0.1)" stroke="#475569" stroke-width="1"/>
+                  <text x="83" y="72" text-anchor="middle" font-size="12" fill="#64748b">3</text>
+                  <!-- arrow: 5 ↔ 2 -->
+                  <line class="sv sv-draw" pathLength="1" x1="66" y1="50" x2="55" y2="54" stroke="#a78bfa" stroke-width="1.5" style="animation-delay:.15s"/>
+                  <text class="sv" x="80" y="98" text-anchor="middle" font-size="11" fill="#a78bfa" style="animation-delay:.3s">5 的对面是 2（正中）</text>
+                </svg>
+              </div>
+              <div class="step-label">② 上下突出的面，对面是横排<strong>正中那格</strong>（5↔2）</div>
+            </div>
+            <div class="step">
+              <div class="step-vis">
+                <svg viewBox="0 0 160 100" width="100%">
+                  <rect x="5" y="10" width="150" height="28" rx="7" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="1"/>
+                  <text x="80" y="29" text-anchor="middle" font-size="12" font-weight="700" fill="#f59e0b">横排间隔是对面</text>
+                  <rect class="sv pop" x="5" y="44" width="150" height="28" rx="7" fill="rgba(16,185,129,0.15)" stroke="#10b981" stroke-width="1" style="animation-delay:.3s"/>
+                  <text class="sv" x="80" y="63" text-anchor="middle" font-size="12" font-weight="700" fill="#10b981" style="animation-delay:.4s">上下突出找中间</text>
+                  <text class="sv" x="80" y="92" text-anchor="middle" font-size="11" fill="#94a3b8" style="animation-delay:.55s">记住口诀，秒解对面！✅</text>
+                </svg>
+              </div>
+              <div class="step-label">③ 口诀：<strong>横排间隔是对面，上下突出找中间</strong> ✅</div>
+            </div>
+            <button class="va-btn" style="flex-basis:100%;margin-top:4px" onclick="event.stopPropagation();tv(this,'对面识别口诀：横排中间隔一个就是对面。上方突出的面，对面是横排正中那个。下方突出同理。记住这个口诀，遇到展开图找对面，秒解！')">🔊 听讲解</button>
           </div>
         </div>
       </div>
@@ -843,7 +1153,8 @@ function toggleMCard(card) {
 // ── Reveal steps ──
 function revealSteps(id) {
   const c = document.getElementById(id);
-  c.querySelectorAll('.step').forEach((s, i) => setTimeout(() => s.classList.add('show'), i * 380));
+  c.querySelectorAll('.step').forEach(s => { s.classList.remove('show'); void s.offsetHeight; });
+  c.querySelectorAll('.step').forEach((s, i) => setTimeout(() => s.classList.add('show'), i * 520));
   const rb = c.previousElementSibling;
   if (rb && rb.classList.contains('reveal-btn')) rb.style.display = 'none';
 }
@@ -1212,84 +1523,104 @@ function netGuess(answer) {
 }
 renderNet(0);
 
-/* ── 3. 三视图 ── Canvas drawing ── */
+/* ── 3. 三视图 ── */
 let currentViewDir = 'front', currentViewShape = 'cube';
 
-function vRect(ctx, x,y,w,h) { ctx.beginPath(); ctx.rect(x,y,w,h); ctx.fill(); ctx.stroke(); }
-const VIEW_DATA = {
+// 体素定义 [col, row, layer]，col=左右，row=前后(0=前)，layer=高度
+const VIEW_VOXELS = {
   cube: {
-    front:  { label:'正方体·正视图 = 正方形', draw: ctx => { ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(16,185,129,0.12)'; vRect(ctx,30,30,80,80); }},
-    side:   { label:'正方体·侧视图 = 正方形', draw: ctx => { ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(16,185,129,0.12)'; vRect(ctx,30,30,80,80); }},
-    top:    { label:'正方体·俯视图 = 正方形', draw: ctx => { ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(16,185,129,0.12)'; vRect(ctx,30,30,80,80); }},
-  },
-  cylinder: {
-    front:  { label:'圆柱·正视图 = 长方形', draw: ctx => { ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(16,185,129,0.12)'; vRect(ctx,30,20,80,100); }},
-    side:   { label:'圆柱·侧视图 = 长方形', draw: ctx => { ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(16,185,129,0.12)'; vRect(ctx,30,20,80,100); }},
-    top:    { label:'圆柱·俯视图 = 圆形', draw: ctx => { ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(16,185,129,0.12)'; ctx.beginPath(); ctx.arc(70,70,50,0,Math.PI*2); ctx.fill(); ctx.stroke(); }},
-  },
-  cone: {
-    front:  { label:'圆锥·正视图 = 三角形', draw: ctx => { ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(16,185,129,0.12)'; ctx.beginPath(); ctx.moveTo(70,15); ctx.lineTo(20,115); ctx.lineTo(120,115); ctx.closePath(); ctx.fill(); ctx.stroke(); }},
-    side:   { label:'圆锥·侧视图 = 三角形', draw: ctx => { ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(16,185,129,0.12)'; ctx.beginPath(); ctx.moveTo(70,15); ctx.lineTo(20,115); ctx.lineTo(120,115); ctx.closePath(); ctx.fill(); ctx.stroke(); }},
-    top:    { label:'圆锥·俯视图 = 圆形+中心点', draw: ctx => { ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(16,185,129,0.12)'; ctx.beginPath(); ctx.arc(70,70,50,0,Math.PI*2); ctx.fill(); ctx.stroke(); ctx.fillStyle='#6ee7b7'; ctx.beginPath(); ctx.arc(70,70,5,0,Math.PI*2); ctx.fill(); }},
+    // 2×2×2 正方体
+    voxels: [
+      [0,0,0],[1,0,0],[0,1,0],[1,1,0],
+      [0,0,1],[1,0,1],[0,1,1],[1,1,1]
+    ],
+    col: { top:'#a7f3d0', left:'#10b981', right:'#047857' },
+    labels: { front:'正方形（2×2）', side:'正方形（2×2）', top:'正方形（2×2）' },
+    tip: '正方体三视图三个方向全是正方形！'
   },
   lshape: {
-    front:  { label:'L形·正视图 = 2格高L形', draw: ctx => { ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(16,185,129,0.12)'; vRect(ctx,25,25,40,90); vRect(ctx,65,65,50,50); }},
-    side:   { label:'L形·侧视图 = 2格高矩形', draw: ctx => { ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(16,185,129,0.12)'; vRect(ctx,30,25,80,90); }},
-    top:    { label:'L形·俯视图 = L形平面', draw: ctx => { ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(16,185,129,0.12)'; vRect(ctx,25,25,45,90); vRect(ctx,70,65,45,50); }},
-  },
+    // L形积木：底层5块（col×row的L）+ 竖向柱再叠2层
+    //   底层(l=0): (0,0)(0,1)(0,2)(1,2)(2,2)
+    //   第2层(l=1): (0,0)(0,1)(0,2)
+    //   第3层(l=2): (0,0)
+    voxels: [
+      [0,0,0],[0,1,0],[0,2,0],[1,2,0],[2,2,0],
+      [0,0,1],[0,1,1],[0,2,1],
+      [0,0,2]
+    ],
+    col: { top:'#ddd6fe', left:'#8b5cf6', right:'#5b21b6' },
+    labels: {
+      front: '正视图：阶梯形（从正前方看）',
+      side:  '侧视图：矩形 3×3（从左侧看）',
+      top:   '俯视图：L 形平面（从上方看）'
+    },
+    tip: 'L形积木正视图是阶梯形，侧视图是长方形，俯视图是L形！'
+  }
 };
 
-// Isometric 3D preview drawings for each shape
-const ISO_DRAWS = {
-  cube: ctx => {
-    const c='#6ee7b7'; drawIsoCube(ctx,55,45,50,50,50,c);
+// 圆柱/圆锥用画布描绘，不做体素化
+const VIEW_SMOOTH = {
+  cylinder: {
+    labels: { front:'长方形', side:'长方形', top:'圆形' },
+    tip: '圆柱正视图和侧视图是长方形，俯视图是圆形！',
+    draw3d(ctx,W,H) {
+      const cx=W/2, r=58, top=H*0.16, h=H*0.62;
+      // 侧面
+      ctx.fillStyle='rgba(16,185,129,0.18)';
+      ctx.beginPath(); ctx.moveTo(cx-r,top); ctx.lineTo(cx-r,top+h);
+      ctx.arc(cx,top+h,r,Math.PI,0,true); ctx.lineTo(cx+r,top); ctx.closePath(); ctx.fill();
+      // 侧面轮廓
+      ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2;
+      ctx.beginPath(); ctx.moveTo(cx-r,top); ctx.lineTo(cx-r,top+h); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx+r,top); ctx.lineTo(cx+r,top+h); ctx.stroke();
+      // 底椭圆
+      ctx.fillStyle='rgba(16,185,129,0.25)';
+      ctx.beginPath(); ctx.ellipse(cx,top+h,r,r*0.32,0,0,Math.PI*2); ctx.fill(); ctx.stroke();
+      // 顶椭圆
+      ctx.fillStyle='rgba(16,185,129,0.35)';
+      ctx.beginPath(); ctx.ellipse(cx,top,r,r*0.32,0,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    },
+    draw2d(ctx,W,H,dir) {
+      ctx.strokeStyle='#6ee7b7'; ctx.fillStyle='rgba(16,185,129,0.18)'; ctx.lineWidth=2;
+      if(dir==='top') {
+        ctx.beginPath(); ctx.arc(W/2,H/2,60,0,Math.PI*2); ctx.fill(); ctx.stroke();
+      } else {
+        ctx.beginPath(); ctx.rect(W/2-50,H/2-60,100,120); ctx.fill(); ctx.stroke();
+      }
+    }
   },
-  cylinder: ctx => {
-    const c='#6ee7b7', cx=70, r=40, top=30, h=80;
-    ctx.fillStyle=c+'18'; ctx.strokeStyle=c; ctx.lineWidth=2;
-    ctx.beginPath(); ctx.ellipse(cx,top,r,r*0.35,0,0,Math.PI*2); ctx.fill(); ctx.stroke();
-    ctx.fillStyle=c+'10';
-    ctx.beginPath(); ctx.moveTo(cx-r,top); ctx.lineTo(cx-r,top+h); ctx.arc(cx,top+h,r,Math.PI,0,true); ctx.lineTo(cx+r,top); ctx.closePath(); ctx.fill();
-    ctx.strokeStyle=c; ctx.lineWidth=2;
-    ctx.beginPath(); ctx.moveTo(cx-r,top); ctx.lineTo(cx-r,top+h); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(cx+r,top); ctx.lineTo(cx+r,top+h); ctx.stroke();
-    ctx.beginPath(); ctx.ellipse(cx,top+h,r,r*0.35,0,0,Math.PI*2); ctx.fill(); ctx.stroke();
-  },
-  cone: ctx => {
-    const c='#a78bfa', cx=70, r=45, tip=20, base=120;
-    ctx.fillStyle=c+'18'; ctx.strokeStyle=c; ctx.lineWidth=2;
-    ctx.beginPath(); ctx.ellipse(cx,base,r,r*0.3,0,0,Math.PI*2); ctx.fill(); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(cx-r,base); ctx.lineTo(cx,tip); ctx.lineTo(cx+r,base); ctx.fill();
-    ctx.strokeStyle=c; ctx.lineWidth=2;
-    ctx.beginPath(); ctx.moveTo(cx-r,base); ctx.lineTo(cx,tip); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(cx+r,base); ctx.lineTo(cx,tip); ctx.stroke();
-  },
-  lshape: ctx => {
-    const c='#6ee7b7';
-    drawIsoCube(ctx,30,60,40,40,40,c);
-    drawIsoCube(ctx,70,60,40,40,40,c);
-    drawIsoCube(ctx,30,20,40,40,40,c);
-  },
+  cone: {
+    labels: { front:'等腰三角形', side:'等腰三角形', top:'圆形 + 中心点' },
+    tip: '圆锥正视图和侧视图是三角形，俯视图是圆形加中心点！',
+    draw3d(ctx,W,H) {
+      const cx=W/2, r=60, tip=H*0.1, base=H*0.88;
+      ctx.fillStyle='rgba(167,139,250,0.18)';
+      ctx.beginPath(); ctx.moveTo(cx-r,base); ctx.lineTo(cx,tip); ctx.lineTo(cx+r,base); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle='#a78bfa'; ctx.lineWidth=2;
+      ctx.beginPath(); ctx.moveTo(cx-r,base); ctx.lineTo(cx,tip); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx+r,base); ctx.lineTo(cx,tip); ctx.stroke();
+      ctx.fillStyle='rgba(167,139,250,0.3)';
+      ctx.beginPath(); ctx.ellipse(cx,base,r,r*0.28,0,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    },
+    draw2d(ctx,W,H,dir) {
+      ctx.strokeStyle='#a78bfa'; ctx.fillStyle='rgba(167,139,250,0.2)'; ctx.lineWidth=2;
+      if(dir==='top') {
+        ctx.beginPath(); ctx.arc(W/2,H/2,60,0,Math.PI*2); ctx.fill(); ctx.stroke();
+        ctx.fillStyle='#a78bfa';
+        ctx.beginPath(); ctx.arc(W/2,H/2,5,0,Math.PI*2); ctx.fill();
+      } else {
+        ctx.beginPath(); ctx.moveTo(W/2,H/2-65); ctx.lineTo(W/2-60,H/2+60); ctx.lineTo(W/2+60,H/2+60); ctx.closePath(); ctx.fill(); ctx.stroke();
+      }
+    }
+  }
 };
 
-function drawIsoCube(ctx, x, y, w, h, d, color) {
-  const ux=w*0.5, uy=-w*0.25, vx=0, vy=h*0.5, wx=w, wy=w*0.25;
-  // top face
-  ctx.fillStyle=color+'25'; ctx.strokeStyle=color; ctx.lineWidth=1.8;
-  ctx.beginPath();
-  ctx.moveTo(x,y); ctx.lineTo(x+ux,y+uy); ctx.lineTo(x+ux+wx,y+uy+wy); ctx.lineTo(x+wx,y+wy); ctx.closePath();
-  ctx.fill(); ctx.stroke();
-  // left face
-  ctx.fillStyle=color+'15';
-  ctx.beginPath();
-  ctx.moveTo(x,y); ctx.lineTo(x,y+vy); ctx.lineTo(x+vx,y+vy+vy); ctx.lineTo(x+wx,y+wy+vy); ctx.lineTo(x+wx,y+wy); ctx.lineTo(x,y); ctx.closePath();
-  ctx.fill(); ctx.stroke();
-  // right face
-  ctx.fillStyle=color+'10';
-  ctx.beginPath();
-  ctx.moveTo(x+wx,y+wy); ctx.lineTo(x+wx,y+wy+vy); ctx.lineTo(x+ux+wx,y+uy+wy+vy); ctx.lineTo(x+ux+wx,y+uy+wy); ctx.closePath();
-  ctx.fill(); ctx.stroke();
-}
+// 视角文字说明
+const VIEW_DIR_INFO = {
+  front: { label:'从正前方看 →',  axisH:'左 ← 宽度 → 右', axisV:'下 ↓ 高度 ↑ 上' },
+  side:  { label:'从左侧面看 →',  axisH:'前 ← 深度 → 后', axisV:'下 ↓ 高度 ↑ 上' },
+  top:   { label:'从正上方俯视 ↓', axisH:'左 ← 宽度 → 右', axisV:'前 ← 深度 → 后' }
+};
 
 function selectView(btn, dir) {
   document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
@@ -1303,43 +1634,246 @@ function selectViewShape(btn, shape) {
   currentViewShape = shape;
   renderView();
 }
-function renderView() {
-  // Draw 3D preview
-  const c3 = document.getElementById('view-canvas-3d').getContext('2d');
-  c3.clearRect(0,0,140,140);
-  const isoFn = ISO_DRAWS[currentViewShape];
-  if (isoFn) isoFn(c3);
 
-  // Draw 2D view
-  const c2 = document.getElementById('view-canvas-2d').getContext('2d');
-  c2.clearRect(0,0,140,140);
-  const vd = VIEW_DATA[currentViewShape]?.[currentViewDir];
-  if (vd) {
-    vd.draw(c2);
-    document.getElementById('view-label').textContent = vd.label;
+function renderView() {
+  draw3DView();
+  draw2DView();
+  updateViewUI();
+}
+
+/* ─── 3D 预览 ─── */
+function draw3DView() {
+  const canvas = document.getElementById('view-canvas-3d');
+  const ctx = canvas.getContext('2d');
+  const W=canvas.width, H=canvas.height;
+  ctx.clearRect(0,0,W,H);
+
+  const smooth = VIEW_SMOOTH[currentViewShape];
+  if (smooth) { smooth.draw3d(ctx,W,H); drawViewArrow3D(ctx,W,H); return; }
+
+  const s = VIEW_VOXELS[currentViewShape];
+  drawVoxels3D(ctx, W, H, s.voxels, s.col);
+  drawViewArrow3D(ctx, W, H);
+}
+
+function drawVoxels3D(ctx, W, H, voxels, col) {
+  const hw=32, hh=16, dh=20;
+
+  // 包围盒自动居中
+  const minCR = Math.min(...voxels.map(v=>v[0]-v[1]));
+  const maxCR = Math.max(...voxels.map(v=>v[0]-v[1]));
+  const minCpR = Math.min(...voxels.map(v=>v[0]+v[1]));
+  const maxCpR = Math.max(...voxels.map(v=>v[0]+v[1]));
+  const maxL   = Math.max(...voxels.map(v=>v[2]));
+
+  const xMin = minCR*hw, xMax = maxCR*hw + 2*hw;
+  const yMin = minCpR*hh - maxL*dh - hh;
+  const yMax = maxCpR*hh + hh + dh;
+
+  const offX = (W-(xMax-xMin))/2 - xMin;
+  const offY = (H-(yMax-yMin))/2 - yMin;
+
+  // 画家算法：按 (col+row) 升序，相同时 row 降序，layer 升序
+  const sorted = [...voxels].sort((a,b)=>{
+    const sa=a[0]+a[1], sb=b[0]+b[1];
+    if(sa!==sb) return sa-sb;
+    if(a[1]!==b[1]) return b[1]-a[1];
+    return a[2]-b[2];
+  });
+
+  for(const [c,r,l] of sorted) {
+    const sx = offX + (c-r)*hw;
+    const sy = offY + (c+r)*hh - l*dh;
+    drawSolidCube(ctx, sx, sy, hw, hh, dh, col, 1);
   }
 }
+
+function drawViewArrow3D(ctx, W, H) {
+  // 在画布边缘绘制视角方向提示箭头
+  const dirs = {
+    front: { x:W/2, y:H-14, text:'▲ 正视图视线方向' },
+    side:  { x:14,  y:H/2,  text:'▶ 侧视' },
+    top:   { x:W/2, y:14,   text:'▼ 俯视' }
+  };
+  const d = dirs[currentViewDir];
+  ctx.save();
+  ctx.font = '11px "Noto Sans SC", sans-serif';
+  ctx.fillStyle = 'rgba(110,231,183,0.9)';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  // 绘制提示标签背景
+  const tw = ctx.measureText(d.text).width;
+  ctx.fillStyle = 'rgba(16,185,129,0.15)';
+  ctx.beginPath();
+  ctx.roundRect(d.x - tw/2 - 6, d.y - 9, tw+12, 18, 5);
+  ctx.fill();
+  ctx.fillStyle = '#6ee7b7';
+  ctx.fillText(d.text, d.x, d.y);
+  ctx.restore();
+}
+
+/* ─── 2D 投影 ─── */
+function draw2DView() {
+  const canvas = document.getElementById('view-canvas-2d');
+  const ctx = canvas.getContext('2d');
+  const W=canvas.width, H=canvas.height;
+  ctx.clearRect(0,0,W,H);
+
+  const smooth = VIEW_SMOOTH[currentViewShape];
+  if (smooth) { smooth.draw2d(ctx,W,H,currentViewDir); return; }
+
+  const s = VIEW_VOXELS[currentViewShape];
+  drawProjection2D(ctx, W, H, s.voxels, s.col, currentViewDir);
+}
+
+function drawProjection2D(ctx, W, H, voxels, col, dir) {
+  // 投影到 2D：前视 col×layer，侧视 row×layer，俯视 col×row
+  const proj = new Set();
+  let maxA=0, maxB=0;
+  for(const [c,r,l] of voxels) {
+    const [a,b] = dir==='front' ? [c,l] : dir==='side' ? [r,l] : [c,r];
+    proj.add(`${a},${b}`);
+    if(a>maxA) maxA=a;
+    if(b>maxB) maxB=b;
+  }
+
+  const pad = 14;
+  const cell = Math.min((W-pad*2)/(maxA+1), (H-pad*2)/(maxB+1));
+  const ox = (W - cell*(maxA+1)) / 2;
+  const oy = (H - cell*(maxB+1)) / 2;
+
+  // 绘制格子背景
+  for(let a=0; a<=maxA; a++) {
+    for(let b=0; b<=maxB; b++) {
+      // front/side: layer=0在底部（翻转b），top: row=0在顶部（不翻转）
+      const bDraw = (dir==='top') ? b : (maxB - b);
+      const px = ox + a*cell;
+      const py = oy + bDraw*cell;
+      ctx.strokeStyle = 'rgba(16,185,129,0.22)';
+      ctx.lineWidth = 0.5;
+      ctx.strokeRect(px, py, cell, cell);
+      if(proj.has(`${a},${b}`)) {
+        ctx.fillStyle = col.top;
+        ctx.fillRect(px+1.5, py+1.5, cell-3, cell-3);
+        ctx.strokeStyle = col.left;
+        ctx.lineWidth = 1.8;
+        ctx.strokeRect(px+1.5, py+1.5, cell-3, cell-3);
+      }
+    }
+  }
+}
+
+function updateViewUI() {
+  // 更新标签
+  const shape = VIEW_VOXELS[currentViewShape] || VIEW_SMOOTH[currentViewShape];
+  if(!shape) return;
+  const lbl = shape.labels[currentViewDir];
+  const info = VIEW_DIR_INFO[currentViewDir];
+  document.getElementById('view-label').innerHTML =
+    `<span style="color:#6ee7b7">${info.label}</span><br><span style="color:var(--muted2);font-size:11px;font-weight:400">${lbl}</span>`;
+
+  // 更新视角指示器
+  const ind = document.getElementById('view-dir-indicator');
+  ind.innerHTML = ['front','side','top'].map(d =>
+    `<span style="padding:2px 8px;border-radius:5px;${d===currentViewDir?'background:rgba(16,185,129,0.2);color:#6ee7b7;font-weight:700':'color:var(--muted2)'}">${d==='front'?'⬛正视':d==='side'?'◀侧视':'▲俯视'}</span>`
+  ).join('');
+}
+
 renderView();
 
 /* ── 4. 数立方块 ── */
 const CUBE_PRESETS = [
-  { grid:[[2,1,0],[1,3,0],[0,1,2]], answer:10, hint:'提示：把每格数字加起来，答案是 10 块！' },
-  { grid:[[3,2,1],[2,1,0],[1,0,0]], answer:10, hint:'提示：答案也是 10 块！试试数数看。' },
-  { grid:[[1,1,1],[1,1,1],[1,1,1]], answer:9,  hint:'自由模式，每格可以随意点击修改！' },
+  { grid:[[2,1,1],[1,2,0],[1,0,1]], answer:9,  hint:'把每格的数字加起来，答案是 9 块！' },
+  { grid:[[3,1,0],[2,2,1],[0,1,2]], answer:12, hint:'注意最高叠了3层，答案是 12 块！' },
+  { grid:[[1,2,1],[2,3,2],[1,2,1]], answer:15, hint:'中间最高叠3层，答案是 15 块！' },
+  { grid:[[1,1,1],[1,1,1],[1,1,1]], answer:9,  hint:'自由搭建，随意修改！' },
 ];
-let cubeGrid = [[1,1,0],[1,2,0],[0,1,1]];
-let cubePresetIdx = 0;
+// 每层颜色方案（top / left / right）
+const CUBE_LAYER_COLORS = [
+  { top:'#ddd6fe', left:'#8b5cf6', right:'#5b21b6' }, // 紫
+  { top:'#a7f3d0', left:'#10b981', right:'#047857' }, // 绿
+  { top:'#fde68a', left:'#f59e0b', right:'#b45309' }, // 黄
+  { top:'#fbcfe8', left:'#ec4899', right:'#9d174d' }, // 粉
+  { top:'#bfdbfe', left:'#3b82f6', right:'#1d4ed8' }, // 蓝
+];
+const ROT_LABELS = ['正面视角','右侧视角','背面视角','左侧视角'];
 
+let cubeGrid = CUBE_PRESETS[0].grid.map(r=>[...r]);
+let cubePresetIdx = 0;
+let cubeRotAngle = 0;
+let cubeShowLayer = 0; // 0=全部, 1/2/3...=只高亮该层（其他半透明）
+let cubeAutoTimer = null;
+
+/* ---- 工具函数 ---- */
+function rotateGridCW(g) {
+  const n=g.length, m=g[0].length;
+  const ng = Array.from({length:m},()=>Array(n).fill(0));
+  for(let r=0;r<n;r++) for(let c=0;c<m;c++) ng[c][n-1-r]=g[r][c];
+  return ng;
+}
+function getViewGrid() {
+  let g = cubeGrid.map(r=>[...r]);
+  for(let i=0;i<cubeRotAngle;i++) g = rotateGridCW(g);
+  return g;
+}
+function cubeMaxH() { return Math.max(...cubeGrid.flat()); }
+
+/* ---- 加载题目 ---- */
 function cubeLoadPreset(btn, idx) {
   document.querySelectorAll('.cube-preset-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   cubePresetIdx = idx;
-  const p = CUBE_PRESETS[idx];
-  cubeGrid = p.grid.map(row=>[...row]);
+  cubeGrid = CUBE_PRESETS[idx].grid.map(r=>[...r]);
+  cubeShowLayer = 0;
+  cubeRotAngle = 0;
+  clearTimeout(cubeAutoTimer);
   document.getElementById('cube-answer').style.display = 'none';
+  document.getElementById('cube-rot-label').textContent = ROT_LABELS[0];
+  renderLayerBtns();
   renderCubeGrid();
   drawCubeIso();
+  updateStepPanel();
 }
+
+/* ---- 旋转 ---- */
+function cubeRotate(dir) {
+  cubeRotAngle = (cubeRotAngle + dir + 4) % 4;
+  document.getElementById('cube-rot-label').textContent = ROT_LABELS[cubeRotAngle];
+  drawCubeIso();
+}
+
+/* ---- 层级按钮 ---- */
+function renderLayerBtns() {
+  const wrap = document.getElementById('cube-layer-btns');
+  wrap.innerHTML = '';
+  const maxH = cubeMaxH();
+
+  const mkBtn = (label, ly, color) => {
+    const b = document.createElement('button');
+    b.className = 'cube-ctrl-btn';
+    b.textContent = label;
+    b.style.borderColor = ly===0 ? 'rgba(139,92,246,0.4)' : color.left + '99';
+    if(ly !== 0) b.style.setProperty('--layer-dot', color.top);
+    b.onclick = () => { cubeShowLayer = ly; highlightLayerBtn(wrap, b); drawCubeIso(); updateStepPanel(); };
+    if((ly===0 && cubeShowLayer===0) || ly===cubeShowLayer) b.style.background='rgba(139,92,246,0.22)';
+    return b;
+  };
+
+  wrap.appendChild(mkBtn('全部', 0, CUBE_LAYER_COLORS[0]));
+  for(let ly=1; ly<=maxH; ly++) {
+    const col = CUBE_LAYER_COLORS[(ly-1) % CUBE_LAYER_COLORS.length];
+    const b = mkBtn(`第${ly}层`, ly, col);
+    b.style.borderLeftWidth = '3px';
+    b.style.borderLeftColor = col.left;
+    wrap.appendChild(b);
+  }
+}
+function highlightLayerBtn(wrap, active) {
+  wrap.querySelectorAll('button').forEach(b => b.style.background='');
+  active.style.background = 'rgba(139,92,246,0.22)';
+}
+
+/* ---- 俯视格子 ---- */
 function renderCubeGrid() {
   const wrap = document.getElementById('cube-topgrid');
   wrap.innerHTML = '';
@@ -1349,67 +1883,148 @@ function renderCubeGrid() {
     row.forEach((val,c) => {
       const cell = document.createElement('div');
       cell.className = 'cube-cell' + (val===0?' empty':'');
-      cell.textContent = val===0 ? '0' : val;
-      cell.title = '点击 +1 层，长按清零';
-      let pressTimer = null;
-      cell.addEventListener('mousedown', () => { pressTimer = setTimeout(()=>{ cubeGrid[r][c]=0; renderCubeGrid(); drawCubeIso(); },600); });
-      cell.addEventListener('mouseup', () => clearTimeout(pressTimer));
-      cell.addEventListener('touchstart', e => { pressTimer = setTimeout(()=>{ cubeGrid[r][c]=0; renderCubeGrid(); drawCubeIso(); e.preventDefault(); },600); }, {passive:false});
-      cell.addEventListener('touchend', () => clearTimeout(pressTimer));
-      cell.addEventListener('click', () => { cubeGrid[r][c] = (cubeGrid[r][c]+1)%5; renderCubeGrid(); drawCubeIso(); });
+      cell.textContent = val===0?'0':val;
+      cell.title = '点击 +1（最多5层），长按清零';
+      let t=null;
+      const refresh = () => { renderCubeGrid(); renderLayerBtns(); drawCubeIso(); updateStepPanel(); };
+      cell.addEventListener('mousedown',()=>{ t=setTimeout(()=>{ cubeGrid[r][c]=0; refresh(); },600); });
+      cell.addEventListener('mouseup',()=>clearTimeout(t));
+      cell.addEventListener('touchstart',e=>{ t=setTimeout(()=>{ cubeGrid[r][c]=0; refresh(); e.preventDefault(); },600); },{passive:false});
+      cell.addEventListener('touchend',()=>clearTimeout(t));
+      cell.addEventListener('click',()=>{ cubeGrid[r][c]=(cubeGrid[r][c]+1)%6; refresh(); });
       wrap.appendChild(cell);
     });
   });
 }
+
+/* ---- 步骤面板 ---- */
+function updateStepPanel() {
+  const panel = document.getElementById('cube-step-panel');
+  const flat = cubeGrid.flat();
+  const maxH = Math.max(...flat);
+  if(maxH === 0){ panel.innerHTML='<span style="color:var(--muted2)">暂无方块</span>'; return; }
+  let html='', acc=0;
+  for(let ly=1; ly<=maxH; ly++){
+    const col = CUBE_LAYER_COLORS[(ly-1)%CUBE_LAYER_COLORS.length];
+    const cnt = flat.filter(v=>v>=ly).length;
+    acc += cnt;
+    const isActive = cubeShowLayer===0 || cubeShowLayer===ly;
+    const dim = !isActive;
+    html += `<div style="display:flex;align-items:center;gap:8px;opacity:${dim?0.3:1};${cubeShowLayer===ly?'font-weight:700':''}">
+      <span style="flex-shrink:0;display:inline-block;width:14px;height:14px;border-radius:3px;background:${col.top};border:1.5px solid ${col.left}"></span>
+      <span>第 <b>${ly}</b> 层：<b style="color:${col.left}">${cnt}</b> 块</span>
+      ${cubeShowLayer===0?`<span style="color:var(--muted2);font-size:12px">累计 ${acc}</span>`:''}
+    </div>`;
+  }
+  if(cubeShowLayer===0){
+    const total=flat.reduce((a,b)=>a+b,0);
+    html+=`<div style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(139,92,246,0.2);font-weight:700;color:#a78bfa">合计：${total} 块</div>`;
+  }
+  panel.innerHTML = html;
+}
+
+/* ---- 等距绘制（painter's algorithm 正确排序） ---- */
 function drawCubeIso() {
   const canvas = document.getElementById('cube-iso');
   const ctx = canvas.getContext('2d');
-  ctx.clearRect(0,0,160,160);
-  const sz=30, color='#a78bfa';
-  // Render from back-bottom to front-top so front cubes are on top
-  const rows = cubeGrid.length, cols = cubeGrid[0].length;
-  for (let r=rows-1; r>=0; r--) {
-    for (let c=0; c<cols; c++) {
-      const layers = cubeGrid[r][c];
-      for (let l=0; l<layers; l++) {
-        const ox = 20 + c*sz*0.6 - r*sz*0.3;
-        const oy = 100 + r*sz*0.35 - l*sz*0.55 - c*sz*0.2;
-        drawIsoCubeSmall(ctx, ox, oy, sz, color);
-      }
-    }
+  const W=canvas.width, H=canvas.height;
+  ctx.clearRect(0,0,W,H);
+
+  const vg = getViewGrid();
+  const rows=vg.length, cols=vg[0].length;
+  const hw=46, hh=23, dh=28; // 半宽、菱形半高、竖向深度
+
+  // 让整体居中：计算实际包围盒，然后确定偏移
+  // sx = offX + (c-r)*hw,  sy = offY + (c+r)*hh - l*dh
+  // x范围: [(0-(rows-1))*hw, ((cols-1)-0)*hw + 2hw] = [-(rows-1)*hw, (cols-1)*hw+2hw]
+  const xMin = -(rows-1)*hw;
+  const xMax = (cols-1)*hw + 2*hw;
+  const maxL = cubeMaxH();
+  const yMin = 0 - (maxL-1)*dh - hh;          // 最高点（顶面顶部）
+  const yMax = (rows-1+cols-1)*hh + hh + dh;  // 最低点（底面底部）
+  const offX = (W - (xMax-xMin)) / 2 - xMin;
+  const offY = (H - (yMax-yMin)) / 2 - yMin;
+
+  // 正确 painter's 排序：按 (r+c) 升序，相同时 r 降序（左侧先画），层 l 升序
+  const items = [];
+  for(let r=0;r<rows;r++) for(let c=0;c<cols;c++) for(let l=0;l<vg[r][c];l++) items.push([r,c,l]);
+  items.sort((a,b)=>{
+    const sa=a[0]+a[1], sb=b[0]+b[1];
+    if(sa!==sb) return sa-sb;
+    if(a[0]!==b[0]) return b[0]-a[0]; // 同 (r+c) 时 r 大的先画
+    return a[2]-b[2]; // 低层先画
+  });
+
+  for(const [r,c,l] of items){
+    const layerIdx = l; // 0-based
+    const col = CUBE_LAYER_COLORS[layerIdx % CUBE_LAYER_COLORS.length];
+    const sx = offX + (c-r)*hw;
+    const sy = offY + (c+r)*hh - l*dh;
+    // 透明度：全部显示=1；非当前层=0.15，当前层=1
+    let alpha = 1;
+    if(cubeShowLayer !== 0) alpha = (layerIdx+1 === cubeShowLayer) ? 1 : 0.12;
+    drawSolidCube(ctx, sx, sy, hw, hh, dh, col, alpha);
   }
 }
-function drawIsoCubeSmall(ctx, x, y, sz, color) {
-  const hw=sz*0.5, qh=sz*0.25;
-  // top
-  ctx.fillStyle=color+'30'; ctx.strokeStyle=color; ctx.lineWidth=1.2;
+
+function drawSolidCube(ctx, x, y, hw, hh, dh, col, alpha) {
+  ctx.globalAlpha = alpha;
+  ctx.lineWidth = 1.2;
+
+  // 顶面（菱形）
+  ctx.fillStyle = col.top;
+  ctx.strokeStyle = 'rgba(255,255,255,0.6)';
   ctx.beginPath();
-  ctx.moveTo(x,y); ctx.lineTo(x+hw,y-qh); ctx.lineTo(x+sz,y); ctx.lineTo(x+hw,y+qh); ctx.closePath();
+  ctx.moveTo(x,     y);
+  ctx.lineTo(x+hw,  y-hh);
+  ctx.lineTo(x+hw*2,y);
+  ctx.lineTo(x+hw,  y+hh);
+  ctx.closePath();
   ctx.fill(); ctx.stroke();
-  // left
-  ctx.fillStyle=color+'1a';
+
+  // 左侧面
+  ctx.fillStyle = col.left;
+  ctx.strokeStyle = 'rgba(0,0,0,0.12)';
   ctx.beginPath();
-  ctx.moveTo(x,y); ctx.lineTo(x,y+sz*0.5); ctx.lineTo(x+hw,y+sz*0.5+qh); ctx.lineTo(x+hw,y+qh); ctx.closePath();
+  ctx.moveTo(x,     y);
+  ctx.lineTo(x,     y+dh);
+  ctx.lineTo(x+hw,  y+hh+dh);
+  ctx.lineTo(x+hw,  y+hh);
+  ctx.closePath();
   ctx.fill(); ctx.stroke();
-  // right
-  ctx.fillStyle=color+'12';
+
+  // 右侧面
+  ctx.fillStyle = col.right;
   ctx.beginPath();
-  ctx.moveTo(x+hw,y+qh); ctx.lineTo(x+hw,y+sz*0.5+qh); ctx.lineTo(x+sz,y+sz*0.5); ctx.lineTo(x+sz,y); ctx.closePath();
+  ctx.moveTo(x+hw,  y+hh);
+  ctx.lineTo(x+hw,  y+hh+dh);
+  ctx.lineTo(x+hw*2,y+dh);
+  ctx.lineTo(x+hw*2,y);
+  ctx.closePath();
   ctx.fill(); ctx.stroke();
+
+  ctx.globalAlpha = 1;
 }
+
+/* ---- 检验答案 ---- */
 function cubeCheckAnswer() {
   const total = cubeGrid.flat().reduce((a,b)=>a+b,0);
   const p = CUBE_PRESETS[cubePresetIdx];
   const ans = document.getElementById('cube-answer');
   ans.style.display = 'block';
-  if (total === p.answer) {
-    ans.innerHTML = `🎉 答对了！共 <strong>${total}</strong> 块！把俯视图数字全加起来就对了！`;
+  const isFree = cubePresetIdx === CUBE_PRESETS.length-1;
+  if(isFree) {
+    ans.innerHTML = `📝 自由搭建，共 <strong>${total}</strong> 块！`;
+    ans.style.color = '#a78bfa';
+  } else if(total === p.answer) {
+    ans.innerHTML = `🎉 答对了！共 <strong>${total}</strong> 块，全部数清楚了！`;
     ans.style.color = '#6ee7b7';
   } else {
-    ans.innerHTML = `🤔 当前是 ${total} 块，${p.hint}`;
+    ans.innerHTML = `🤔 你数出 ${total} 块。${p.hint}`;
     ans.style.color = '#fca5a5';
   }
 }
+
 cubeLoadPreset(document.querySelector('.cube-preset-btn'), 0);
 
 initQuiz();
