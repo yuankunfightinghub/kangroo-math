@@ -491,6 +491,93 @@ body {
 }
 .mob-tab .mt-icon { font-size: 20px; }
 .mob-tab.on { color: #67e8f9; background: rgba(6,182,212,0.1); }
+
+/* ── S1 Interactive Components ── */
+.seq-type-btn {
+  padding: 6px 14px; border-radius: 8px; border: 1px solid rgba(6,182,212,0.25);
+  background: rgba(6,182,212,0.07); color: #67e8f9; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all .2s; font-family: 'Noto Sans SC', sans-serif;
+}
+.seq-type-btn.active { background: rgba(6,182,212,0.22); border-color: rgba(6,182,212,0.5); box-shadow: 0 0 0 2px rgba(6,182,212,0.15); }
+.seq-type-btn:hover { background: rgba(6,182,212,0.16); }
+
+.seq-tile {
+  width: 54px; height: 54px; display: flex; align-items: center; justify-content: center;
+  border-radius: 12px; font-size: 16px; font-weight: 800;
+  border: 1.5px solid rgba(6,182,212,0.3); background: rgba(6,182,212,0.1); color: #67e8f9;
+  position: relative; transition: all .3s; animation: tileIn .35s ease both;
+}
+.seq-tile.question { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.15); color: var(--muted); border-style: dashed; }
+.seq-tile.reveal { background: rgba(16,185,129,0.15); border-color: #6ee7b7; color: #6ee7b7; animation: tileReveal .4s ease both; }
+.seq-arrow { color: var(--muted2); font-size: 18px; align-self: center; }
+.seq-diff {
+  position: absolute; top: -18px; left: 50%; transform: translateX(-50%);
+  font-size: 11px; color: #fcd34d; font-weight: 700; white-space: nowrap;
+  opacity: 0; transition: opacity .3s .1s;
+}
+.seq-tile.reveal .seq-diff { opacity: 1; }
+@keyframes tileIn { from { opacity:0; transform: scale(0.6) translateY(10px); } to { opacity:1; transform: none; } }
+@keyframes tileReveal { 0%{transform:scale(1)} 40%{transform:scale(1.18)} 100%{transform:scale(1)} }
+
+.seq-ctrl-btn {
+  padding: 8px 16px; border-radius: 10px;
+  background: rgba(6,182,212,0.12); border: 1px solid rgba(6,182,212,0.3);
+  color: #67e8f9; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.seq-ctrl-btn:hover { background: rgba(6,182,212,0.22); transform: scale(1.03); }
+
+/* Elimination */
+.elim-option {
+  padding: 10px 18px; border-radius: 10px; font-size: 15px; font-weight: 700;
+  border: 1.5px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.08);
+  color: #a78bfa; cursor: pointer; transition: all .25s; user-select: none;
+}
+.elim-option:hover:not(.eliminated):not(.winner) { background: rgba(139,92,246,0.18); }
+.elim-option.eliminated { background: rgba(255,100,100,0.08); border-color: rgba(255,100,100,0.2); color: var(--muted2); text-decoration: line-through; cursor: default; opacity: 0.55; }
+.elim-option.winner { background: rgba(16,185,129,0.15); border-color: #6ee7b7; color: #6ee7b7; cursor: default; animation: tileReveal .4s ease; }
+.elim-cond {
+  padding: 8px 14px; border-radius: 8px; font-size: 13px;
+  background: rgba(139,92,246,0.07); border-left: 3px solid #a78bfa; color: var(--muted);
+  animation: tileIn .3s ease;
+}
+.elim-cond strong { color: var(--text); }
+
+/* Sorting */
+.sort-animal {
+  width: 62px; height: 72px; border-radius: 14px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 4px;
+  border: 1.5px solid rgba(245,158,11,0.3); background: rgba(245,158,11,0.08);
+  font-size: 26px; cursor: grab; user-select: none; transition: all .25s;
+  touch-action: none;
+}
+.sort-animal:active { cursor: grabbing; transform: scale(1.08); opacity: 0.8; }
+.sort-animal .sa-name { font-size: 10px; color: var(--muted); font-weight: 600; }
+.sort-slot {
+  width: 68px; height: 80px; border-radius: 14px;
+  border: 2px dashed rgba(245,158,11,0.25); background: rgba(245,158,11,0.03);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px; transition: all .2s; position: relative;
+}
+.sort-slot .slot-label { font-size: 10px; color: var(--muted2); position: absolute; top: -18px; white-space: nowrap; }
+.sort-slot.filled { border-style: solid; border-color: rgba(245,158,11,0.4); background: rgba(245,158,11,0.08); }
+.sort-slot.drag-over { border-color: #fcd34d; background: rgba(245,158,11,0.15); }
+.sort-clue { display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted); }
+.sort-clue strong { color: var(--text); }
+.sort-arrow { color: #fcd34d; font-size:16px; }
+
+/* Truth/false reasoning */
+.truth-hypo-btn {
+  padding: 9px 16px; border-radius: 10px; font-size: 13px; font-weight: 700;
+  border: 1.5px solid rgba(16,185,129,0.3); background: rgba(16,185,129,0.07);
+  color: #6ee7b7; cursor: pointer; transition: all .25s;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.truth-hypo-btn:hover { background: rgba(16,185,129,0.16); transform: scale(1.03); }
+.truth-hypo-btn.active { background: rgba(16,185,129,0.2); box-shadow: 0 0 0 2px rgba(16,185,129,0.3); }
+.truth-ok { color: #6ee7b7; }
+.truth-bad { color: #fca5a5; }
+.truth-line { padding: 3px 0; }
 </style>
 </head>
 <body>
@@ -536,57 +623,84 @@ body {
     <div class="gcard">
       <div class="sec-heading">💡 核心概念</div>
 
-      <!-- 概念1 -->
+      <!-- ── 概念1：数列规律 ── Canvas 序列可视化 -->
       <div class="cbox" style="--accent:#67e8f9;--accent-bg:rgba(6,182,212,0.06)">
-        <button class="vbtn vbtn-c" onclick="tv(this,'数列规律，就是一串按照某个固定规律排列的数。常见类型有：等差数列，每次加一个固定的数，比如2、5、8、11，每次加3。等比数列，每次乘一个固定的数，比如1、2、4、8，每次乘2。还有差数规律，相邻两项的差本身也有规律，比如1、2、4、7、11，差是1、2、3、4，每次多1。','m3_s2_v1')">🔊 听讲解</button>
-        <h4>📐 数列规律</h4>
-        <p>数列是按照<strong>固定规律</strong>排列的一串数，找规律要先看相邻两项的<strong>差</strong>或<strong>比</strong>：</p>
-        <ul>
-          <li>➕ <strong>等差数列</strong>：每次加/减同一个数（如 3, 6, 9, 12… 差=3）</li>
-          <li>✖️ <strong>等比数列</strong>：每次乘/除同一个数（如 2, 4, 8, 16… 比=2）</li>
-          <li>🔼 <strong>差数递增</strong>：相邻差本身也有规律（如 1, 2, 4, 7, 11… 差=1,2,3,4）</li>
-          <li>🔄 <strong>循环规律</strong>：若干个一组反复出现（如 红黄蓝红黄蓝…）</li>
-        </ul>
+        <button class="vbtn vbtn-c" onclick="tv(this,'数列规律，就是一串按照某个固定规律排列的数。有等差数列，每次加同一个数；等比数列，每次乘同一个数；还有差数递增，相邻的差本身也在变化。选一个类型，点击下一项，看看规律是怎么出现的！','m3_v1')">🔊 听讲解</button>
+        <h4>📐 数列规律 — 点击发现下一项</h4>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px">
+          <button class="seq-type-btn active" data-type="等差" onclick="seqSelectType(this,'等差')">➕ 等差</button>
+          <button class="seq-type-btn" data-type="等比" onclick="seqSelectType(this,'等比')">✖️ 等比</button>
+          <button class="seq-type-btn" data-type="差递增" onclick="seqSelectType(this,'差递增')">🔼 差递增</button>
+          <button class="seq-type-btn" data-type="循环" onclick="seqSelectType(this,'循环')">🔄 循环</button>
+        </div>
+
+        <div id="seq-track" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;min-height:64px;padding:12px;background:rgba(6,182,212,0.05);border-radius:12px;border:1px solid rgba(6,182,212,0.15)"></div>
+
+        <div style="display:flex;gap:8px;margin-top:12px;align-items:center">
+          <button class="seq-ctrl-btn" onclick="seqNext()" id="seq-next-btn">👆 下一项</button>
+          <button class="seq-ctrl-btn" style="background:rgba(255,255,255,0.05);color:var(--muted)" onclick="seqReset()">🔄 重置</button>
+          <span id="seq-hint" style="font-size:13px;color:var(--muted);flex:1"></span>
+        </div>
       </div>
 
-      <!-- 概念2 -->
+      <!-- ── 概念2：排除法 ── 可点击划掉的选项卡 -->
       <div class="cbox" style="--accent:#a78bfa;--accent-bg:rgba(139,92,246,0.06)">
-        <button class="vbtn vbtn-v" onclick="tv(this,'排除法是逻辑推理最常用的武器！面对多个选项，我们不急着找答案，而是先排除掉肯定不对的选项。一个一个消除不符合条件的，最后剩下的那个就是答案！就像名侦探一样：排除一切不可能，剩下的就是真相！','m3_s2_v2')">🔊 听讲解</button>
-        <h4>🔍 排除法（逻辑推理核心）</h4>
-        <p>不急着找答案，先<strong>排除肯定错的</strong>选项，剩下的就是答案！</p>
-        <ul>
-          <li>❌ 找出<strong>违反条件</strong>的选项，直接排除</li>
-          <li>🧩 将条件<strong>逐一代入</strong>检验，不满足即排除</li>
-          <li>✅ 最终剩下<strong>唯一可能</strong>，即为正确答案</li>
-          <li>💡 口诀：<strong>"不可能的排光，答案自然出来"</strong></li>
-        </ul>
+        <button class="vbtn vbtn-v" onclick="tv(this,'排除法就是先不找答案，而是把肯定不对的选项一个一个划掉！就像名侦探一样，排除一切不可能，剩下的那个，就是真相！点击选项，把不符合条件的划掉，试试看！','m3_v2')">🔊 听讲解</button>
+        <h4>🔍 排除法 — 点击划掉错误选项</h4>
+        <p style="font-size:13px;color:var(--muted);margin:6px 0 12px">题目：找到满足所有条件的那个数。条件逐一出现，点击不符合的选项划掉它！</p>
+
+        <div id="elim-conditions" style="margin-bottom:12px;display:flex;flex-direction:column;gap:6px"></div>
+        <div id="elim-options" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"></div>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="seq-ctrl-btn" onclick="elimNextCondition()" id="elim-cond-btn">🔍 显示下一个条件</button>
+          <button class="seq-ctrl-btn" style="background:rgba(255,255,255,0.05);color:var(--muted)" onclick="elimReset()">🔄 重新开始</button>
+        </div>
+        <div id="elim-result" style="margin-top:10px;font-size:14px;font-weight:700;color:#6ee7b7;display:none"></div>
       </div>
 
-      <!-- 概念3 -->
+      <!-- ── 概念3：比较排序 ── 拖拽排序 + 传递关系箭头 -->
       <div class="cbox" style="--accent:#fcd34d;--accent-bg:rgba(245,158,11,0.06)">
-        <button class="vbtn vbtn-a" onclick="tv(this,'比较排序，是把多个人或物体按照某个标准从大到小或从小到大排列。关键技巧是传递性：如果甲比乙高，乙比丙高，那么甲一定比丙高！这叫传递律。还有间接比较：甲和丙没有直接比，但通过乙可以推出甲和丙的大小关系！','m3_s2_v3')">🔊 听讲解</button>
-        <h4>↕️ 比较与排序</h4>
-        <p>关键是<strong>传递律</strong>：A > B，B > C，则 A > C！</p>
-        <ul>
-          <li>📋 把所有"谁比谁大/高/重"的条件<strong>写下来</strong></li>
-          <li>🔗 用传递律<strong>连锁推导</strong>，建立完整的大小链</li>
-          <li>🏆 最终整理出<strong>从大到小</strong>的完整顺序</li>
-          <li>⚠️ 注意：条件可能有<strong>矛盾</strong>，矛盾说明某条件是假的</li>
-        </ul>
+        <button class="vbtn vbtn-a" onclick="tv(this,'比较排序的关键是传递律：甲比乙高，乙比丙高，那甲一定比丙高！先把已知条件整理成箭头图，再从高到低排好顺序。把小动物拖到正确位置，试试看你能排对吗！','m3_v3')">🔊 听讲解</button>
+        <h4>↕️ 比较与排序 — 拖动排列正确顺序</h4>
+
+        <div id="sort-clues" style="font-size:13px;color:var(--muted);margin:8px 0 12px;line-height:2;display:flex;flex-direction:column;gap:4px"></div>
+
+        <div style="display:flex;gap:6px;margin-bottom:8px">
+          <div style="flex:1;text-align:center;font-size:11px;color:var(--muted);padding-bottom:4px">👇 拖到这里排序（最高→最矮）</div>
+        </div>
+        <div id="sort-slots" style="display:flex;gap:8px;justify-content:center;margin-bottom:12px"></div>
+        <div id="sort-pool" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:12px;background:rgba(255,255,255,0.03);border-radius:12px;border:1px dashed rgba(245,158,11,0.2);margin-bottom:12px"></div>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="seq-ctrl-btn" style="background:rgba(245,158,11,0.12);color:#fcd34d;border-color:rgba(245,158,11,0.3)" onclick="sortCheck()">✅ 检验答案</button>
+          <button class="seq-ctrl-btn" style="background:rgba(255,255,255,0.05);color:var(--muted)" onclick="sortReset()">🔄 重置</button>
+        </div>
+        <div id="sort-feedback" style="margin-top:10px;font-size:14px;font-weight:700;display:none"></div>
       </div>
 
-      <!-- 概念4 -->
+      <!-- ── 概念4：真假推理 ── 假设切换 + 矛盾检测 -->
       <div class="cbox" style="--accent:#6ee7b7;--accent-bg:rgba(16,185,129,0.06)">
-        <button class="vbtn vbtn-e" onclick="tv(this,'逻辑真假推理，是判断哪些陈述是真话、哪些是假话的推理。关键方法是假设法：先假设某人说的是真话，把所有条件推一遍，看有没有矛盾。如果有矛盾，说明假设错了；如果没有矛盾，假设就是正确的！','m3_s2_v4')">🔊 听讲解</button>
-        <h4>✅ 真假推理</h4>
-        <p>当多人说话，已知真假人数时，用<strong>假设法</strong>突破：</p>
-        <ul>
-          <li>🎯 <strong>假设某人说真话</strong>，推导所有结论</li>
-          <li>🔍 检查推导结果是否<strong>自相矛盾</strong></li>
-          <li>✅ 无矛盾 → 假设成立；❌ 有矛盾 → 假设错误</li>
-          <li>📊 常配合<strong>表格</strong>整理，避免遗漏</li>
-        </ul>
+        <button class="vbtn vbtn-e" onclick="tv(this,'真假推理用假设法：先假设某人说真话，把所有话都推一遍，看有没有矛盾。有矛盾说明假设错了；没矛盾说明假设正确！点击每个人的按钮，假设他说真话，看看有没有矛盾出现！','m3_v4')">🔊 听讲解</button>
+        <h4>✅ 真假推理 — 点击假设，看矛盾</h4>
+
+        <div style="background:rgba(16,185,129,0.06);border-radius:10px;padding:12px 14px;margin:8px 0 14px;font-size:13px;color:var(--muted);line-height:1.8;border:1px solid rgba(16,185,129,0.15)">
+          <strong style="color:#6ee7b7">题目：</strong>小明、小红、小蓝三人中，有且只有一人说了真话。<br>
+          小明说："我没有打碎花瓶。"<br>
+          小红说："小明打碎了花瓶。"<br>
+          小蓝说："我打碎了花瓶。"
+        </div>
+
+        <p style="font-size:12px;color:var(--muted);margin-bottom:10px">👇 点击某人，假设"他说真话"，系统自动推导：</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+          <button class="truth-hypo-btn" onclick="truthHypo('明')" id="hypo-明">假设小明说真话</button>
+          <button class="truth-hypo-btn" onclick="truthHypo('红')" id="hypo-红">假设小红说真话</button>
+          <button class="truth-hypo-btn" onclick="truthHypo('蓝')" id="hypo-蓝">假设小蓝说真话</button>
+        </div>
+        <div id="truth-result" style="font-size:13px;line-height:1.9;display:none;background:rgba(0,0,0,0.2);border-radius:10px;padding:12px 14px;border:1px solid rgba(255,255,255,0.07)"></div>
       </div>
+
     </div>
   </div>
 
@@ -1055,6 +1169,305 @@ function answerQ(i) {
 function goQ(idx) {
   if (idx < 0 || idx >= quizData.length) return;
   renderQ(idx);
+}
+
+initQuiz();
+
+/* ═══════════════ S1 INTERACTIVE COMPONENTS ═══════════════ */
+
+/* ── 1. 数列规律 ── */
+const SEQ_PRESETS = {
+  '等差': { nums:[3,6,9,12,15,18], label:(i,a)=>`+${a[i]-a[i-1]}`, color:'#67e8f9', hint:'每次加同一个数，这叫等差数列 ✨' },
+  '等比': { nums:[1,2,4,8,16,32], label:(i,a)=>`×${a[i]/a[i-1]}`, color:'#a78bfa', hint:'每次乘同一个数，这叫等比数列 ✨' },
+  '差递增': { nums:[1,2,4,7,11,16], label:(i,a)=>`+${a[i]-a[i-1]}`, color:'#fcd34d', hint:'差在递增（+1,+2,+3…），差数递增数列 ✨' },
+  '循环': { nums:['🔴','🟡','🔵','🔴','🟡','🔵'], label:()=>'循环', color:'#f472b6', hint:'三个一组不断重复，这叫循环规律 ✨' },
+};
+let seqType = '等差', seqShown = 0;
+
+function seqSelectType(btn, type) {
+  document.querySelectorAll('.seq-type-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  seqType = type;
+  seqShown = 0;
+  renderSeq();
+}
+function seqNext() {
+  const p = SEQ_PRESETS[seqType];
+  if (seqShown < p.nums.length) { seqShown++; renderSeq(); }
+  if (seqShown >= p.nums.length) {
+    document.getElementById('seq-hint').textContent = p.hint;
+    document.getElementById('seq-next-btn').disabled = true;
+    document.getElementById('seq-next-btn').style.opacity = '0.4';
+  }
+}
+function seqReset() {
+  seqShown = 0;
+  document.getElementById('seq-hint').textContent = '';
+  document.getElementById('seq-next-btn').disabled = false;
+  document.getElementById('seq-next-btn').style.opacity = '';
+  renderSeq();
+}
+function renderSeq() {
+  const p = SEQ_PRESETS[seqType];
+  const track = document.getElementById('seq-track');
+  track.innerHTML = '';
+  for (let i = 0; i < p.nums.length; i++) {
+    if (i > 0) {
+      const arrow = document.createElement('div');
+      arrow.className = 'seq-arrow';
+      arrow.textContent = '→';
+      track.appendChild(arrow);
+    }
+    const tile = document.createElement('div');
+    tile.className = 'seq-tile' + (i < seqShown ? ' reveal' : ' question');
+    if (i < seqShown) {
+      tile.textContent = p.nums[i];
+      if (i > 0) {
+        const diff = document.createElement('div');
+        diff.className = 'seq-diff';
+        diff.textContent = p.label(i, p.nums);
+        tile.appendChild(diff);
+      }
+    } else {
+      tile.textContent = i === seqShown ? '?' : '…';
+    }
+    track.appendChild(tile);
+  }
+}
+renderSeq();
+
+/* ── 2. 排除法 ── */
+const ELIM_PROBLEM = {
+  options: [12, 18, 27, 36, 45, 54, 63, 72],
+  conditions: [
+    { text: '① 是两位数', fn: n => n >= 10 && n <= 99 },
+    { text: '② 是偶数', fn: n => n % 2 === 0 },
+    { text: '③ 各位数字之和 = 9', fn: n => (Math.floor(n/10) + n%10) === 9 },
+    { text: '④ 十位数字 < 个位数字', fn: n => Math.floor(n/10) < n%10 },
+  ],
+  answer: 36,
+};
+let elimCondIdx = 0;
+let elimSurvivors = [...ELIM_PROBLEM.options];
+
+function elimReset() {
+  elimCondIdx = 0; elimSurvivors = [...ELIM_PROBLEM.options];
+  document.getElementById('elim-conditions').innerHTML = '';
+  document.getElementById('elim-result').style.display = 'none';
+  document.getElementById('elim-cond-btn').disabled = false;
+  document.getElementById('elim-cond-btn').style.opacity = '';
+  renderElimOptions();
+}
+function renderElimOptions() {
+  const wrap = document.getElementById('elim-options');
+  wrap.innerHTML = '';
+  ELIM_PROBLEM.options.forEach(n => {
+    const btn = document.createElement('div');
+    btn.className = 'elim-option' + (elimSurvivors.includes(n) ? '' : ' eliminated') + (n === ELIM_PROBLEM.answer && elimSurvivors.length === 1 ? ' winner' : '');
+    btn.textContent = n;
+    btn.onclick = () => {
+      if (!elimSurvivors.includes(n)) return;
+      elimSurvivors = elimSurvivors.filter(x => x !== n);
+      renderElimOptions();
+    };
+    wrap.appendChild(btn);
+  });
+}
+function elimNextCondition() {
+  if (elimCondIdx >= ELIM_PROBLEM.conditions.length) return;
+  const cond = ELIM_PROBLEM.conditions[elimCondIdx];
+  const div = document.createElement('div');
+  div.className = 'elim-cond';
+  div.innerHTML = `<strong>${cond.text}</strong> — 不满足的选项可以划掉 👇`;
+  document.getElementById('elim-conditions').appendChild(div);
+  const newSurvivors = elimSurvivors.filter(cond.fn);
+  elimSurvivors = newSurvivors;
+  renderElimOptions();
+  elimCondIdx++;
+  if (elimCondIdx >= ELIM_PROBLEM.conditions.length) {
+    const res = document.getElementById('elim-result');
+    res.style.display = 'block';
+    res.textContent = `🎉 答案是 ${ELIM_PROBLEM.answer}！满足全部条件，所有其他选项都被排除啦！`;
+    document.getElementById('elim-cond-btn').disabled = true;
+    document.getElementById('elim-cond-btn').style.opacity = '0.4';
+  }
+}
+renderElimOptions();
+
+/* ── 3. 比较排序 ── 拖拽 */
+const SORT_ANIMALS = [
+  { id:'长颈鹿', emoji:'🦒', name:'长颈鹿' },
+  { id:'大象',   emoji:'🐘', name:'大象' },
+  { id:'马',     emoji:'🐎', name:'马' },
+  { id:'狗',     emoji:'🐕', name:'狗' },
+  { id:'猫',     emoji:'🐈', name:'猫' },
+];
+const SORT_CLUES = [
+  '🦒 长颈鹿 比 🐘 大象 <strong>高</strong>',
+  '🐘 大象 比 🐎 马 <strong>高</strong>',
+  '🐎 马 比 🐕 狗 <strong>高</strong>',
+  '🐕 狗 比 🐈 猫 <strong>高</strong>',
+];
+const SORT_ANSWER = ['长颈鹿','大象','马','狗','猫'];
+let sortSlotData = Array(5).fill(null);
+let sortDragId = null;
+
+function sortReset() {
+  sortSlotData = Array(5).fill(null);
+  renderSort();
+  document.getElementById('sort-feedback').style.display='none';
+}
+function renderSort() {
+  // clues
+  const cluesEl = document.getElementById('sort-clues');
+  cluesEl.innerHTML = '';
+  SORT_CLUES.forEach(c => {
+    const d = document.createElement('div'); d.className='sort-clue';
+    d.innerHTML = `<span class="sort-arrow">↓ 高于</span> ${c}`;
+    cluesEl.appendChild(d);
+  });
+
+  // slots
+  const slots = document.getElementById('sort-slots');
+  slots.innerHTML = '';
+  const labels = ['第1高','第2高','第3高','第4高','第5高'];
+  sortSlotData.forEach((animal, i) => {
+    const slot = document.createElement('div');
+    slot.className = 'sort-slot' + (animal ? ' filled' : '');
+    slot.innerHTML = `<span class="slot-label">${labels[i]}</span>`;
+    if (animal) {
+      const a = SORT_ANIMALS.find(x=>x.id===animal);
+      slot.innerHTML += `<span style="font-size:26px">${a.emoji}</span><span style="font-size:10px;color:var(--muted)">${a.name}</span>`;
+    }
+    slot.ondragover = e => { e.preventDefault(); slot.classList.add('drag-over'); };
+    slot.ondragleave = () => slot.classList.remove('drag-over');
+    slot.ondrop = e => {
+      e.preventDefault(); slot.classList.remove('drag-over');
+      if (sortDragId) {
+        const prev = sortSlotData.indexOf(sortDragId);
+        const displaced = sortSlotData[i]; // 目标槽原来的动物
+        if (prev !== -1) sortSlotData[prev] = displaced; // 交换
+        sortSlotData[i] = sortDragId;
+        renderSort();
+      }
+    };
+    // touch support
+    slot.addEventListener('touchend', e => {
+      const touch = e.changedTouches[0];
+      const el = document.elementFromPoint(touch.clientX, touch.clientY);
+      if (el && el.closest('.sort-slot')) {
+        const targetSlot = el.closest('.sort-slot');
+        const allSlots = Array.from(document.getElementById('sort-slots').children);
+        const idx = allSlots.indexOf(targetSlot);
+        if (idx !== -1 && sortDragId) {
+          const prev = sortSlotData.indexOf(sortDragId);
+          if (prev !== -1) sortSlotData[prev] = sortSlotData[idx];
+          sortSlotData[idx] = sortDragId;
+          sortDragId = null;
+          renderSort();
+        }
+      }
+    });
+    slots.appendChild(slot);
+  });
+
+  // pool — also accept drag-back from slots
+  const pool = document.getElementById('sort-pool');
+  pool.innerHTML = '';
+  pool.ondragover = e => e.preventDefault();
+  pool.ondrop = e => {
+    e.preventDefault();
+    if (sortDragId) {
+      const prev = sortSlotData.indexOf(sortDragId);
+      if (prev !== -1) { sortSlotData[prev] = null; renderSort(); }
+    }
+  };
+  const placed = sortSlotData.filter(Boolean);
+  SORT_ANIMALS.forEach(animal => {
+    if (placed.includes(animal.id)) return;
+    const el = document.createElement('div');
+    el.className = 'sort-animal'; el.draggable = true;
+    el.innerHTML = `<span>${animal.emoji}</span><span class="sa-name">${animal.name}</span>`;
+    el.ondragstart = () => { sortDragId = animal.id; };
+    el.ondragend = () => { sortDragId = null; };
+    el.addEventListener('touchstart', e => { sortDragId = animal.id; e.preventDefault(); }, {passive:false});
+    el.addEventListener('touchmove', e => e.preventDefault(), {passive:false});
+    el.addEventListener('touchend', e => {
+      const touch = e.changedTouches[0];
+      const target = document.elementFromPoint(touch.clientX, touch.clientY);
+      if (target) {
+        const slot = target.closest('.sort-slot');
+        if (slot) {
+          const allSlots = Array.from(document.getElementById('sort-slots').children);
+          const idx = allSlots.indexOf(slot);
+          if (idx !== -1) { sortSlotData[idx] = sortDragId; sortDragId = null; renderSort(); return; }
+        }
+      }
+      sortDragId = null;
+    });
+    pool.appendChild(el);
+  });
+}
+function sortCheck() {
+  const fb = document.getElementById('sort-feedback');
+  fb.style.display = 'block';
+  if (JSON.stringify(sortSlotData) === JSON.stringify(SORT_ANSWER)) {
+    fb.innerHTML = '🎉 完全正确！传递律帮你推出了完整顺序：长颈鹿 > 大象 > 马 > 狗 > 猫 ✨';
+    fb.style.color = '#6ee7b7';
+  } else {
+    fb.innerHTML = '🤔 还不太对，再看看线索，用传递律推导一下！';
+    fb.style.color = '#fca5a5';
+  }
+}
+renderSort();
+
+/* ── 4. 真假推理 ── */
+const TRUTH_SCENARIOS = {
+  '明': {
+    假设: '小明说真话',
+    推导: [
+      { line: '小明说"我没打碎"→ <span class="truth-ok">✅ 小明没打碎</span>' },
+      { line: '小红说"小明打碎了"→ 与上一条矛盾！<span class="truth-bad">❌ 小红说假话</span>' },
+      { line: '小蓝说"我打碎了"→ 已知打碎者不是小明，小蓝也没矛盾→ <span class="truth-ok">✅ 小蓝说真话</span>' },
+      { line: '⚠️ 但这样小明和小蓝都说真话 = 2人说真话，<span class="truth-bad">矛盾！题目说只有1人说真话</span>' },
+    ],
+    result: '❌ 假设失败，小明不是说真话的那个人',
+    ok: false,
+  },
+  '红': {
+    假设: '小红说真话',
+    推导: [
+      { line: '小红说"小明打碎了"→ <span class="truth-ok">✅ 小明打碎了花瓶</span>' },
+      { line: '小明说"我没打碎"→ 与上矛盾！<span class="truth-bad">❌ 小明说假话</span>' },
+      { line: '小蓝说"我打碎了"→ 但已知是小明打碎→ <span class="truth-bad">❌ 小蓝说假话</span>' },
+      { line: '✅ 只有小红说真话，符合"有且只有1人"的条件！' },
+    ],
+    result: '🎉 假设成立！小红说真话，小明打碎了花瓶！',
+    ok: true,
+  },
+  '蓝': {
+    假设: '小蓝说真话',
+    推导: [
+      { line: '小蓝说"我打碎了"→ <span class="truth-ok">✅ 小蓝打碎了花瓶</span>' },
+      { line: '小明说"我没打碎"→ 小明确实没打碎→ <span class="truth-ok">✅ 小明说真话</span>' },
+      { line: '⚠️ 小明和小蓝都说真话 = 2人说真话，<span class="truth-bad">矛盾！</span>' },
+    ],
+    result: '❌ 假设失败，小蓝不是说真话的那个人',
+    ok: false,
+  },
+};
+function truthHypo(person) {
+  document.querySelectorAll('.truth-hypo-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('hypo-'+person).classList.add('active');
+  const s = TRUTH_SCENARIOS[person];
+  const res = document.getElementById('truth-result');
+  res.style.display = 'block';
+  let html = `<div style="font-weight:700;color:#6ee7b7;margin-bottom:8px">假设：${s.假设}</div>`;
+  s.推导.forEach((step,i) => {
+    html += `<div class="truth-line" style="animation:tileIn .3s ease ${i*0.12}s both">👉 ${step.line}</div>`;
+  });
+  html += `<div style="margin-top:10px;font-weight:700;${s.ok?'color:#6ee7b7':'color:#fca5a5'}">${s.result}</div>`;
+  res.innerHTML = html;
 }
 
 initQuiz();
