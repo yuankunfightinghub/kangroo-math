@@ -460,12 +460,13 @@ body {
 
       <!-- ── 概念3：迷宫探索 ── SVG迷宫 + 方向按钮 -->
       <div class="cbox" style="--accent:#a78bfa;--accent-bg:rgba(139,92,246,0.06)">
-        <button class="vbtn vbtn-v" onclick="tv(this,'走迷宫！用方向按钮控制小人移动，找到通往出口的路！碰到墙壁不能通过。遇到岔路口，就用排除法：先试一条路，碰壁了退回来，再试另一条！这就是系统地走迷宫的方法。')">🔊 听讲解</button>
+        <button class="vbtn vbtn-v" onclick="tv(this,'走迷宫！用方向按钮控制小人移动，找到通往出口的路！碰到墙壁不能通过。遇到岔路口，就用排除法：先试一条路，碰壁了退回来，再试另一条！尽量用最少的步数走出去，步数越少星越多！')">🔊 听讲解</button>
         <h4>🌀 迷宫探索 — 方向按钮控制小人</h4>
 
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 12px">
-          <button class="ctrl-btn active" onclick="mazeSelect(this,0)">🌟 简单迷宫</button>
-          <button class="ctrl-btn" onclick="mazeSelect(this,1)">🔥 挑战迷宫</button>
+          <button class="ctrl-btn maze-lvl active" onclick="mazeSelect(this,0)">⭐ 入门 5×5</button>
+          <button class="ctrl-btn maze-lvl" onclick="mazeSelect(this,1)">🔥 进阶 7×7</button>
+          <button class="ctrl-btn maze-lvl" onclick="mazeSelect(this,2)">💀 挑战 9×9</button>
         </div>
 
         <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
@@ -484,8 +485,12 @@ body {
               <div></div>
             </div>
             <div id="maze-status" style="font-size:13px;color:var(--muted);line-height:1.6">用按钮控制小人走出迷宫！</div>
-            <div style="margin-top:8px;font-size:12px;color:var(--muted2)">步数：<strong id="maze-steps" style="color:#a78bfa">0</strong></div>
-            <button class="ctrl-btn" style="margin-top:10px;background:rgba(139,92,246,0.1);border-color:rgba(139,92,246,0.3);color:#a78bfa;font-size:12px" onclick="mazeReset()">🔄 重新开始</button>
+            <div style="margin-top:6px;font-size:12px;color:var(--muted2)">步数：<strong id="maze-steps" style="color:#a78bfa">0</strong> &nbsp;最优：<strong id="maze-optimal" style="color:#6ee7b7">—</strong> 步</div>
+            <div id="maze-stars" style="font-size:20px;margin-top:4px;min-height:24px"></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+              <button class="ctrl-btn" style="background:rgba(139,92,246,0.1);border-color:rgba(139,92,246,0.3);color:#a78bfa;font-size:12px" onclick="mazeReset()">🔄 重新开始</button>
+              <button class="ctrl-btn" id="maze-hint-btn" style="background:rgba(251,191,36,0.08);border-color:rgba(251,191,36,0.3);color:#fbbf24;font-size:12px" onclick="mazeHint()">💡 显示提示</button>
+            </div>
           </div>
         </div>
       </div>
@@ -1016,41 +1021,68 @@ function drawPathCanvas() {
 drawPathCanvas();
 
 /* ── 3. 迷宫 ── */
-// Maze represented as walls. Each cell has walls: {top, right, bottom, left}
-// Use bit mask: 1=top, 2=right, 4=bottom, 8=left
-const MAZES = [
-  {
-    rows:5, cols:5,
-    walls:[
-      [11,9,3,13,3],
-      [12,6,12,3,10],
-      [11,9,3,12,2],
-      [10,10,12,3,10],
-      [12,4,7,12,6],
-    ],
-    start:{r:0,c:0}, end:{r:4,c:4},
-  },
-  {
-    rows:6, cols:6,
-    walls:[
-      [11,9,3,13,1,3],
-      [12,6,12,3,10,14],
-      [9,5,3,10,8,3],
-      [8,3,14,10,14,10],
-      [10,12,3,12,3,10],
-      [12,7,12,5,4,6],
-    ],
-    start:{r:0,c:0}, end:{r:5,c:5},
-  },
+// walls bitmask: 1=top, 2=right, 4=bottom, 8=left
+function generateMaze(rows, cols, seed) {
+  let s = seed >>> 0;
+  function rand(n) { s = (Math.imul(s, 1664525) + 1013904223) >>> 0; return s % n; }
+  const walls = Array.from({length:rows}, () => Array(cols).fill(15));
+  const visited = Array.from({length:rows}, () => Array(cols).fill(false));
+  const DIRS = [[-1,0,1,4],[0,1,2,8],[1,0,4,1],[0,-1,8,2]];
+  function dfs(r, c) {
+    visited[r][c] = true;
+    const dirs = [...DIRS];
+    for (let i=3; i>0; i--) { const j=rand(i+1); [dirs[i],dirs[j]]=[dirs[j],dirs[i]]; }
+    for (const [dr,dc,wCur,wNbr] of dirs) {
+      const nr=r+dr, nc=c+dc;
+      if (nr>=0 && nr<rows && nc>=0 && nc<cols && !visited[nr][nc]) {
+        walls[r][c] &= ~wCur; walls[nr][nc] &= ~wNbr; dfs(nr, nc);
+      }
+    }
+  }
+  dfs(0, 0);
+  return walls;
+}
+function bfsSolve(walls, rows, cols, start, end) {
+  const dist = Array.from({length:rows}, () => Array(cols).fill(-1));
+  const prev = Array.from({length:rows}, () => Array(cols).fill(null));
+  const q = [[start.r, start.c]];
+  dist[start.r][start.c] = 0;
+  while (q.length) {
+    const [r,c] = q.shift();
+    if (r===end.r && c===end.c) break;
+    for (const [dr,dc,bit] of [[-1,0,1],[0,1,2],[1,0,4],[0,-1,8]]) {
+      if (!(walls[r][c] & bit)) {
+        const nr=r+dr, nc=c+dc;
+        if (nr>=0 && nr<rows && nc>=0 && nc<cols && dist[nr][nc]===-1) {
+          dist[nr][nc] = dist[r][c]+1; prev[nr][nc] = [r,c]; q.push([nr,nc]);
+        }
+      }
+    }
+  }
+  const path = []; let cur = [end.r, end.c];
+  while (cur) { path.unshift(cur); cur = prev[cur[0]][cur[1]]; }
+  return {steps: dist[end.r][end.c], path};
+}
+
+const MAZE_CONFIGS = [
+  {rows:5, cols:5, seed:1337, start:{r:0,c:0}, end:{r:4,c:4}},
+  {rows:7, cols:7, seed:2048, start:{r:0,c:0}, end:{r:6,c:6}},
+  {rows:9, cols:9, seed:9999, start:{r:0,c:0}, end:{r:8,c:8}},
 ];
+const MAZES = MAZE_CONFIGS.map(cfg => {
+  const walls = generateMaze(cfg.rows, cfg.cols, cfg.seed);
+  const sol = bfsSolve(walls, cfg.rows, cfg.cols, cfg.start, cfg.end);
+  return {...cfg, walls, optimal: sol.steps, solution: sol.path};
+});
 
 let mazeCurrent = 0;
 let mazePos = {r:0, c:0};
 let mazeSteps = 0;
 let mazeWon = false;
+let mazeShowHint = false;
 
 function mazeSelect(btn, idx) {
-  document.querySelectorAll('.ctrl-btn:not(.cyan)').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.ctrl-btn.maze-lvl').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   mazeCurrent = idx;
   mazeReset();
@@ -1058,86 +1090,84 @@ function mazeSelect(btn, idx) {
 function mazeReset() {
   const m = MAZES[mazeCurrent];
   mazePos = {...m.start};
-  mazeSteps = 0;
-  mazeWon = false;
+  mazeSteps = 0; mazeWon = false; mazeShowHint = false;
   document.getElementById('maze-steps').textContent = '0';
+  document.getElementById('maze-optimal').textContent = m.optimal;
   document.getElementById('maze-status').textContent = '用按钮控制小人走出迷宫！';
   document.getElementById('maze-player-icon').textContent = '🧒';
+  document.getElementById('maze-stars').textContent = '';
+  document.getElementById('maze-hint-btn').textContent = '💡 显示提示';
   renderMaze();
 }
-
 function canMove(r, c, dr, dc) {
   const m = MAZES[mazeCurrent];
   if (r+dr < 0 || r+dr >= m.rows || c+dc < 0 || c+dc >= m.cols) return false;
-  // Check wall: dr=-1 means going up (top wall = bit 1)
-  // dc=+1 means going right (right wall = bit 2)
-  // dr=+1 means going down (bottom wall = bit 4)
-  // dc=-1 means going left (left wall = bit 8)
   const wallBit = dc===1 ? 2 : dc===-1 ? 8 : dr===-1 ? 1 : 4;
   return !(m.walls[r][c] & wallBit);
 }
-
 function mazeMove(dc, dr) {
   if (mazeWon) return;
   if (!canMove(mazePos.r, mazePos.c, dr, dc)) {
-    document.getElementById('maze-status').textContent = '🧱 这里有墙，走不过去！';
-    return;
+    document.getElementById('maze-status').textContent = '🧱 这里有墙，走不过去！'; return;
   }
-  mazePos.r += dr;
-  mazePos.c += dc;
-  mazeSteps++;
+  mazePos.r += dr; mazePos.c += dc; mazeSteps++;
   document.getElementById('maze-steps').textContent = mazeSteps;
   const m = MAZES[mazeCurrent];
   if (mazePos.r === m.end.r && mazePos.c === m.end.c) {
     mazeWon = true;
-    document.getElementById('maze-status').innerHTML = `🎉 <strong style="color:#6ee7b7">走出来了！</strong>共走了 ${mazeSteps} 步，太棒了！`;
-    document.getElementById('maze-player-icon').style.animation = 'winBounce .6s ease';
+    const ratio = m.optimal / mazeSteps;
+    const stars = ratio >= 1 ? '⭐⭐⭐' : ratio >= 0.75 ? '⭐⭐' : '⭐';
+    const comment = ratio >= 1 ? '完美！走了最短路线！' : ratio >= 0.75 ? '很棒！差一点点就最优了！' : '成功走出！再挑战一次能更少步吗？';
+    document.getElementById('maze-status').innerHTML = `🎉 <strong style="color:#6ee7b7">走出来了！</strong>${comment}`;
+    document.getElementById('maze-stars').textContent = stars;
     document.getElementById('maze-player-icon').textContent = '🎉';
   } else {
     document.getElementById('maze-status').textContent = '继续走，找到出口 🏁';
   }
   renderMaze();
 }
-
+function mazeHint() {
+  mazeShowHint = !mazeShowHint;
+  renderMaze();
+  document.getElementById('maze-hint-btn').textContent = mazeShowHint ? '🙈 隐藏提示' : '💡 显示提示';
+}
 function renderMaze() {
   const m = MAZES[mazeCurrent];
-  const cell = 38, pad = 10;
-  const W = m.cols * cell + pad*2, H = m.rows * cell + pad*2;
+  const cell = m.cols <= 5 ? 40 : m.cols <= 7 ? 32 : 26;
+  const pad = 10;
+  const W = m.cols*cell + pad*2, H = m.rows*cell + pad*2;
   const svg = document.getElementById('maze-svg');
-  svg.setAttribute('width', W);
-  svg.setAttribute('height', H);
+  svg.setAttribute('width', W); svg.setAttribute('height', H);
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   let html = '';
-
-  // Fill cells
+  const hintSet = new Set();
+  if (mazeShowHint) m.solution.forEach(([r,c]) => hintSet.add(`${r},${c}`));
   for (let r=0; r<m.rows; r++) {
     for (let c=0; c<m.cols; c++) {
       const x=pad+c*cell, y=pad+r*cell;
       const isStart = r===m.start.r && c===m.start.c;
       const isEnd   = r===m.end.r   && c===m.end.c;
       const isPlayer = r===mazePos.r && c===mazePos.c;
-      const bg = isEnd ? 'rgba(103,232,249,0.15)' : isStart ? 'rgba(16,185,129,0.12)' : 'rgba(255,255,255,0.02)';
+      const isHint  = hintSet.has(`${r},${c}`) && !isStart && !isEnd && !isPlayer;
+      const bg = isEnd ? 'rgba(103,232,249,0.2)' : isStart ? 'rgba(16,185,129,0.15)' : isHint ? 'rgba(251,191,36,0.1)' : 'rgba(255,255,255,0.02)';
       html += `<rect x="${x}" y="${y}" width="${cell}" height="${cell}" fill="${bg}"/>`;
-      if (isEnd && !isPlayer) html += `<text x="${x+cell/2}" y="${y+cell/2+6}" text-anchor="middle" font-size="20">🏁</text>`;
-      if (isPlayer) html += `<text x="${x+cell/2}" y="${y+cell/2+6}" text-anchor="middle" font-size="18">${mazeWon?'🎉':'🧒'}</text>`;
+      if (isHint) html += `<circle cx="${x+cell/2}" cy="${y+cell/2}" r="${cell<30?3:4}" fill="rgba(251,191,36,0.55)"/>`;
+      const fs = cell < 30 ? 14 : 18;
+      if (isEnd && !isPlayer) html += `<text x="${x+cell/2}" y="${y+cell/2+fs*0.38}" text-anchor="middle" font-size="${fs}">🏁</text>`;
+      if (isPlayer) html += `<text x="${x+cell/2}" y="${y+cell/2+fs*0.38}" text-anchor="middle" font-size="${fs}">${mazeWon?'🎉':'🧒'}</text>`;
     }
   }
-
-  // Draw walls
   for (let r=0; r<m.rows; r++) {
     for (let c=0; c<m.cols; c++) {
       const x=pad+c*cell, y=pad+r*cell;
-      const w = m.walls[r][c];
-      const stroke='#a78bfa'; const sw=2.5;
+      const w = m.walls[r][c]; const stroke='#a78bfa'; const sw=2;
       if (w & 1) html += `<line x1="${x}" y1="${y}" x2="${x+cell}" y2="${y}" stroke="${stroke}" stroke-width="${sw}" stroke-linecap="round"/>`;
       if (w & 2) html += `<line x1="${x+cell}" y1="${y}" x2="${x+cell}" y2="${y+cell}" stroke="${stroke}" stroke-width="${sw}" stroke-linecap="round"/>`;
       if (w & 4) html += `<line x1="${x}" y1="${y+cell}" x2="${x+cell}" y2="${y+cell}" stroke="${stroke}" stroke-width="${sw}" stroke-linecap="round"/>`;
       if (w & 8) html += `<line x1="${x}" y1="${y}" x2="${x}" y2="${y+cell}" stroke="${stroke}" stroke-width="${sw}" stroke-linecap="round"/>`;
     }
   }
-  // Outer border
   html += `<rect x="${pad}" y="${pad}" width="${m.cols*cell}" height="${m.rows*cell}" fill="none" stroke="#a78bfa" stroke-width="2.5"/>`;
-
   svg.innerHTML = html;
 }
 
