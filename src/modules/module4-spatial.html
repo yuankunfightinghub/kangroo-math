@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎲 空间想象与立体 — 袋鼠数学乐园</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #030712;
+  --bg2: #0a0f1e;
+  --card: rgba(255,255,255,0.03);
+  --card-border: rgba(255,255,255,0.08);
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --muted2: #64748b;
+  --amber: #f59e0b;
+  --amber-light: #fcd34d;
+  --red: #ef4444;
+  --red-light: #fca5a5;
+  --emerald: #10b981;
+  --blue: #3b82f6;
+  --purple: #8b5cf6;
+  --cyan: #06b6d4;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', 'Noto Sans SC', sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Aurora ── */
+.aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.aurora-blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.12; animation: auroraF linear infinite; }
+.ab1 { width: 600px; height: 600px; background: radial-gradient(circle,#f59e0b,transparent 70%); top: -100px; left: -100px; animation-duration: 22s; }
+.ab2 { width: 500px; height: 500px; background: radial-gradient(circle,#ef4444,transparent 70%); top: 50%; right: -100px; animation-duration: 28s; animation-delay:-10s; }
+.ab3 { width: 400px; height: 400px; background: radial-gradient(circle,#f97316,transparent 70%); bottom: 10%; left: 20%; animation-duration: 20s; animation-delay:-5s; }
+@keyframes auroraF { 0%{transform:translate(0,0)} 33%{transform:translate(30px,-25px)} 66%{transform:translate(-15px,35px)} 100%{transform:translate(0,0)} }
+
+.dot-grid { position: fixed; inset: 0; z-index: 0; pointer-events: none; background-image: radial-gradient(rgba(255,255,255,0.05) 1px,transparent 1px); background-size: 28px 28px; mask-image: radial-gradient(ellipse 70% 70% at 50% 50%,black 40%,transparent 100%); }
+
+.page { position: relative; z-index: 1; }
+
+/* ── Top bar ── */
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(3,7,18,0.8); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--card-border); padding: 0 24px;
+}
+.topbar-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; gap: 16px; height: 60px; }
+.back-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--muted); font-size: 13px; font-weight: 500;
+  text-decoration: none; transition: color .2s; padding: 6px 12px; border-radius: 8px;
+}
+.back-link:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+.topbar-sep { color: var(--muted2); font-size: 14px; }
+.topbar-title { font-size: 14px; font-weight: 600; color: var(--muted); }
+
+/* ── Hero ── */
+.tab-nav {
+  display: inline-flex; gap: 6px;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--card-border);
+  border-radius: 16px; padding: 6px; margin-top: 24px;
+  animation: fadeUp .5s ease .3s both;
+}
+.tab-pill {
+  padding: 10px 22px; border-radius: 10px;
+  font-size: 14px; font-weight: 600; border: none;
+  background: transparent; color: var(--muted);
+  cursor: pointer; transition: all .25s; white-space: nowrap;
+  font-family: 'Noto Sans SC', sans-serif; display: flex; align-items: center; gap: 6px;
+}
+.tab-pill:hover { background: rgba(255,255,255,0.06); color: var(--text); }
+.tab-pill.on { background: rgba(245,158,11,0.18); color: #fcd34d; box-shadow: 0 0 0 1px rgba(245,158,11,0.35); }
+
+.mod-hero { padding: 60px 24px 56px; text-align: center; position: relative; max-width: 960px; margin: 0 auto; }
+.mod-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25);
+  border-radius: 999px; padding: 5px 16px;
+  font-size: 12px; font-weight: 600; color: #fcd34d;
+  margin-bottom: 20px; animation: fadeUp .5s ease both;
+}
+.mod-title {
+  font-size: clamp(32px, 6vw, 56px); font-weight: 900;
+  letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 14px;
+  animation: fadeUp .5s ease .1s both;
+}
+.mod-sub { color: var(--muted); font-size: 16px; max-width: 480px; margin: 20px auto 0; animation: fadeUp .5s ease .4s both; }
+.grad-text { background: linear-gradient(135deg,#fcd34d,#fb923c,#fca5a5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+/* ── Sections ── */
+.container { max-width: 960px; margin: 0 auto; padding: 0 24px 80px; }
+.sec { display: none; animation: fadeUp .4s ease; }
+.sec.on { display: block; }
+.sec-heading { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--card-border); }
+
+/* ── Glass Card ── */
+.gcard {
+  background: var(--card); border: 1px solid var(--card-border);
+  border-radius: 20px; padding: 28px; margin-bottom: 16px;
+  transition: border-color .3s; position: relative; overflow: hidden;
+}
+.gcard:hover { border-color: rgba(245,158,11,0.25); }
+.gcard::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(245,158,11,0.4), transparent);
+  opacity: 0; transition: opacity .3s;
+}
+.gcard:hover::before { opacity: 1; }
+
+/* ── Concept box ── */
+.cbox {
+  border-radius: 16px; padding: 20px 20px 20px 24px; margin: 14px 0;
+  position: relative; border-left: 3px solid var(--accent, var(--amber));
+  background: var(--accent-bg, rgba(245,158,11,0.05));
+}
+.cbox h4 { font-size: 17px; font-weight: 700; margin-bottom: 8px; color: var(--accent, #fcd34d); letter-spacing: -0.01em; }
+.cbox p, .cbox ul { font-size: 15px; color: var(--muted); line-height: 1.8; }
+.cbox ul { margin-left: 20px; margin-top: 8px; }
+.cbox li { margin-bottom: 4px; }
+.cbox b, .cbox strong { color: var(--text); font-weight: 600; }
+
+/* Solid shapes grid */
+.solid-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(100px,1fr)); gap: 10px; margin: 14px 0; }
+.solid-item {
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px; padding: 14px 8px; text-align: center;
+}
+.solid-item .s-icon { font-size: 28px; display: block; margin-bottom: 6px; }
+.solid-item .s-name { font-size: 12px; font-weight: 600; color: var(--muted); }
+.solid-item .s-desc { font-size: 11px; color: var(--muted2); margin-top: 3px; }
+
+/* Net diagram */
+.net-diagram {
+  display: grid; gap: 2px; margin: 14px 0;
+  font-size: 11px; font-weight: 700; color: var(--muted);
+}
+.net-cell {
+  background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25);
+  border-radius: 6px; display: flex; align-items: center; justify-content: center;
+  aspect-ratio: 1; min-height: 40px; font-size: 13px; font-weight: 700; color: #fcd34d;
+}
+.net-cell.empty { background: transparent; border-color: transparent; }
+
+/* ── Voice btn ── */
+.vbtn {
+  position: absolute; top: 14px; right: 14px;
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: 8px; border: none;
+  font-size: 12px; font-weight: 600; cursor: pointer; transition: all .25s;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.vbtn:hover { transform: scale(1.06); }
+.vbtn.playing { opacity: .75; }
+.vbtn-a { background: rgba(245,158,11,0.12); color: #fcd34d; border: 1px solid rgba(245,158,11,0.25); }
+.vbtn-r { background: rgba(239,68,68,0.12); color: #fca5a5; border: 1px solid rgba(239,68,68,0.25); }
+.vbtn-e { background: rgba(16,185,129,0.12); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.25); }
+.vbtn-v { background: rgba(139,92,246,0.15); color: #a78bfa; border: 1px solid rgba(139,92,246,0.25); }
+
+/* ── Method Cards ── */
+.mcard {
+  background: var(--card); border: 1px solid var(--card-border);
+  border-radius: 16px; margin-bottom: 12px; cursor: pointer; transition: all .3s; overflow: hidden;
+}
+.mcard:hover { border-color: rgba(255,255,255,0.12); transform: translateY(-1px); }
+.mcard.open { border-color: rgba(245,158,11,0.3); }
+.mcard-head { padding: 20px 24px; display: flex; align-items: center; gap: 16px; }
+.mcard-icon { font-size: 28px; flex-shrink: 0; }
+.mcard-info { flex: 1; }
+.mcard-title { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
+.mcard-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.mcard-chevron { font-size: 18px; color: var(--muted); transition: transform .3s; margin-left: auto; }
+.mcard.open .mcard-chevron { transform: rotate(180deg); color: #fcd34d; }
+.mcard-body { max-height: 0; overflow: hidden; transition: max-height .5s cubic-bezier(0.23,1,0.32,1); }
+.mcard-body.open { max-height: 1400px; }
+.mcard-body-inner { padding: 0 24px 24px; border-top: 1px solid var(--card-border); }
+.mcard-challenge {
+  background: rgba(255,255,255,0.03); border-radius: 12px; padding: 14px 16px;
+  font-size: 14px; color: var(--muted); margin: 16px 0 12px; line-height: 1.7;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.mcard-challenge strong { color: var(--text); }
+.reveal-btn {
+  display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; border-radius: 10px;
+  background: rgba(245,158,11,0.1); border: 1px dashed rgba(245,158,11,0.35);
+  color: #fcd34d; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .25s; margin-bottom: 12px;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.reveal-btn:hover { background: rgba(245,158,11,0.18); transform: scale(1.03); }
+.step { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 12px; opacity: 0; transform: translateX(-16px); transition: all .4s; }
+.step.show { opacity: 1; transform: none; }
+.step-num {
+  width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800; color: #fff;
+  background: linear-gradient(135deg, var(--scolor1,#f59e0b), var(--scolor2,#ef4444));
+}
+.step-content {
+  background: rgba(255,255,255,0.04); border-radius: 12px; padding: 10px 14px;
+  flex: 1; font-size: 14px; line-height: 1.75; color: var(--muted);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.step-content strong, .step-content b { color: var(--text); }
+
+/* ── Example Cards ── */
+.excard { background: var(--card); border: 1px solid var(--card-border); border-radius: 20px; overflow: hidden; margin-bottom: 24px; }
+.excard-hdr {
+  padding: 16px 24px; background: rgba(255,255,255,0.02);
+  border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center;
+}
+.excard-hdr .ex-num { font-size: 14px; font-weight: 700; color: #fcd34d; }
+.excard-hdr .ex-tag { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: rgba(245,158,11,0.1); color: #fcd34d; border: 1px solid rgba(245,158,11,0.25); }
+.excard-body { padding: 24px; }
+.qbox { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 18px; margin-bottom: 20px; font-size: 16px; line-height: 1.8; color: var(--text); }
+.qbox small { color: var(--muted); font-size: 13px; }
+.ex-opts { display: grid; grid-template-columns: repeat(auto-fit,minmax(140px,1fr)); gap: 8px; margin-bottom: 14px; }
+.ex-opt {
+  padding: 12px 16px; border-radius: 12px; border: 1px solid var(--card-border);
+  background: rgba(255,255,255,0.03); font-size: 15px; font-weight: 600; cursor: pointer;
+  transition: all .25s; text-align: center; color: var(--muted); font-family: 'Noto Sans SC', sans-serif;
+}
+.ex-opt:hover { border-color: rgba(245,158,11,0.4); background: rgba(245,158,11,0.08); color: var(--text); transform: translateY(-2px); }
+.ex-opt.correct { border-color: rgba(16,185,129,0.5); background: rgba(16,185,129,0.1); color: #6ee7b7; pointer-events: none; }
+.ex-opt.wrong { border-color: rgba(239,68,68,0.5); background: rgba(239,68,68,0.08); animation: shake .4s; color: #fca5a5; }
+.ex-opt.dim { opacity: .35; pointer-events: none; }
+.ex-result { border-radius: 12px; padding: 14px 16px; font-size: 14px; font-weight: 600; line-height: 1.7; display: none; }
+
+/* Guide chain */
+.guide-chain { margin-top: 16px; display: none; }
+.guide-item { margin-bottom: 10px; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.06); transition: border-color .3s; }
+.guide-item.unlocked { border-color: rgba(245,158,11,0.3); }
+.guide-q { padding: 13px 18px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; color: var(--muted2); transition: all .25s; }
+.guide-item.unlocked .guide-q { color: var(--text); background: rgba(245,158,11,0.05); }
+.guide-item.unlocked .guide-q:hover { background: rgba(245,158,11,0.1); }
+.guide-lock { margin-left: auto; font-size: 11px; font-weight: 600; color: var(--muted2); }
+.guide-a { max-height: 0; overflow: hidden; transition: max-height .4s; font-size: 14px; line-height: 1.8; color: var(--muted); background: rgba(0,0,0,0.2); }
+.guide-a.open { max-height: 300px; padding: 14px 18px; }
+
+/* Feynman */
+.feynman-box { margin-top: 16px; border-radius: 16px; overflow: hidden; border: 1px solid rgba(16,185,129,0.3); display: none; }
+.feynman-box.show { display: block; animation: fadeUp .5s ease; }
+.feynman-hdr { background: linear-gradient(135deg,rgba(16,185,129,0.15),rgba(245,158,11,0.1)); border-bottom: 1px solid rgba(16,185,129,0.2); padding: 14px 20px; font-size: 14px; font-weight: 700; color: #6ee7b7; }
+.feynman-body { padding: 20px; }
+.fn-step { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+.fn-num { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; background: rgba(16,185,129,0.2); border: 1px solid rgba(16,185,129,0.35); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #6ee7b7; }
+.fn-content { background: rgba(16,185,129,0.05); border-radius: 12px; padding: 10px 14px; flex: 1; font-size: 14px; line-height: 1.75; color: var(--muted); border: 1px solid rgba(16,185,129,0.1); }
+.fn-content strong { color: var(--text); }
+
+/* ── Quiz ── */
+.quiz-wrap { background: var(--card); border: 1px solid var(--card-border); border-radius: 20px; padding: 28px; margin-bottom: 16px; }
+.quiz-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+.quiz-title { font-size: 18px; font-weight: 800; letter-spacing: -0.02em; }
+.stars { display: flex; gap: 4px; }
+.star { font-size: 18px; transition: all .3s; opacity: .3; }
+.star.on { opacity: 1; animation: starPop .4s ease; }
+@keyframes starPop { 0%{transform:scale(0)} 60%{transform:scale(1.3)} 100%{transform:scale(1)} }
+.qnav { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 20px; }
+.qdot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.1); transition: all .25s; cursor: pointer; }
+.qdot.done { background: var(--emerald); }
+.qdot.cur { background: var(--amber); transform: scale(1.4); }
+.q-meta { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; }
+.q-diff { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; color: #fff; }
+.q-src { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: rgba(245,158,11,0.1); color: #fcd34d; border: 1px solid rgba(245,158,11,0.2); }
+.quiz-q { font-size: 16px; font-weight: 600; line-height: 1.8; margin-bottom: 14px; color: var(--text); }
+.qopts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.qopt { padding: 12px 16px; border-radius: 12px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.03); font-size: 14px; font-weight: 600; cursor: pointer; transition: all .25s; text-align: center; color: var(--muted); font-family: 'Noto Sans SC', sans-serif; }
+.qopt:hover { border-color: rgba(245,158,11,0.4); background: rgba(245,158,11,0.08); color: var(--text); }
+.qopt.correct { border-color: rgba(16,185,129,0.5); background: rgba(16,185,129,0.1); color: #6ee7b7; }
+.qopt.wrong { border-color: rgba(239,68,68,0.5); background: rgba(239,68,68,0.08); color: #fca5a5; animation: shake .4s; }
+.qopt.dis { pointer-events: none; opacity: .4; }
+.qfb { margin-top: 12px; padding: 12px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; line-height: 1.7; display: none; animation: fadeUp .3s ease; }
+.qfb.show { display: block; }
+.qfb.ok { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2); color: #6ee7b7; }
+.qfb.no { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); color: #fcd34d; }
+.q-nav-row { display: flex; gap: 8px; margin-top: 14px; }
+.qnbtn { display: none; padding: 8px 20px; border-radius: 10px; border: none; font-size: 13px; font-weight: 700; cursor: pointer; transition: all .25s; font-family: 'Noto Sans SC', sans-serif; }
+.qnbtn.show { display: inline-flex; align-items: center; gap: 5px; }
+.qnbtn:hover { transform: translateY(-1px); }
+.qnbtn-prev { background: rgba(255,255,255,0.06); color: var(--muted); border: 1px solid var(--card-border); }
+.qnbtn-prev:hover { color: var(--text); }
+.qnbtn-next { background: rgba(245,158,11,0.15); color: #fcd34d; border: 1px solid rgba(245,158,11,0.25); }
+
+/* Inline voice btn */
+.va-btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 8px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .25s; font-family: 'Noto Sans SC', sans-serif; background: rgba(245,158,11,0.12); color: #fcd34d; border: 1px solid rgba(245,158,11,0.25); }
+.va-btn:hover { background: rgba(245,158,11,0.2); }
+.va-btn.playing { opacity: .75; }
+
+/* ── Animations ── */
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .tab-nav { gap: 4px; padding: 4px; }
+  .tab-pill { padding: 8px 14px; font-size: 13px; }
+  .qopts, .ex-opts { grid-template-columns: 1fr; }
+  .gcard, .excard-body { padding: 20px; }
+  .mod-title { font-size: 28px; }
+  .solid-grid { grid-template-columns: repeat(3,1fr); }
+}
+
+/* Mobile bottom nav */
+.mob-tabs { display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; background: rgba(3,7,18,0.95); backdrop-filter: blur(20px); border-top: 1px solid var(--card-border); padding: 8px 8px 20px; gap: 4px; }
+@media (max-width: 640px) { .mob-tabs { display: flex; } .container { padding-bottom: 100px; } }
+.mob-tab { flex: 1; padding: 8px 4px; border-radius: 10px; font-size: 11px; font-weight: 600; border: none; background: transparent; color: var(--muted2); cursor: pointer; transition: all .25s; display: flex; flex-direction: column; align-items: center; gap: 3px; font-family: 'Noto Sans SC', sans-serif; }
+.mob-tab .mt-icon { font-size: 20px; }
+.mob-tab.on { color: #fcd34d; background: rgba(245,158,11,0.1); }
+</style>
+</head>
+<body>
+
+<div class="aurora">
+  <div class="aurora-blob ab1"></div>
+  <div class="aurora-blob ab2"></div>
+  <div class="aurora-blob ab3"></div>
+</div>
+<div class="dot-grid"></div>
+
+<div class="page">
+
+<!-- ── Top Bar ── -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="back-link" href="../../index.html">← 返回主页</a>
+    <span class="topbar-sep">/</span>
+    <span class="topbar-title">空间想象与立体</span>
+  </div>
+</div>
+
+<!-- ── Hero ── -->
+<div class="mod-hero">
+  <div class="mod-badge">模块 04 · 空间想象与立体</div>
+  <h1 class="mod-title">脑中搭积木，<br><span class="grad-text">探索 3D 世界</span></h1>
+  <nav class="tab-nav">
+    <button class="tab-pill on" data-s="s1">💡 概念</button>
+    <button class="tab-pill" data-s="s2">🛠 技巧</button>
+    <button class="tab-pill" data-s="s3">📖 例题</button>
+    <button class="tab-pill" data-s="s4">🎮 挑战</button>
+  </nav>
+  <p class="mod-sub">从展开图到三视图，在脑海里搭建属于你的 3D 世界 🎲</p>
+</div>
+
+<!-- ── Content ── -->
+<div class="container">
+
+  <!-- ═══════════════ S1 概念 ═══════════════ -->
+  <div id="s1" class="sec on">
+    <div class="gcard">
+      <div class="sec-heading">💡 核心概念</div>
+
+      <!-- 概念1 -->
+      <div class="cbox" style="--accent:#fcd34d;--accent-bg:rgba(245,158,11,0.06)">
+        <button class="vbtn vbtn-a" onclick="tv(this,'认识立体图形！立体图形有长宽高三个方向，不像平面图形只有长和宽。正方体六个面都是正方形，比如骰子和魔方。长方体六个面是长方形，比如砖块和书本。圆柱两端是圆形，侧面是弯的，像饮料罐。圆锥底面是圆，顶部是一个尖，像冰淇淋。球体没有平面，像足球！')">🔊 听讲解</button>
+        <h4>🎲 认识立体图形</h4>
+        <p>立体图形有<strong>长、宽、高</strong>三个方向，我们生活中随处可见！</p>
+        <div class="solid-grid">
+          <div class="solid-item"><span class="s-icon">🎲</span><span class="s-name">正方体</span><span class="s-desc">6个正方形面</span></div>
+          <div class="solid-item"><span class="s-icon">📦</span><span class="s-name">长方体</span><span class="s-desc">6个长方形面</span></div>
+          <div class="solid-item"><span class="s-icon">🥫</span><span class="s-name">圆柱</span><span class="s-desc">2圆面+1侧面</span></div>
+          <div class="solid-item"><span class="s-icon">🍦</span><span class="s-name">圆锥</span><span class="s-desc">1圆面+1侧面</span></div>
+          <div class="solid-item"><span class="s-icon">⚽</span><span class="s-name">球体</span><span class="s-desc">无平面，全曲面</span></div>
+          <div class="solid-item"><span class="s-icon">🔺</span><span class="s-name">三棱柱</span><span class="s-desc">2三角形+3长方形</span></div>
+        </div>
+        <p style="margin-top:8px">💡 记忆口诀：<strong>"正方体魔方形，长方体砖头形，圆柱罐头形，圆锥冰淇淋形！"</strong></p>
+      </div>
+
+      <!-- 概念2 -->
+      <div class="cbox" style="--accent:#fb923c;--accent-bg:rgba(249,115,22,0.06)">
+        <button class="vbtn vbtn-r" onclick="tv(this,'正方体展开图！把正方体六个面剪开摊平，就是展开图。正方体共有11种不同的展开图！最常见的是十字形，中间一排4个面，上下各一个面。判断展开图能不能折成正方体，关键看：相对的两个面不能相邻，而且每个面只能出现一次！')">🔊 听讲解</button>
+        <h4>📦 正方体展开图</h4>
+        <p>把正方体"剪开摊平"就是<strong>展开图</strong>，共有 <strong>11 种</strong>不同的展开图！</p>
+        <ul>
+          <li>✂️ 最常见：<strong>十字形</strong>（中间4格一排，上下各1格）</li>
+          <li>🔄 <strong>判断能否折叠</strong>：相对的面不能直接相邻；共6个面，不多不少</li>
+          <li>⚠️ <strong>常见陷阱</strong>：看起来像展开图，但有面重叠 → 不能折成正方体</li>
+          <li>💡 <strong>标记法</strong>：把6个面标1~6，折叠时对面之和=7（1↔6，2↔5，3↔4）</li>
+        </ul>
+      </div>
+
+      <!-- 概念3 -->
+      <div class="cbox" style="--accent:#6ee7b7;--accent-bg:rgba(16,185,129,0.06)">
+        <button class="vbtn vbtn-e" onclick="tv(this,'三视图！从三个方向看立体图形，画出来的图就是三视图。正视图是从正面看，侧视图是从左边或右边看，俯视图是从上面往下看。比如一个正方体，三个方向看都是正方形。一个圆柱，从正面和侧面看是长方形，从上面看是圆形！三视图帮我们把三维图形用二维表示出来！')">🔊 听讲解</button>
+        <h4>👁️ 三视图（正视·侧视·俯视）</h4>
+        <p>从三个方向观察立体图形，画出来的平面图叫<strong>三视图</strong>！</p>
+        <ul>
+          <li>⬛ <strong>正视图</strong>：从正面看（最直观的视角）</li>
+          <li>◀️ <strong>侧视图</strong>：从左侧或右侧看</li>
+          <li>⬆️ <strong>俯视图</strong>：从上方向下俯视</li>
+        </ul>
+        <p style="margin-top:8px">常见立体三视图对照：</p>
+        <ul>
+          <li>🎲 <strong>正方体</strong>：三个方向都是 <strong>正方形</strong></li>
+          <li>🥫 <strong>圆柱</strong>：正/侧视图是长方形，俯视图是 <strong>圆形</strong></li>
+          <li>🍦 <strong>圆锥</strong>：正/侧视图是三角形，俯视图是圆形+中心点</li>
+        </ul>
+      </div>
+
+      <!-- 概念4 -->
+      <div class="cbox" style="--accent:#a78bfa;--accent-bg:rgba(139,92,246,0.06)">
+        <button class="vbtn vbtn-v" onclick="tv(this,'数立方块！把很多小正方体堆在一起，怎么数总共有几个？方法是分层数：把整堆积木一层一层分开数，每层有几个，然后加起来就是总数。有的小正方体被藏在里面看不到，要结合俯视图来推断！俯视图上的数字告诉你这个位置叠了几层！')">🔊 听讲解</button>
+        <h4>🔢 数立方块</h4>
+        <p>一堆小正方体叠在一起，用<strong>分层计数法</strong>数清楚！</p>
+        <ul>
+          <li>📐 <strong>分层法</strong>：第一层数完再数第二层，逐层累加</li>
+          <li>🗺️ <strong>俯视图标数字</strong>：每个格子的数字 = 该位置叠了几层</li>
+          <li>👀 <strong>注意隐藏块</strong>：被遮住的正方体也要计入！</li>
+          <li>➕ <strong>总数</strong> = 各层数量之和，或俯视图上所有数字之和</li>
+        </ul>
+        <p style="margin-top:8px">💡 口诀：<strong>"俯视数字加一加，就是总块数！"</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ S2 技巧 ═══════════════ -->
+  <div id="s2" class="sec">
+
+    <!-- 方法1 -->
+    <div class="mcard" onclick="toggleMCard(this)">
+      <div class="mcard-head">
+        <div class="mcard-icon">✂️</div>
+        <div class="mcard-info">
+          <div class="mcard-title">展开图折叠法</div>
+          <div class="mcard-sub">脑内折纸，判断展开图能不能变成正方体！</div>
+        </div>
+        <div class="mcard-chevron">⌄</div>
+      </div>
+      <div class="mcard-body">
+        <div class="mcard-body-inner">
+          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>一个展开图：T字形，上方1格，中间一排4格，下方1格（共6格）。能折成正方体吗？</div>
+          <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms1')">👆 看解法</button>
+          <div id="ms1">
+            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">1</div><div class="step-content"><strong>数格子</strong>：共 6 格 ✅（正方体恰好 6 个面，数量正确）</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">2</div><div class="step-content"><strong>标对面</strong>：中间一排从左到右标为前、左、后、右；上方是上，下方是下。前↔后，左↔右，上↔下，没有矛盾 ✅</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">3</div><div class="step-content"><strong>结论</strong>：T字形（上+中4+下）是 11 种展开图之一，<strong>可以折成正方体</strong> ✅</div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'展开图折叠法：先数格子，6个才对。再标对面，前对后，左对右，上对下。没有矛盾就能折叠。T字形是合法展开图，可以折成正方体！')">🔊 听讲解</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 方法2 -->
+    <div class="mcard" onclick="toggleMCard(this)">
+      <div class="mcard-head">
+        <div class="mcard-icon">👁️</div>
+        <div class="mcard-info">
+          <div class="mcard-title">三视图还原法</div>
+          <div class="mcard-sub">从三张平面图，推出立体图形是什么！</div>
+        </div>
+        <div class="mcard-chevron">⌄</div>
+      </div>
+      <div class="mcard-body">
+        <div class="mcard-body-inner">
+          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>正视图是圆形，侧视图是圆形，俯视图也是圆形。这是什么立体图形？</div>
+          <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms2')">👆 看解法</button>
+          <div id="ms2">
+            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">1</div><div class="step-content"><strong>正视图是圆</strong>：从正面看是圆，说明正面的轮廓是圆形</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">2</div><div class="step-content"><strong>三个方向都是圆</strong>：无论从哪个角度看都是圆 → 每个方向的截面都是圆形</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">3</div><div class="step-content">唯一满足"三视图都是圆"的立体图形就是 <strong>球体</strong> ⚽ ✅</div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'三视图还原：正面、侧面、上面看都是圆形，说明每个方向截面都是圆。只有球体才能做到！三个方向全是圆，答案就是球！')">🔊 听讲解</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 方法3 -->
+    <div class="mcard" onclick="toggleMCard(this)">
+      <div class="mcard-head">
+        <div class="mcard-icon">🔢</div>
+        <div class="mcard-info">
+          <div class="mcard-title">分层计数法</div>
+          <div class="mcard-sub">一层一层数，藏起来的也别漏！</div>
+        </div>
+        <div class="mcard-chevron">⌄</div>
+      </div>
+      <div class="mcard-body">
+        <div class="mcard-body-inner">
+          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>用小正方体搭一个楼梯形状：第一层 3 个，第二层 2 个（叠在右边2格上），第三层 1 个（叠在最右边）。共几个小正方体？</div>
+          <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms3')">👆 看解法</button>
+          <div id="ms3">
+            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">1</div><div class="step-content"><strong>第一层</strong>（底层）：3 个小正方体，横排放置</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">2</div><div class="step-content"><strong>第二层</strong>：叠在右边 2 个格子上方 → 2 个小正方体</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">3</div><div class="step-content"><strong>第三层</strong>：叠在最右边 1 个格子上方 → 1 个小正方体<br>总计：3 + 2 + 1 = <strong>6 个</strong> ✅</div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'分层计数：底层3个，第二层2个，第三层1个，加起来3加2加1等于6个！楼梯形状，每层少一个，这是三角数的规律！')">🔊 听讲解</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 方法4 -->
+    <div class="mcard" onclick="toggleMCard(this)">
+      <div class="mcard-head">
+        <div class="mcard-icon">🎲</div>
+        <div class="mcard-info">
+          <div class="mcard-title">对面识别法</div>
+          <div class="mcard-sub">展开图中，哪两个面是对面？有口诀！</div>
+        </div>
+        <div class="mcard-chevron">⌄</div>
+      </div>
+      <div class="mcard-body">
+        <div class="mcard-body-inner">
+          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>一个正方体的 6 个面标 1~6，掷骰子时，1 的对面是 6，2 的对面是 5，3 的对面是 4。在十字形展开图中，如何快速找对面？</div>
+          <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms4')">👆 看解法</button>
+          <div id="ms4">
+            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">1</div><div class="step-content"><strong>十字形展开图规律</strong>：中间一横排（4个面）中，<strong>相隔一格的两个面是对面</strong>（第1和第3，第2和第4互为对面）</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">2</div><div class="step-content"><strong>上下延伸的面</strong>：与中间横排的上下各一格，<strong>与延伸出来的格子对面</strong>是横排中间那个格子</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#f59e0b;--scolor2:#ef4444">3</div><div class="step-content">口诀：<strong>"横排间隔是对面，上下突出找中间"</strong> ✅ 掌握这个，展开图题不怕了！</div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'对面识别口诀：横排中间隔一个就是对面。上方突出的面，对面是横排正中那个。下方突出同理。记住这个口诀，遇到展开图找对面，秒解！')">🔊 听讲解</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════ S3 例题 ═══════════════ -->
+  <div id="s3" class="sec">
+
+    <!-- 例题1 -->
+    <div class="excard">
+      <div class="excard-hdr">
+        <span class="ex-num">例题一</span>
+        <span class="ex-tag">2023年 · 展开图判断</span>
+      </div>
+      <div class="excard-body">
+        <div class="qbox">
+          ✂️ 下面哪种展开图<strong>不能</strong>折成正方体？<br><br>
+          (A) 十字形：中间4格一排，上下各1格<br>
+          (B) L形扩展：一排3格，左边延伸2格，共6格（像L加大）<br>
+          (C) Z形：中间一排4格，最左格上方1格，最右格下方1格<br>
+          (D) 直线排列：6格连成一排<br><br>
+          <small>（袋鼠数学竞赛改编，考察展开图合法性判断）</small>
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
+        <div class="ex-opts" id="ex1-opts"></div>
+        <div class="ex-result" id="ex1-result"></div>
+        <div class="guide-chain" id="ex1-guide"></div>
+        <div class="feynman-box" id="ex1-feynman">
+          <div class="feynman-hdr">🧠 费曼讲解 — 直线6格不可以！</div>
+          <div class="feynman-body">
+            <div class="fn-step"><div class="fn-num">1</div><div class="fn-content">A、B、C 都是正方体展开图的合法形状（11种之一）。关键看D：6格直线排列。</div></div>
+            <div class="fn-step"><div class="fn-num">2</div><div class="fn-content">直线6格折叠时：折成环状后，首尾两面会<strong>重叠</strong>，而且缺少上下两个面，无法封闭成正方体。</div></div>
+            <div class="fn-step"><div class="fn-num">3</div><div class="fn-content">判断规则：<strong>任意一行或一列不超过4格</strong>才可能合法。直线6格违反此规则 ❌ 答案是 D！</div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="tv(this,'费曼讲解！直线6格折起来，首尾重叠，上下没有面，无法封闭。判断展开图的快捷规则：任意一行一列不超过4格。直线6格超了，所以不能折成正方体！答案D！')">🔊 听讲解</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 例题2 -->
+    <div class="excard">
+      <div class="excard-hdr">
+        <span class="ex-num">例题二</span>
+        <span class="ex-tag">2022年 · 俯视图计数</span>
+      </div>
+      <div class="excard-body">
+        <div class="qbox">
+          🔢 用小正方体搭了一个立体图形，俯视图如下（数字表示该位置叠的层数）：<br><br>
+          <div style="display:inline-grid;grid-template-columns:repeat(3,44px);gap:3px;margin:12px 0">
+            <div style="background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);border-radius:8px;height:44px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fcd34d">3</div>
+            <div style="background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);border-radius:8px;height:44px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fcd34d">1</div>
+            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;height:44px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--muted2)">0</div>
+            <div style="background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);border-radius:8px;height:44px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fcd34d">2</div>
+            <div style="background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);border-radius:8px;height:44px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fcd34d">2</div>
+            <div style="background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);border-radius:8px;height:44px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fcd34d">1</div>
+            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;height:44px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--muted2)">0</div>
+            <div style="background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);border-radius:8px;height:44px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fcd34d">1</div>
+            <div style="background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);border-radius:8px;height:44px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fcd34d">2</div>
+          </div><br>
+          <small>（0 表示该位置没有方块）</small><br><br>
+          这个立体图形共用了几个小正方体？
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
+        <div class="ex-opts" id="ex2-opts"></div>
+        <div class="ex-result" id="ex2-result"></div>
+        <div class="guide-chain" id="ex2-guide"></div>
+        <div class="feynman-box" id="ex2-feynman">
+          <div class="feynman-hdr">🧠 费曼讲解 — 俯视图数字全加起来！</div>
+          <div class="feynman-body">
+            <div class="fn-step"><div class="fn-num">1</div><div class="fn-content">俯视图上每个数字 = 该位置叠了几块。0 = 没有块，不用算。</div></div>
+            <div class="fn-step"><div class="fn-num">2</div><div class="fn-content">把所有非零数字加起来：3+1+2+2+1+1+1+2 = <strong>13</strong></div></div>
+            <div class="fn-step"><div class="fn-num">3</div><div class="fn-content">共用了 <strong>13 个</strong>小正方体 ✅ 俯视图数字求和 = 总块数，简单直接！</div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="tv(this,'费曼讲解！俯视图数字直接加：3加1加2加2加1加1加1加2等于13！0不用算。俯视图所有数字之和就是总的小正方体数，非常简洁！')">🔊 听讲解</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 例题3 -->
+    <div class="excard">
+      <div class="excard-hdr">
+        <span class="ex-num">例题三</span>
+        <span class="ex-tag">2024年 · 三视图识别</span>
+      </div>
+      <div class="excard-body">
+        <div class="qbox">
+          👁️ 一个立体图形的三视图如下：<br>
+          正视图：<strong>等腰三角形</strong><br>
+          侧视图：<strong>等腰三角形</strong><br>
+          俯视图：<strong>圆形（中心有一个点）</strong><br><br>
+          <small>（袋鼠数学竞赛改编，考察三视图反推立体图形）</small><br><br>
+          这个立体图形是什么？
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
+        <div class="ex-opts" id="ex3-opts"></div>
+        <div class="ex-result" id="ex3-result"></div>
+        <div class="guide-chain" id="ex3-guide"></div>
+        <div class="feynman-box" id="ex3-feynman">
+          <div class="feynman-hdr">🧠 费曼讲解 — 三个视图齐出动！</div>
+          <div class="feynman-body">
+            <div class="fn-step"><div class="fn-num">1</div><div class="fn-content">正视图是三角形：从正面看是三角形，顶部是尖的。排除圆柱（正视图是矩形）和正方体（是正方形）。</div></div>
+            <fn-step><div class="fn-num">2</div><div class="fn-content">俯视图是圆形（含中心点）：从上方看底面是圆，中心点是顶点的投影 → 底面是圆！这排除了三棱锥（俯视是三角形）。</div></fn-step>
+            <div class="fn-step"><div class="fn-num">3</div><div class="fn-content">底面是圆 + 侧面是三角形 + 顶部是尖 = <strong>圆锥</strong> 🍦 ✅</div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="tv(this,'费曼讲解！正视图三角形，侧视图三角形，说明从侧面看也是尖顶。俯视图是圆，说明底面是圆形。顶部尖、底面圆，就是圆锥！冰淇淋的形状！')">🔊 听讲解</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════ S4 闯关 ═══════════════ -->
+  <div id="s4" class="sec">
+    <div class="quiz-wrap">
+      <div class="quiz-top">
+        <div class="quiz-title">🎮 闯关挑战</div>
+        <div class="stars" id="stars"></div>
+      </div>
+      <div class="qnav" id="qnav"></div>
+      <div id="quiz-content"></div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- Mobile bottom nav -->
+<div class="mob-tabs">
+  <button class="mob-tab on" data-s="s1"><span class="mt-icon">💡</span>概念</button>
+  <button class="mob-tab" data-s="s2"><span class="mt-icon">🛠</span>技巧</button>
+  <button class="mob-tab" data-s="s3"><span class="mt-icon">📖</span>例题</button>
+  <button class="mob-tab" data-s="s4"><span class="mt-icon">🎮</span>挑战</button>
+</div>
+
+</div><!-- /page -->
+
+<script>
+// ── 语音播放 ──
+let cBtn = null;
+function tv(btn, text) {
+  const isSame = btn === cBtn;
+  speechSynthesis.cancel();
+  if (cBtn) { cBtn.classList.remove('playing'); cBtn.innerHTML = cBtn.dataset.o || '🔊 听讲解'; cBtn = null; }
+  if (isSame) return;
+  btn.dataset.o = btn.innerHTML; btn.innerHTML = '⏹ 停止'; btn.classList.add('playing'); cBtn = btn;
+  if (!('speechSynthesis' in window)) return;
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'zh-CN'; u.rate = 0.84; u.pitch = 1.1;
+  const v = speechSynthesis.getVoices();
+  const zh = v.find(x=>x.name.includes('Tingting')||x.name.includes('Xiaoxiao')) || v.find(x=>x.lang.startsWith('zh'));
+  if (zh) u.voice = zh;
+  u.onend = () => { btn.classList.remove('playing'); btn.innerHTML = btn.dataset.o; cBtn = null; };
+  speechSynthesis.speak(u);
+}
+if ('speechSynthesis' in window) { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices(); }
+
+// ── Tabs ──
+function switchTab(s) {
+  document.querySelectorAll('.tab-pill,.mob-tab').forEach(x => x.classList.toggle('on', x.dataset.s === s));
+  document.querySelectorAll('.sec').forEach(x => x.classList.toggle('on', x.id === s));
+  speechSynthesis.cancel();
+  if (cBtn) { cBtn.classList.remove('playing'); cBtn.innerHTML = cBtn.dataset.o; cBtn = null; }
+}
+document.querySelectorAll('.tab-pill, .mob-tab').forEach(p => p.addEventListener('click', () => switchTab(p.dataset.s)));
+
+// ── Method cards ──
+function toggleMCard(card) {
+  const body = card.querySelector('.mcard-body');
+  const open = body.classList.contains('open');
+  document.querySelectorAll('.mcard-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.mcard').forEach(c => c.classList.remove('open'));
+  if (!open) { body.classList.add('open'); card.classList.add('open'); }
+}
+
+// ── Reveal steps ──
+function revealSteps(id) {
+  const c = document.getElementById(id);
+  c.querySelectorAll('.step').forEach((s, i) => setTimeout(() => s.classList.add('show'), i * 380));
+  const rb = c.previousElementSibling;
+  if (rb && rb.classList.contains('reveal-btn')) rb.style.display = 'none';
+}
+
+// ── Example data ──
+const exData = {
+  ex1: {
+    opts: [{t:'(A) 十字形',v:false},{t:'(B) L形扩展',v:false},{t:'(C) Z形',v:false},{t:'(D) 直线6格',v:true}],
+    guide: [
+      {q:'A、B、C 三种展开图，各自能折成正方体吗？', a:'A十字形 ✅、B L形扩展 ✅、C Z形 ✅，都是11种合法展开图之一', vc:'十字形、L形加宽、Z形都是正方体的合法展开图，可以折叠！'},
+      {q:'直线6格（D）折叠时，会出现什么问题？', a:'折成环状后首尾重叠，且缺少上下两个面，无法封闭', vc:'直线6格折起来会变成一个圆环，首尾两面重叠，而且没有上下两个面，不能封闭成正方体！'},
+      {q:'判断展开图合法的快捷规则是什么？', a:'任意一行或一列中，连续的格子数不超过4个，才有可能是合法展开图', vc:'判断展开图的口诀：任意一行一列不超过4格。直线6格违反了这个规则，所以不合法！答案是D！'}
+    ]
+  },
+  ex2: {
+    opts: [{t:'(A) 11个',v:false},{t:'(B) 12个',v:false},{t:'(C) 13个',v:true},{t:'(D) 14个',v:false}],
+    guide: [
+      {q:'俯视图中的数字代表什么意思？0 代表什么？', a:'数字代表该位置叠了几个小正方体；0 表示该位置没有方块，不计入总数', vc:'俯视图上的数字就是那个位置叠了几块。0表示没有方块，不用计算！'},
+      {q:'把所有非零数字列出来，分别是哪些？', a:'3, 1, 2, 2, 1, 1, 1, 2（共8个位置有方块，2个位置为0）', vc:'非零数字有：3、1、2、2、1、1、1、2，一共8个数字需要相加！'},
+      {q:'所有非零数字之和是多少？', a:'3+1+2+2+1+1+1+2 = 13，共用了 13 个小正方体 ✅', vc:'3加1加2加2加1加1加1加2，等于13！共用了13个小正方体！'}
+    ]
+  },
+  ex3: {
+    opts: [{t:'(A) 圆柱',v:false},{t:'(B) 三棱锥',v:false},{t:'(C) 圆锥',v:true},{t:'(D) 正方体',v:false}],
+    guide: [
+      {q:'正视图和侧视图都是三角形，说明这个图形有什么特征？', a:'从正面和侧面看都是三角形，说明顶部是尖的（有一个顶点），排除圆柱和正方体', vc:'正视图和侧视图都是三角形，说明这个立体图形顶部是尖的！圆柱正视图是矩形，正方体是正方形，都被排除！'},
+      {q:'俯视图是圆形（含中心点），说明什么？', a:'俯视图是圆，说明底面是圆形；中心点是顶点的投影，说明顶点在中心正上方', vc:'俯视图是圆形，底面是圆！中心有个点，那是顶尖投影下来的点。底面圆、顶部尖，排除三棱锥（俯视图是三角形）！'},
+      {q:'综合三个视图，最终答案是什么？', a:'底面是圆 + 顶部是尖 + 侧面是三角形轮廓 = 圆锥 🍦 ✅', vc:'底面圆、顶尖、侧面三角形，就是圆锥！冰淇淋的形状，答案是圆锥！'}
+    ]
+  }
+};
+
+function initEx(id) {
+  exData[id].opts.forEach((o, i) => {
+    const btn = document.createElement('div');
+    btn.className = 'ex-opt'; btn.textContent = o.t;
+    btn.onclick = () => handleEx(id, i);
+    document.getElementById(id+'-opts').appendChild(btn);
+  });
+}
+
+function handleEx(id, idx) {
+  const data = exData[id];
+  const opts = document.querySelectorAll('#'+id+'-opts .ex-opt');
+  const res = document.getElementById(id+'-result');
+  if (data.opts[idx].v) {
+    opts.forEach((o,i) => { o.classList.add('dim'); if(data.opts[i].v) o.classList.add('correct'); });
+    res.style.cssText = 'display:block;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);color:#6ee7b7';
+    res.innerHTML = '🎉 答对了！你真棒！一起看看解题思路——';
+    setTimeout(() => buildGuide(id, data), 700);
+  } else {
+    opts[idx].classList.add('wrong');
+    res.style.cssText = 'display:block;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);color:#fcd34d';
+    res.innerHTML = `<div style="margin-bottom:10px">💡 这个答案不太对哦，没关系！</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button onclick="retryEx('${id}',${idx})" style="padding:7px 16px;border-radius:8px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);color:#6ee7b7;font-size:13px;font-weight:600;cursor:pointer;font-family:'Noto Sans SC',sans-serif">🔄 再试试</button>
+        <button onclick="learnEx('${id}')" style="padding:7px 16px;border-radius:8px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.25);color:#fcd34d;font-size:13px;font-weight:600;cursor:pointer;font-family:'Noto Sans SC',sans-serif">📖 看解法</button>
+      </div>`;
+  }
+}
+
+function retryEx(id, wrongIdx) {
+  document.querySelectorAll('#'+id+'-opts .ex-opt')[wrongIdx].classList.remove('wrong');
+  document.getElementById(id+'-result').style.display = 'none';
+}
+
+function learnEx(id) {
+  const data = exData[id];
+  document.querySelectorAll('#'+id+'-opts .ex-opt').forEach((o,i) => { o.classList.add('dim'); if(data.opts[i].v) o.classList.add('correct'); });
+  const res = document.getElementById(id+'-result');
+  res.style.cssText = 'display:block;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);color:#fcd34d';
+  res.innerHTML = '📖 没关系！正确答案已标出，我们一起来看——';
+  setTimeout(() => buildGuide(id, data), 700);
+}
+
+function buildGuide(id, data) {
+  const chain = document.getElementById(id+'-guide');
+  chain.style.display = 'block';
+  chain.scrollIntoView({behavior:'smooth',block:'center'});
+  data.guide.forEach((g, i) => {
+    const item = document.createElement('div'); item.className = 'guide-item'; item.id = id+'-g'+i;
+    if (i===0) item.classList.add('unlocked');
+    const qd = document.createElement('div'); qd.className = 'guide-q';
+    qd.innerHTML = `<span>${i<data.guide.length-1?'💬':'🚀'}</span>${g.q}<span class="guide-lock">${i===0?'👆 点击':'🔒'}</span>`;
+    const ad = document.createElement('div'); ad.className = 'guide-a';
+    ad.innerHTML = `<p>${g.a}</p><button class="va-btn" onclick="event.stopPropagation();tv(this,'${g.vc.replace(/'/g,"\\'")}')">🔊 听解析</button>`;
+    qd.onclick = () => {
+      if (!item.classList.contains('unlocked')||ad.classList.contains('open')) return;
+      ad.classList.add('open'); qd.querySelector('.guide-lock').textContent = '✅';
+      setTimeout(() => {
+        const nxt = document.getElementById(id+'-g'+(i+1));
+        if (nxt) { nxt.classList.add('unlocked'); nxt.querySelector('.guide-lock').textContent='👆 点击'; nxt.scrollIntoView({behavior:'smooth',block:'center'}); }
+        else { const fb = document.getElementById(id+'-feynman'); fb.classList.add('show'); fb.scrollIntoView({behavior:'smooth',block:'center'}); }
+      }, 500);
+    };
+    item.appendChild(qd); item.appendChild(ad); chain.appendChild(item);
+  });
+}
+
+initEx('ex1'); initEx('ex2'); initEx('ex3');
+
+// ── Quiz ──
+const quizData = [
+  {src:'2024·Q1',d:'★',dc:'#10b981',
+   q:'下列哪个立体图形从任何方向看都是圆形？',
+   opts:[{t:'圆柱'},{t:'圆锥'},{t:'球体'},{t:'半球'}],
+   ans:2,ok:'🎉 正确！球体从任何方向看都是圆形！',no:'💡 球体三视图全是圆，无论从哪个角度看都是圆形！'},
+  {src:'2023·Q4',d:'★',dc:'#10b981',
+   q:'正方体有几个面、几条棱、几个顶点？',
+   opts:[{t:'6面·12棱·8顶'},{t:'4面·6棱·4顶'},{t:'6面·8棱·6顶'},{t:'8面·12棱·6顶'}],
+   ans:0,ok:'🎉 正确！正方体：6个面，12条棱，8个顶点！',no:'💡 正方体：上下左右前后 = 6面；每个面4条棱但共享 = 12棱；8个角 = 8顶点！'},
+  {src:'2023·Q7',d:'★',dc:'#10b981',
+   q:'一个圆柱体，从正面看是什么图形？',
+   opts:[{t:'圆形'},{t:'三角形'},{t:'长方形'},{t:'梯形'}],
+   ans:2,ok:'🎉 正确！圆柱正视图是长方形（宽=直径，高=柱高）！',no:'💡 圆柱从正面看：两条竖线加上下两条横线，就是长方形！'},
+  {src:'2022·Q5',d:'★★',dc:'#f59e0b',
+   q:'一个正方体展开图，中间一横排4格，上方突出1格，下方突出1格。上方格子的对面是哪个格？',
+   opts:[{t:'横排第1格'},{t:'横排第2格'},{t:'横排第3格'},{t:'下方格子'}],
+   ans:1,ok:'🎉 正确！上方突出格的对面是它下方所连接的横排格子，即横排第2格！',no:'💡 上方突出格连接横排第2格，折叠时第2格转到顶面，上方格变底面，互为对面！'},
+  {src:'2024·Q6',d:'★★',dc:'#f59e0b',
+   q:'俯视图数字为：第一行 2,1；第二行 1,3。总共用了几个小正方体？',
+   opts:[{t:'5个'},{t:'6个'},{t:'7个'},{t:'8个'}],
+   ans:2,ok:'🎉 正确！2+1+1+3 = 7个小正方体！',no:'💡 俯视图数字全加：2+1+1+3 = 7！'},
+  {src:'2022·Q8',d:'★★',dc:'#f59e0b',
+   q:'下列展开图哪一个能折成正方体？（选能折叠的）',
+   opts:[{t:'直线6格连排'},{t:'L形：3格+上方3格叠加'},{t:'T字形：中4格+上1+下1'},{t:'2×3矩形排列'}],
+   ans:2,ok:'🎉 正确！T字形（中4+上1+下1）是11种合法展开图之一！',no:'💡 T字形是正方体的合法展开图。直线6格和2×3矩形都不行，L形叠加也不合法！'},
+  {src:'2023·Q10',d:'★★★',dc:'#ec4899',
+   q:'用27个小正方体拼成一个大正方体（3×3×3）。挖去最中间一个，还剩几个？',
+   opts:[{t:'24个'},{t:'25个'},{t:'26个'},{t:'27个'}],
+   ans:2,ok:'🎉 正确！27-1 = 26个！最中间那个挖去，其余26个保持不变！',no:'💡 3×3×3 = 27个，挖去最中间1个，剩 27-1 = 26个！'},
+  {src:'2024·Q12',d:'★★★',dc:'#ec4899',
+   q:'一个立体图形：正视图为三角形，俯视图为正方形（无中心点）。这是什么图形？',
+   opts:[{t:'圆锥'},{t:'四棱锥'},{t:'三棱柱'},{t:'正方体'}],
+   ans:1,ok:'🎉 正确！俯视图是正方形 + 正视图是三角形 = 四棱锥（金字塔形）！',no:'💡 俯视图是正方形（无圆心点）→ 底面是正方形；正视图三角形 → 顶部是尖。这就是四棱锥，金字塔的形状！'},
+];
+
+let cur = 0, scores = [];
+
+function initQuiz() {
+  document.getElementById('stars').innerHTML = quizData.map((_,i) => `<span class="star" id="star${i}">⭐</span>`).join('');
+  scores = new Array(quizData.length).fill(null);
+  renderNav(); renderQ(0);
+}
+
+function renderNav() {
+  document.getElementById('qnav').innerHTML = quizData.map((_,i) => `<div class="qdot ${i===cur?'cur':scores[i]!==null?'done':''}" onclick="goQ(${i})"></div>`).join('');
+}
+
+function renderQ(idx) {
+  cur = idx;
+  const q = quizData[idx];
+  document.getElementById('quiz-content').innerHTML = `
+    <div class="q-meta">
+      <span class="q-diff" style="background:${q.dc}">${q.d}</span>
+      <span class="q-src">${q.src}</span>
+    </div>
+    <div class="quiz-q">${q.q}</div>
+    <div class="qopts" id="qopts">
+      ${q.opts.map((o,i)=>`<button class="qopt" onclick="answerQ(${i})">${o.t}</button>`).join('')}
+    </div>
+    <div class="qfb" id="qfb"></div>
+    <div class="q-nav-row">
+      <button class="qnbtn qnbtn-prev ${idx>0?'show':''}" onclick="goQ(${idx-1})">← 上一题</button>
+      <button class="qnbtn qnbtn-next" id="qnext" onclick="goQ(${idx+1})">下一题 →</button>
+    </div>`;
+  if (idx === quizData.length-1) document.getElementById('qnext').style.display='none';
+  renderNav();
+}
+
+function answerQ(i) {
+  const q = quizData[cur];
+  const opts = document.querySelectorAll('.qopt');
+  const fb = document.getElementById('qfb');
+  opts.forEach(o => o.classList.add('dis'));
+  if (i === q.ans) {
+    opts[i].classList.add('correct');
+    fb.className = 'qfb show ok'; fb.textContent = q.ok;
+    if (scores[cur] === null) { scores[cur] = true; document.getElementById('star'+cur).classList.add('on'); }
+  } else {
+    opts[i].classList.add('wrong'); opts[q.ans].classList.add('correct');
+    fb.className = 'qfb show no'; fb.textContent = q.no;
+    if (scores[cur] === null) scores[cur] = false;
+  }
+  const nx = document.getElementById('qnext');
+  if (nx && cur < quizData.length-1) nx.classList.add('show');
+  renderNav();
+}
+
+function goQ(idx) {
+  if (idx < 0 || idx >= quizData.length) return;
+  renderQ(idx);
+}
+
+initQuiz();
+</script>
+</body>
+</html>
