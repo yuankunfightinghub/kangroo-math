@@ -315,6 +315,97 @@ body {
 .mob-tab { flex: 1; padding: 8px 4px; border-radius: 10px; font-size: 11px; font-weight: 600; border: none; background: transparent; color: var(--muted2); cursor: pointer; transition: all .25s; display: flex; flex-direction: column; align-items: center; gap: 3px; font-family: 'Noto Sans SC', sans-serif; }
 .mob-tab .mt-icon { font-size: 20px; }
 .mob-tab.on { color: #fcd34d; background: rgba(245,158,11,0.1); }
+
+/* ── S1 Interactive Components ── */
+
+/* Shape selector */
+.shape-sel-btn {
+  padding: 7px 14px; border-radius: 9px; font-size: 13px; font-weight: 600; cursor: pointer;
+  border: 1px solid rgba(245,158,11,0.3); background: rgba(245,158,11,0.07); color: #fcd34d;
+  transition: all .2s; font-family: 'Noto Sans SC', sans-serif;
+}
+.shape-sel-btn.active { background: rgba(245,158,11,0.2); border-color: rgba(245,158,11,0.5); box-shadow: 0 0 0 2px rgba(245,158,11,0.15); }
+.shape-sel-btn:hover { background: rgba(245,158,11,0.15); }
+
+.stat-chip {
+  padding: 4px 10px; border-radius: 7px; font-size: 12px; font-weight: 700;
+  background: rgba(245,158,11,0.1); color: #fcd34d; border: 1px solid rgba(245,158,11,0.2);
+}
+
+/* CSS 3D Cube */
+.css3d-cube {
+  width: 70px; height: 70px;
+  transform-style: preserve-3d;
+  transform: rotateX(-20deg) rotateY(30deg);
+}
+.css3d-cube.spinning { animation: cubeSpin 6s linear infinite; }
+@keyframes cubeSpin {
+  from { transform: rotateX(-20deg) rotateY(0deg); }
+  to   { transform: rotateX(-20deg) rotateY(360deg); }
+}
+.cube-face {
+  position: absolute; width: 70px; height: 70px;
+  border: 2px solid rgba(245,158,11,0.6);
+  background: rgba(245,158,11,0.12);
+  backface-visibility: visible;
+}
+.face-front  { transform: translateZ(35px); }
+.face-back   { transform: rotateY(180deg) translateZ(35px); }
+.face-left   { transform: rotateY(-90deg) translateZ(35px); }
+.face-right  { transform: rotateY(90deg) translateZ(35px); }
+.face-top    { transform: rotateX(90deg) translateZ(35px); }
+.face-bottom { transform: rotateX(-90deg) translateZ(35px); }
+
+/* Net buttons */
+.net-btn {
+  padding: 7px 14px; border-radius: 9px; font-size: 13px; font-weight: 600; cursor: pointer;
+  border: 1px solid rgba(249,115,22,0.3); background: rgba(249,115,22,0.07); color: #fb923c;
+  transition: all .2s; font-family: 'Noto Sans SC', sans-serif;
+}
+.net-btn.active { background: rgba(249,115,22,0.2); border-color: rgba(249,115,22,0.5); box-shadow: 0 0 0 2px rgba(249,115,22,0.15); }
+.net-btn:hover { background: rgba(249,115,22,0.14); }
+.net-guess-btn {
+  padding: 8px 16px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer;
+  transition: all .2s; font-family: 'Noto Sans SC', sans-serif; border: 1.5px solid;
+}
+#net-yes { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.35); color: #6ee7b7; }
+#net-yes:hover { background: rgba(16,185,129,0.2); }
+#net-no  { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.35); color: #fca5a5; }
+#net-no:hover  { background: rgba(239,68,68,0.2); }
+
+/* View buttons */
+.view-btn {
+  padding: 7px 14px; border-radius: 9px; font-size: 13px; font-weight: 600; cursor: pointer;
+  border: 1px solid rgba(16,185,129,0.3); background: rgba(16,185,129,0.07); color: #6ee7b7;
+  transition: all .2s; font-family: 'Noto Sans SC', sans-serif;
+}
+.view-btn.active { background: rgba(16,185,129,0.2); border-color: rgba(16,185,129,0.5); box-shadow: 0 0 0 2px rgba(16,185,129,0.15); }
+.view-btn:hover { background: rgba(16,185,129,0.14); }
+.shape-view-btn {
+  padding: 5px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer;
+  border: 1px solid rgba(16,185,129,0.25); background: rgba(16,185,129,0.05); color: var(--muted);
+  transition: all .2s; font-family: 'Noto Sans SC', sans-serif;
+}
+.shape-view-btn.active { background: rgba(16,185,129,0.15); color: #6ee7b7; border-color: rgba(16,185,129,0.4); }
+.shape-view-btn:hover { background: rgba(16,185,129,0.12); }
+
+/* Cube counting */
+.cube-preset-btn {
+  padding: 7px 14px; border-radius: 9px; font-size: 13px; font-weight: 600; cursor: pointer;
+  border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.07); color: #a78bfa;
+  transition: all .2s; font-family: 'Noto Sans SC', sans-serif;
+}
+.cube-preset-btn.active { background: rgba(139,92,246,0.2); border-color: rgba(139,92,246,0.5); box-shadow: 0 0 0 2px rgba(139,92,246,0.15); }
+.cube-preset-btn:hover { background: rgba(139,92,246,0.14); }
+.cube-cell {
+  width: 52px; height: 52px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  font-size: 22px; font-weight: 800; color: #a78bfa; cursor: pointer; user-select: none;
+  border: 2px solid rgba(139,92,246,0.35); background: rgba(139,92,246,0.1);
+  transition: all .2s;
+}
+.cube-cell:hover { background: rgba(139,92,246,0.2); transform: scale(1.05); }
+.cube-cell.empty { color: var(--muted2); border-style: dashed; }
+@keyframes s1FadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
 </style>
 </head>
 <body>
@@ -358,66 +449,125 @@ body {
     <div class="gcard">
       <div class="sec-heading">💡 核心概念</div>
 
-      <!-- 概念1 -->
+      <!-- ── 概念1：认识立体图形 ── CSS 3D 旋转卡片 -->
       <div class="cbox" style="--accent:#fcd34d;--accent-bg:rgba(245,158,11,0.06)">
-        <button class="vbtn vbtn-a" onclick="tv(this,'认识立体图形！立体图形有长宽高三个方向，不像平面图形只有长和宽。正方体六个面都是正方形，比如骰子和魔方。长方体六个面是长方形，比如砖块和书本。圆柱两端是圆形，侧面是弯的，像饮料罐。圆锥底面是圆，顶部是一个尖，像冰淇淋。球体没有平面，像足球！')">🔊 听讲解</button>
-        <h4>🎲 认识立体图形</h4>
-        <p>立体图形有<strong>长、宽、高</strong>三个方向，我们生活中随处可见！</p>
-        <div class="solid-grid">
-          <div class="solid-item"><span class="s-icon">🎲</span><span class="s-name">正方体</span><span class="s-desc">6个正方形面</span></div>
-          <div class="solid-item"><span class="s-icon">📦</span><span class="s-name">长方体</span><span class="s-desc">6个长方形面</span></div>
-          <div class="solid-item"><span class="s-icon">🥫</span><span class="s-name">圆柱</span><span class="s-desc">2圆面+1侧面</span></div>
-          <div class="solid-item"><span class="s-icon">🍦</span><span class="s-name">圆锥</span><span class="s-desc">1圆面+1侧面</span></div>
-          <div class="solid-item"><span class="s-icon">⚽</span><span class="s-name">球体</span><span class="s-desc">无平面，全曲面</span></div>
-          <div class="solid-item"><span class="s-icon">🔺</span><span class="s-name">三棱柱</span><span class="s-desc">2三角形+3长方形</span></div>
+        <button class="vbtn vbtn-a" onclick="tv(this,'来认识立体图形！正方体有六个正方形的面，像魔方。长方体有六个长方形的面，像砖块。圆柱两端是圆形，像饮料罐。圆锥底部是圆，顶部是尖的，像冰淇淋。球体全是曲面，像足球！点击每个形状，看看它们有什么特点！')">🔊 听讲解</button>
+        <h4>🎲 认识立体图形 — 点击形状看特征</h4>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0">
+          <button class="shape-sel-btn active" data-shape="cube" onclick="selectShape(this,'cube')">🎲 正方体</button>
+          <button class="shape-sel-btn" data-shape="cuboid" onclick="selectShape(this,'cuboid')">📦 长方体</button>
+          <button class="shape-sel-btn" data-shape="cylinder" onclick="selectShape(this,'cylinder')">🥫 圆柱</button>
+          <button class="shape-sel-btn" data-shape="cone" onclick="selectShape(this,'cone')">🍦 圆锥</button>
+          <button class="shape-sel-btn" data-shape="sphere" onclick="selectShape(this,'sphere')">⚽ 球体</button>
         </div>
-        <p style="margin-top:8px">💡 记忆口诀：<strong>"正方体魔方形，长方体砖头形，圆柱罐头形，圆锥冰淇淋形！"</strong></p>
+
+        <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+          <!-- 3D CSS shape display -->
+          <div id="shape-3d-wrap" style="width:120px;height:120px;perspective:400px;flex-shrink:0;display:flex;align-items:center;justify-content:center">
+            <div id="shape-3d-cube" class="css3d-cube spinning">
+              <div class="cube-face face-front"></div>
+              <div class="cube-face face-back"></div>
+              <div class="cube-face face-left"></div>
+              <div class="cube-face face-right"></div>
+              <div class="cube-face face-top"></div>
+              <div class="cube-face face-bottom"></div>
+            </div>
+            <svg id="shape-3d-svg" width="110" height="110" style="display:none"></svg>
+          </div>
+
+          <!-- Info panel -->
+          <div id="shape-info" style="flex:1;min-width:180px">
+            <div id="shape-info-name" style="font-size:18px;font-weight:800;color:#fcd34d;margin-bottom:8px"></div>
+            <div id="shape-info-stats" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px"></div>
+            <div id="shape-info-example" style="font-size:13px;color:var(--muted);line-height:1.7"></div>
+          </div>
+        </div>
       </div>
 
-      <!-- 概念2 -->
+      <!-- ── 概念2：正方体展开图 ── SVG 网格点击判断 -->
       <div class="cbox" style="--accent:#fb923c;--accent-bg:rgba(249,115,22,0.06)">
-        <button class="vbtn vbtn-r" onclick="tv(this,'正方体展开图！把正方体六个面剪开摊平，就是展开图。正方体共有11种不同的展开图！最常见的是十字形，中间一排4个面，上下各一个面。判断展开图能不能折成正方体，关键看：相对的两个面不能相邻，而且每个面只能出现一次！')">🔊 听讲解</button>
-        <h4>📦 正方体展开图</h4>
-        <p>把正方体"剪开摊平"就是<strong>展开图</strong>，共有 <strong>11 种</strong>不同的展开图！</p>
-        <ul>
-          <li>✂️ 最常见：<strong>十字形</strong>（中间4格一排，上下各1格）</li>
-          <li>🔄 <strong>判断能否折叠</strong>：相对的面不能直接相邻；共6个面，不多不少</li>
-          <li>⚠️ <strong>常见陷阱</strong>：看起来像展开图，但有面重叠 → 不能折成正方体</li>
-          <li>💡 <strong>标记法</strong>：把6个面标1~6，折叠时对面之和=7（1↔6，2↔5，3↔4）</li>
-        </ul>
+        <button class="vbtn vbtn-r" onclick="tv(this,'把正方体的六个面剪开摊平，就是展开图。正方体共有11种合法展开图！点击每种展开图，猜猜它能不能折成正方体，然后点检验答案看看对不对！')">🔊 听讲解</button>
+        <h4>📦 正方体展开图 — 猜猜能否折叠？</h4>
+        <p style="font-size:13px;color:var(--muted);margin:6px 0 12px">展开图是把正方体6个面"摊平"的结果，正方体共有 <strong style="color:#fb923c">11种</strong> 合法展开图。点击一种展开图，猜猜它能不能折成正方体！</p>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+          <button class="net-btn active" data-net="0" onclick="selectNet(this,0)">十字形 ✚</button>
+          <button class="net-btn" data-net="1" onclick="selectNet(this,1)">T字形</button>
+          <button class="net-btn" data-net="2" onclick="selectNet(this,2)">L字形</button>
+          <button class="net-btn" data-net="3" onclick="selectNet(this,3)">Z字形 ⚠️</button>
+          <button class="net-btn" data-net="4" onclick="selectNet(this,4)">2×3矩形 ⚠️</button>
+        </div>
+
+        <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
+          <svg id="net-svg" width="160" height="160" viewBox="0 0 160 160" style="flex-shrink:0;background:rgba(249,115,22,0.04);border-radius:12px;border:1px solid rgba(249,115,22,0.15)"></svg>
+          <div style="flex:1;min-width:160px">
+            <div id="net-question" style="font-size:14px;color:var(--muted);margin-bottom:12px;line-height:1.7"></div>
+            <div style="display:flex;gap:8px;margin-bottom:10px">
+              <button class="net-guess-btn" id="net-yes" onclick="netGuess(true)">✅ 能折叠</button>
+              <button class="net-guess-btn" id="net-no" onclick="netGuess(false)">❌ 不能折叠</button>
+            </div>
+            <div id="net-result" style="display:none;font-size:14px;font-weight:700;line-height:1.6"></div>
+          </div>
+        </div>
       </div>
 
-      <!-- 概念3 -->
+      <!-- ── 概念3：三视图 ── Canvas 等轴测 + 视角切换 -->
       <div class="cbox" style="--accent:#6ee7b7;--accent-bg:rgba(16,185,129,0.06)">
-        <button class="vbtn vbtn-e" onclick="tv(this,'三视图！从三个方向看立体图形，画出来的图就是三视图。正视图是从正面看，侧视图是从左边或右边看，俯视图是从上面往下看。比如一个正方体，三个方向看都是正方形。一个圆柱，从正面和侧面看是长方形，从上面看是圆形！三视图帮我们把三维图形用二维表示出来！')">🔊 听讲解</button>
-        <h4>👁️ 三视图（正视·侧视·俯视）</h4>
-        <p>从三个方向观察立体图形，画出来的平面图叫<strong>三视图</strong>！</p>
-        <ul>
-          <li>⬛ <strong>正视图</strong>：从正面看（最直观的视角）</li>
-          <li>◀️ <strong>侧视图</strong>：从左侧或右侧看</li>
-          <li>⬆️ <strong>俯视图</strong>：从上方向下俯视</li>
-        </ul>
-        <p style="margin-top:8px">常见立体三视图对照：</p>
-        <ul>
-          <li>🎲 <strong>正方体</strong>：三个方向都是 <strong>正方形</strong></li>
-          <li>🥫 <strong>圆柱</strong>：正/侧视图是长方形，俯视图是 <strong>圆形</strong></li>
-          <li>🍦 <strong>圆锥</strong>：正/侧视图是三角形，俯视图是圆形+中心点</li>
-        </ul>
+        <button class="vbtn vbtn-e" onclick="tv(this,'三视图就是从三个方向看立体图形画出来的图。正视图从正前方看，侧视图从左边看，俯视图从上面往下看。点击三个按钮，分别看正方体从三个方向的样子，你发现了什么规律？')">🔊 听讲解</button>
+        <h4>👁️ 三视图 — 点击切换观察方向</h4>
+
+        <div style="display:flex;gap:8px;margin:10px 0 14px;flex-wrap:wrap">
+          <button class="view-btn active" onclick="selectView(this,'front')">⬛ 正视图（从前面看）</button>
+          <button class="view-btn" onclick="selectView(this,'side')">◀️ 侧视图（从左面看）</button>
+          <button class="view-btn" onclick="selectView(this,'top')">⬆️ 俯视图（从上面看）</button>
+        </div>
+
+        <!-- 切换形体 -->
+        <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
+          <span style="font-size:12px;color:var(--muted2);align-self:center">选形体：</span>
+          <button class="shape-view-btn active" data-sv="cube" onclick="selectViewShape(this,'cube')">正方体</button>
+          <button class="shape-view-btn" data-sv="cylinder" onclick="selectViewShape(this,'cylinder')">圆柱</button>
+          <button class="shape-view-btn" data-sv="cone" onclick="selectViewShape(this,'cone')">圆锥</button>
+          <button class="shape-view-btn" data-sv="lshape" onclick="selectViewShape(this,'lshape')">L形积木</button>
+        </div>
+
+        <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
+          <canvas id="view-canvas-3d" width="140" height="140" style="border-radius:12px;background:rgba(16,185,129,0.05);border:1px solid rgba(16,185,129,0.15);flex-shrink:0"></canvas>
+          <div style="flex:1;min-width:160px">
+            <div style="font-size:12px;color:var(--muted2);margin-bottom:6px">👇 从该方向看到的样子：</div>
+            <canvas id="view-canvas-2d" width="140" height="140" style="border-radius:12px;background:rgba(16,185,129,0.04);border:1px solid rgba(16,185,129,0.2)"></canvas>
+            <div id="view-label" style="font-size:13px;color:#6ee7b7;font-weight:700;margin-top:6px"></div>
+          </div>
+        </div>
       </div>
 
-      <!-- 概念4 -->
+      <!-- ── 概念4：数立方块 ── 俯视图格子 + 实时统计 -->
       <div class="cbox" style="--accent:#a78bfa;--accent-bg:rgba(139,92,246,0.06)">
-        <button class="vbtn vbtn-v" onclick="tv(this,'数立方块！把很多小正方体堆在一起，怎么数总共有几个？方法是分层数：把整堆积木一层一层分开数，每层有几个，然后加起来就是总数。有的小正方体被藏在里面看不到，要结合俯视图来推断！俯视图上的数字告诉你这个位置叠了几层！')">🔊 听讲解</button>
-        <h4>🔢 数立方块</h4>
-        <p>一堆小正方体叠在一起，用<strong>分层计数法</strong>数清楚！</p>
-        <ul>
-          <li>📐 <strong>分层法</strong>：第一层数完再数第二层，逐层累加</li>
-          <li>🗺️ <strong>俯视图标数字</strong>：每个格子的数字 = 该位置叠了几层</li>
-          <li>👀 <strong>注意隐藏块</strong>：被遮住的正方体也要计入！</li>
-          <li>➕ <strong>总数</strong> = 各层数量之和，或俯视图上所有数字之和</li>
-        </ul>
-        <p style="margin-top:8px">💡 口诀：<strong>"俯视数字加一加，就是总块数！"</strong></p>
+        <button class="vbtn vbtn-v" onclick="tv(this,'数立方块！把小正方体堆起来，俯视图每个格子里的数字就是那个位置叠了几层。把所有格子的数字加起来，就是总块数。你来点击格子改变层数，试试看能数对吗！')">🔊 听讲解</button>
+        <h4>🔢 数立方块 — 点击格子改变层数，数出总块数</h4>
+        <p style="font-size:13px;color:var(--muted);margin:6px 0 12px">俯视图中每格的数字 = 该位置叠了几层。点击格子可以 <strong style="color:#a78bfa">+1层</strong>（最多4层），长按清零。</p>
+
+        <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+          <button class="cube-preset-btn active" onclick="cubeLoadPreset(this,0)">🎯 题目一</button>
+          <button class="cube-preset-btn" onclick="cubeLoadPreset(this,1)">🎯 题目二</button>
+          <button class="cube-preset-btn" onclick="cubeLoadPreset(this,2)">✏️ 自由模式</button>
+        </div>
+
+        <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
+          <!-- isometric preview canvas -->
+          <canvas id="cube-iso" width="160" height="160" style="border-radius:12px;background:rgba(139,92,246,0.05);border:1px solid rgba(139,92,246,0.15);flex-shrink:0"></canvas>
+
+          <div style="flex:1;min-width:160px">
+            <div style="font-size:12px;color:var(--muted2);margin-bottom:8px">👇 俯视图（点击格子改层数）：</div>
+            <div id="cube-topgrid" style="display:inline-grid;grid-template-columns:repeat(3,52px);gap:4px;margin-bottom:12px"></div>
+            <div style="font-size:14px;color:var(--muted);margin-top:4px">总块数：<strong id="cube-total" style="font-size:22px;color:#a78bfa">0</strong> 块</div>
+            <div id="cube-answer" style="margin-top:8px;font-size:13px;font-weight:700;display:none"></div>
+            <button style="margin-top:10px;padding:7px 14px;border-radius:9px;background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.3);color:#a78bfa;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit" onclick="cubeCheckAnswer()">✅ 检验答案</button>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 
@@ -887,6 +1037,380 @@ function goQ(idx) {
   if (idx < 0 || idx >= quizData.length) return;
   renderQ(idx);
 }
+
+/* ═══════════════ S1 INTERACTIVE COMPONENTS ═══════════════ */
+
+/* ── 1. 认识立体图形 ── */
+const SHAPES = {
+  cube:     { name:'正方体', emoji:'🎲', faces:6, edges:12, vertices:8, example:'魔方、骰子、方形积木', color:'#fcd34d', desc:'6个面全是正方形，每个面都一样大！' },
+  cuboid:   { name:'长方体', emoji:'📦', faces:6, edges:12, vertices:8, example:'砖块、书本、抽屉', color:'#fb923c', desc:'6个面都是长方形（有的可能是正方形）。' },
+  cylinder: { name:'圆柱',   emoji:'🥫', faces:3, edges:2,  vertices:0, example:'饮料罐、蜡烛、柱子', color:'#67e8f9', desc:'上下两个圆形面 + 弯曲的侧面。' },
+  cone:     { name:'圆锥',   emoji:'🍦', faces:2, edges:1,  vertices:1, example:'冰淇淋筒、交通锥', color:'#a78bfa', desc:'底部一个圆形面 + 一个尖顶（顶点）。' },
+  sphere:   { name:'球体',   emoji:'⚽', faces:1, edges:0,  vertices:0, example:'足球、地球、弹珠', color:'#6ee7b7', desc:'全是弯曲面，没有任何平面和棱！' },
+};
+let currentShape = 'cube';
+
+function selectShape(btn, shape) {
+  document.querySelectorAll('.shape-sel-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentShape = shape;
+  renderShape3D(shape);
+  renderShapeInfo(shape);
+}
+
+function renderShape3D(shape) {
+  const cubeEl = document.getElementById('shape-3d-cube');
+  const svgEl = document.getElementById('shape-3d-svg');
+  const s = SHAPES[shape];
+
+  if (shape === 'cube') {
+    cubeEl.style.display = '';
+    svgEl.style.display = 'none';
+    document.querySelectorAll('.cube-face').forEach(f => {
+      f.style.background = `${s.color}22`; f.style.borderColor = `${s.color}88`;
+      f.style.width='70px'; f.style.height='70px';
+    });
+    cubeEl.style.width='70px'; cubeEl.style.height='70px';
+    cubeEl.querySelector('.face-front').style.transform  = 'translateZ(35px)';
+    cubeEl.querySelector('.face-back').style.transform   = 'rotateY(180deg) translateZ(35px)';
+    cubeEl.querySelector('.face-left').style.transform   = 'rotateY(-90deg) translateZ(35px)';
+    cubeEl.querySelector('.face-right').style.transform  = 'rotateY(90deg) translateZ(35px)';
+    cubeEl.querySelector('.face-top').style.transform    = 'rotateX(90deg) translateZ(35px)';
+    cubeEl.querySelector('.face-bottom').style.transform = 'rotateX(-90deg) translateZ(35px)';
+  } else {
+    cubeEl.style.display = 'none';
+    svgEl.style.display = '';
+    svgEl.innerHTML = '';
+    const W=110, H=110, cx=W/2, cy=H/2;
+    if (shape === 'cuboid') {
+      // Draw isometric cuboid with SVG
+      const w=60,h=30,d=40, ax=0.6,ay=-0.3, bx=0,by=0.5, sx=cx-w/2, sy=cy;
+      const p = (dx,dy) => `${sx+dx*ax*w+dy*bx*d},${sy+dx*ay*w+dy*by*d}`;
+      svgEl.innerHTML = `
+        <polygon points="${p(0,0)} ${p(1,0)} ${p(1,0)}+0,${-h} ${p(0,0)}+0,${-h}" fill="${s.color}22" stroke="${s.color}" stroke-width="1.8"/>
+        <polygon points="${cx-30},${cy} ${cx+30},${cy} ${cx+30},${cy-h} ${cx-30},${cy-h}" fill="${s.color}1a" stroke="${s.color}" stroke-width="1.8"/>
+        <polygon points="${cx-30},${cy-h} ${cx+30},${cy-h} ${cx+55},${cy-h-15} ${cx-5},${cy-h-15}" fill="${s.color}28" stroke="${s.color}" stroke-width="1.8"/>
+        <polygon points="${cx-30},${cy} ${cx-30},${cy-h} ${cx-5},${cy-h-15} ${cx-5},${cy-15}" fill="${s.color}12" stroke="${s.color}" stroke-width="1.8"/>
+        <polygon points="${cx+30},${cy} ${cx+30},${cy-h} ${cx+55},${cy-h-15} ${cx+55},${cy-15}" fill="${s.color}10" stroke="${s.color}" stroke-width="1.8"/>
+        <polygon points="${cx-30},${cy} ${cx+30},${cy} ${cx+55},${cy-15} ${cx-5},${cy-15}" fill="${s.color}08" stroke="${s.color}" stroke-width="1.8"/>`;
+    } else if (shape === 'cylinder') {
+      svgEl.innerHTML = `
+        <ellipse cx="${cx}" cy="35" rx="38" ry="14" fill="${s.color}22" stroke="${s.color}" stroke-width="2"/>
+        <rect x="${cx-38}" y="35" width="76" height="55" fill="${s.color}11" stroke="none"/>
+        <line x1="${cx-38}" y1="35" x2="${cx-38}" y2="90" stroke="${s.color}" stroke-width="2"/>
+        <line x1="${cx+38}" y1="35" x2="${cx+38}" y2="90" stroke="${s.color}" stroke-width="2"/>
+        <ellipse cx="${cx}" cy="90" rx="38" ry="14" fill="${s.color}22" stroke="${s.color}" stroke-width="2"/>`;
+    } else if (shape === 'cone') {
+      svgEl.innerHTML = `
+        <ellipse cx="${cx}" cy="90" rx="42" ry="14" fill="${s.color}22" stroke="${s.color}" stroke-width="2"/>
+        <line x1="${cx-42}" y1="90" x2="${cx}" y2="18" stroke="${s.color}" stroke-width="2"/>
+        <line x1="${cx+42}" y1="90" x2="${cx}" y2="18" stroke="${s.color}" stroke-width="2"/>
+        <circle cx="${cx}" cy="18" r="4" fill="${s.color}"/>`;
+    } else if (shape === 'sphere') {
+      svgEl.innerHTML = `
+        <circle cx="${cx}" cy="${cy}" r="45" fill="${s.color}18" stroke="${s.color}" stroke-width="2"/>
+        <ellipse cx="${cx}" cy="${cy}" rx="45" ry="14" fill="none" stroke="${s.color}88" stroke-width="1.5" stroke-dasharray="6 4"/>
+        <ellipse cx="${cx}" cy="${cy}" rx="18" ry="45" fill="none" stroke="${s.color}66" stroke-width="1.5" stroke-dasharray="6 4"/>`;
+    }
+  }
+}
+
+function renderShapeInfo(shape) {
+  const s = SHAPES[shape];
+  document.getElementById('shape-info-name').innerHTML = `${s.emoji} ${s.name}`;
+  document.getElementById('shape-info-name').style.color = s.color;
+  const statsEl = document.getElementById('shape-info-stats');
+  statsEl.innerHTML = `
+    <span class="stat-chip" style="background:${s.color}18;color:${s.color};border-color:${s.color}44">面 × ${s.faces}</span>
+    <span class="stat-chip" style="background:${s.color}18;color:${s.color};border-color:${s.color}44">棱 × ${s.edges}</span>
+    <span class="stat-chip" style="background:${s.color}18;color:${s.color};border-color:${s.color}44">顶点 × ${s.vertices}</span>`;
+  document.getElementById('shape-info-example').innerHTML =
+    `<strong style="color:var(--text)">特征：</strong>${s.desc}<br><strong style="color:var(--text)">生活中：</strong>${s.example}`;
+}
+renderShape3D('cube');
+renderShapeInfo('cube');
+
+/* ── 2. 展开图 ── */
+const NETS = [
+  {
+    name:'十字形', valid:true,
+    desc:'中间一排4格，上下各1格，共6格。',
+    cells:[[1,0],[1,1],[0,1],[1,2],[2,1],[3,1]],
+    reason:'✅ 这是最经典的展开图！中间4面是前/下/后/上，左右各一面，完全合法。'
+  },
+  {
+    name:'T字形', valid:true,
+    desc:'一排3格，在第2格上下各延伸，总共6格。',
+    cells:[[0,1],[1,1],[2,1],[1,0],[1,2],[1,3]],
+    reason:'✅ 合法！T字形是11种展开图之一，可以折叠成正方体。'
+  },
+  {
+    name:'L字形', valid:true,
+    desc:'一排4格，最后一格上方额外1格，再左端上方1格。',
+    cells:[[0,0],[0,1],[1,1],[2,1],[3,1],[0,2]],
+    reason:'✅ 合法！L字变体是11种展开图之一。'
+  },
+  {
+    name:'Z字形（无效）', valid:false,
+    desc:'两格在上，向右偏移，下面两格，共形成Z形。',
+    cells:[[0,0],[1,0],[1,1],[2,1],[2,2],[3,2]],
+    reason:'❌ 不能折叠！这个形状有面会重叠，不是正方体展开图。'
+  },
+  {
+    name:'2×3矩形（无效）', valid:false,
+    desc:'2行×3列共6格排成整齐矩形。',
+    cells:[[0,0],[1,0],[2,0],[0,1],[1,1],[2,1]],
+    reason:'❌ 不能折叠！2×3矩形折叠时有两对面会重叠，不合法。'
+  },
+];
+let currentNet = 0, netGuessed = false;
+
+function selectNet(btn, idx) {
+  document.querySelectorAll('.net-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentNet = idx;
+  netGuessed = false;
+  document.getElementById('net-result').style.display = 'none';
+  document.getElementById('net-yes').disabled = false;
+  document.getElementById('net-no').disabled = false;
+  renderNet(idx);
+}
+function renderNet(idx) {
+  const net = NETS[idx];
+  const svg = document.getElementById('net-svg');
+  const size = 36, pad = 14;
+  // Find bounding box
+  const maxC = Math.max(...net.cells.map(([c])=>c));
+  const maxR = Math.max(...net.cells.map(([,r])=>r));
+  const totalW = (maxC+1)*size + pad*2, totalH = (maxR+1)*size + pad*2;
+  const vw = Math.max(160, totalW), vh = Math.max(160, totalH);
+  svg.setAttribute('viewBox', `0 0 ${vw} ${vh}`);
+  const ox = (vw - (maxC+1)*size) / 2, oy = (vh - (maxR+1)*size) / 2;
+  const color = net.valid ? '#fb923c' : '#ef4444';
+  let html = '';
+  net.cells.forEach(([c,r], i) => {
+    const x = ox + c*size, y = oy + r*size;
+    html += `<rect x="${x+1}" y="${y+1}" width="${size-2}" height="${size-2}" rx="4"
+      fill="${color}22" stroke="${color}" stroke-width="1.5"/>
+      <text x="${x+size/2}" y="${y+size/2+5}" text-anchor="middle" font-size="13" font-weight="700" fill="${color}" font-family="Noto Sans SC">${i+1}</text>`;
+  });
+  svg.innerHTML = html;
+  document.getElementById('net-question').innerHTML =
+    `<strong style="color:#fb923c">${net.name}</strong>：${net.desc}<br>👆 你觉得这个展开图能折成正方体吗？`;
+}
+function netGuess(answer) {
+  if (netGuessed) return;
+  netGuessed = true;
+  const net = NETS[currentNet];
+  const correct = answer === net.valid;
+  const res = document.getElementById('net-result');
+  res.style.display = 'block';
+  res.innerHTML = (correct ? '🎉 答对了！' : '🤔 这次没猜对！') + '<br>' + net.reason;
+  res.style.color = correct ? '#6ee7b7' : '#fca5a5';
+  document.getElementById('net-yes').disabled = true;
+  document.getElementById('net-no').disabled = true;
+}
+renderNet(0);
+
+/* ── 3. 三视图 ── Canvas drawing ── */
+let currentViewDir = 'front', currentViewShape = 'cube';
+
+function vRect(ctx, x,y,w,h) { ctx.beginPath(); ctx.rect(x,y,w,h); ctx.fill(); ctx.stroke(); }
+const VIEW_DATA = {
+  cube: {
+    front:  { label:'正方体·正视图 = 正方形', draw: ctx => { ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(16,185,129,0.12)'; vRect(ctx,30,30,80,80); }},
+    side:   { label:'正方体·侧视图 = 正方形', draw: ctx => { ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(16,185,129,0.12)'; vRect(ctx,30,30,80,80); }},
+    top:    { label:'正方体·俯视图 = 正方形', draw: ctx => { ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(16,185,129,0.12)'; vRect(ctx,30,30,80,80); }},
+  },
+  cylinder: {
+    front:  { label:'圆柱·正视图 = 长方形', draw: ctx => { ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(16,185,129,0.12)'; vRect(ctx,30,20,80,100); }},
+    side:   { label:'圆柱·侧视图 = 长方形', draw: ctx => { ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(16,185,129,0.12)'; vRect(ctx,30,20,80,100); }},
+    top:    { label:'圆柱·俯视图 = 圆形', draw: ctx => { ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(16,185,129,0.12)'; ctx.beginPath(); ctx.arc(70,70,50,0,Math.PI*2); ctx.fill(); ctx.stroke(); }},
+  },
+  cone: {
+    front:  { label:'圆锥·正视图 = 三角形', draw: ctx => { ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(16,185,129,0.12)'; ctx.beginPath(); ctx.moveTo(70,15); ctx.lineTo(20,115); ctx.lineTo(120,115); ctx.closePath(); ctx.fill(); ctx.stroke(); }},
+    side:   { label:'圆锥·侧视图 = 三角形', draw: ctx => { ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(16,185,129,0.12)'; ctx.beginPath(); ctx.moveTo(70,15); ctx.lineTo(20,115); ctx.lineTo(120,115); ctx.closePath(); ctx.fill(); ctx.stroke(); }},
+    top:    { label:'圆锥·俯视图 = 圆形+中心点', draw: ctx => { ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(16,185,129,0.12)'; ctx.beginPath(); ctx.arc(70,70,50,0,Math.PI*2); ctx.fill(); ctx.stroke(); ctx.fillStyle='#6ee7b7'; ctx.beginPath(); ctx.arc(70,70,5,0,Math.PI*2); ctx.fill(); }},
+  },
+  lshape: {
+    front:  { label:'L形·正视图 = 2格高L形', draw: ctx => { ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(16,185,129,0.12)'; vRect(ctx,25,25,40,90); vRect(ctx,65,65,50,50); }},
+    side:   { label:'L形·侧视图 = 2格高矩形', draw: ctx => { ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(16,185,129,0.12)'; vRect(ctx,30,25,80,90); }},
+    top:    { label:'L形·俯视图 = L形平面', draw: ctx => { ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5; ctx.fillStyle='rgba(16,185,129,0.12)'; vRect(ctx,25,25,45,90); vRect(ctx,70,65,45,50); }},
+  },
+};
+
+// Isometric 3D preview drawings for each shape
+const ISO_DRAWS = {
+  cube: ctx => {
+    const c='#6ee7b7'; drawIsoCube(ctx,55,45,50,50,50,c);
+  },
+  cylinder: ctx => {
+    const c='#6ee7b7', cx=70, r=40, top=30, h=80;
+    ctx.fillStyle=c+'18'; ctx.strokeStyle=c; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.ellipse(cx,top,r,r*0.35,0,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle=c+'10';
+    ctx.beginPath(); ctx.moveTo(cx-r,top); ctx.lineTo(cx-r,top+h); ctx.arc(cx,top+h,r,Math.PI,0,true); ctx.lineTo(cx+r,top); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle=c; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(cx-r,top); ctx.lineTo(cx-r,top+h); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx+r,top); ctx.lineTo(cx+r,top+h); ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(cx,top+h,r,r*0.35,0,0,Math.PI*2); ctx.fill(); ctx.stroke();
+  },
+  cone: ctx => {
+    const c='#a78bfa', cx=70, r=45, tip=20, base=120;
+    ctx.fillStyle=c+'18'; ctx.strokeStyle=c; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.ellipse(cx,base,r,r*0.3,0,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx-r,base); ctx.lineTo(cx,tip); ctx.lineTo(cx+r,base); ctx.fill();
+    ctx.strokeStyle=c; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(cx-r,base); ctx.lineTo(cx,tip); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx+r,base); ctx.lineTo(cx,tip); ctx.stroke();
+  },
+  lshape: ctx => {
+    const c='#6ee7b7';
+    drawIsoCube(ctx,30,60,40,40,40,c);
+    drawIsoCube(ctx,70,60,40,40,40,c);
+    drawIsoCube(ctx,30,20,40,40,40,c);
+  },
+};
+
+function drawIsoCube(ctx, x, y, w, h, d, color) {
+  const ux=w*0.5, uy=-w*0.25, vx=0, vy=h*0.5, wx=w, wy=w*0.25;
+  // top face
+  ctx.fillStyle=color+'25'; ctx.strokeStyle=color; ctx.lineWidth=1.8;
+  ctx.beginPath();
+  ctx.moveTo(x,y); ctx.lineTo(x+ux,y+uy); ctx.lineTo(x+ux+wx,y+uy+wy); ctx.lineTo(x+wx,y+wy); ctx.closePath();
+  ctx.fill(); ctx.stroke();
+  // left face
+  ctx.fillStyle=color+'15';
+  ctx.beginPath();
+  ctx.moveTo(x,y); ctx.lineTo(x,y+vy); ctx.lineTo(x+vx,y+vy+vy); ctx.lineTo(x+wx,y+wy+vy); ctx.lineTo(x+wx,y+wy); ctx.lineTo(x,y); ctx.closePath();
+  ctx.fill(); ctx.stroke();
+  // right face
+  ctx.fillStyle=color+'10';
+  ctx.beginPath();
+  ctx.moveTo(x+wx,y+wy); ctx.lineTo(x+wx,y+wy+vy); ctx.lineTo(x+ux+wx,y+uy+wy+vy); ctx.lineTo(x+ux+wx,y+uy+wy); ctx.closePath();
+  ctx.fill(); ctx.stroke();
+}
+
+function selectView(btn, dir) {
+  document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentViewDir = dir;
+  renderView();
+}
+function selectViewShape(btn, shape) {
+  document.querySelectorAll('.shape-view-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentViewShape = shape;
+  renderView();
+}
+function renderView() {
+  // Draw 3D preview
+  const c3 = document.getElementById('view-canvas-3d').getContext('2d');
+  c3.clearRect(0,0,140,140);
+  const isoFn = ISO_DRAWS[currentViewShape];
+  if (isoFn) isoFn(c3);
+
+  // Draw 2D view
+  const c2 = document.getElementById('view-canvas-2d').getContext('2d');
+  c2.clearRect(0,0,140,140);
+  const vd = VIEW_DATA[currentViewShape]?.[currentViewDir];
+  if (vd) {
+    vd.draw(c2);
+    document.getElementById('view-label').textContent = vd.label;
+  }
+}
+renderView();
+
+/* ── 4. 数立方块 ── */
+const CUBE_PRESETS = [
+  { grid:[[2,1,0],[1,3,0],[0,1,2]], answer:10, hint:'提示：把每格数字加起来，答案是 10 块！' },
+  { grid:[[3,2,1],[2,1,0],[1,0,0]], answer:10, hint:'提示：答案也是 10 块！试试数数看。' },
+  { grid:[[1,1,1],[1,1,1],[1,1,1]], answer:9,  hint:'自由模式，每格可以随意点击修改！' },
+];
+let cubeGrid = [[1,1,0],[1,2,0],[0,1,1]];
+let cubePresetIdx = 0;
+
+function cubeLoadPreset(btn, idx) {
+  document.querySelectorAll('.cube-preset-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  cubePresetIdx = idx;
+  const p = CUBE_PRESETS[idx];
+  cubeGrid = p.grid.map(row=>[...row]);
+  document.getElementById('cube-answer').style.display = 'none';
+  renderCubeGrid();
+  drawCubeIso();
+}
+function renderCubeGrid() {
+  const wrap = document.getElementById('cube-topgrid');
+  wrap.innerHTML = '';
+  const total = cubeGrid.flat().reduce((a,b)=>a+b,0);
+  document.getElementById('cube-total').textContent = total;
+  cubeGrid.forEach((row,r) => {
+    row.forEach((val,c) => {
+      const cell = document.createElement('div');
+      cell.className = 'cube-cell' + (val===0?' empty':'');
+      cell.textContent = val===0 ? '0' : val;
+      cell.title = '点击 +1 层，长按清零';
+      let pressTimer = null;
+      cell.addEventListener('mousedown', () => { pressTimer = setTimeout(()=>{ cubeGrid[r][c]=0; renderCubeGrid(); drawCubeIso(); },600); });
+      cell.addEventListener('mouseup', () => clearTimeout(pressTimer));
+      cell.addEventListener('touchstart', e => { pressTimer = setTimeout(()=>{ cubeGrid[r][c]=0; renderCubeGrid(); drawCubeIso(); e.preventDefault(); },600); }, {passive:false});
+      cell.addEventListener('touchend', () => clearTimeout(pressTimer));
+      cell.addEventListener('click', () => { cubeGrid[r][c] = (cubeGrid[r][c]+1)%5; renderCubeGrid(); drawCubeIso(); });
+      wrap.appendChild(cell);
+    });
+  });
+}
+function drawCubeIso() {
+  const canvas = document.getElementById('cube-iso');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,160,160);
+  const sz=30, color='#a78bfa';
+  // Render from back-bottom to front-top so front cubes are on top
+  const rows = cubeGrid.length, cols = cubeGrid[0].length;
+  for (let r=rows-1; r>=0; r--) {
+    for (let c=0; c<cols; c++) {
+      const layers = cubeGrid[r][c];
+      for (let l=0; l<layers; l++) {
+        const ox = 20 + c*sz*0.6 - r*sz*0.3;
+        const oy = 100 + r*sz*0.35 - l*sz*0.55 - c*sz*0.2;
+        drawIsoCubeSmall(ctx, ox, oy, sz, color);
+      }
+    }
+  }
+}
+function drawIsoCubeSmall(ctx, x, y, sz, color) {
+  const hw=sz*0.5, qh=sz*0.25;
+  // top
+  ctx.fillStyle=color+'30'; ctx.strokeStyle=color; ctx.lineWidth=1.2;
+  ctx.beginPath();
+  ctx.moveTo(x,y); ctx.lineTo(x+hw,y-qh); ctx.lineTo(x+sz,y); ctx.lineTo(x+hw,y+qh); ctx.closePath();
+  ctx.fill(); ctx.stroke();
+  // left
+  ctx.fillStyle=color+'1a';
+  ctx.beginPath();
+  ctx.moveTo(x,y); ctx.lineTo(x,y+sz*0.5); ctx.lineTo(x+hw,y+sz*0.5+qh); ctx.lineTo(x+hw,y+qh); ctx.closePath();
+  ctx.fill(); ctx.stroke();
+  // right
+  ctx.fillStyle=color+'12';
+  ctx.beginPath();
+  ctx.moveTo(x+hw,y+qh); ctx.lineTo(x+hw,y+sz*0.5+qh); ctx.lineTo(x+sz,y+sz*0.5); ctx.lineTo(x+sz,y); ctx.closePath();
+  ctx.fill(); ctx.stroke();
+}
+function cubeCheckAnswer() {
+  const total = cubeGrid.flat().reduce((a,b)=>a+b,0);
+  const p = CUBE_PRESETS[cubePresetIdx];
+  const ans = document.getElementById('cube-answer');
+  ans.style.display = 'block';
+  if (total === p.answer) {
+    ans.innerHTML = `🎉 答对了！共 <strong>${total}</strong> 块！把俯视图数字全加起来就对了！`;
+    ans.style.color = '#6ee7b7';
+  } else {
+    ans.innerHTML = `🤔 当前是 ${total} 块，${p.hint}`;
+    ans.style.color = '#fca5a5';
+  }
+}
+cubeLoadPreset(document.querySelector('.cube-preset-btn'), 0);
 
 initQuiz();
 </script>
