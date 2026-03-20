@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🗺️ 路径、迷宫与方向 — 袋鼠数学乐园</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #030712;
+  --bg2: #0a0f1e;
+  --card: rgba(255,255,255,0.03);
+  --card-border: rgba(255,255,255,0.08);
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --muted2: #64748b;
+  --emerald: #10b981;
+  --emerald-light: #6ee7b7;
+  --cyan: #06b6d4;
+  --cyan-light: #67e8f9;
+  --amber: #f59e0b;
+  --purple: #8b5cf6;
+  --pink: #ec4899;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', 'Noto Sans SC', sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Aurora ── */
+.aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.aurora-blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.12; animation: auroraF linear infinite; }
+.ab1 { width: 600px; height: 600px; background: radial-gradient(circle,#10b981,transparent 70%); top: -100px; left: -100px; animation-duration: 22s; }
+.ab2 { width: 500px; height: 500px; background: radial-gradient(circle,#06b6d4,transparent 70%); top: 50%; right: -100px; animation-duration: 28s; animation-delay:-10s; }
+.ab3 { width: 400px; height: 400px; background: radial-gradient(circle,#3b82f6,transparent 70%); bottom: 10%; left: 20%; animation-duration: 20s; animation-delay:-5s; }
+@keyframes auroraF { 0%{transform:translate(0,0)} 33%{transform:translate(30px,-25px)} 66%{transform:translate(-15px,35px)} 100%{transform:translate(0,0)} }
+
+.dot-grid { position: fixed; inset: 0; z-index: 0; pointer-events: none; background-image: radial-gradient(rgba(255,255,255,0.05) 1px,transparent 1px); background-size: 28px 28px; mask-image: radial-gradient(ellipse 70% 70% at 50% 50%,black 40%,transparent 100%); }
+.page { position: relative; z-index: 1; }
+
+/* ── Top bar ── */
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(3,7,18,0.8); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--card-border); padding: 0 24px;
+}
+.topbar-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; gap: 16px; height: 60px; }
+.back-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--muted); font-size: 13px; font-weight: 500;
+  text-decoration: none; transition: color .2s;
+  padding: 6px 12px; border-radius: 8px;
+}
+.back-link:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+.topbar-sep { color: var(--muted2); font-size: 14px; }
+.topbar-title { font-size: 14px; font-weight: 600; color: var(--muted); }
+
+/* ── Tab Nav ── */
+.tab-nav {
+  display: inline-flex; gap: 6px;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--card-border);
+  border-radius: 16px; padding: 6px;
+  margin-top: 24px; animation: fadeUp .5s ease .3s both;
+}
+.tab-pill {
+  padding: 10px 22px; border-radius: 10px;
+  font-size: 14px; font-weight: 600; border: none;
+  background: transparent; color: var(--muted);
+  cursor: pointer; transition: all .25s; white-space: nowrap;
+  font-family: 'Noto Sans SC', sans-serif;
+  display: flex; align-items: center; gap: 6px;
+}
+.tab-pill:hover { background: rgba(255,255,255,0.06); color: var(--text); }
+.tab-pill.on { background: rgba(16,185,129,0.18); color: #6ee7b7; box-shadow: 0 0 0 1px rgba(16,185,129,0.35); }
+
+/* ── Hero ── */
+.mod-hero { padding: 40px 0 32px; animation: fadeUp .5s ease both; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 14px; border-radius: 999px;
+  background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25);
+  font-size: 12px; font-weight: 700; color: #6ee7b7; margin-bottom: 16px;
+}
+.hero-title {
+  font-size: clamp(28px,5vw,48px); font-weight: 900; letter-spacing: -0.03em;
+  line-height: 1.1; margin-bottom: 12px;
+}
+.hero-grad { background: linear-gradient(135deg,#6ee7b7,#67e8f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.hero-sub { font-size: 16px; color: var(--muted); max-width: 560px; line-height: 1.6; }
+.hero-stats { display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap; }
+.hstat { display: flex; flex-direction: column; }
+.hstat-num { font-size: 22px; font-weight: 800; color: #6ee7b7; }
+.hstat-label { font-size: 11px; color: var(--muted2); font-weight: 500; }
+
+/* ── Container & Sections ── */
+.container { max-width: 960px; margin: 0 auto; padding: 0 24px 80px; }
+.sec { display: none; animation: fadeUp .4s ease; }
+.sec.on { display: block; }
+.sec-heading { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--card-border); }
+
+/* ── Glass Card ── */
+.gcard {
+  background: var(--card); border: 1px solid var(--card-border);
+  border-radius: 20px; padding: 28px; margin-bottom: 20px; position: relative;
+  transition: border-color .3s;
+}
+.gcard:hover { border-color: rgba(16,185,129,0.25); }
+.gcard::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg,transparent,rgba(16,185,129,0.4),transparent);
+  opacity: 0; transition: opacity .3s;
+}
+.gcard:hover::before { opacity: 1; }
+
+/* ── Concept box ── */
+.cbox {
+  border-radius: 16px; padding: 20px 20px 20px 24px; margin: 14px 0;
+  position: relative; border-left: 3px solid var(--accent, var(--emerald));
+  background: var(--accent-bg, rgba(16,185,129,0.05));
+}
+.cbox h4 { font-size: 17px; font-weight: 700; margin-bottom: 8px; color: var(--accent, #6ee7b7); letter-spacing: -0.01em; }
+.cbox p, .cbox ul { font-size: 15px; color: var(--muted); line-height: 1.8; }
+.cbox ul { margin-left: 20px; margin-top: 8px; }
+.cbox li { margin-bottom: 4px; }
+.cbox b, .cbox strong { color: var(--text); font-weight: 600; }
+
+/* ── Voice btn ── */
+.vbtn {
+  position: absolute; top: 14px; right: 14px;
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: 8px; border: none;
+  font-size: 12px; font-weight: 600; cursor: pointer; transition: all .25s;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.vbtn:hover { transform: scale(1.06); }
+.vbtn.playing { opacity: .75; }
+.vbtn-e { background: rgba(16,185,129,0.12); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.25); }
+.vbtn-c { background: rgba(6,182,212,0.12); color: #67e8f9; border: 1px solid rgba(6,182,212,0.25); }
+.vbtn-a { background: rgba(245,158,11,0.12); color: #fcd34d; border: 1px solid rgba(245,158,11,0.25); }
+.vbtn-v { background: rgba(139,92,246,0.15); color: #a78bfa; border: 1px solid rgba(139,92,246,0.25); }
+
+/* ── Method Cards ── */
+.mcard {
+  background: var(--card); border: 1px solid var(--card-border);
+  border-radius: 16px; margin-bottom: 12px;
+  cursor: pointer; transition: all .3s; overflow: hidden;
+}
+.mcard:hover { border-color: rgba(255,255,255,0.12); transform: translateY(-1px); }
+.mcard.open { border-color: rgba(16,185,129,0.3); }
+.mcard-head { padding: 20px 24px; display: flex; align-items: center; gap: 16px; }
+.mcard-icon { font-size: 28px; flex-shrink: 0; }
+.mcard-info { flex: 1; }
+.mcard-title { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
+.mcard-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.mcard-chevron { font-size: 18px; color: var(--muted); transition: transform .3s; margin-left: auto; }
+.mcard.open .mcard-chevron { transform: rotate(180deg); color: #6ee7b7; }
+.mcard-body { max-height: 0; overflow: hidden; transition: max-height .5s cubic-bezier(0.23,1,0.32,1); }
+.mcard-body.open { max-height: 1200px; }
+.mcard-body-inner { padding: 0 24px 24px; border-top: 1px solid var(--card-border); }
+.mcard-challenge {
+  background: rgba(255,255,255,0.03); border-radius: 12px;
+  padding: 14px 16px; font-size: 14px; color: var(--muted);
+  margin: 16px 0 12px; line-height: 1.7; border: 1px solid rgba(255,255,255,0.06);
+}
+.mcard-challenge strong { color: var(--text); }
+.reveal-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 18px; border-radius: 10px;
+  background: rgba(16,185,129,0.1); border: 1px dashed rgba(16,185,129,0.35);
+  color: #6ee7b7; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all .25s; margin-bottom: 12px;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.reveal-btn:hover { background: rgba(16,185,129,0.18); transform: scale(1.03); }
+.step {
+  display: flex; gap: 14px; align-items: flex-start;
+  margin-bottom: 12px; opacity: 0; transform: translateX(-16px); transition: all .4s;
+}
+.step.show { opacity: 1; transform: none; }
+.step-num {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800;
+  background: linear-gradient(135deg, var(--scolor1,#10b981), var(--scolor2,#06b6d4));
+  color: #fff;
+}
+.step-content { font-size: 14px; color: var(--muted); line-height: 1.7; padding-top: 4px; }
+.step-content strong { color: var(--text); }
+.va-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: 8px; border: none;
+  font-size: 12px; font-weight: 600; cursor: pointer; transition: all .25s;
+  background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25); color: #6ee7b7;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.va-btn:hover { transform: scale(1.04); }
+
+/* ── Example Cards ── */
+.excard {
+  background: var(--card); border: 1px solid var(--card-border);
+  border-radius: 20px; padding: 24px; margin-bottom: 20px;
+}
+.ex-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+.ex-body { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 16px; }
+.ex-body strong { color: var(--text); }
+.choice-grid { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+.choice-btn {
+  padding: 10px 20px; border-radius: 12px; font-size: 15px; font-weight: 600;
+  border: 1.5px solid var(--card-border); background: rgba(255,255,255,0.03);
+  color: var(--text); cursor: pointer; transition: all .25s;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.choice-btn:hover:not(.dis) { border-color: rgba(16,185,129,0.4); background: rgba(16,185,129,0.08); }
+.choice-btn.correct { background: rgba(16,185,129,0.15); border-color: #6ee7b7; color: #6ee7b7; }
+.choice-btn.wrong   { background: rgba(239,68,68,0.1); border-color: #fca5a5; color: #fca5a5; animation: shake .4s ease; }
+.choice-btn.dis { cursor: default; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+.ex-feedback { font-size: 14px; font-weight: 700; margin-bottom: 14px; min-height: 22px; }
+.retry-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+.retry-btn {
+  padding: 8px 16px; border-radius: 10px; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all .25s; font-family: 'Noto Sans SC', sans-serif; border: none;
+}
+.retry-btn.r { background: rgba(6,182,212,0.12); color: #67e8f9; border: 1px solid rgba(6,182,212,0.3); }
+.retry-btn.l { background: rgba(245,158,11,0.12); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); }
+
+/* Guide chain */
+.guide-chain { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+.guide-item {
+  border-radius: 12px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02);
+  transition: border-color .3s;
+}
+.guide-item.active { border-color: rgba(16,185,129,0.35); }
+.guide-item.locked { opacity: .4; pointer-events: none; }
+.guide-q {
+  padding: 12px 16px; font-size: 14px; color: var(--muted); cursor: pointer;
+  display: flex; align-items: center; gap: 10px; transition: background .2s;
+}
+.guide-q:hover { background: rgba(255,255,255,0.03); }
+.guide-q .gq-icon { font-size: 16px; }
+.guide-q .gq-text { flex: 1; }
+.guide-q .gq-arrow { font-size: 12px; color: var(--muted2); }
+.guide-a {
+  display: none; padding: 12px 16px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  background: rgba(16,185,129,0.05); font-size: 14px; color: var(--muted); line-height: 1.7;
+}
+.guide-a strong { color: var(--text); }
+.guide-a .va-btn { margin-top: 8px; }
+
+.feynman-box {
+  background: rgba(16,185,129,0.07); border: 1.5px solid rgba(16,185,129,0.25);
+  border-radius: 14px; padding: 18px; margin-top: 14px; display: none;
+}
+.feynman-box .fn-title { font-size: 15px; font-weight: 700; color: #6ee7b7; margin-bottom: 12px; }
+.feynman-box .fn-step { display: flex; gap: 12px; margin-bottom: 10px; font-size: 14px; color: var(--muted); }
+.feynman-box .fn-num {
+  width: 24px; height: 24px; border-radius: 50%; background: rgba(16,185,129,0.2);
+  color: #6ee7b7; display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800; flex-shrink: 0;
+}
+.feynman-box .fn-step strong { color: var(--text); }
+
+/* ── Quiz ── */
+.quiz-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.star-bar { display: flex; gap: 4px; }
+.star { font-size: 18px; transition: all .3s; }
+.star.on { filter: drop-shadow(0 0 4px gold); }
+.q-nav-dots { display: flex; gap: 6px; flex-wrap: wrap; }
+.q-dot {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(255,255,255,0.06); border: 1.5px solid var(--card-border);
+  font-size: 11px; font-weight: 700; color: var(--muted2);
+  display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .25s;
+}
+.q-dot:hover { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.3); }
+.q-dot.on  { background: rgba(16,185,129,0.2); border-color: #6ee7b7; color: #6ee7b7; }
+.q-dot.ok  { background: rgba(16,185,129,0.15); border-color: #6ee7b7; color: #6ee7b7; }
+.q-dot.bad { background: rgba(239,68,68,0.1); border-color: #fca5a5; color: #fca5a5; }
+.qcard {
+  background: var(--card); border: 1px solid var(--card-border);
+  border-radius: 20px; padding: 24px;
+}
+.q-meta { display: flex; gap: 8px; margin-bottom: 14px; }
+.q-badge {
+  padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700;
+}
+.q-diff-1 { background: rgba(16,185,129,0.12); color: #6ee7b7; }
+.q-diff-2 { background: rgba(245,158,11,0.12); color: #fcd34d; }
+.q-diff-3 { background: rgba(239,68,68,0.12); color: #fca5a5; }
+.q-src { background: rgba(255,255,255,0.05); color: var(--muted); padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+.q-text { font-size: 16px; font-weight: 600; margin-bottom: 16px; line-height: 1.6; }
+.q-opts { display: flex; flex-direction: column; gap: 8px; }
+.q-opt {
+  padding: 12px 16px; border-radius: 12px;
+  border: 1.5px solid var(--card-border); background: rgba(255,255,255,0.02);
+  font-size: 14px; color: var(--text); cursor: pointer; transition: all .25s;
+  text-align: left; font-family: 'Noto Sans SC', sans-serif;
+}
+.q-opt:hover:not(.dis) { border-color: rgba(16,185,129,0.4); background: rgba(16,185,129,0.06); }
+.q-opt.correct { background: rgba(16,185,129,0.12); border-color: #6ee7b7; color: #6ee7b7; }
+.q-opt.wrong   { background: rgba(239,68,68,0.08); border-color: #fca5a5; animation: shake .4s ease; }
+.q-opt.dis { cursor: default; }
+.qfb { font-size: 14px; font-weight: 700; margin-top: 12px; min-height: 22px; display: none; }
+.qfb.show { display: block; }
+.qfb.ok { color: #6ee7b7; }
+.qfb.no { color: #fca5a5; }
+.q-nav { display: flex; gap: 10px; margin-top: 16px; justify-content: flex-end; }
+.qnav-btn {
+  padding: 8px 20px; border-radius: 10px; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all .25s; font-family: 'Noto Sans SC', sans-serif; border: none;
+}
+.qnav-btn.prev { background: rgba(255,255,255,0.06); color: var(--muted); }
+.qnav-btn.next { background: rgba(16,185,129,0.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.3); display: none; }
+.qnav-btn.next.show { display: block; }
+
+/* ── Animations ── */
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+
+/* ── Mobile bottom nav ── */
+.mob-nav {
+  display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(3,7,18,0.95); backdrop-filter: blur(20px);
+  border-top: 1px solid var(--card-border);
+  padding: 10px 16px; gap: 6px; overflow-x: auto;
+}
+.mob-tab {
+  flex: 0 0 auto; padding: 8px 14px; border-radius: 10px;
+  font-size: 12px; font-weight: 600; border: none;
+  background: transparent; color: var(--muted); cursor: pointer;
+  font-family: 'Noto Sans SC', sans-serif; white-space: nowrap; transition: all .2s;
+}
+.mob-tab.on { color: #6ee7b7; background: rgba(16,185,129,0.1); }
+
+@media (max-width: 680px) {
+  .tab-nav { display: none; }
+  .mob-nav { display: flex; }
+  .topbar-inner { gap: 8px; }
+  .mod-hero { padding: 24px 0 20px; }
+  .hero-title { font-size: 26px; }
+  body { padding-bottom: 70px; }
+}
+
+/* ── S1 Interactive Components ── */
+.ctrl-btn {
+  padding: 7px 14px; border-radius: 9px; font-size: 13px; font-weight: 600; cursor: pointer;
+  border: 1px solid rgba(16,185,129,0.3); background: rgba(16,185,129,0.07); color: #6ee7b7;
+  transition: all .2s; font-family: 'Noto Sans SC', sans-serif;
+}
+.ctrl-btn.active { background: rgba(16,185,129,0.2); border-color: rgba(16,185,129,0.5); box-shadow: 0 0 0 2px rgba(16,185,129,0.15); }
+.ctrl-btn:hover { background: rgba(16,185,129,0.14); }
+.ctrl-btn.cyan { border-color: rgba(6,182,212,0.35); background: rgba(6,182,212,0.08); color: #67e8f9; }
+.ctrl-btn.cyan.active { background: rgba(6,182,212,0.2); border-color: rgba(6,182,212,0.5); box-shadow: 0 0 0 2px rgba(6,182,212,0.15); }
+.ctrl-btn.cyan:hover { background: rgba(6,182,212,0.15); }
+.maze-dir-btn {
+  width: 48px; height: 48px; border-radius: 12px; font-size: 20px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid rgba(16,185,129,0.3); background: rgba(16,185,129,0.08); cursor: pointer;
+  transition: all .15s; user-select: none; -webkit-user-select: none;
+}
+.maze-dir-btn:hover, .maze-dir-btn:active { background: rgba(16,185,129,0.22); transform: scale(1.08); }
+@keyframes cellPop { 0%{transform:scale(1)} 50%{transform:scale(1.2)} 100%{transform:scale(1)} }
+@keyframes winBounce { 0%,100%{transform:scale(1)} 30%{transform:scale(1.3) rotate(-10deg)} 60%{transform:scale(1.2) rotate(10deg)} }
+</style>
+</head>
+<body>
+<div class="aurora">
+  <div class="aurora-blob ab1"></div>
+  <div class="aurora-blob ab2"></div>
+  <div class="aurora-blob ab3"></div>
+</div>
+<div class="dot-grid"></div>
+
+<div class="page">
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <a href="../../index.html" class="back-link">← 返回主页</a>
+      <span class="topbar-sep">/</span>
+      <span class="topbar-title">模块五 · 路径、迷宫与方向</span>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Hero -->
+    <div class="mod-hero">
+      <div class="hero-badge">🗺️ 模块五</div>
+      <h1 class="hero-title">路径 · 迷宫 · <span class="hero-grad">方向</span></h1>
+      <p class="hero-sub">学会辨认方向，数出最短路径，在迷宫里找到出口！成为最棒的小导航家 🧭</p>
+      <div class="hero-stats">
+        <div class="hstat"><span class="hstat-num">3</span><span class="hstat-label">核心概念</span></div>
+        <div class="hstat"><span class="hstat-num">3</span><span class="hstat-label">学习技巧</span></div>
+        <div class="hstat"><span class="hstat-num">3</span><span class="hstat-label">例题精讲</span></div>
+        <div class="hstat"><span class="hstat-num">8</span><span class="hstat-label">闯关题目</span></div>
+      </div>
+      <nav class="tab-nav">
+        <button class="tab-pill on" data-s="s1">💡 概念</button>
+        <button class="tab-pill" data-s="s2">🛠 技巧</button>
+        <button class="tab-pill" data-s="s3">📖 例题</button>
+        <button class="tab-pill" data-s="s4">🎮 闯关</button>
+      </nav>
+    </div>
+
+<div class="container" style="padding:0">
+
+  <!-- ═══════════════ S1 概念 ═══════════════ -->
+  <div id="s1" class="sec on">
+    <div class="gcard">
+      <div class="sec-heading">💡 核心概念</div>
+
+      <!-- ── 概念1：方向与罗盘 ── SVG 8方向罗盘 + 小地图 -->
+      <div class="cbox" style="--accent:#6ee7b7;--accent-bg:rgba(16,185,129,0.06)">
+        <button class="vbtn vbtn-e" onclick="tv(this,'来认识八个方向！中间是你站的位置，周围有东南西北四个主方向，还有东北、东南、西南、西北四个斜方向。点击罗盘上的任意一个方向，看看它叫什么名字！然后在小地图上，点两个格子，看看它们的相对方向！')">🔊 听讲解</button>
+        <h4>🧭 方向辨认 — 点击罗盘探索八方</h4>
+
+        <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;margin-top:10px">
+          <!-- Compass SVG -->
+          <div style="flex-shrink:0">
+            <svg id="compass-svg" width="180" height="180" viewBox="0 0 180 180" style="cursor:pointer"></svg>
+            <div id="compass-label" style="text-align:center;font-size:14px;font-weight:700;color:#6ee7b7;margin-top:6px;min-height:22px"></div>
+          </div>
+          <!-- Mini map -->
+          <div style="flex:1;min-width:160px">
+            <div style="font-size:12px;color:var(--muted2);margin-bottom:8px">🗺️ 小地图：点两个格子，看相对方向</div>
+            <div id="minimap" style="display:inline-grid;grid-template-columns:repeat(5,38px);gap:3px"></div>
+            <div id="map-result" style="margin-top:10px;font-size:13px;color:#6ee7b7;font-weight:700;min-height:20px"></div>
+            <button class="ctrl-btn" style="margin-top:8px;font-size:12px;padding:5px 10px" onclick="resetMap()">🔄 重置</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 概念2：最短路径 ── Canvas 网格路径计数 -->
+      <div class="cbox" style="--accent:#67e8f9;--accent-bg:rgba(6,182,212,0.06)">
+        <button class="vbtn vbtn-c" onclick="tv(this,'最短路径就是从起点到终点，每次只能向右或向下走，总步数最少的路线！步数 = 向右走的格数 + 向下走的格数。路径数的计算用加法规则：到达某个格子的路径数 = 上面格子的路径数 + 左边格子的路径数！')">🔊 听讲解</button>
+        <h4>🛤️ 最短路径 — 点格子看路径数</h4>
+        <p style="font-size:13px;color:var(--muted);margin:6px 0 12px">从 <strong style="color:#67e8f9">🟢 起点</strong> 只能向右或向下走，到达每个格子的路径数 = 上方路径数 + 左方路径数。点击任意格子设为终点！</p>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+          <button class="ctrl-btn cyan active" onclick="pathSelectGrid(this,'4x4')">4×4 格</button>
+          <button class="ctrl-btn cyan" onclick="pathSelectGrid(this,'5x5')">5×5 格</button>
+          <button class="ctrl-btn cyan" onclick="pathSelectGrid(this,'3x5')">3×5 格</button>
+        </div>
+
+        <canvas id="path-canvas" style="border-radius:12px;cursor:pointer;max-width:100%;background:rgba(6,182,212,0.04);border:1px solid rgba(6,182,212,0.15)"></canvas>
+        <div style="margin-top:10px;font-size:14px;color:var(--muted)">
+          到达终点的最短路径数：<strong id="path-count" style="font-size:22px;color:#67e8f9">-</strong>
+          <span id="path-formula" style="font-size:12px;color:var(--muted2);display:block;margin-top:2px"></span>
+        </div>
+      </div>
+
+      <!-- ── 概念3：迷宫探索 ── SVG迷宫 + 方向按钮 -->
+      <div class="cbox" style="--accent:#a78bfa;--accent-bg:rgba(139,92,246,0.06)">
+        <button class="vbtn vbtn-v" onclick="tv(this,'走迷宫！用方向按钮控制小人移动，找到通往出口的路！碰到墙壁不能通过。遇到岔路口，就用排除法：先试一条路，碰壁了退回来，再试另一条！这就是系统地走迷宫的方法。')">🔊 听讲解</button>
+        <h4>🌀 迷宫探索 — 方向按钮控制小人</h4>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 12px">
+          <button class="ctrl-btn active" onclick="mazeSelect(this,0)">🌟 简单迷宫</button>
+          <button class="ctrl-btn" onclick="mazeSelect(this,1)">🔥 挑战迷宫</button>
+        </div>
+
+        <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
+          <svg id="maze-svg" style="border-radius:12px;background:rgba(139,92,246,0.05);border:1px solid rgba(139,92,246,0.2);flex-shrink:0;max-width:100%"></svg>
+          <div style="flex:1;min-width:120px">
+            <!-- Direction pad -->
+            <div style="display:grid;grid-template-columns:repeat(3,52px);grid-template-rows:repeat(3,52px);gap:6px;margin-bottom:14px">
+              <div></div>
+              <button class="maze-dir-btn" onclick="mazeMove(0,-1)" id="mbtn-up">⬆️</button>
+              <div></div>
+              <button class="maze-dir-btn" onclick="mazeMove(-1,0)" id="mbtn-left">⬅️</button>
+              <div style="display:flex;align-items:center;justify-content:center;font-size:22px" id="maze-player-icon">🧒</div>
+              <button class="maze-dir-btn" onclick="mazeMove(1,0)" id="mbtn-right">➡️</button>
+              <div></div>
+              <button class="maze-dir-btn" onclick="mazeMove(0,1)" id="mbtn-down">⬇️</button>
+              <div></div>
+            </div>
+            <div id="maze-status" style="font-size:13px;color:var(--muted);line-height:1.6">用按钮控制小人走出迷宫！</div>
+            <div style="margin-top:8px;font-size:12px;color:var(--muted2)">步数：<strong id="maze-steps" style="color:#a78bfa">0</strong></div>
+            <button class="ctrl-btn" style="margin-top:10px;background:rgba(139,92,246,0.1);border-color:rgba(139,92,246,0.3);color:#a78bfa;font-size:12px" onclick="mazeReset()">🔄 重新开始</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════ S2 技巧 ═══════════════ -->
+  <div id="s2" class="sec">
+
+    <!-- 方法1 -->
+    <div class="mcard" onclick="toggleMCard(this)">
+      <div class="mcard-head">
+        <div class="mcard-icon">➕</div>
+        <div class="mcard-info">
+          <div class="mcard-title">加法规则数路径</div>
+          <div class="mcard-sub">每格路径数 = 上方格子数 + 左边格子数，逐格填写！</div>
+        </div>
+        <div class="mcard-chevron">⌄</div>
+      </div>
+      <div class="mcard-body">
+        <div class="mcard-body-inner">
+          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>从左上角走到右下角，只能向右或向下，一个 3×3 的格子共有多少条最短路径？</div>
+          <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms1')">👆 看解法</button>
+          <div id="ms1">
+            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#06b6d4">1</div><div class="step-content"><strong>第一行和第一列</strong>全部填 1（只有一种走法，一直往右或一直往下）</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#06b6d4">2</div><div class="step-content"><strong>逐格填写</strong>：每格 = 上方格数 + 左方格数<br>第2行第2格 = 1+1 = 2；第2行第3格 = 1+2 = 3</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#06b6d4">3</div><div class="step-content"><strong>右下角</strong>就是答案：1,1,1 / 1,2,3 / 1,3,<strong>6</strong> → 共 <strong>6</strong> 条最短路径 ✅</div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'加法规则：第一行第一列全填1，其余每格等于上面格子加左边格子。3乘3的格子，右下角答案是6。')">🔊 听讲解</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 方法2 -->
+    <div class="mcard" onclick="toggleMCard(this)">
+      <div class="mcard-head">
+        <div class="mcard-icon">🧭</div>
+        <div class="mcard-info">
+          <div class="mcard-title">方向转换口诀法</div>
+          <div class="mcard-sub">面朝不同方向，左右东西会互换！</div>
+        </div>
+        <div class="mcard-chevron">⌄</div>
+      </div>
+      <div class="mcard-body">
+        <div class="mcard-body-inner">
+          <div class="mcard-challenge"><strong>🎯 小挑战：</strong>小明面朝南站立，他的右手边是哪个方向？</div>
+          <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms2')">👆 看解法</button>
+          <div id="ms2">
+            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#06b6d4">1</div><div class="step-content"><strong>画出方向图</strong>：地图上北上南下，东右西左（这是地图视角）</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#06b6d4">2</div><div class="step-content"><strong>小明面朝南</strong>（背朝北）→ 他的前方是南，后方是北</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#06b6d4">3</div><div class="step-content">面朝南时：<strong>右手边 = 西</strong>（东西互换了！）✅ 口诀：<strong>"面南背北，左东右西"</strong></div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'方向口诀：面北背南，左西右东。面南背北，左东右西。面东背西，左北右南。面西背东，左南右北！')">🔊 听讲解</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 方法3 -->
+    <div class="mcard" onclick="toggleMCard(this)">
+      <div class="mcard-head">
+        <div class="mcard-icon">🌀</div>
+        <div class="mcard-info">
+          <div class="mcard-title">走迷宫 · 右手法则</div>
+          <div class="mcard-sub">右手始终贴着右侧墙壁走，一定能走出去！</div>
+        </div>
+        <div class="mcard-chevron">⌄</div>
+      </div>
+      <div class="mcard-body">
+        <div class="mcard-body-inner">
+          <div class="mcard-challenge"><strong>🎯 挑战：</strong>遇到复杂迷宫，怎样保证一定能走出去，不会原地打转？</div>
+          <button class="reveal-btn" onclick="event.stopPropagation();revealSteps('ms3')">👆 看解法</button>
+          <div id="ms3">
+            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#06b6d4">1</div><div class="step-content"><strong>右手法则</strong>：进入迷宫后，右手始终保持贴着右边的墙壁行走</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#06b6d4">2</div><div class="step-content"><strong>遇到岔路</strong>：优先向右转；右边是墙就直走；直走也是墙就向左；全堵就掉头</div></div>
+            <div class="step"><div class="step-num" style="--scolor1:#10b981;--scolor2:#06b6d4">3</div><div class="step-content"><strong>科学原理</strong>：对于与外墙连通的迷宫，右手法则100%有效！适合没有"环形"路段的迷宫 ✅</div></div>
+            <button class="va-btn" style="margin-top:8px" onclick="event.stopPropagation();tv(this,'右手法则：进迷宫后，右手始终贴着右边的墙。优先右转，不行直走，再不行左转，全堵就掉头。对于没有环形路段的迷宫，一定能走出去！')">🔊 听讲解</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ S3 例题 ═══════════════ -->
+  <div id="s3" class="sec">
+
+    <!-- 例题1 -->
+    <div class="excard" id="ex1">
+      <div class="ex-title">📝 例题一：最短路径数</div>
+      <div class="ex-body">
+        从 A 点出发，只能向右或向下行走，到达 B 点共有多少条最短路径？<br>
+        A 在左上角，B 在右下角，格子是 <strong>3列×2行</strong>（即需要向右走2步，向下走1步）。
+      </div>
+      <div class="choice-grid">
+        <button class="choice-btn" onclick="checkEx(1,this,false)">A. 2条</button>
+        <button class="choice-btn" onclick="checkEx(1,this,true)">B. 3条</button>
+        <button class="choice-btn" onclick="checkEx(1,this,false)">C. 4条</button>
+        <button class="choice-btn" onclick="checkEx(1,this,false)">D. 6条</button>
+      </div>
+      <div class="ex-feedback" id="fb1"></div>
+      <div class="retry-btns" id="rb1" style="display:none">
+        <button class="retry-btn r" onclick="retryEx(1)">🔄 再试试哦</button>
+        <button class="retry-btn l" onclick="learnEx(1)">📖 学学解法</button>
+      </div>
+      <div class="guide-chain" id="gc1" style="display:none">
+        <div class="guide-item active">
+          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">最短路径需要走几步？向右几步，向下几步？</span><span class="gq-arrow">▼</span></div>
+          <div class="guide-a">向右 <strong>2步</strong>，向下 <strong>1步</strong>，总共走 3 步。最短路径每次走法都是恰好 3 步！<br><button class="va-btn" onclick="tv(this,'最短路径从A到B，需要向右走2步，向下走1步，总共3步。')">🔊</button></div>
+        </div>
+        <div class="guide-item locked">
+          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">用加法规则填格子：第一行和第一列怎么填？</span><span class="gq-arrow">▼</span></div>
+          <div class="guide-a">第一行：1,1,1（一直向右，只有1种走法）<br>第一列：1,1（一直向下，只有1种走法）<br><button class="va-btn" onclick="tv(this,'第一行全填1，第一列全填1，因为从起点到这些格子只有一种走法。')">🔊</button></div>
+        </div>
+        <div class="guide-item locked">
+          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">第2行第2格和第2行第3格各是多少？</span><span class="gq-arrow">▼</span></div>
+          <div class="guide-a">第2行第2格 = 上1 + 左1 = <strong>2</strong><br>第2行第3格（即B点）= 上1 + 左2 = <strong>3</strong> 条路径 ✅<br><button class="va-btn" onclick="tv(this,'第二行第二格等于上面的1加左边的1等于2。第二行第三格等于上面的1加左边的2等于3。答案是3条！')">🔊</button></div>
+        </div>
+      </div>
+      <div class="feynman-box" id="fn1">
+        <div class="fn-title">🧠 费曼讲解：为什么是3条？</div>
+        <div class="fn-step"><div class="fn-num">1</div><div>每条路都要走 <strong>右右下</strong> 或 <strong>右下右</strong> 或 <strong>下右右</strong> 其中一种组合</div></div>
+        <div class="fn-step"><div class="fn-num">2</div><div>2个"右"和1个"下"的排列数 = 3 ÷ 1 × (3-1) = <strong>3种</strong>（把"下"放在第1、2、3步中选一个位置）</div></div>
+        <div class="fn-step"><div class="fn-num">3</div><div>加法规则其实是这个排列计算的快捷版！填格子就是在积累所有路径 🎉</div></div>
+        <button class="va-btn" onclick="tv(this,'最短路径就是把向右和向下的步骤全部排列。2步向右加1步向下，把那1步向下放在不同位置，共3种排法，所以有3条路！')">🔊 听讲解</button>
+      </div>
+    </div>
+
+    <!-- 例题2 -->
+    <div class="excard" id="ex2">
+      <div class="ex-title">📝 例题二：方向判断</div>
+      <div class="ex-body">
+        小美站在学校门口，学校在她的正东方，图书馆在她的正南方。<br>
+        请问：<strong>图书馆在学校的哪个方向？</strong>
+      </div>
+      <div class="choice-grid">
+        <button class="choice-btn" onclick="checkEx(2,this,false)">A. 东南方</button>
+        <button class="choice-btn" onclick="checkEx(2,this,false)">B. 西北方</button>
+        <button class="choice-btn" onclick="checkEx(2,this,true)">C. 西南方</button>
+        <button class="choice-btn" onclick="checkEx(2,this,false)">D. 南方</button>
+      </div>
+      <div class="ex-feedback" id="fb2"></div>
+      <div class="retry-btns" id="rb2" style="display:none">
+        <button class="retry-btn r" onclick="retryEx(2)">🔄 再试试哦</button>
+        <button class="retry-btn l" onclick="learnEx(2)">📖 学学解法</button>
+      </div>
+      <div class="guide-chain" id="gc2" style="display:none">
+        <div class="guide-item active">
+          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">小美、学校、图书馆分别在哪里？先画出位置！</span><span class="gq-arrow">▼</span></div>
+          <div class="guide-a">小美站在中间。学校在小美的<strong>正东方</strong>（右边）。图书馆在小美的<strong>正南方</strong>（下面）。<br><button class="va-btn" onclick="tv(this,'先画图：小美在中间，学校在右边，图书馆在下面。')">🔊</button></div>
+        </div>
+        <div class="guide-item locked">
+          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">以学校为中心，图书馆在哪个方向？</span><span class="gq-arrow">▼</span></div>
+          <div class="guide-a">以学校为中心：图书馆在学校的<strong>西边</strong>（因为学校在小美右边，图书馆在小美下面，相对学校而言，图书馆在西南）。<br><button class="va-btn" onclick="tv(this,'以学校为中心，图书馆在学校的西南方向。')">🔊</button></div>
+        </div>
+        <div class="guide-item locked">
+          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">为什么是西南方，而不是南方？</span><span class="gq-arrow">▼</span></div>
+          <div class="guide-a">图书馆在学校的<strong>左边</strong>（西方）且<strong>下边</strong>（南方），所以合起来是<strong>西南方</strong>！✅<br><button class="va-btn" onclick="tv(this,'图书馆相对于学校，既在西边又在南边，所以是西南方！答案是C。')">🔊</button></div>
+        </div>
+      </div>
+      <div class="feynman-box" id="fn2">
+        <div class="fn-title">🧠 费曼讲解：方向推理三步走</div>
+        <div class="fn-step"><div class="fn-num">1</div><div><strong>先画位置图</strong>：把所有地点画在格子里，这样眼睛能直接看出方向</div></div>
+        <div class="fn-step"><div class="fn-num">2</div><div><strong>换主角视角</strong>：把"问谁的方向"那个地点当做中心，重新看其他地点在哪里</div></div>
+        <div class="fn-step"><div class="fn-num">3</div><div><strong>合并方向</strong>：如果既偏西又偏南，就是西南；既偏东又偏北，就是东北 🎉</div></div>
+        <button class="va-btn" onclick="tv(this,'方向推理三步：画图，换视角，合并方向。图书馆在小美南边，学校在小美东边，所以图书馆在学校的西南方！')">🔊 听讲解</button>
+      </div>
+    </div>
+
+    <!-- 例题3 -->
+    <div class="excard" id="ex3">
+      <div class="ex-title">📝 例题三：迷宫路径计数</div>
+      <div class="ex-body">
+        一个迷宫，从入口到出口只有一条通路（没有环路）。小明走了15步到达出口，小红走了18步，小蓝走了15步。<br>
+        <strong>以下哪个说法是正确的？</strong>
+      </div>
+      <div class="choice-grid">
+        <button class="choice-btn" onclick="checkEx(3,this,false)">A. 小红走的是最短路径</button>
+        <button class="choice-btn" onclick="checkEx(3,this,false)">B. 小蓝走了一条不同于小明的最短路径</button>
+        <button class="choice-btn" onclick="checkEx(3,this,true)">C. 小明和小蓝走的是同一条最短路径</button>
+        <button class="choice-btn" onclick="checkEx(3,this,false)">D. 无法判断谁走了最短路径</button>
+      </div>
+      <div class="ex-feedback" id="fb3"></div>
+      <div class="retry-btns" id="rb3" style="display:none">
+        <button class="retry-btn r" onclick="retryEx(3)">🔄 再试试哦</button>
+        <button class="retry-btn l" onclick="learnEx(3)">📖 学学解法</button>
+      </div>
+      <div class="guide-chain" id="gc3" style="display:none">
+        <div class="guide-item active">
+          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">题目说"只有一条通路"，这意味着什么？</span><span class="gq-arrow">▼</span></div>
+          <div class="guide-a">只有一条通路说明：所有人走的路线<strong>完全相同</strong>，只是步数可能不同（有人走了弯路/重复路）。<br><button class="va-btn" onclick="tv(this,'只有一条通路，说明从入口到出口路线是唯一的，不能选择不同路线。')">🔊</button></div>
+        </div>
+        <div class="guide-item locked">
+          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">步数最少的是谁？多走的步数去哪了？</span><span class="gq-arrow">▼</span></div>
+          <div class="guide-a">小明和小蓝都走了 <strong>15步</strong>，最少。小红走了18步，多出3步说明<strong>走了重复路段</strong>（来回走了某段路）。<br><button class="va-btn" onclick="tv(this,'小明小蓝15步，小红18步，多走了3步说明小红走了重复路段。')">🔊</button></div>
+        </div>
+        <div class="guide-item locked">
+          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">小明和小蓝都走了15步，他们的路线一样吗？</span><span class="gq-arrow">▼</span></div>
+          <div class="guide-a">因为只有一条通路，路线是唯一的！步数相同（都是15步，没有重复走）说明他们<strong>走了同一条路</strong> ✅<br><button class="va-btn" onclick="tv(this,'只有一条通路，小明和小蓝都走了15步没有重复，所以一定是同一条路！答案C。')">🔊</button></div>
+        </div>
+      </div>
+      <div class="feynman-box" id="fn3">
+        <div class="fn-title">🧠 费曼讲解：唯一通路的奥秘</div>
+        <div class="fn-step"><div class="fn-num">1</div><div><strong>唯一通路</strong>意味着路线没有分叉，所有人都走同一条路（不可能走不同路线）</div></div>
+        <div class="fn-step"><div class="fn-num">2</div><div><strong>步数差异</strong>的原因只有一个：有人在某处来回走了（多走 2n 步）</div></div>
+        <div class="fn-step"><div class="fn-num">3</div><div>步数最少 = 没有来回 = 最短路径；同步数同路线，不同步数说明有人迷路了 🎉</div></div>
+        <button class="va-btn" onclick="tv(this,'唯一通路的迷宫，路线只有一条。步数最少就是最短路径。步数一样的人走了同一段路，步数多的人在某处来回走了几步。')">🔊 听讲解</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ S4 闯关 ═══════════════ -->
+  <div id="s4" class="sec">
+    <div class="quiz-header">
+      <div class="star-bar" id="star-bar"></div>
+      <div class="q-nav-dots" id="q-nav"></div>
+    </div>
+    <div class="qcard" id="qcard"></div>
+  </div>
+
+</div><!-- /inner container -->
+</div><!-- /container -->
+</div><!-- /page -->
+
+<!-- Mobile bottom nav -->
+<nav class="mob-nav">
+  <button class="mob-tab on" data-s="s1">💡 概念</button>
+  <button class="mob-tab" data-s="s2">🛠 技巧</button>
+  <button class="mob-tab" data-s="s3">📖 例题</button>
+  <button class="mob-tab" data-s="s4">🎮 闯关</button>
+</nav>
+
+<script>
+/* ── Tab switching ── */
+const allTabs = document.querySelectorAll('.tab-pill, .mob-tab');
+const allSecs = document.querySelectorAll('.sec');
+allTabs.forEach(t => t.addEventListener('click', () => {
+  const s = t.dataset.s;
+  allTabs.forEach(x => x.classList.toggle('on', x.dataset.s === s));
+  allSecs.forEach(x => { x.classList.toggle('on', x.id === s); });
+  if (cBtn) { speechSynthesis.cancel(); cBtn.classList.remove('playing'); cBtn.innerHTML = cBtn.dataset.orig; cBtn = null; }
+}));
+
+/* ── Voice ── */
+let cBtn = null;
+function tv(btn, text) {
+  const isSame = btn === cBtn;
+  if (cBtn) { speechSynthesis.cancel(); cBtn.classList.remove('playing'); cBtn.innerHTML = cBtn.dataset.orig; cBtn = null; }
+  if (isSame) return;
+  btn.dataset.orig = btn.innerHTML;
+  btn.innerHTML = '⏹';
+  btn.classList.add('playing');
+  cBtn = btn;
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'zh-CN'; u.rate = 0.82; u.pitch = 1.1;
+  const voices = speechSynthesis.getVoices();
+  const best = voices.find(v => v.name.includes('Xiaoxiao') || v.name.includes('Tingting')) || voices.find(v => v.lang.startsWith('zh'));
+  if (best) u.voice = best;
+  u.onend = () => { btn.classList.remove('playing'); btn.innerHTML = btn.dataset.orig; cBtn = null; };
+  speechSynthesis.speak(u);
+}
+
+/* ── Method cards ── */
+function toggleMCard(card) {
+  const isOpen = card.classList.contains('open');
+  document.querySelectorAll('.mcard').forEach(c => { c.classList.remove('open'); c.querySelector('.mcard-body').classList.remove('open'); });
+  if (!isOpen) { card.classList.add('open'); card.querySelector('.mcard-body').classList.add('open'); }
+}
+function revealSteps(id) {
+  const steps = document.querySelectorAll(`#${id} .step`);
+  steps.forEach((s, i) => setTimeout(() => s.classList.add('show'), i * 400));
+}
+
+/* ── Example problem flow ── */
+function checkEx(n, btn, correct) {
+  const card = document.getElementById('ex'+n);
+  const btns = card.querySelectorAll('.choice-btn');
+  btns.forEach(b => b.classList.add('dis'));
+  const fb = document.getElementById('fb'+n);
+  if (correct) {
+    btn.classList.add('correct');
+    fb.textContent = '🎉 答对了！来看看为什么～'; fb.style.color='#6ee7b7';
+    openGuideChain(n);
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent = '🤔 这个想法很有创意！不过再看看……'; fb.style.color='#fca5a5';
+    document.getElementById('rb'+n).style.display='flex';
+  }
+}
+function retryEx(n) {
+  const card = document.getElementById('ex'+n);
+  card.querySelectorAll('.choice-btn').forEach(b => { b.classList.remove('dis','correct','wrong'); });
+  document.getElementById('fb'+n).textContent='';
+  document.getElementById('rb'+n).style.display='none';
+}
+function learnEx(n) {
+  const card = document.getElementById('ex'+n);
+  card.querySelectorAll('.choice-btn').forEach(b => { b.classList.add('dis'); if(b.onclick.toString().includes('true')) b.classList.add('correct'); });
+  document.getElementById('rb'+n).style.display='none';
+  openGuideChain(n);
+}
+function openGuideChain(n) {
+  const gc = document.getElementById('gc'+n);
+  gc.style.display='flex';
+}
+function toggleGuide(qEl) {
+  const item = qEl.closest('.guide-item');
+  if (item.classList.contains('locked')) return;
+  const ans = item.querySelector('.guide-a');
+  const isOpen = ans.style.display==='block';
+  ans.style.display = isOpen ? 'none' : 'block';
+  if (!isOpen) {
+    const next = item.nextElementSibling;
+    if (next && next.classList.contains('locked')) {
+      next.classList.remove('locked');
+      const isLast = !next.nextElementSibling || !next.nextElementSibling.classList.contains('guide-item');
+      const gcId = item.closest('.guide-chain').id;
+      const n = gcId.replace('gc','');
+      if (!next.nextElementSibling || !next.nextElementSibling.classList.contains('guide-item')) {
+        // last item unlocked, but feynman shows after last is opened
+      }
+      if (!next.nextElementSibling) {
+        // This was the last one before feynman — handled after open
+      }
+    }
+    // Check if this is last item → show feynman
+    const gc = item.closest('.guide-chain');
+    const allItems = gc.querySelectorAll('.guide-item');
+    const lastItem = allItems[allItems.length-1];
+    if (item === lastItem) {
+      const n = gc.id.replace('gc','');
+      const fn = document.getElementById('fn'+n);
+      if (fn) fn.style.display='block';
+    }
+  }
+}
+
+/* ═══════════════ S1 INTERACTIVE COMPONENTS ═══════════════ */
+
+/* ── 1. 方向罗盘 ── */
+const COMPASS_DIRS = [
+  { name:'北', angle: 270, cx: 90, cy: 20,  color:'#67e8f9' },
+  { name:'东北', angle: 315, cx: 155, cy: 25,  color:'#6ee7b7' },
+  { name:'东', angle: 0,   cx: 160, cy: 90,  color:'#6ee7b7' },
+  { name:'东南', angle: 45,  cx: 155, cy: 155, color:'#fcd34d' },
+  { name:'南', angle: 90,  cx: 90, cy: 160,  color:'#fb923c' },
+  { name:'西南', angle: 135, cx: 25, cy: 155, color:'#a78bfa' },
+  { name:'西', angle: 180, cx: 20, cy: 90,   color:'#a78bfa' },
+  { name:'西北', angle: 225, cx: 25, cy: 25,  color:'#67e8f9' },
+];
+const COMPASS_EMOJI = { '北':'⬆️','东北':'↗️','东':'➡️','东南':'↘️','南':'⬇️','西南':'↙️','西':'⬅️','西北':'↖️' };
+
+function buildCompass() {
+  const svg = document.getElementById('compass-svg');
+  let html = '';
+  // Background circle
+  html += `<circle cx="90" cy="90" r="82" fill="rgba(16,185,129,0.06)" stroke="rgba(16,185,129,0.2)" stroke-width="1.5"/>`;
+  // Center dot
+  html += `<circle cx="90" cy="90" r="6" fill="#6ee7b7" opacity="0.8"/>`;
+  // 8 sector wedges
+  COMPASS_DIRS.forEach((d, i) => {
+    const a1 = (i * 45 - 22.5) * Math.PI / 180;
+    const a2 = ((i+1) * 45 - 22.5) * Math.PI / 180;
+    const r = 78;
+    const x1 = 90 + r * Math.cos(a1 - Math.PI/2), y1 = 90 + r * Math.sin(a1 - Math.PI/2);
+    const x2 = 90 + r * Math.cos(a2 - Math.PI/2), y2 = 90 + r * Math.sin(a2 - Math.PI/2);
+    html += `<path id="csec-${i}" d="M90,90 L${x1},${y1} A${r},${r} 0 0,1 ${x2},${y2} Z"
+      fill="${d.color}18" stroke="${d.color}44" stroke-width="1"
+      style="cursor:pointer;transition:fill .2s" onclick="compassClick(${i})"/>`;
+    // Label
+    const lx = 90 + 58 * Math.cos((i * 45 - Math.PI/2 * 180/Math.PI + 0) * Math.PI / 180 - Math.PI/2);
+    const ly = 90 + 58 * Math.sin((i * 45) * Math.PI / 180 - Math.PI/2);
+    html += `<text x="${lx}" y="${ly+4}" text-anchor="middle" font-size="12" font-weight="700" fill="${d.color}" font-family="Noto Sans SC" style="pointer-events:none">${d.name}</text>`;
+  });
+  // Cardinal marks
+  html += `<text x="90" y="12" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.3)" font-family="sans-serif">N</text>`;
+  svg.innerHTML = html;
+}
+function compassClick(i) {
+  document.querySelectorAll('[id^="csec-"]').forEach((el,j) => {
+    const d = COMPASS_DIRS[j];
+    el.setAttribute('fill', j===i ? d.color+'55' : d.color+'18');
+    el.setAttribute('stroke', j===i ? d.color+'cc' : d.color+'44');
+  });
+  const d = COMPASS_DIRS[i];
+  document.getElementById('compass-label').textContent = COMPASS_EMOJI[d.name] + ' ' + d.name + '方';
+}
+buildCompass();
+
+/* Mini map */
+const MAP_SIZE = 5;
+let mapA = null, mapB = null;
+function buildMinimap() {
+  const wrap = document.getElementById('minimap');
+  wrap.innerHTML = '';
+  for (let r = 0; r < MAP_SIZE; r++) {
+    for (let c = 0; c < MAP_SIZE; c++) {
+      const cell = document.createElement('div');
+      cell.style.cssText = `width:38px;height:38px;border-radius:8px;border:1.5px solid rgba(16,185,129,0.2);background:rgba(16,185,129,0.05);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:all .2s;user-select:none`;
+      cell.dataset.r = r; cell.dataset.c = c;
+      cell.onclick = () => mapClick(r, c, cell);
+      wrap.appendChild(cell);
+    }
+  }
+}
+function mapClick(r, c, cell) {
+  const allCells = document.querySelectorAll('#minimap > div');
+  if (!mapA) {
+    mapA = {r,c};
+    allCells.forEach(el => {
+      if (+el.dataset.r===r && +el.dataset.c===c) { el.textContent='🟢'; el.style.background='rgba(16,185,129,0.2)'; }
+    });
+    document.getElementById('map-result').textContent = '再点一个格子作为B点 →';
+  } else if (!mapB && !(r===mapA.r && c===mapA.c)) {
+    mapB = {r,c};
+    allCells.forEach(el => {
+      if (+el.dataset.r===r && +el.dataset.c===c) { el.textContent='🔴'; el.style.background='rgba(239,68,68,0.15)'; }
+    });
+    // Compute relative direction from A to B
+    const dr = mapB.r - mapA.r, dc = mapB.c - mapA.c;
+    const dirParts = [];
+    if (dr < 0) dirParts.push('北'); else if (dr > 0) dirParts.push('南');
+    if (dc > 0) dirParts.push('东'); else if (dc < 0) dirParts.push('西');
+    const label = dirParts.length ? dirParts.join('') + '方' : '同一位置';
+    document.getElementById('map-result').textContent = `🔴 B 在 🟢 A 的 ${label}`;
+  }
+}
+function resetMap() {
+  mapA = null; mapB = null;
+  buildMinimap();
+  document.getElementById('map-result').textContent = '';
+}
+buildMinimap();
+
+/* ── 2. 最短路径 ── Canvas grid ── */
+let pathRows = 4, pathCols = 4, pathTarget = {r:3, c:3};
+
+function pathSelectGrid(btn, type) {
+  document.querySelectorAll('.ctrl-btn.cyan').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if (type==='4x4') { pathRows=4; pathCols=4; }
+  else if (type==='5x5') { pathRows=5; pathCols=5; }
+  else { pathRows=3; pathCols=5; }
+  pathTarget = {r: pathRows-1, c: pathCols-1};
+  drawPathCanvas();
+}
+
+function computePaths(rows, cols, targetR, targetC) {
+  const dp = Array.from({length:rows}, () => Array(cols).fill(0));
+  for (let c=0; c<=targetC; c++) dp[0][c] = 1;
+  for (let r=0; r<=targetR; r++) dp[r][0] = 1;
+  for (let r=1; r<=targetR; r++) {
+    for (let c=1; c<=targetC; c++) {
+      dp[r][c] = dp[r-1][c] + dp[r][c-1];
+    }
+  }
+  return dp;
+}
+
+function drawPathCanvas() {
+  const canvas = document.getElementById('path-canvas');
+  const cell = 52, pad = 16;
+  const W = pathCols * cell + pad*2, H = pathRows * cell + pad*2;
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+  const dp = computePaths(pathRows, pathCols, pathTarget.r, pathTarget.c);
+
+  for (let r=0; r<pathRows; r++) {
+    for (let c=0; c<pathCols; c++) {
+      const x = pad + c*cell, y = pad + r*cell;
+      const isTarget = r===pathTarget.r && c===pathTarget.c;
+      const isStart  = r===0 && c===0;
+      const inRange  = r<=pathTarget.r && c<=pathTarget.c;
+
+      // Cell bg
+      ctx.fillStyle = isStart ? 'rgba(16,185,129,0.25)' : isTarget ? 'rgba(103,232,249,0.25)' : inRange ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.02)';
+      ctx.beginPath(); ctx.rect(x+2,y+2,cell-4,cell-4); ctx.fill();
+      // Cell border
+      ctx.strokeStyle = isStart ? '#6ee7b7' : isTarget ? '#67e8f9' : inRange ? 'rgba(16,185,129,0.3)' : 'rgba(255,255,255,0.06)';
+      ctx.lineWidth = isStart || isTarget ? 2 : 1;
+      ctx.stroke();
+      // Number
+      if (inRange) {
+        ctx.fillStyle = isStart ? '#6ee7b7' : isTarget ? '#67e8f9' : '#94a3b8';
+        ctx.font = `${isTarget?'700':'600'} ${dp[r][c]>99?11:13}px 'Noto Sans SC'`;
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(dp[r][c], x+cell/2, y+cell/2);
+      }
+      // Icon
+      if (isStart) {
+        ctx.font = '18px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText('🟢', x+cell/2, y+cell/2-8);
+      }
+      if (isTarget) {
+        ctx.font = '18px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText('🏁', x+cell/2, y+cell/2-8);
+      }
+    }
+  }
+  // Arrow hints on first row and col
+  ctx.strokeStyle='rgba(16,185,129,0.25)'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
+  for (let c=1; c<pathCols; c++) {
+    const x1=pad+c*cell-4, y1=pad+cell/2;
+    ctx.beginPath(); ctx.moveTo(pad+(c-1)*cell+cell-4,y1); ctx.lineTo(x1,y1); ctx.stroke();
+  }
+  for (let r=1; r<pathRows; r++) {
+    const x1=pad+cell/2, y1=pad+r*cell-4;
+    ctx.beginPath(); ctx.moveTo(x1,pad+(r-1)*cell+cell-4); ctx.lineTo(x1,y1); ctx.stroke();
+  }
+  ctx.setLineDash([]);
+
+  const count = dp[pathTarget.r][pathTarget.c];
+  document.getElementById('path-count').textContent = count;
+  const right = pathTarget.c, down = pathTarget.r;
+  document.getElementById('path-formula').textContent = `共需向右${right}步 + 向下${down}步`;
+  document.getElementById('path-canvas').onclick = e => {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width, scaleY = canvas.height / rect.height;
+    const x = (e.clientX - rect.left) * scaleX - pad;
+    const y = (e.clientY - rect.top) * scaleY - pad;
+    const c = Math.floor(x/cell), r = Math.floor(y/cell);
+    if (c>=1 && r>=1 && c<pathCols && r<pathRows) {
+      pathTarget = {r, c};
+      drawPathCanvas();
+    }
+  };
+}
+drawPathCanvas();
+
+/* ── 3. 迷宫 ── */
+// Maze represented as walls. Each cell has walls: {top, right, bottom, left}
+// Use bit mask: 1=top, 2=right, 4=bottom, 8=left
+const MAZES = [
+  {
+    rows:5, cols:5,
+    walls:[
+      [9,5,3,15,15],
+      [8,7,12,3,15],
+      [12,5,3,14,15],
+      [13,3,10,13,3],
+      [15,14,12,5,6],
+    ],
+    start:{r:0,c:0}, end:{r:4,c:4},
+  },
+  {
+    rows:6, cols:6,
+    walls:[
+      [13,5,3,13,5,3],
+      [13,3,12,3,15,10],
+      [15,12,3,12,3,14],
+      [15,15,12,3,12,3],
+      [13,5,5,4,7,10],
+      [13,5,5,7,15,14],
+    ],
+    start:{r:0,c:0}, end:{r:5,c:5},
+  },
+];
+
+let mazeCurrent = 0;
+let mazePos = {r:0, c:0};
+let mazeSteps = 0;
+let mazeWon = false;
+
+function mazeSelect(btn, idx) {
+  document.querySelectorAll('.ctrl-btn:not(.cyan)').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  mazeCurrent = idx;
+  mazeReset();
+}
+function mazeReset() {
+  const m = MAZES[mazeCurrent];
+  mazePos = {...m.start};
+  mazeSteps = 0;
+  mazeWon = false;
+  document.getElementById('maze-steps').textContent = '0';
+  document.getElementById('maze-status').textContent = '用按钮控制小人走出迷宫！';
+  document.getElementById('maze-player-icon').textContent = '🧒';
+  renderMaze();
+}
+
+function canMove(r, c, dr, dc) {
+  const m = MAZES[mazeCurrent];
+  if (r+dr < 0 || r+dr >= m.rows || c+dc < 0 || c+dc >= m.cols) return false;
+  // Check wall: dr=-1 means going up (top wall = bit 1)
+  // dc=+1 means going right (right wall = bit 2)
+  // dr=+1 means going down (bottom wall = bit 4)
+  // dc=-1 means going left (left wall = bit 8)
+  const wallBit = dc===1 ? 2 : dc===-1 ? 8 : dr===-1 ? 1 : 4;
+  return !(m.walls[r][c] & wallBit);
+}
+
+function mazeMove(dc, dr) {
+  if (mazeWon) return;
+  if (!canMove(mazePos.r, mazePos.c, dr, dc)) {
+    document.getElementById('maze-status').textContent = '🧱 这里有墙，走不过去！';
+    return;
+  }
+  mazePos.r += dr;
+  mazePos.c += dc;
+  mazeSteps++;
+  document.getElementById('maze-steps').textContent = mazeSteps;
+  const m = MAZES[mazeCurrent];
+  if (mazePos.r === m.end.r && mazePos.c === m.end.c) {
+    mazeWon = true;
+    document.getElementById('maze-status').innerHTML = `🎉 <strong style="color:#6ee7b7">走出来了！</strong>共走了 ${mazeSteps} 步，太棒了！`;
+    document.getElementById('maze-player-icon').style.animation = 'winBounce .6s ease';
+    document.getElementById('maze-player-icon').textContent = '🎉';
+  } else {
+    document.getElementById('maze-status').textContent = '继续走，找到出口 🏁';
+  }
+  renderMaze();
+}
+
+function renderMaze() {
+  const m = MAZES[mazeCurrent];
+  const cell = 38, pad = 10;
+  const W = m.cols * cell + pad*2, H = m.rows * cell + pad*2;
+  const svg = document.getElementById('maze-svg');
+  svg.setAttribute('width', W);
+  svg.setAttribute('height', H);
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  let html = '';
+
+  // Fill cells
+  for (let r=0; r<m.rows; r++) {
+    for (let c=0; c<m.cols; c++) {
+      const x=pad+c*cell, y=pad+r*cell;
+      const isStart = r===m.start.r && c===m.start.c;
+      const isEnd   = r===m.end.r   && c===m.end.c;
+      const isPlayer = r===mazePos.r && c===mazePos.c;
+      const bg = isEnd ? 'rgba(103,232,249,0.15)' : isStart ? 'rgba(16,185,129,0.12)' : 'rgba(255,255,255,0.02)';
+      html += `<rect x="${x}" y="${y}" width="${cell}" height="${cell}" fill="${bg}"/>`;
+      if (isEnd && !isPlayer) html += `<text x="${x+cell/2}" y="${y+cell/2+6}" text-anchor="middle" font-size="20">🏁</text>`;
+      if (isPlayer) html += `<text x="${x+cell/2}" y="${y+cell/2+6}" text-anchor="middle" font-size="18">${mazeWon?'🎉':'🧒'}</text>`;
+    }
+  }
+
+  // Draw walls
+  for (let r=0; r<m.rows; r++) {
+    for (let c=0; c<m.cols; c++) {
+      const x=pad+c*cell, y=pad+r*cell;
+      const w = m.walls[r][c];
+      const stroke='#a78bfa'; const sw=2.5;
+      if (w & 1) html += `<line x1="${x}" y1="${y}" x2="${x+cell}" y2="${y}" stroke="${stroke}" stroke-width="${sw}" stroke-linecap="round"/>`;
+      if (w & 2) html += `<line x1="${x+cell}" y1="${y}" x2="${x+cell}" y2="${y+cell}" stroke="${stroke}" stroke-width="${sw}" stroke-linecap="round"/>`;
+      if (w & 4) html += `<line x1="${x}" y1="${y+cell}" x2="${x+cell}" y2="${y+cell}" stroke="${stroke}" stroke-width="${sw}" stroke-linecap="round"/>`;
+      if (w & 8) html += `<line x1="${x}" y1="${y}" x2="${x}" y2="${y+cell}" stroke="${stroke}" stroke-width="${sw}" stroke-linecap="round"/>`;
+    }
+  }
+  // Outer border
+  html += `<rect x="${pad}" y="${pad}" width="${m.cols*cell}" height="${m.rows*cell}" fill="none" stroke="#a78bfa" stroke-width="2.5"/>`;
+
+  svg.innerHTML = html;
+}
+
+// Keyboard support
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('s1').classList.contains('on')) return;
+  if (e.key==='ArrowUp')    mazeMove(0,-1);
+  if (e.key==='ArrowDown')  mazeMove(0,1);
+  if (e.key==='ArrowLeft')  mazeMove(-1,0);
+  if (e.key==='ArrowRight') mazeMove(1,0);
+});
+
+mazeReset();
+
+/* ═══════════════ QUIZ ═══════════════ */
+const quizData = [
+  {
+    q:'从 A（左上角）到 B（右下角）只能向右或向下，4×4 格子（需右3步下3步），共有多少条最短路径？',
+    opts:['10条','15条','20条','12条'], ans:2,
+    diff:2, src:'袋鼠数学·路径', ok:'🎉 正确！C(6,3)=20条，加法规则填格子右下角就是20！', no:'🤔 试试加法规则，逐格填写路径数！'
+  },
+  {
+    q:'小明面朝北，向右转 90°，现在面朝什么方向？',
+    opts:['南','西','东','北'], ans:2,
+    diff:1, src:'袋鼠数学·方向', ok:'🎉 正确！面朝北右转90°就是东！', no:'🤔 面朝北，右手边是东哦！'
+  },
+  {
+    q:'下图中，学校在公园的________方向。（学校在公园左边且上面）',
+    opts:['东南','西北','西南','东北'], ans:1,
+    diff:1, src:'袋鼠数学·方向', ok:'🎉 正确！左边=西，上面=北，合起来是西北方！', no:'🤔 左边是西，上面是北，合起来是西北！'
+  },
+  {
+    q:'一个只能向右或向下走的格子地图，从 A 走 2 步向右、3 步向下到达 B。这条路最少要走几步？',
+    opts:['3步','5步','6步','4步'], ans:1,
+    diff:1, src:'袋鼠数学·路径', ok:'🎉 正确！最短路径步数 = 向右步数 + 向下步数 = 2+3 = 5步！', no:'🤔 最短路径步数 = 横向步数 + 纵向步数哦！'
+  },
+  {
+    q:'用"右手法则"走迷宫，下列哪种迷宫右手法则一定有效？',
+    opts:['有环形回路的迷宫','外墙连通无环形路的迷宫','所有岔路都是死路的迷宫','只有一条出口的迷宫'], ans:1,
+    diff:2, src:'袋鼠数学·迷宫', ok:'🎉 正确！右手法则对外墙连通、无环形路段的迷宫100%有效！', no:'🤔 右手法则在有环形回路的迷宫可能失效哦！'
+  },
+  {
+    q:'小花家在小明家的正东方，学校在小明家的正北方。学校在小花家的哪个方向？',
+    opts:['东北','西北','东南','西南'], ans:1,
+    diff:2, src:'袋鼠数学·方向', ok:'🎉 正确！学校在小明北边，小花在小明东边，所以学校在小花的西北方！', no:'🤔 先画位置图，以小花为中心重新看！'
+  },
+  {
+    q:'在 5×5 格子中，从左上角走到第3行第4列（行列从1开始），需要向右走几步，向下走几步？',
+    opts:['右3步下2步','右2步下3步','右3步下3步','右4步下3步'], ans:0,
+    diff:2, src:'袋鼠数学·路径', ok:'🎉 正确！从(1,1)到(3,4)：向右3步（列1→4），向下2步（行1→3）！', no:'🤔 向右 = 目标列 - 起始列，向下 = 目标行 - 起始行！'
+  },
+  {
+    q:'小明走迷宫，每次遇到岔路都先往右走。他走了一条死路后退回来，又找到了出口。这用了什么策略？',
+    opts:['右手法则','深度优先搜索（回溯法）','广度优先搜索','随机游走'], ans:1,
+    diff:3, src:'袋鼠数学·迷宫', ok:'🎉 正确！遇到死路退回重试，就是回溯法，也叫深度优先搜索！', no:'🤔 这种"走死路退回来"的方法叫回溯法！'
+  },
+];
+
+let cur=0, scores=Array(quizData.length).fill(null);
+function initQuiz() {
+  const starBar=document.getElementById('star-bar');
+  const nav=document.getElementById('q-nav');
+  starBar.innerHTML = quizData.map((_,i)=>`<span class="star" id="star${i}">☆</span>`).join('');
+  nav.innerHTML = quizData.map((_,i)=>`<div class="q-dot" id="dot${i}" onclick="goQ(${i})">${i+1}</div>`).join('');
+  renderQ(0);
+}
+function renderNav() {
+  quizData.forEach((_,i)=>{
+    const d=document.getElementById('dot'+i);
+    d.className='q-dot'+(i===cur?' on':scores[i]===true?' ok':scores[i]===false?' bad':'');
+  });
+}
+function renderQ(idx) {
+  cur=idx;
+  const q=quizData[idx];
+  document.getElementById('qcard').innerHTML=`
+    <div class="q-meta">
+      <span class="q-badge q-diff-${q.diff}">${['','⭐ 基础','⭐⭐ 进阶','⭐⭐⭐ 挑战'][q.diff]}</span>
+      <span class="q-src">${q.src}</span>
+    </div>
+    <div class="q-text">Q${idx+1}. ${q.q}</div>
+    <div class="q-opts">${q.opts.map((o,i)=>`<button class="q-opt" onclick="ansQ(${i})">${['A','B','C','D'][i]}. ${o}</button>`).join('')}</div>
+    <div class="qfb" id="qfb"></div>
+    <div class="q-nav">
+      <button class="qnav-btn prev" onclick="goQ(${idx-1})" ${idx===0?'disabled style="opacity:.3"':''}>← 上一题</button>
+      <button class="qnav-btn next" id="qnext" onclick="goQ(${idx+1})">下一题 →</button>
+    </div>`;
+  renderNav();
+}
+function ansQ(i) {
+  const q=quizData[cur];
+  const opts=document.querySelectorAll('.q-opt');
+  const fb=document.getElementById('qfb');
+  opts.forEach(o=>o.classList.add('dis'));
+  if (i===q.ans) {
+    opts[i].classList.add('correct');
+    fb.className='qfb show ok'; fb.textContent=q.ok;
+    if (scores[cur]===null) { scores[cur]=true; document.getElementById('star'+cur).textContent='⭐'; document.getElementById('star'+cur).classList.add('on'); }
+  } else {
+    opts[i].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className='qfb show no'; fb.textContent=q.no;
+    if (scores[cur]===null) scores[cur]=false;
+  }
+  const nx=document.getElementById('qnext');
+  if (nx && cur<quizData.length-1) nx.classList.add('show');
+  renderNav();
+}
+function goQ(idx) { if (idx<0||idx>=quizData.length) return; renderQ(idx); }
+
+initQuiz();
+</script>
+</body>
+</html>
