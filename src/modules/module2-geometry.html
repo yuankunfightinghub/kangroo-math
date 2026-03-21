@@ -606,6 +606,7 @@ body {
     <button class="tab-pill on" data-s="s1">💡 概念</button>
     <button class="tab-pill" data-s="s2">🛠 技巧</button>
     <button class="tab-pill" data-s="s3">📖 例题</button>
+    <button class="tab-pill" data-s="s5">🚀 进阶</button>
     <button class="tab-pill" data-s="s4">🎮 挑战</button>
   </nav>
   <p class="mod-sub">从基本形状到面积对称，用眼睛探索数学的美丽 🔷</p>
@@ -1299,6 +1300,183 @@ body {
     </div>
   </div>
 
+  <!-- ═══════════════ S5 进阶 ═══════════════ -->
+  <div id="s5" class="sec">
+    <div class="gcard">
+      <div class="sec-heading">🚀 几何与图形进阶实战</div>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:20px">欢迎来到几何实验室！这里的题目需要你动动手，在脑海中完成形状的变换与组合。</p>
+
+      <!-- 进阶例题 1: 镜像与印章 (2022-Q14) -->
+      <div class="excard">
+        <div class="excard-hdr">
+          <span class="ex-num">进阶 01</span>
+          <span class="ex-tag">2022年 · 镜像变换</span>
+        </div>
+        <div class="excard-body">
+          <div class="qbox">
+            🦘 <strong>袋鼠数学竞赛真题（2022年 第14题）</strong><br><br>
+            <img src="../assets/exam-images/2022/q14.png" alt="2022-Q14" style="width:100%;border-radius:10px;margin:8px 0 4px">
+            <small>提示：印章印出的图案和底部的图案是互为镜像的哦！</small>
+          </div>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
+          <div class="ex-opts" id="ex_q14_2022-opts"></div>
+          <div class="ex-result" id="ex_q14_2022-result"></div>
+
+          <!-- 互动可视化：镜像盖章演示 -->
+          <div class="ex-visual" id="ex_q14_2022-visual">
+            <div style="background:rgba(255,255,255,0.03);border:1px solid var(--card-border);border-radius:16px;padding:24px;text-align:center">
+              <div style="font-size:14px;font-weight:700;color:#93c5fd;margin-bottom:15px">✨ 互动：印章镜像实验室</div>
+              
+              <div style="display:flex;justify-content:center;gap:30px;align-items:center;margin-bottom:20px">
+                <div style="text-align:center">
+                  <div id="stamp-handle" style="width:60px;height:70px;background:linear-gradient(to bottom, #ec4899, #be185d);margin:0 auto;border-radius:8px 8px 10px 10px;position:relative;transition:all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)">
+                    <div id="stamp-face" style="position:absolute;bottom:-3px;left:50%;transform:translateX(-50%);width:50px;height:12px;background:#fbcfe8;border:2px solid #be185d;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:#be185d">KANG</div>
+                  </div>
+                  <div style="margin-top:10px;font-size:11px;color:var(--muted)">印章本身</div>
+                </div>
+                
+                <div style="font-size:24px;color:var(--muted2)">➔</div>
+                
+                <div style="text-align:center">
+                  <div id="paper-area" style="width:80px;height:80px;background:#fff;border-radius:6px;margin:0 auto;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:inset 0 0 10px rgba(0,0,0,0.1)">
+                    <div id="stamp-print" style="font-size:20px;font-weight:900;color:#be185d;opacity:0;transform:scaleX(-1) scale(0.8);transition:all 0.3s">KANG</div>
+                  </div>
+                  <div style="margin-top:10px;font-size:11px;color:var(--muted)">印出的效果</div>
+                </div>
+              </div>
+
+              <button class="ex-vis-btn" id="stamp-action-btn" onclick="performStamping()">🖨 点击盖章</button>
+              <button class="ex-vis-btn" style="background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1);color:var(--muted);margin-left:8px" onclick="resetStamp()">🔄 清除</button>
+              
+              <div id="stamp-status" style="margin-top:12px;font-size:13px;color:var(--muted2)">镜像就是左右反过来！仔细观察字符的变化。</div>
+            </div>
+          </div>
+
+          <div class="guide-chain" id="ex_q14_2022-guide"></div>
+          <div class="feynman-box" id="ex_q14_2022-feynman">
+            <div class="feynman-hdr">💡 费曼学习法：镜像思维训练</div>
+            <div class="feynman-body">
+              <div class="fn-step"><div class="fn-num">1</div><div class="fn-content"><strong>左右对调</strong>：想象中间有一面镜子，所有左边的点都要挪到右边。</div></div>
+              <div class="fn-step"><div class="fn-num">2</div><div class="fn-content"><strong>特征锚点</strong>：盯着印章上的一个小尖角，看它印完后指着哪个方向。</div></div>
+              <div class="fn-step"><div class="fn-num">3</div><div class="fn-content"><strong>旋转陷阱</strong>：镜像和旋转 180 度是不一样的，镜像只是左右反了，上下没反。</div></div>
+              <button class="va-btn" onclick="tv(this,'印章魔法就是镜像魔法！下次做这种题，你就想象自己拿着印章往纸上按那一下，这时候左右就悄悄交换啦！','m2_q14_f1')">🔊 听总结</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 进阶例题 2: 不重叠覆盖 (2024-Q19) -->
+      <div class="excard">
+        <div class="excard-hdr">
+          <span class="ex-num">进阶 02</span>
+          <span class="ex-tag">2024年 · 图形拼接</span>
+        </div>
+        <div class="excard-body">
+          <div class="qbox">
+            🦘 <strong>袋鼠数学竞赛真题（2024年 第19题）</strong><br><br>
+            <img src="../assets/exam-images/2024/q19.png" alt="2024-Q19" style="width:100%;border-radius:10px;margin:8px 0 4px">
+            <small>提示：哪两块碎片能不重叠地填满那个残缺的大方格？</small>
+          </div>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
+          <div class="ex-opts" id="ex_q19_2024-opts"></div>
+          <div class="ex-result" id="ex_q19_2024-result"></div>
+
+          <!-- 互动可视化：碎片拼接模拟 -->
+          <div class="ex-visual" id="ex_q19_2024-visual">
+            <div style="background:rgba(255,255,255,0.03);border:1px solid var(--card-border);border-radius:16px;padding:24px;text-align:center">
+              <div style="font-size:14px;font-weight:700;color:#6ee7b7;margin-bottom:15px">✨ 互动：碎片填空挑战</div>
+              
+              <div style="display:flex;justify-content:center;gap:30px;align-items:center;flex-wrap:wrap">
+                <!-- 大方格缺口 -->
+                <div id="big-square" style="width:120px;height:120px;background:#1e293b;border:2px solid #334155;border-radius:8px;position:relative;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr)">
+                   <!-- 模拟缺口 -->
+                   <div style="grid-area:1/1/3/3;background:rgba(16,185,129,0.1);border:1px dashed #10b981;display:flex;align-items:center;justify-content:center;font-size:10px;color:#10b981">缺口</div>
+                </div>
+
+                <div style="display:flex;flex-direction:column;gap:10px">
+                   <div style="font-size:12px;color:var(--muted)">待选碎片:</div>
+                   <div style="display:flex;gap:8px">
+                      <div class="puzzle-piece" onclick="togglePiece(this, 'P1')" style="width:40px;height:40px;background:#3b82f6;border-radius:4px;cursor:pointer;border:2px solid transparent">1</div>
+                      <div class="puzzle-piece" onclick="togglePiece(this, 'P2')" style="width:60px;height:40px;background:#8b5cf6;border-radius:4px;cursor:pointer;border:2px solid transparent">2</div>
+                      <div class="puzzle-piece" onclick="togglePiece(this, 'P3')" style="width:40px;height:60px;background:#f59e0b;border-radius:4px;cursor:pointer;border:2px solid transparent">3</div>
+                   </div>
+                </div>
+              </div>
+
+              <div id="puzzle-status" style="margin-top:15px;font-size:13px;color:var(--muted2)">点击两个碎片，看看它们能不能拼成正方形！</div>
+              <button class="ex-vis-btn" style="margin-top:10px" onclick="resetPuzzle()">🔄 重置</button>
+            </div>
+          </div>
+
+          <div class="guide-chain" id="ex_q19_2024-guide"></div>
+          <div class="feynman-box" id="ex_q19_2024-feynman">
+            <div class="feynman-hdr">💡 费曼学习法：图形填补策略</div>
+            <div class="feynman-body">
+              <div class="fn-step"><div class="fn-num">1</div><div class="fn-content"><strong>缺口建模</strong>：先在心里画出那个洞长什么样，比如“它是 2x2 的正方形”。</div></div>
+              <div class="fn-step"><div class="fn-num">2</div><div class="fn-content"><strong>面积预判</strong>：缺了几个格子的面积，碎片加起来也得是那么多格子。</div></div>
+              <div class="fn-step"><div class="fn-num">3</div><div class="fn-content"><strong>轮廓对齐</strong>：盯着碎片的边边角角，看它能不能卡进洞里的牙齿。</div></div>
+              <button class="va-btn" onclick="tv(this,'拼图题不要瞎试！先看洞的形状，再找能填进去的木塞子。记住，面积不符的直接Pass掉。','m2_q19_f1')">🔊 听总结</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 进阶例题 3: 轮廓匹配 (2022-Q6) -->
+      <div class="excard">
+        <div class="excard-hdr">
+          <span class="ex-num">进阶 03</span>
+          <span class="ex-tag">2022年 · 轮廓识别与组合</span>
+        </div>
+        <div class="excard-body">
+          <div class="qbox">
+            🦘 <strong>袋鼠数学竞赛真题（2022年 第6题）</strong><br><br>
+            <img src="../assets/exam-images/2022/q6.png" alt="2022-Q6" style="width:100%;border-radius:10px;margin:8px 0 4px">
+            <small>提示：这是一张残缺的寻宝图，哪一块地图碎片能刚好补全它？</small>
+          </div>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
+          <div class="ex-opts" id="ex_q6_2022-opts"></div>
+          <div class="ex-result" id="ex_q6_2022-result"></div>
+
+          <!-- 互动可视化：地图轮廓扫描仪 -->
+          <div class="ex-visual" id="ex_q6_2022-visual">
+            <div style="background:rgba(255,255,255,0.03);border:1px solid var(--card-border);border-radius:16px;padding:24px;text-align:center">
+              <div style="font-size:14px;font-weight:700;color:#67e8f9;margin-bottom:15px">✨ 互动：寻宝图边缘匹配</div>
+              
+              <div style="position:relative;width:200px;height:120px;margin:0 auto 20px;background:rgba(245,158,11,0.05);border:1px dashed rgba(245,158,11,0.2);border-radius:8px;overflow:hidden">
+                 <!-- 模拟地图 -->
+                 <div style="position:absolute;left:10px;top:10px;right:40px;bottom:10px;background:#92400e;border-radius:4px;opacity:0.8">
+                    <!-- 锯齿缺口 -->
+                    <div style="position:absolute;right:-10px;top:20px;width:30px;height:60px;background:var(--bg);clip-path:polygon(0% 0%, 100% 50%, 0% 100%)"></div>
+                 </div>
+                 <div id="map-target" style="position:absolute;right:25px;top:45px;width:15px;height:15px;border:2px solid #67e8f9;border-radius:50%;opacity:0.5"></div>
+              </div>
+
+              <div id="map-pieces" style="display:flex;justify-content:center;gap:12px">
+                 <div class="puzzle-piece" onclick="matchMap('F1', false)" style="width:40px;height:40px;background:#92400e;clip-path:polygon(0% 0%, 100% 100%, 0% 100%)">A</div>
+                 <div class="puzzle-piece" onclick="matchMap('F2', true)" style="width:40px;height:40px;background:#92400e;clip-path:polygon(0% 0%, 100% 50%, 0% 100%)">D</div>
+                 <div class="puzzle-piece" onclick="matchMap('F3', false)" style="width:40px;height:40px;background:#92400e;clip-path:polygon(0% 50%, 100% 0%, 100% 100%)">E</div>
+              </div>
+
+              <div id="map-status" style="margin-top:15px;font-size:13px;color:var(--muted2)">点击碎片 D，看看它能不能卡进地图的齿缝！</div>
+              <button class="ex-vis-btn" style="margin-top:10px;background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1);color:var(--muted)" onclick="resetMap()">🔄 复原地图</button>
+            </div>
+          </div>
+
+          <div class="guide-chain" id="ex_q6_2022-guide"></div>
+          <div class="feynman-box" id="ex_q6_2022-feynman">
+            <div class="feynman-hdr">💡 费曼学习法：边缘轮廓咬合法</div>
+            <div class="feynman-body">
+              <div class="fn-step"><div class="fn-num">1</div><div class="fn-content"><strong>轮廓取样</strong>：就像钥匙开锁一样，看边缘是“尖”的还是“平”的。</div></div>
+              <div class="fn-step"><div class="fn-num">2</div><div class="fn-content"><strong>方向判定</strong>：缺口朝右，那碎片的尖角就应该朝左才能填进去。</div></div>
+              <div class="fn-step"><div class="fn-num">3</div><div class="fn-content"><strong>连续性检查</strong>：看看图案上的线条在那一瞬间有没有接连起来。</div></div>
+              <button class="va-btn" onclick="tv(this,'地图匹配考察的是你的“图形咬合力”！看准那个锯齿的位置，把碎片脑补放进去，缝隙越小，答案越准。','m2_q6_f1')">🔊 听总结</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </div><!-- /container -->
 
 <!-- Mobile bottom nav -->
@@ -1306,6 +1484,7 @@ body {
   <button class="mob-tab on" data-s="s1"><span class="mt-icon">💡</span>概念</button>
   <button class="mob-tab" data-s="s2"><span class="mt-icon">🛠</span>技巧</button>
   <button class="mob-tab" data-s="s3"><span class="mt-icon">📖</span>例题</button>
+  <button class="mob-tab" data-s="s5"><span class="mt-icon">🚀</span>进阶</button>
   <button class="mob-tab" data-s="s4"><span class="mt-icon">🎮</span>挑战</button>
 </div>
 
@@ -1408,6 +1587,30 @@ const exData = {
       {q:'第二步：剪去的正方形面积是多少？', a:'正方形面积 = 边长 × 边长 = 2 × 2 = 4 平方米', vc:'剪去的正方形边长2米，面积等于2乘2等于4平方米！', va:'m2_q3_g2'},
       {q:'第三步：剩余草地面积是多少？', a:'剩余面积 = 40 - 4 = 36 平方米 ✅', vc:'整块40平方米减去剪去的4平方米，剩余36平方米！组合图形就是大减小！', va:'m2_q3_g3'}
     ]
+  },
+  ex_q14_2022: {
+    opts: [{t:'(A) 选项 A',v:false},{t:'(B) 选项 B',v:false},{t:'(C) 选项 C',v:true},{t:'(D) 选项 D',v:false},{t:'(E) 选项 E',v:false}],
+    guide: [
+      {q:'印章印出来的图案和印章底部的图案是什么关系？', a:'它们互为“镜像”关系，也就是左右相反。', vc:'想一想，印章就像是照镜子！你左手拿章，印出来的图案里，那个位置其实是在右边的。', va:'m2_q14_g1'},
+      {q:'我们怎么快速找到镜像后的样子？', a:'可以选取印章上的一个特殊点（如突出的尖角），看它镜像后到了哪个位置。', vc:'找个“显眼包”！盯着印章上最特别的一个小勾或者小点。如果在印章左边，那印出来就在右边！', va:'m2_q14_g2'},
+      {q:'选项中哪一个符合印章镜像后的样式？', a:'观察印章图案的左右特征，进行水平翻转推导。选项 (C) 是唯一的正确样式。', vc:'把印章左右对调一下，看看哪个选项和你的“脑内成像”一模一样。没错，就是C！', va:'m2_q14_g3'}
+    ]
+  },
+  ex_q19_2024: {
+    opts: [{t:'(A) 选项 A',v:false},{t:'(B) 选项 B',v:true},{t:'(C) 选项 C',v:false},{t:'(D) 选项 D',v:false},{t:'(E) 选项 E',v:false}],
+    guide: [
+      {q:'观察大方格中残缺部分的轮廓？', a:'残缺部分是由几个单位小方格组成的特定形状。', vc:'先把目光锁在那个“洞”上！数数看它缺了几个格子，边沿是平的还是锯齿状的？', va:'m2_q19_g1'},
+      {q:'给定的碎片能灵活拼接吗？', a:'通常碎片可以旋转但不能重叠。', vc:'这些碎片就像乐高积木，你可以转转方向，但不能把两个叠在一起用。', va:'m2_q19_g2'},
+      {q:'哪两块拼在一起能刚好补全缺口？', a:'通过“互补”原则，找到轮廓匹配的两个碎片组合。', vc:'找找看哪两块碎片能像拼图一样，把那个大洞补得平平整整。结果就是B选项定义的组合！', va:'m2_q19_g3'}
+    ]
+  },
+  ex_q6_2022: {
+    opts: [{t:'(A) 选项 A',v:false},{t:'(B) 选项 B',v:false},{t:'(C) 选项 C',v:false},{t:'(D) 选项 D',v:true},{t:'(E) 选项 E',v:false}],
+    guide: [
+      {q:'寻宝图的边缘轮廓有什么关键细节？', a:'注意边缘的凹凸、尖角以及线条的走向。', vc:'盯着缺口的边缘看：哪里有个小山峰？哪里有两个连在一起的小坑？', va:'m2_q6_g1'},
+      {q:'怎么快速排除明显不符的选项？', a:'观察地图缺口的特征点与其对应的碎片边缘。', vc:'如果一张碎片的角是圆的，但地图缺口是尖的，那就赶紧把它Pass掉。', va:'m2_q6_g2'},
+      {q:'哪个碎片能与原图无缝衔接？', a:'对比选项 (D) 的每一条边，发现它与寻宝图缺口完美契合。', vc:'把放大镜对准 (D) 选项。看，每一条细线都接上了，这就是我们要找的那块地图！', va:'m2_q6_g3'}
+    ]
   }
 };
 
@@ -1484,7 +1687,7 @@ function buildGuide(id, data) {
   });
 }
 
-initEx('ex1'); initEx('ex2'); initEx('ex3');
+initEx('ex1'); initEx('ex2'); initEx('ex3'); initEx('ex_q14_2022'); initEx('ex_q19_2024'); initEx('ex_q6_2022');
 
 // ══════════════════════════════════════════════
 //  📐 角的认识 — Canvas 拖拽组件
@@ -2001,6 +2204,129 @@ function goQ(idx) {
 }
 
 initQuiz();
+
+/* ═══════════════ S5 ADVANCED GEOMETRY INTERACTIVE ═══════════════ */
+
+/* ── 1. Q14: 印章镜像逻辑 ── */
+function performStamping() {
+  const handle = document.getElementById('stamp-handle');
+  const print = document.getElementById('stamp-print');
+  const btn = document.getElementById('stamp-action-btn');
+  const status = document.getElementById('stamp-status');
+  
+  if(!handle || !print) return;
+  
+  btn.disabled = true;
+  // 盖章动作
+  handle.style.transform = 'translateY(40px) scale(0.95)';
+  
+  setTimeout(() => {
+    print.style.opacity = '1';
+    print.style.transform = 'scaleX(-1) scale(1)';
+    status.textContent = '✨ 盖章成功！看，KANG 字母左右反过来了！';
+    status.style.color = '#6ee7b7';
+    // 弹开
+    handle.style.transform = 'translateY(0) scale(1)';
+  }, 400);
+}
+
+function resetStamp() {
+  const print = document.getElementById('stamp-print');
+  const status = document.getElementById('stamp-status');
+  const btn = document.getElementById('stamp-action-btn');
+  if(print) {
+    print.style.opacity = '0';
+    print.style.transform = 'scaleX(-1) scale(0.8)';
+  }
+  if(status) {
+    status.textContent = '镜像就是左右反过来！仔细观察字符的变化。';
+    status.style.color = '';
+  }
+  if(btn) btn.disabled = false;
+}
+
+/* ── 2. Q19: 图形拼接逻辑 ── */
+let selectedPieces = new Set();
+function togglePiece(el, id) {
+  if (selectedPieces.has(id)) {
+    selectedPieces.delete(id);
+    el.style.borderColor = 'transparent';
+    el.style.boxShadow = 'none';
+  } else {
+    if (selectedPieces.size >= 2) return;
+    selectedPieces.add(id);
+    el.style.borderColor = '#10b981';
+    el.style.boxShadow = '0 0 10px rgba(16,185,129,0.3)';
+  }
+  checkPuzzle();
+}
+
+function checkPuzzle() {
+  const status = document.getElementById('puzzle-status');
+  if(!status) return;
+  
+  if (selectedPieces.size === 2) {
+    // 假设 P1 和 P2 是正确组合
+    if (selectedPieces.has('P1') && selectedPieces.has('P2')) {
+      status.textContent = '🎉 太棒了！这两块碎片刚好能补全缺口！';
+      status.style.color = '#6ee7b7';
+    } else {
+      status.textContent = '🤔 这两块好像拼不拢哦，换一组试试？';
+      status.style.color = '#fca5a5';
+    }
+  } else if (selectedPieces.size === 1) {
+    status.textContent = '还差一块就能填满啦，继续选！';
+    status.style.color = '';
+  } else {
+    status.textContent = '点击两个碎片，看看它们能不能拼出正方形！';
+    status.style.color = '';
+  }
+}
+
+function resetPuzzle() {
+  selectedPieces.clear();
+  document.querySelectorAll('.puzzle-piece').forEach(p => {
+    p.style.borderColor = 'transparent';
+    p.style.boxShadow = 'none';
+  });
+  checkPuzzle();
+}
+
+/* ── 3. Q6: 地图匹配逻辑 ── */
+function matchMap(fragmentId, isCorrect) {
+  const status = document.getElementById('map-status');
+  if(!status) return;
+  
+  if (isCorrect) {
+    status.textContent = '🎯 完美契合！这个锯齿形状刚好补齐了地图的缺口！';
+    status.style.color = '#6ee7b7';
+    // 简单的视觉反馈
+    document.getElementById('map-target').style.borderColor = '#10b981';
+    document.getElementById('map-target').style.transform = 'scale(1.2)';
+  } else {
+    status.textContent = '❌ 形状不对哦。看，它的尖角方向或者大小和地图对不上。';
+    status.style.color = '#fca5a5';
+    document.getElementById('map-target').style.borderColor = '#fca5a5';
+  }
+}
+
+function resetMap() {
+  const status = document.getElementById('map-status');
+  const target = document.getElementById('map-target');
+  if(status) {
+    status.textContent = '点击碎片 D，看看它能不能卡进地图的齿缝！';
+    status.style.color = '';
+  }
+  if(target) {
+    target.style.borderColor = '#67e8f9';
+    target.style.transform = 'scale(1)';
+  }
+}
+
+// 初始化几何实验室
+resetStamp();
+resetPuzzle();
+resetMap();
 </script>
 
 <script>

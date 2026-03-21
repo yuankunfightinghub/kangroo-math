@@ -670,6 +670,7 @@ body {
     <button class="tab-pill on" data-s="s1">💡 概念</button>
     <button class="tab-pill" data-s="s2">🛠 技巧</button>
     <button class="tab-pill" data-s="s3">📖 例题</button>
+    <button class="tab-pill" data-s="s5">🚀 进阶</button>
     <button class="tab-pill" data-s="s4">🎮 挑战</button>
   </nav>
   <p class="mod-sub">从数列规律到逻辑推断，训练你的侦探式思维 🔍</p>
@@ -1387,6 +1388,159 @@ body {
     </div>
   </div>
 
+  <!-- ═══════════════ S5 进阶 ═══════════════ -->
+  <div id="s5" class="sec">
+    <div class="gcard">
+      <div class="sec-heading">🚀 逻辑推理进阶实战</div>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:20px">欢迎来到逻辑进阶挑战！这里的题目需要你像侦探一样，从细微的线索中推导出隐藏的真相。</p>
+
+      <!-- 进阶例题 1: 瓢虫数独 (2025-Q21) -->
+      <div class="excard">
+        <div class="excard-hdr">
+          <span class="ex-num">进阶 01</span>
+          <span class="ex-tag">2025年 · 方格约束推理</span>
+        </div>
+        <div class="excard-body">
+          <div class="qbox">
+            🦘 <strong>袋鼠数学竞赛真题（2025年 第21题）</strong><br><br>
+            <img src="../assets/exam-images/2025/q21.png" alt="2025-Q21" style="width:100%;border-radius:10px;margin:8px 0 4px">
+            <small>提示：仔细看图中已有的点数。每行每列都要有 1、2、3 个点且不重复。</small>
+          </div>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
+          <div class="ex-opts" id="ex_q21-opts"></div>
+          <div class="ex-result" id="ex_q21-result"></div>
+
+          <!-- 互动可视化：瓢虫数独模拟器 -->
+          <div class="ex-visual" id="ex_q21-visual">
+            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;text-align:center">
+              <div style="font-size:14px;font-weight:700;color:#67e8f9;margin-bottom:15px">✨ 动手试试：瓢虫 3×3 挑战</div>
+              <p style="font-size:12px;color:var(--muted);margin-bottom:12px">点击空白格切换点数，让每行每列都不重复！</p>
+              
+              <div id="ladybug-grid" style="display:grid;grid-template-columns:repeat(3, 60px);gap:10px;justify-content:center;margin:0 auto">
+                <!-- 由 JS 动态生成 -->
+              </div>
+              
+              <div id="ladybug-status" style="margin-top:15px;font-size:13px;color:var(--muted2)">提示：从点数最多的那一列开始填！</div>
+              <button class="ex-vis-btn" style="margin-top:10px" onclick="resetLadybug()">🔄 重置网格</button>
+            </div>
+          </div>
+
+          <div class="guide-chain" id="ex_q21-guide"></div>
+          <div class="feynman-box" id="ex_q21-feynman">
+            <div class="feynman-hdr">💡 费曼学习法：解决方格推理的绝招</div>
+            <div class="feynman-body">
+              <div class="fn-step"><div class="fn-num">1</div><div class="fn-content"><strong>确定性先行</strong>：先填那个“呼之欲出”的空格，比如一行里只剩一个坑了。</div></div>
+              <div class="fn-step"><div class="fn-num">2</div><div class="fn-content"><strong>双向交叉检查</strong>：每填一个数，都要横着看、竖着看，确保都没撞车。</div></div>
+              <div class="fn-step"><div class="fn-num">3</div><div class="fn-content"><strong>标记排除</strong>：在一个格子里，如果 1 和 2 都不行，那它肯定只能填 3。</div></div>
+              <button class="va-btn" onclick="tv(this,'数独题就是排除游戏！记住那个口诀：先填简单的，再求复杂的。只要盯紧行和列，点数的秘密就藏不住啦！','m3_q21_f1')">🔊 听总结</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 进阶例题 2: 规律遮挡 (2025-Q17) -->
+      <div class="excard">
+        <div class="excard-hdr">
+          <span class="ex-num">进阶 02</span>
+          <span class="ex-tag">2025年 · 规律推算与遮挡</span>
+        </div>
+        <div class="excard-body">
+          <div class="qbox">
+            🦘 <strong>袋鼠数学竞赛真题（2025年 第17题）</strong><br><br>
+            <img src="../assets/exam-images/2025/q17.png" alt="2025-Q17" style="width:100%;border-radius:10px;margin:8px 0 4px">
+            <small>提示：看清珠子排列的队形，黑白交替还是两个两个排？</small>
+          </div>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
+          <div class="ex-opts" id="ex_q17-opts"></div>
+          <div class="ex-result" id="ex_q17-result"></div>
+
+          <!-- 互动可视化：规律补全演示 -->
+          <div class="ex-visual" id="ex_q17-visual">
+            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;text-align:center">
+              <div style="font-size:14px;font-weight:700;color:#fcd34d;margin-bottom:15px">✨ 动手试试：珠子规律复原机</div>
+              <div style="margin-bottom:20px;display:flex;justify-content:center;gap:5px;align-items:center" id="beads-container">
+                <!-- 动态生成 -->
+              </div>
+              <div style="display:flex;justify-content:center;gap:15px">
+                <button class="vbtn-a" id="lift-wood-btn" style="position:static;padding:8px 16px;font-size:13px" onclick="liftWood()">🔭 移开木块</button>
+                <button class="vbtn-v" style="position:static;padding:8px 16px;font-size:13px" onclick="resetBeads()">🔄 还原题目</button>
+              </div>
+              <div id="beads-status" style="margin-top:12px;font-size:13px;color:var(--muted2)">观察被遮挡的部分，你能算出有几颗白珠子吗？</div>
+            </div>
+          </div>
+
+          <div class="guide-chain" id="ex_q17-guide"></div>
+          <div class="feynman-box" id="ex_q17-feynman">
+            <div class="feynman-hdr">💡 费曼学习法：规律遮挡的逻辑</div>
+            <div class="feynman-body">
+              <div class="fn-step"><div class="fn-num">1</div><div class="fn-content"><strong>提取模式</strong>：也就是找到序列的“DNA”，比如黑-白。</div></div>
+              <div class="fn-step"><div class="fn-num">2</div><div class="fn-content"><strong>定位断点</strong>：看木块刚好盖住了规律的哪一个环节。</div></div>
+              <div class="fn-step"><div class="fn-num">3</div><div class="fn-content"><strong>接龙逻辑</strong>：从木块左边开始往右“脑补”，一个接一个填入颜色。</div></div>
+              <button class="va-btn" onclick="tv(this,'规律题最怕心急！先在心里把那个调子唱准，比如“黑白黑白”，然后遇到被盖住的地方，就小声把规律接下去。数一数你唱了几次白色，答案就出来啦！','m3_q17_f1')">🔊 听总结</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 进阶例题 3: 图形解码 (2023-Q12) -->
+      <div class="excard">
+        <div class="excard-hdr">
+          <span class="ex-num">进阶 03</span>
+          <span class="ex-tag">2023年 · 回归与解码推理</span>
+        </div>
+        <div class="excard-body">
+          <div class="qbox">
+            🦘 <strong>袋鼠数学竞赛真题（2023年 第12题）</strong><br><br>
+            <img src="../assets/exam-images/2023/q12.png" alt="2023-Q12" style="width:100%;border-radius:10px;margin:8px 0 4px">
+            <small>提示：每种样式的翅膀、身体和条纹代表不同的分数哦！</small>
+          </div>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
+          <div class="ex-opts" id="ex_q12-opts"></div>
+          <div class="ex-result" id="ex_q12-result"></div>
+
+          <!-- 互动可视化：积分计算器 -->
+          <div class="ex-visual" id="ex_q12-visual">
+            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;text-align:center">
+              <div style="font-size:14px;font-weight:700;color:#6ee7b7;margin-bottom:15px">✨ 动手试试：蜜蜂积分扫描仪</div>
+              
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;text-align:left;margin-bottom:15px">
+                <div style="background:rgba(0,0,0,0.2);padding:10px;border-radius:10px;border:1px solid var(--card-border)">
+                  <div style="font-size:12px;color:#67e8f9;margin-bottom:5px">🔍 零件分数参考表</div>
+                  <div style="font-size:12px;color:var(--muted);line-height:1.6" id="bee-price-list">
+                    <!-- JS 填充 -->
+                  </div>
+                </div>
+                <div style="background:rgba(110,231,183,0.05);padding:10px;border-radius:10px;border:1px solid rgba(110,231,183,0.2);display:flex;flex-direction:column;justify-content:center;align-items:center">
+                  <div style="font-size:11px;color:#6ee7b7">当前累积积分</div>
+                  <div id="bee-score-total" style="font-size:32px;font-weight:900;color:#6ee7b7">0</div>
+                  <button class="ex-vis-btn" style="padding:4px 10px;font-size:11px" onclick="resetBeeScore()">清零</button>
+                </div>
+              </div>
+
+              <div id="bee-parts-box" style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap">
+                <!-- 由 JS 生成部件按钮 -->
+              </div>
+
+              <div id="bee-status" style="margin-top:12px;font-size:13px;color:var(--muted2)">点击上图零件，计算不同形状的积分组合。</div>
+            </div>
+          </div>
+
+          <div class="guide-chain" id="ex_q12-guide"></div>
+          <div class="feynman-box" id="ex_q12-feynman">
+            <div class="feynman-hdr">💡 费曼学习法：图形解码的策略</div>
+            <div class="feynman-body">
+              <div class="fn-step"><div class="fn-num">1</div><div class="fn-content"><strong>建立索引</strong>：把每个形状和它对应的数字“连上线”。</div></div>
+              <div class="fn-step"><div class="fn-num">2</div><div class="fn-content"><strong>局部叠加</strong>：不要急着算总和，先一段一段算。</div></div>
+              <div class="fn-step"><div class="fn-num">3</div><div class="fn-content"><strong>差额锁定</strong>：用“目标总分”减去已知的部分，剩下的就是你要找的那个。</div></div>
+              <button class="va-btn" onclick="tv(this,'图形解码就是把图片变成算式！只要你找准了每个部件的分值，再大的蜜蜂也能加出来。记住，看清形状的细节是关键！','m3_q12_f1')">🔊 听总结</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </div><!-- /container -->
 
 <!-- Mobile bottom nav -->
@@ -1394,6 +1548,7 @@ body {
   <button class="mob-tab on" data-s="s1"><span class="mt-icon">💡</span>概念</button>
   <button class="mob-tab" data-s="s2"><span class="mt-icon">🛠</span>技巧</button>
   <button class="mob-tab" data-s="s3"><span class="mt-icon">📖</span>例题</button>
+  <button class="mob-tab" data-s="s5"><span class="mt-icon">🚀</span>进阶</button>
   <button class="mob-tab" data-s="s4"><span class="mt-icon">🎮</span>挑战</button>
 </div>
 
@@ -1504,6 +1659,30 @@ const exData = {
       {q:'1只小狗重多少千克？', a:'18 − 14 = 4千克', vc:'18减14等于4，所以一只小狗重4千克！', va:'m3_q5_g2'},
       {q:'知道小狗的重量，怎么求大狗的重量？', a:'大狗 = 14 − 4 = 10千克 ✅ 答案是 (B) 10千克！', vc:'大狗加一只小狗等于14，小狗是4千克，所以大狗等于14减4等于10千克！答案是B！', va:'m3_q5_g3'}
     ]
+  },
+  ex_q21: {
+    opts: [{t:'(A) 选项 A',v:false},{t:'(B) 选项 B',v:true},{t:'(C) 选项 C',v:false},{t:'(D) 选项 D',v:false},{t:'(E) 选项 E',v:false}],
+    guide: [
+      {q:'3×3 数独的基本规则是什么？', a:'每一行（横着）和每一列（竖着）都必须包含所有的元素，且不能重复。', vc:'这其实是一个数字游戏！横排和竖列里的瓢虫点数都不能撞车，这是最核心的规则。', va:'m3_q21_g1'},
+      {q:'我们应该从哪一个格子开始入手？', a:'通常从已知条件最多的那一行或那一列开始，或者找只差一个格子的。', vc:'先看最后一行或者中间一列，如果它们只空了一个坑，那这个坑填什么就一目了然啦。', va:'m3_q21_g2'},
+      {q:'怎么确定左上角格子的点数？', a:'观察它所在的行和列，排除已经出现的点数，剩下的就是正确答案。', vc:'用排除法最快！看它的邻居有哪些点数了，把它邻居有的都划掉，留下的就是它要填的。', va:'m3_q21_g3'}
+    ]
+  },
+  ex_q17: {
+    opts: [{t:'(A) 2 颗',v:false},{t:'(B) 3 颗',v:true},{t:'(C) 4 颗',v:false},{t:'(D) 5 颗',v:false}],
+    guide: [
+      {q:'露出的珠子排列有什么规律？', a:'排列规律是：一颗黑珠子接一颗白珠子，循环往复。', vc:'看，珠子的队伍很整齐：黑白、黑白、黑白……像是在跳双人舞一样。', va:'m3_q17_g1'},
+      {q:'遮挡处的前后两颗珠子分别是什么颜色？', a:'遮挡处之前是黑珠子，之后是白珠子。', vc:'抓住交界点！木块左边最后露出来的是黑的，右边第一个露出来的是白的。', va:'m3_q17_g2'},
+      {q:'木块遮住了 5 颗珠子，按规律它们应该是什么颜色？', a:'规律推算：白、黑、白、黑、白。一共 3 个白，2 个黑。', vc:'我们来接龙：黑后面该是白，然后黑，然后白，然后黑，最后是白。数一数，一共出现了 3 次白色！', va:'m3_q17_g3'}
+    ]
+  },
+  ex_q12: {
+    opts: [{t:'(A) 3 分',v:false},{t:'(B) 4 分',v:false},{t:'(C) 5 分',v:true},{t:'(D) 6 分',v:false}],
+    guide: [
+      {q:'右侧的完整蜜蜂模板总分是多少？', a:'根据题目条件，一只完整的蜜蜂通常对应一个特定的目标积分（如 20 分）。', vc:'先算算右边那个完美的蜜蜂值多少钱，它是我们的积分标准。', va:'m3_q12_g1'},
+      {q:'左侧蜜蜂已经有哪些部位了？它们一共值多少分？', a:'左侧有身体（X分）和一只翅膀（Y分），总和是 X+Y。', vc:'数数左边那只手里的零件：身体值几分？翅膀值几分？先加起来。', va:'m3_q12_g2'},
+      {q:'还需要补全哪个部位？它的分值是多少？', a:'还需要补全另一只翅膀。通过 目标总分 - 已有分 = 缺失分 算出答案。', vc:'最后一步，用大蜜蜂的分数减掉刚才加出来的分数，剩下来的就是缺掉的小零件的值啦。', va:'m3_q12_g3'}
+    ]
   }
 };
 
@@ -1580,7 +1759,7 @@ function buildGuide(id, data) {
   });
 }
 
-initEx('ex1'); initEx('ex2'); initEx('ex3'); initEx('ex4'); initEx('ex5');
+initEx('ex1'); initEx('ex2'); initEx('ex3'); initEx('ex4'); initEx('ex5'); initEx('ex_q21'); initEx('ex_q17'); initEx('ex_q12');
 
 /* ═══════════════ S3 可视化交互 ═══════════════ */
 
@@ -2190,6 +2369,172 @@ function truthHypo(person) {
 }
 
 initQuiz();
+
+/* ═══════════════ S5 ADVANCED LOGIC INTERACTIVE ═══════════════ */
+
+/* ── 1. Q21: 瓢虫数独逻辑 ── */
+let ladybugData = [0, 0, 3, 0, 0, 0, 0, 0, 1]; 
+
+function initLadybug() {
+  const grid = document.getElementById('ladybug-grid');
+  if(!grid) return;
+  grid.innerHTML = '';
+  ladybugData.forEach((val, i) => {
+    const cell = document.createElement('div');
+    cell.style.cssText = `width:60px;height:60px;background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.1);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;transition:all 0.2s;`;
+    cell.onclick = () => toggleLadybug(i);
+    cell.id = `lb-cell-${i}`;
+    renderLadybugCell(cell, val);
+    grid.appendChild(cell);
+  });
+}
+
+function toggleLadybug(i) {
+  ladybugData[i] = (ladybugData[i] + 1) % 4;
+  const cell = document.getElementById(`lb-cell-${i}`);
+  renderLadybugCell(cell, ladybugData[i]);
+  checkLadybug();
+}
+
+function renderLadybugCell(cell, val) {
+  if (val === 0) { cell.textContent = ''; cell.style.background = 'rgba(255,255,255,0.03)'; }
+  else if (val === 1) { cell.textContent = '🐞'; cell.style.fontSize = '20px'; }
+  else if (val === 2) { cell.textContent = '🐞🐞'; cell.style.fontSize = '14px'; }
+  else if (val === 3) { cell.textContent = '🐞🐞🐞'; cell.style.fontSize = '11px'; }
+}
+
+function checkLadybug() {
+  let hasConflict = false;
+  for(let i=0; i<3; i++) {
+    const row = [ladybugData[i*3], ladybugData[i*3+1], ladybugData[i*3+2]].filter(x=>x>0);
+    const col = [ladybugData[i], ladybugData[i+3], ladybugData[i+6]].filter(x=>x>0);
+    if(new Set(row).size !== row.length || new Set(col).size !== col.length) hasConflict = true;
+  }
+  const status = document.getElementById('ladybug-status');
+  if(!status) return;
+  if (hasConflict) {
+    status.textContent = '⚠️ 发现行或列中有重复的点数哦，再调整一下！';
+    status.style.color = '#fca5a5';
+  } else {
+    status.textContent = '✅ 目前没有冲突，继续寻找规律吧！';
+    status.style.color = '#6ee7b7';
+  }
+}
+
+function resetLadybug() {
+  ladybugData = [0, 0, 3, 0, 0, 0, 0, 0, 1];
+  initLadybug();
+}
+
+/* ── 2. Q17: 珠子规律逻辑 ── */
+const beadSequence = ['B','W','B','W','B','W','B','W','B','W','B','W']; 
+
+function initBeads() {
+  const container = document.getElementById('beads-container');
+  if(!container) return;
+  container.innerHTML = '';
+  container.style.position = 'relative'; 
+  beadSequence.forEach((type, i) => {
+    const bead = document.createElement('div');
+    bead.style.cssText = `width:24px;height:24px;border-radius:50%;background:${type==='B'?'#1e293b':'#f8fafc'};border:1px solid rgba(255,255,255,0.2);flex-shrink:0;transition:all 0.5s;`;
+    if (i >= 5 && i <= 9) {
+      bead.id = `bead-masked-${i}`;
+      bead.style.opacity = '0';
+    }
+    container.appendChild(bead);
+    if (i === 4) {
+      const wood = document.createElement('div');
+      wood.id = 'bead-wood';
+      wood.style.cssText = `width:145px;height:34px;background:#78350f;border:2px solid #92400e;border-radius:6px;position:absolute;z-index:10;left:50%;transform:translateX(-72px);box-shadow:0 4px 10px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fcd34d;font-weight:700`;
+      wood.textContent = 'WOOD BLOCK';
+      container.appendChild(wood);
+    }
+  });
+}
+
+function liftWood() {
+  const wood = document.getElementById('bead-wood');
+  if(!wood) return;
+  wood.style.transform = 'translateX(-72px) translateY(-50px)';
+  wood.style.opacity = '0';
+  for(let i=5; i<=9; i++) {
+    const b = document.getElementById(`bead-masked-${i}`);
+    if(b) b.style.opacity = '1';
+  }
+  document.getElementById('lift-wood-btn').disabled = true;
+  const status = document.getElementById('beads-status');
+  status.innerHTML = '✨ 秘密揭晓！遮挡处是 <strong>白、黑、白、黑、白</strong>，共 3 颗白珠子。';
+  status.style.color = '#6ee7b7';
+}
+
+function resetBeads() {
+  initBeads();
+  const btn = document.getElementById('lift-wood-btn');
+  if(btn) btn.disabled = false;
+  const status = document.getElementById('beads-status');
+  if(status) {
+    status.textContent = '观察被遮挡的部分，你能算出有几颗白珠子吗？';
+    status.style.color = '';
+  }
+}
+
+/* ── 3. Q12: 蜜蜂评分逻辑 ── */
+const beeParts = [
+  { name: '圆身体', score: 10, icon: '🟡' },
+  { name: '尖身体', score: 12, icon: '🔶' },
+  { name: '平纹翅膀', score: 5, icon: '🕊️' },
+  { name: '格子翅膀', score: 8, icon: '🧇' },
+  { name: '双条斑纹', score: 3, icon: '〓' },
+  { name: '三条斑纹', score: 4, icon: '≡' }
+];
+let beeScore = 0;
+
+function initBeeScorer() {
+  const list = document.getElementById('bee-price-list');
+  if(!list) return;
+  list.innerHTML = beeParts.map(p => `<div>${p.icon} ${p.name} = <strong>${p.score}分</strong></div>`).join('');
+  
+  const box = document.getElementById('bee-parts-box');
+  if(!box) return;
+  box.innerHTML = '';
+  beeParts.forEach(p => {
+    const btn = document.createElement('button');
+    btn.className = 'ex-vis-btn amber';
+    btn.style.margin = '4px';
+    btn.innerHTML = `${p.icon} ${p.score}`;
+    btn.onclick = () => {
+      beeScore += p.score;
+      updateBeeUI();
+    };
+    box.appendChild(btn);
+  });
+}
+
+function updateBeeUI() {
+  const total = document.getElementById('bee-score-total');
+  if(total) total.textContent = beeScore;
+  const status = document.getElementById('bee-status');
+  if(!status) return;
+  if (beeScore === 20) {
+    status.textContent = '🎯 刚好 20 分！这可能就是完整蜜蜂的分数！';
+    status.style.color = '#6ee7b7';
+  } else if (beeScore > 20) {
+    status.textContent = '📈 积分超过目标了，试试其他组合。';
+    status.style.color = '#fca5a5';
+  }
+}
+
+function resetBeeScore() {
+  beeScore = 0;
+  updateBeeUI();
+  const status = document.getElementById('bee-status');
+  if(status) status.textContent = '点击部件开始计算。';
+}
+
+// 统一初始化
+initLadybug();
+initBeads();
+initBeeScorer();
 </script>
 
 <script>

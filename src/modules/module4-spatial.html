@@ -454,6 +454,7 @@ body {
     <button class="tab-pill on" data-s="s1">💡 概念</button>
     <button class="tab-pill" data-s="s2">🛠 技巧</button>
     <button class="tab-pill" data-s="s3">📖 例题</button>
+    <button class="tab-pill" data-s="s5">🚀 进阶</button>
     <button class="tab-pill" data-s="s4">🎮 挑战</button>
   </nav>
   <p class="mod-sub">从展开图到三视图，在脑海里搭建属于你的 3D 世界 🎲</p>
@@ -1100,6 +1101,151 @@ body {
     </div>
   </div>
 
+  <!-- ═══════════════ S5 进阶 ═══════════════ -->
+  <div id="s5" class="sec">
+    <div class="gcard">
+      <div class="sec-heading">🚀 空间想象进阶实战</div>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:20px">欢迎来到进阶挑战！这里的题目不仅考验你的观察力，更需要你在脑海中进行复杂的“三维建模”。准备好了吗？</p>
+
+      <!-- 进阶例题 1: 纸张折叠与打孔 (2023-Q14) -->
+      <div class="excard">
+        <div class="excard-hdr">
+          <span class="ex-num">进阶 01</span>
+          <span class="ex-tag">2023年 · 纸张折叠与打孔</span>
+        </div>
+        <div class="excard-body">
+          <div class="qbox">
+            🦘 <strong>袋鼠数学竞赛真题（2023年 第14题）</strong><br><br>
+            <img src="../assets/exam-images/2023/q14.png" alt="2023-Q14" style="width:100%;border-radius:10px;margin:8px 0 4px">
+            <small>提示：仔细观察纸张折叠的方向，以及打孔所在的相对位置。</small>
+          </div>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
+          <div class="ex-opts" id="ex_q14-opts"></div>
+          <div class="ex-result" id="ex_q14-result"></div>
+
+          <!-- 互动可视化：折叠展开演示 -->
+          <div class="ex-visual" id="ex_q14-visual">
+            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;text-align:center">
+              <div style="font-size:14px;font-weight:700;color:#fcd34d;margin-bottom:15px">✨ 动手试试：纸张展开实验室</div>
+              <div style="display:flex;justify-content:center;gap:20px;margin-bottom:15px">
+                <button class="vbtn-a" style="position:static;padding:8px 16px;font-size:13px" onclick="resetFold()">🎬 重新开始</button>
+                <button class="vbtn-e" id="fold-action-btn" style="position:static;padding:8px 16px;font-size:13px" onclick="nextFoldPhase()">👉 下一步</button>
+              </div>
+              <div id="fold-canvas-container" style="width:240px;height:240px;margin:0 auto;background:rgba(0,0,0,0.2);border-radius:8px;position:relative;overflow:hidden">
+                <!-- SVG 将通过 JS 动态渲染在这里 -->
+                <svg id="fold-svg" width="240" height="240" viewBox="0 0 240 240"></svg>
+              </div>
+              <div id="fold-status" style="margin-top:12px;font-size:13px;color:var(--muted2)">点击“下一步”观察折叠和展开过程</div>
+            </div>
+          </div>
+
+          <div class="guide-chain" id="ex_q14-guide"></div>
+          <div class="feynman-box" id="ex_q14-feynman">
+            <div class="feynman-hdr">💡 费曼学习法：纸张折叠的秘密</div>
+            <div class="feynman-body">
+              <div class="fn-step"><div class="fn-num">1</div><div class="fn-content"><strong>镜像对称</strong>：每展开一次，纸上的孔都会相对于折痕做一次“照镜子”运动。</div></div>
+              <div class="fn-step"><div class="fn-num">2</div><div class="fn-content"><strong>翻倍逻辑</strong>：如果是对折，每展开一层孔的数量就会翻一倍。</div></div>
+              <div class="fn-step"><div class="fn-num">3</div><div class="fn-content"><strong>中心定位</strong>：如果孔打在折叠后的“死角”（中心点），展开后会组成一个环绕中心的正多边形。</div></div>
+              <button class="va-btn" onclick="tv(this,'纸张折叠其实就是镜像游戏！记住两个要点：一是折痕就是镜子，展开时要在镜子另一边画出一样的孔；二是孔的数量会翻倍。练习多了，你就能在脑海里一秒看到全图！','m4_q14_f1')">🔊 听总结</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 进阶例题 2: 立体翻转 (2024-Q17) -->
+      <div class="excard">
+        <div class="excard-hdr">
+          <span class="ex-num">进阶 02</span>
+          <span class="ex-tag">2024年 · 立体图形脑内翻转</span>
+        </div>
+        <div class="excard-body">
+          <div class="qbox">
+            🦘 <strong>袋鼠数学竞赛真题（2024年 第17题）</strong><br><br>
+            <img src="../assets/exam-images/2024/q17.png" alt="2024-Q17" style="width:100%;border-radius:10px;margin:8px 0 4px">
+            <small>提示：跟踪那个最高或最特殊的色块，看它翻转后到了哪个面。</small>
+          </div>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
+          <div class="ex-opts" id="ex_q17-opts"></div>
+          <div class="ex-result" id="ex_q17-result"></div>
+
+          <!-- 互动可视化：3D 翻转演示 -->
+          <div class="ex-visual" id="ex_q17-visual">
+            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;text-align:center">
+              <div style="font-size:14px;font-weight:700;color:#6ee7b7;margin-bottom:15px">✨ 动手试试：3D 脑内翻转训练箱</div>
+              <div style="display:flex;justify-content:center;gap:8px;margin-bottom:20px;flex-wrap:wrap">
+                <button class="view-btn" onclick="rotateBox3D('X')">🔄 垂直翻转</button>
+                <button class="view-btn" onclick="rotateBox3D('Y')">🔄 水平翻转</button>
+                <button class="view-btn" onclick="rotateBox3D('Z')">🔄 侧向翻转</button>
+                <button class="vbtn-r" style="position:static;padding:7px 14px;font-size:13px" onclick="resetBox3D()">🧹 重置</button>
+              </div>
+              <div id="flip-3d-scene" style="width:200px;height:200px;margin:30px auto;perspective:800px">
+                <div id="flip-container" style="width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)">
+                  <!-- 动态生成的 3D 方块 -->
+                </div>
+              </div>
+              <div id="flip-status" style="margin-top:12px;font-size:13px;color:var(--muted2)">点击按钮让盒子翻转，观察积木的位置变化</div>
+            </div>
+          </div>
+
+          <div class="guide-chain" id="ex_q17-guide"></div>
+          <div class="feynman-box" id="ex_q17-feynman">
+            <div class="feynman-hdr">💡 费曼学习法：解决立体翻转的绝招</div>
+            <div class="feynman-body">
+              <div class="fn-step"><div class="fn-num">1</div><div class="fn-content"><strong>锚点法</strong>：在图形上选一个最明显的特征（如最高的塔尖），只盯着它看。</div></div>
+              <div class="fn-step"><div class="fn-num">2</div><div class="fn-content"><strong>坐标转换</strong>：翻转 90 度时，原来的“高度”会变成“宽度”或者“深度”。</div></div>
+              <div class="fn-step"><div class="fn-num">3</div><div class="fn-content"><strong>排除法</strong>：先看大致的轮廓，把形状明显不对的选项快速划掉。</div></div>
+              <button class="va-btn" onclick="tv(this,'遇到翻转题不要慌，我们要找到那个“显眼包”方块，盯着它运动。想象自己是那只袋鼠，正围着盒子跳。只要盯着一个点，整个盒子的位置就清晰了！','m4_q17_f1')">🔊 听总结</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 进阶例题 3: 堆叠积木规律 (2025-Q22) -->
+      <div class="excard">
+        <div class="excard-hdr">
+          <span class="ex-num">进阶 03</span>
+          <span class="ex-tag">2025年 · 隐藏结构与颜色规律</span>
+        </div>
+        <div class="excard-body">
+          <div class="qbox">
+            🦘 <strong>袋鼠数学竞赛真题（2025年 第22题）</strong><br><br>
+            <img src="../assets/exam-images/2025/q22.png" alt="2025-Q22" style="width:100%;border-radius:10px;margin:8px 0 4px">
+            <small>提示：寻找红蓝交替的规律。如果外面是蓝色，里面紧挨着的是什么颜色？</small>
+          </div>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
+          <div class="ex-opts" id="ex_q22-opts"></div>
+          <div class="ex-result" id="ex_q22-result"></div>
+
+          <!-- 互动可视化：透视积木规律 -->
+          <div class="ex-visual" id="ex_q22-visual">
+            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;text-align:center">
+              <div style="font-size:14px;font-weight:700;color:#a78bfa;margin-bottom:15px">✨ 动手试试：红蓝相间透视镜</div>
+              <div style="display:flex;justify-content:center;gap:10px;margin-bottom:15px">
+                <button class="view-btn" id="xray-btn" onclick="toggleXRay()">🔦 透视模式</button>
+                <button class="view-btn" id="explode-btn" onclick="explodeBlocks()">💥 拆开看看</button>
+                <button class="vbtn-v" style="position:static;padding:7px 14px;font-size:13px" onclick="resetXRay()">🔄 重置</button>
+              </div>
+              <canvas id="xray-canvas" width="300" height="240" style="background:rgba(0,0,0,0.2);border-radius:12px;display:block;margin:0 auto;width:100%;max-width:300px"></canvas>
+              <div id="xray-status" style="margin-top:12px;font-size:13px;color:var(--muted2)">开启透视模式，看清被挡住的积木！</div>
+            </div>
+          </div>
+
+          <div class="guide-chain" id="ex_q22-guide"></div>
+          <div class="feynman-box" id="ex_q22-feynman">
+            <div class="feynman-hdr">💡 费曼学习法：看穿隐藏规律</div>
+            <div class="feynman-body">
+              <div class="fn-step"><div class="fn-num">1</div><div class="fn-content"><strong>棋盘规律</strong>：红蓝相间意味着“加法规律”。如果横、纵、高每次只动一格，颜色就会变一次。</div></div>
+              <div class="fn-step"><div class="fn-num">2</div><div class="fn-content"><strong>奇偶性</strong>：如果总步数是单数，颜色变；总步数是双数，颜色不变。</div></div>
+              <div class="fn-step"><div class="fn-num">3</div><div class="fn-content"><strong>分层扫描</strong>：一层一层看，第一层确定了，后面几层的规律也会跟着排出来。</div></div>
+              <button class="va-btn" onclick="tv(this,'这种题最考验大脑的深度！你可以把立体图形想象成一个大蛋糕，一层红一层蓝交错。即使最里面的被遮住了，只要你算准了步数，颜色规律就跑不掉！','m4_q22_f1')">🔊 听总结</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </div><!-- /container -->
 
 <!-- Mobile bottom nav -->
@@ -1107,6 +1253,7 @@ body {
   <button class="mob-tab on" data-s="s1"><span class="mt-icon">💡</span>概念</button>
   <button class="mob-tab" data-s="s2"><span class="mt-icon">🛠</span>技巧</button>
   <button class="mob-tab" data-s="s3"><span class="mt-icon">📖</span>例题</button>
+  <button class="mob-tab" data-s="s5"><span class="mt-icon">🚀</span>进阶</button>
   <button class="mob-tab" data-s="s4"><span class="mt-icon">🎮</span>挑战</button>
 </div>
 
@@ -1195,7 +1342,33 @@ const exData = {
     guide: [
       {q:'正视图和侧视图都是三角形，说明这个图形有什么特征？', a:'从正面和侧面看都是三角形，说明顶部是尖的（有一个顶点），排除圆柱和正方体', vc:'正视图和侧视图都是三角形，说明这个立体图形顶部是尖的！圆柱正视图是矩形，正方体是正方形，都被排除！', va:'m4_q3_g1'},
       {q:'俯视图是圆形（含中心点），说明什么？', a:'俯视图是圆，说明底面是圆形；中心点是顶点的投影，说明顶点在中心正上方', vc:'俯视图是圆形，底面是圆！中心有个点，那是顶尖投影下来的点。底面圆、顶部尖，排除三棱锥！', va:'m4_q3_g2'},
-      {q:'综合三个视图，最终答案是什么？', a:'底面是圆 + 顶部是尖 + 侧面是三角形轮廓 = 圆锥 🍦 ✅', vc:'底面圆、顶尖、侧面三角形，就是圆锥！冰淇淋的形状，答案是圆锥！', va:'m4_q3_g3'}
+      {q:'综合三个视图，最终答案是什么？', a:'底面是圆 + 顶部是尖 +侧面是三角形轮廓 = 圆锥 🍦 ✅', vc:'底面圆、顶尖、侧面三角形，就是圆锥！冰淇淋的形状，答案是圆锥！', va:'m4_q3_g3'}
+    ]
+  },
+  ex_q14: {
+    opts: [{t:'(A) 选项 A',v:false},{t:'(B) 选项 B',v:false},{t:'(C) 选项 C',v:true},{t:'(D) 选项 D',v:false},{t:'(E) 选项 E',v:false}],
+    guide: [
+      {q:'纸张一共对折了几次？方向分别是哪里？', a:'一共对折了 2 次。第一次从左向右折，第二次从下向上折。', vc:'仔细数数，纸张先左右对折了一次，再上下对折了一次，一共两道折痕哦。', va:'m4_q14_g1'},
+      {q:'打孔的位置在折叠后的纸张哪个角上？', a:'打孔位置在右下角。因为对折了两次，这里其实是纸张的中心位置。', vc:'这个孔打在了折叠后右下角。想一想，当你把它完全展开时，这个孔会在纸的中间产生对称。', va:'m4_q14_g2'},
+      {q:'第一次完全展开（向下翻开）后，会有几个孔？', a:'会有 2 个孔，上下对称排列。', vc:'把最后一层向下翻开，右下角的孔会在右上方出现一个一模一样的“双胞胎”！', va:'m4_q14_g3'},
+      {q:'第二次完全展开（向左翻开）后，一共有几个孔？', a:'一共会有 4 个孔，左右对称，在纸张中心形成一个菱形或正方形排列。', vc:'最后把左右的一层向左翻开，右边的 2 个孔就会在左边映射出 2 个，加起来一共 4 个！', va:'m4_q14_g4'}
+    ]
+  },
+  ex_q17: {
+    opts: [{t:'(A) 选项 A',v:false},{t:'(B) 选项 B',v:false},{t:'(C) 选项 C',v:false},{t:'(D) 选项 D',v:true},{t:'(E) 选项 E',v:false}],
+    guide: [
+      {q:'盒子里一共有几个小正方体？它们是怎么连接的？', a:'一共有 6 个。形成了一个 L 形的底部（4座）加上方突出的组合。', vc:'看，透明盒子里藏着 6 个小伙伴！先数清楚它们的布局：底部有一个长条，上面还叠了一个。', va:'m4_q17_g1'},
+      {q:'题目要求对盒子进行怎样的旋转？', a:'要求我们在脑海里把它向右侧翻转 90 度，或者根据箭头提示旋转。', vc:'我们要把这个盒子像翻滚木头一样，向右边侧着翻一圈。', va:'m4_q17_g2'},
+      {q:'翻转后，原本在顶部的正方体会移动到哪里？', a:'原本在顶部的那个方块，翻转后会移动到右侧。', vc:'注意那个最高的方块！盒子一往右倒，它就变成了最右边的侧面啦。', va:'m4_q17_g3'},
+      {q:'翻转后整体高度和宽度发生了什么变化？', a:'原本 2 层高变成了 2 格宽，原本的宽度变成了高度。', vc:'长变高，高变长，这就是立体翻转的神奇之处！对比 ABCDE，只有 D 符合这个新队形。', va:'m4_q17_g4'}
+    ]
+  },
+  ex_q22: {
+    opts: [{t:'(A) 红色',v:true},{t:'(B) 蓝色',v:false},{t:'(C) 无法确定',v:false}],
+    guide: [
+      {q:'总共有 13 个立方体，它们的排列规律是什么？', a:'规律是“红蓝相间”，也就是相邻的两个颜色一定不同。', vc:'就像国际象棋盘一样，红蓝红、蓝红蓝，每个正方体旁边的邻居都跟它颜色不一样。', va:'m4_q22_g1'},
+      {q:'如果把这组积木看作一个三层结构，最底层有多少块？', a:'可以通过数俯视图或侧面推断，最底层填满了角落，通常是 3×3 的一部分。', vc:'虽然有些被挡住了，但我们可以像透视眼一样通过层级推算出每一层的位置。', va:'m4_q22_g2'},
+      {q:'被完全遮挡在最里面的那个（角落里）是什么颜色？', a:'根据相邻变色规律，第一层角落是红色，相邻两边是蓝色，那么再里面的那个...我们需要建立坐标系推算。', vc:'我们可以给每个位置编个号：(x,y,z)。如果 x+y+z 是偶数就是红色，奇数就是蓝色。角落是 (0,0,0) 所以是红色！', va:'m4_q22_g3'}
     ]
   }
 };
@@ -1273,7 +1446,7 @@ function buildGuide(id, data) {
   });
 }
 
-initEx('ex1'); initEx('ex2'); initEx('ex3');
+initEx('ex1'); initEx('ex2'); initEx('ex3'); initEx('ex_q14'); initEx('ex_q17'); initEx('ex_q22');
 
 // ── Quiz ──
 const quizData = [
@@ -2045,6 +2218,221 @@ function cubeCheckAnswer() {
 }
 
 cubeLoadPreset(document.querySelector('.cube-preset-btn'), 0);
+
+/* ═══════════════ S5 ADVANCED INTERACTIVE LOGIC ═══════════════ */
+
+/* ── 1. Q14: 纸张折叠展开逻辑 ── */
+let foldPhase = 0; // 0:初始, 1:对折, 2:再对折, 3:打孔, 4:展开1, 5:展开2 (完成)
+function resetFold() {
+  foldPhase = 0;
+  document.getElementById('fold-action-btn').textContent = '👉 下一步';
+  document.getElementById('fold-action-btn').disabled = false;
+  renderFoldSVG();
+}
+
+function nextFoldPhase() {
+  if (foldPhase >= 5) return;
+  foldPhase++;
+  if (foldPhase === 5) {
+    document.getElementById('fold-action-btn').textContent = '✨ 完美展开！';
+    document.getElementById('fold-action-btn').disabled = true;
+  }
+  renderFoldSVG();
+}
+
+function renderFoldSVG() {
+  const svg = document.getElementById('fold-svg');
+  const status = document.getElementById('fold-status');
+  const size = 200, pad = 20;
+  svg.innerHTML = '';
+
+  // 纸张主体
+  const paper = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  paper.setAttribute("x", pad); paper.setAttribute("y", pad);
+  paper.setAttribute("width", size); paper.setAttribute("height", size);
+  paper.setAttribute("fill", "rgba(255,255,255,0.95)");
+  paper.setAttribute("stroke", "#94a3b8");
+  paper.setAttribute("stroke-width", "1");
+  svg.appendChild(paper);
+
+  const drawHole = (cx, cy, color="#ef4444") => {
+    const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    c.setAttribute("cx", cx); c.setAttribute("cy", cy); c.setAttribute("r", 6);
+    c.setAttribute("fill", color);
+    c.setAttribute("class", "sv pop");
+    svg.appendChild(c);
+  };
+
+  const drawLine = (x1, y1, x2, y2) => {
+    const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    l.setAttribute("x1", x1); l.setAttribute("y1", y1); l.setAttribute("x2", x2); l.setAttribute("y2", y2);
+    l.setAttribute("stroke", "#cbd5e1"); l.setAttribute("stroke-dasharray", "4 4");
+    svg.appendChild(l);
+  };
+
+  if (foldPhase === 0) {
+    status.textContent = "现在的纸张是完整的。";
+  } else if (foldPhase === 1) {
+    paper.setAttribute("width", size/2);
+    drawLine(pad + size/2, pad, pad + size/2, pad + size);
+    status.textContent = "第一次折叠：从左向右对折。";
+  } else if (foldPhase === 2) {
+    paper.setAttribute("width", size/2); paper.setAttribute("height", size/2);
+    paper.setAttribute("y", pad + size/2);
+    drawLine(pad + size/2, pad, pad + size/2, pad + size);
+    drawLine(pad, pad + size/2, pad + size/2, pad + size/2);
+    status.textContent = "第二次折叠：从下向上对折，现在只有原来的 1/4 大。";
+  } else if (foldPhase === 3) {
+    paper.setAttribute("width", size/2); paper.setAttribute("height", size/2);
+    paper.setAttribute("y", pad + size/2);
+    drawHole(pad + size/2 - 20, pad + size/2 + 20); // 打孔在折叠后的纸张的“中心”面附近
+    status.textContent = "打孔！在折叠后的纸张左上角处打一个孔。";
+  } else if (foldPhase === 4) {
+    paper.setAttribute("width", size/2); paper.setAttribute("height", size);
+    paper.setAttribute("y", pad);
+    drawHole(pad + size/2 - 20, pad + size/2 + 20); // 原本的孔
+    drawHole(pad + size/2 - 20, pad + size/2 - 20); // 镜像孔
+    status.textContent = "展开第一层：上下翻开，出现了 2 个对称的孔！";
+  } else if (foldPhase === 5) {
+    paper.setAttribute("width", size);
+    // 右边的孔
+    drawHole(pad + size/2 - 20, pad + size/2 + 20);
+    drawHole(pad + size/2 - 20, pad + size/2 - 20);
+    // 镜像到左边的孔
+    drawHole(pad + size/2 + 20, pad + size/2 + 20);
+    drawHole(pad + size/2 + 20, pad + size/2 - 20);
+    status.textContent = "全部展开！左右翻开，最后得到了 4 个孔！答案选 C。";
+  }
+}
+renderFoldSVG();
+
+/* ── 2. Q17: 3D 旋转盒子逻辑 ── */
+let currentRotX = 0, currentRotY = 0, currentRotZ = 0;
+
+function initBox3D() {
+  const container = document.getElementById('flip-container');
+  container.innerHTML = '';
+  // 定义 6 个小方块 [x, y, z] (0-1 为准)
+  // L布局：底部 4 个 (0,0,0), (1,0,0), (1,1,0), (1,2,0) + 1 个 (1,0,1)
+  const blocks = [[0,0,0],[1,0,0],[1,1,0],[1,2,0],[1,0,1],[0,0,1]];
+  const unit = 40;
+  blocks.forEach(([bx, by, bz], i) => {
+    const cube = document.createElement('div');
+    cube.style.cssText = `position:absolute;width:${unit}px;height:${unit}px;transform-style:preserve-3d;transform:translate3d(${bx*unit}px, ${by*unit}px, ${bz*unit}px)`;
+    const colors = ['#6ee7b7', '#3b82f6', '#f59e0b', '#ef4444', '#a78bfa', '#fcd34d'];
+    const c = colors[i % colors.length];
+    
+    ['front','back','left','right','top','bottom'].forEach(face => {
+      const f = document.createElement('div');
+      f.style.cssText = `position:absolute;width:${unit}px;height:${unit}px;border:1px solid rgba(255,255,255,0.4);background:${c}cc;backface-visibility:visible;`;
+      if(face==='front') f.style.transform = `translateZ(${unit/2}px)`;
+      if(face==='back') f.style.transform = `rotateY(180deg) translateZ(${unit/2}px)`;
+      if(face==='left') f.style.transform = `rotateY(-90deg) translateZ(${unit/2}px)`;
+      if(face==='right') f.style.transform = `rotateY(90deg) translateZ(${unit/2}px)`;
+      if(face==='top') f.style.transform = `rotateX(90deg) translateZ(${unit/2}px)`;
+      if(face==='bottom') f.style.transform = `rotateX(-90deg) translateZ(${unit/2}px)`;
+      cube.appendChild(f);
+    });
+    container.appendChild(cube);
+  });
+}
+
+function rotateBox3D(axis) {
+  if (axis === 'X') currentRotX += 90;
+  if (axis === 'Y') currentRotY += 90;
+  if (axis === 'Z') currentRotZ += 90;
+  updateBoxTransform();
+}
+
+function resetBox3D() {
+  currentRotX = 0; currentRotY = 0; currentRotZ = 0;
+  updateBoxTransform();
+}
+
+function updateBoxTransform() {
+  const container = document.getElementById('flip-container');
+  container.style.transform = `rotateX(${currentRotX}deg) rotateY(${currentRotY}deg) rotateZ(${currentRotZ}deg)`;
+}
+initBox3D();
+
+/* ── 3. Q22: 红蓝透视积木逻辑 ── */
+let xrayActive = false;
+let explodeFactor = 0;
+
+function toggleXRay() {
+  xrayActive = !xrayActive;
+  document.getElementById('xray-btn').classList.toggle('active', xrayActive);
+  document.getElementById('xray-status').textContent = xrayActive ? "透视模式：已开启！可以隐约看到内部的颜色。" : "已切换回普通模式。";
+  drawXRay();
+}
+
+function explodeBlocks() {
+  explodeFactor = explodeFactor === 0 ? 40 : 0;
+  document.getElementById('explode-btn').classList.toggle('active', explodeFactor > 0);
+  document.getElementById('xray-status').textContent = explodeFactor > 0 ? "积木已拆开！观察每个方块的相对位置。" : "积木已复位。";
+  drawXRay();
+}
+
+function resetXRay() {
+  xrayActive = false; explodeFactor = 0;
+  document.getElementById('xray-btn').classList.remove('active');
+  document.getElementById('explode-btn').classList.remove('active');
+  document.getElementById('xray-status').textContent = "重置完成。";
+  drawXRay();
+}
+
+function drawXRay() {
+  const canvas = document.getElementById('xray-canvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W=canvas.width, H=canvas.height;
+  ctx.clearRect(0,0,W,H);
+
+  // 13个积木的相对坐标 (x, y, layer)
+  const blocks = [];
+  for(let x=0; x<3; x++) {
+    for(let y=0; y<3; y++) {
+      if(x+y < 3) blocks.push([x, y, 0]); // 第一层 6块
+    }
+  }
+  for(let x=0; x<2; x++) {
+    for(let y=0; y<2; y++) {
+      if(x+y < 2) blocks.push([x, y, 1]); // 第二层 4块
+    }
+  }
+  blocks.push([0,0,2],[1,0,2],[0,1,2]); // 第三层 3块
+
+  const hw=30, hh=15, dh=22;
+  const offX = W/2, offY = H * 0.7;
+
+  // 排序绘制（由后向前）
+  blocks.sort((a,b) => (a[0]+a[1]) - (b[0]+b[1]) || a[2] - b[2]);
+
+  blocks.forEach(([bx, by, bz]) => {
+    // 规律：x+y+z 为偶数红，奇数蓝
+    const isRed = (bx + by + bz) % 2 === 0;
+    const col = isRed ? 
+      { top:'#fca5a5', left:'#ef4444', right:'#b91c1c' } : 
+      { top:'#93c5fd', left:'#3b82f6', right:'#1d4ed8' };
+    
+    // 如果是目标块 (0,0,0) 被挡在最里层的
+    const isTarget = bx===0 && by===0 && bz===0;
+    
+    const sx = offX + (bx-by)*(hw + explodeFactor/2);
+    const sy = offY + (bx+by)*(hh + explodeFactor/4) - bz*(dh + explodeFactor);
+    
+    let alpha = xrayActive ? 0.3 : 1;
+    if(xrayActive && isTarget) alpha = 1; // 透视时高亮目标
+
+    drawSolidCube(ctx, sx - hw, sy - hh, hw, hh, dh, col, alpha);
+    
+    if(isTarget && xrayActive) {
+      ctx.strokeStyle = '#fcd34d'; ctx.lineWidth = 2;
+      ctx.strokeRect(sx-hw, sy-hh-5, hw*2, dh+10);
+    }
+  });
+}
+drawXRay();
 
 initQuiz();
 </script>
