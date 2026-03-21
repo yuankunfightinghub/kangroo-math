@@ -52,7 +52,7 @@ body {
 /* ── Layout ── */
 .page {
   position: relative; z-index: 1;
-  max-width: 640px; margin: 0 auto;
+  max-width: 900px; margin: 0 auto;
   padding: 48px 24px 80px;
   display: flex; flex-direction: column;
   min-height: 100vh;
@@ -74,7 +74,7 @@ body {
 }
 
 /* ── Big Cards ── */
-.cards { display: flex; flex-direction: column; gap: 20px; flex: 1; }
+.cards { display: flex; flex-direction: row; gap: 24px; flex: 1; align-items: stretch; }
 
 .big-card {
   display: flex; flex-direction: column;
@@ -170,7 +170,11 @@ body {
 .d2 { animation-delay: .15s; }
 .d3 { animation-delay: .25s; }
 
-/* ── Mobile ── */
+/* ── Responsive Mobile/Tablet ── */
+@media (max-width: 768px) {
+  .page { max-width: 600px; }
+  .cards { flex-direction: column; }
+}
 @media (max-width: 480px) {
   .page { padding: 36px 16px 60px; }
   .header { margin-bottom: 40px; }

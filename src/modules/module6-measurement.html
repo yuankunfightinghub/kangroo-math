@@ -539,7 +539,7 @@ body {
         <div class="sec-heading">🛠 学习技巧</div>
 
         <!-- 技巧1：单位阶梯法 -->
-        <div class="mcard" onclick="toggleMCard(this)">
+        <div class="mcard" onclick="toggleMCard(event, this)">
           <div class="mcard-head">
             <div class="mcard-icon">🪜</div>
             <div class="mcard-info">
@@ -615,7 +615,7 @@ body {
         </div>
 
         <!-- 技巧2：生活锚点法 -->
-        <div class="mcard" onclick="toggleMCard(this)">
+        <div class="mcard" onclick="toggleMCard(event, this)">
           <div class="mcard-head">
             <div class="mcard-icon">🏠</div>
             <div class="mcard-info">
@@ -686,7 +686,7 @@ body {
         </div>
 
         <!-- 技巧3：等量交换法 -->
-        <div class="mcard" onclick="toggleMCard(this)">
+        <div class="mcard" onclick="toggleMCard(event, this)">
           <div class="mcard-head">
             <div class="mcard-icon">🔁</div>
             <div class="mcard-info">
@@ -757,46 +757,80 @@ body {
         <div class="sec-heading">📖 例题精讲</div>
 
         <!-- 例题1 -->
-        <div class="excard">
-          <div class="ex-title">🍎 例题一</div>
-          <div class="ex-body">
-            妈妈买了 <strong>2.5 kg</strong> 苹果和 <strong>500 g</strong> 梨，<strong>一共买了多少克</strong>水果？
+        <div class="excard" id="ex1" style="background:var(--card); border:1px solid var(--card-border); border-radius:20px; overflow:hidden; margin-bottom:24px;">
+          <div class="excard-hdr" style="padding:16px 24px; background:rgba(255,255,255,0.02); border-bottom:1px solid var(--card-border); display:flex; justify-content:space-between; align-items:center;">
+            <span class="ex-num" style="font-size:14px; font-weight:700; color:var(--purple-light);">例题一</span>
+            <span class="ex-tag" style="font-size:11px; font-weight:600; padding:3px 10px; border-radius:999px; background:rgba(139,92,246,0.1); color:var(--purple-light); border:1px solid rgba(139,92,246,0.25);">2024年 · 混合单位换算</span>
           </div>
-          <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
-          <div class="choice-grid" id="ex1-opts"></div>
-          <div class="ex-feedback" id="ex1-fb"></div>
-          <div class="retry-btns" id="ex1-retry" style="display:none">
-            <button class="retry-btn r" onclick="retryEx(1)">🔄 再试试哦</button>
-            <button class="retry-btn l" onclick="showHint(1)">📖 有点难哦，学学解法</button>
-          </div>
-          <div class="guide-chain" id="ex1-guide" style="display:none"></div>
-          <div class="feynman-box" id="ex1-feynman">
-            <div class="fn-title">💡 费曼讲解 — 单位统一再相加</div>
-            <div class="fn-step"><div class="fn-num">1</div><div>先<strong>换算单位</strong>：2.5 kg = 2500 g，把千克变成克，乘以 1000。</div></div>
-            <div class="fn-step"><div class="fn-num">2</div><div><strong>直接相加</strong>：2500 g + 500 g = 3000 g，单位统一了再加，才不会出错！</div></div>
-            <div class="fn-step"><div class="fn-num">3</div><div>遇到<strong>混合单位的加减题</strong>，一定要先统一单位，是我们的解题秘诀 🏆</div></div>
+          <div class="excard-body" style="padding:24px;">
+            <div class="qbox" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:14px; padding:16px; margin-bottom:16px;">
+              🦘 <strong>袋鼠数学竞赛真题（2024年 第1题）</strong><br><br>
+              <img src="../assets/exam-images/2024/q01.png"
+                   alt="2024年第1题"
+                   style="width:100%;border-radius:10px;margin:8px 0 4px">
+              <small style="color:var(--muted); font-size:12px;">提示：两种单位（千克和克）不能直接相加，先把千克换算成克再计算。</small>
+            </div>
+            <p style="font-size:13px; color:var(--muted); margin-bottom:12px;">选择你的答案 ↓</p>
+            <div class="ex-opts choice-grid" id="ex1-opts" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:8px;"></div>
+            <div class="ex-result" id="ex1-result" style="display:none; padding:12px 16px; border-radius:12px; font-size:14px; font-weight:600; line-height:1.7; margin-top:16px;"></div>
+            <div class="guide-chain" id="ex1-guide" style="display:none; margin-top:16px;"></div>
+            <div class="feynman-box" id="ex1-feynman" style="display:none; margin-top:16px; border-radius:16px; overflow:hidden; border:1px solid rgba(16,185,129,0.3);">
+              <div class="feynman-hdr" style="background:linear-gradient(135deg,rgba(16,185,129,0.15),rgba(6,182,212,0.1)); border-bottom:1px solid rgba(16,185,129,0.2); padding:14px 20px; font-size:14px; font-weight:700; color:#6ee7b7;">💡 费曼讲解 — 单位统一再相加</div>
+              <div class="feynman-body" style="padding:20px;">
+                <div class="fn-step" style="display:flex; gap:12px; align-items:flex-start; margin-bottom:12px;">
+                  <div class="fn-num" style="width:28px; height:28px; border-radius:50%; flex-shrink:0; background:rgba(16,185,129,0.2); border:1px solid rgba(16,185,129,0.35); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; color:#6ee7b7;">1</div>
+                  <div class="fn-content" style="background:rgba(16,185,129,0.05); border-radius:12px; padding:10px 14px; flex:1; font-size:14px; line-height:1.75; color:var(--muted); border:1px solid rgba(16,185,129,0.1);">先<strong>换算单位</strong>：1 kg = 1000 g，所以 2.5 kg = 2500 g。千克 × 1000 变成克！</div>
+                </div>
+                <div class="fn-step" style="display:flex; gap:12px; align-items:flex-start; margin-bottom:12px;">
+                  <div class="fn-num" style="width:28px; height:28px; border-radius:50%; flex-shrink:0; background:rgba(16,185,129,0.2); border:1px solid rgba(16,185,129,0.35); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; color:#6ee7b7;">2</div>
+                  <div class="fn-content" style="background:rgba(16,185,129,0.05); border-radius:12px; padding:10px 14px; flex:1; font-size:14px; line-height:1.75; color:var(--muted); border:1px solid rgba(16,185,129,0.1);"><strong>相同单位再相加</strong>：2500 g + 500 g = 3000 g。单位一样了，直接加就行！</div>
+                </div>
+                <div class="fn-step" style="display:flex; gap:12px; align-items:flex-start; margin-bottom:12px;">
+                  <div class="fn-num" style="width:28px; height:28px; border-radius:50%; flex-shrink:0; background:rgba(16,185,129,0.2); border:1px solid rgba(16,185,129,0.35); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; color:#6ee7b7;">3</div>
+                  <div class="fn-content" style="background:rgba(16,185,129,0.05); border-radius:12px; padding:10px 14px; flex:1; font-size:14px; line-height:1.75; color:var(--muted); border:1px solid rgba(16,185,129,0.1);">记住口诀：<strong>遇到混合单位，先统一再计算</strong>，这是度量衡题的万能法则 🏆</div>
+                </div>
+                <button class="va-btn" style="margin-top:8px; padding:6px 14px; border-radius:8px; border:1px solid rgba(96,165,250,0.25); background:rgba(96,165,250,0.12); color:#93c5fd; cursor:pointer; font-family:'Noto Sans SC',sans-serif; font-size:13px;" onclick="tv(this,'先把千克换成克，1千克等于1000克，2.5千克就是2500克。然后2500克加上500克，等于3000克。遇到混合单位，先统一再计算！')">🔊 听费曼讲解</button>
+              </div>
+            </div>
           </div>
         </div>
 
         <!-- 例题2 -->
-        <div class="excard">
-          <div class="ex-title">🏃 例题二</div>
-          <div class="ex-body">
-            小明跑步用了 <strong>1 小时 20 分</strong>，小红用了 <strong>75 分钟</strong>，<strong>谁跑得更快</strong>（用时更少）？
+        <div class="excard" id="ex2" style="background:var(--card); border:1px solid var(--card-border); border-radius:20px; overflow:hidden; margin-bottom:24px;">
+          <div class="excard-hdr" style="padding:16px 24px; background:rgba(255,255,255,0.02); border-bottom:1px solid var(--card-border); display:flex; justify-content:space-between; align-items:center;">
+            <span class="ex-num" style="font-size:14px; font-weight:700; color:var(--purple-light);">例题二</span>
+            <span class="ex-tag" style="font-size:11px; font-weight:600; padding:3px 10px; border-radius:999px; background:rgba(139,92,246,0.1); color:var(--purple-light); border:1px solid rgba(139,92,246,0.25);">2023年 · 时间换算比较</span>
           </div>
-          <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
-          <div class="choice-grid" id="ex2-opts"></div>
-          <div class="ex-feedback" id="ex2-fb"></div>
-          <div class="retry-btns" id="ex2-retry" style="display:none">
-            <button class="retry-btn r" onclick="retryEx(2)">🔄 再试试哦</button>
-            <button class="retry-btn l" onclick="showHint(2)">📖 有点难哦，学学解法</button>
-          </div>
-          <div class="guide-chain" id="ex2-guide" style="display:none"></div>
-          <div class="feynman-box" id="ex2-feynman">
-            <div class="fn-title">💡 费曼讲解 — 时间换算再比较</div>
-            <div class="fn-step"><div class="fn-num">1</div><div><strong>换算</strong>：1 小时 = 60 分钟，1小时20分 = 60 + 20 = <strong>80 分钟</strong>。</div></div>
-            <div class="fn-step"><div class="fn-num">2</div><div><strong>比较</strong>：80 分钟 vs 75 分钟，75 更小，说明小红<strong>用时更少</strong>。</div></div>
-            <div class="fn-step"><div class="fn-num">3</div><div>用时少 = 跑得快！所以<strong>小红更快</strong> 🏅</div></div>
+          <div class="excard-body" style="padding:24px;">
+            <div class="qbox" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:14px; padding:16px; margin-bottom:16px;">
+              🦘 <strong>袋鼠数学竞赛真题（2023年 第2题）</strong><br><br>
+              <img src="../assets/exam-images/2023/q02.png"
+                   alt="2023年第2题"
+                   style="width:100%;border-radius:10px;margin:8px 0 4px">
+              <small style="color:var(--muted); font-size:12px;">提示：小时和分钟是不同单位，把"1小时20分"换算成纯分钟，再和75分钟比大小。</small>
+            </div>
+            <p style="font-size:13px; color:var(--muted); margin-bottom:12px;">选择你的答案 ↓</p>
+            <div class="ex-opts choice-grid" id="ex2-opts" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:8px;"></div>
+            <div class="ex-result" id="ex2-result" style="display:none; padding:12px 16px; border-radius:12px; font-size:14px; font-weight:600; line-height:1.7; margin-top:16px;"></div>
+            <div class="guide-chain" id="ex2-guide" style="display:none; margin-top:16px;"></div>
+            <div class="feynman-box" id="ex2-feynman" style="display:none; margin-top:16px; border-radius:16px; overflow:hidden; border:1px solid rgba(16,185,129,0.3);">
+              <div class="feynman-hdr" style="background:linear-gradient(135deg,rgba(16,185,129,0.15),rgba(6,182,212,0.1)); border-bottom:1px solid rgba(16,185,129,0.2); padding:14px 20px; font-size:14px; font-weight:700; color:#6ee7b7;">💡 费曼讲解 — 时间换算再比较</div>
+              <div class="feynman-body" style="padding:20px;">
+                <div class="fn-step" style="display:flex; gap:12px; align-items:flex-start; margin-bottom:12px;">
+                  <div class="fn-num" style="width:28px; height:28px; border-radius:50%; flex-shrink:0; background:rgba(16,185,129,0.2); border:1px solid rgba(16,185,129,0.35); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; color:#6ee7b7;">1</div>
+                  <div class="fn-content" style="background:rgba(16,185,129,0.05); border-radius:12px; padding:10px 14px; flex:1; font-size:14px; line-height:1.75; color:var(--muted); border:1px solid rgba(16,185,129,0.1);"><strong>换算成分钟</strong>：1 小时 = 60 分钟，所以 1小时20分 = 60 + 20 = <strong>80 分钟</strong>。</div>
+                </div>
+                <div class="fn-step" style="display:flex; gap:12px; align-items:flex-start; margin-bottom:12px;">
+                  <div class="fn-num" style="width:28px; height:28px; border-radius:50%; flex-shrink:0; background:rgba(16,185,129,0.2); border:1px solid rgba(16,185,129,0.35); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; color:#6ee7b7;">2</div>
+                  <div class="fn-content" style="background:rgba(16,185,129,0.05); border-radius:12px; padding:10px 14px; flex:1; font-size:14px; line-height:1.75; color:var(--muted); border:1px solid rgba(16,185,129,0.1);"><strong>比大小</strong>：80 分钟 vs 75 分钟，75 更小 → 小红用时更少！</div>
+                </div>
+                <div class="fn-step" style="display:flex; gap:12px; align-items:flex-start; margin-bottom:12px;">
+                  <div class="fn-num" style="width:28px; height:28px; border-radius:50%; flex-shrink:0; background:rgba(16,185,129,0.2); border:1px solid rgba(16,185,129,0.35); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; color:#6ee7b7;">3</div>
+                  <div class="fn-content" style="background:rgba(16,185,129,0.05); border-radius:12px; padding:10px 14px; flex:1; font-size:14px; line-height:1.75; color:var(--muted); border:1px solid rgba(16,185,129,0.1);">用时少 = 跑得快！<strong>小红更快</strong> 🏅 比较时间长短，单位统一是第一步！</div>
+                </div>
+                <button class="va-btn" style="margin-top:8px; padding:6px 14px; border-radius:8px; border:1px solid rgba(96,165,250,0.25); background:rgba(96,165,250,0.12); color:#93c5fd; cursor:pointer; font-family:'Noto Sans SC',sans-serif; font-size:13px;" onclick="tv(this,'先把1小时20分换算成分钟，1小时等于60分钟，加上20分，一共80分钟。再比较：80分钟比75分钟多，所以小红用时更少，小红跑得更快！')">🔊 听费曼讲解</button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -805,19 +839,16 @@ body {
 
     <!-- ═══ S4 闯关 ═══ -->
     <div id="s4" class="sec">
-      <div class="gcard">
-        <div class="sec-heading">🎮 闯关挑战</div>
-        <div class="quiz-header">
-          <div class="star-bar" id="star-bar"></div>
-          <div class="q-nav-dots" id="q-dots"></div>
+      <div class="quiz-wrap" style="background:var(--card); border:1px solid var(--card-border); border-radius:20px; padding:28px; margin-bottom:16px;">
+        <div class="quiz-top" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+          <div class="quiz-title" style="font-size:18px; font-weight:800; letter-spacing:-0.02em;">🎮 闯关挑战</div>
+          <div class="stars" id="stars" style="display:flex; gap:4px;"></div>
         </div>
-        <div id="qcard-wrap"></div>
-        <div class="q-nav">
-          <button class="qnav-btn prev" onclick="quizNav(-1)">← 上一题</button>
-          <button class="qnav-btn next" id="qnext-btn" onclick="quizNav(1)">下一题 →</button>
-        </div>
+        <div class="qnav" id="qnav" style="display:flex; gap:5px; flex-wrap:wrap; margin-bottom:20px;"></div>
+        <div id="quiz-content"></div>
       </div>
     </div>
+
 
     </div><!-- /inner -->
   </div><!-- /container -->
@@ -975,7 +1006,7 @@ function drawBalance() {
   const ry = cy + armLen * Math.sin(tilt * Math.PI/180);
   svg.innerHTML = `
     <line x1="${cx}" y1="${cy}" x2="${cx}" y2="160" stroke="rgba(245,158,11,0.5)" stroke-width="3" stroke-linecap="round"/>
-    <circle cx="${cx}" cy="160" r="8" fill="rgba(245,158,11,0.2)" stroke="rgba(245,158,11,0.5)" stroke-width="1.5"/>
+        <circle cx="${cx}" cy="160" r="8" fill="rgba(245,158,11,0.2)" stroke="rgba(245,158,11,0.5)" stroke-width="1.5"/>
     <circle cx="${cx}" cy="${cy}" r="6" fill="rgba(245,158,11,0.4)" stroke="#fcd34d" stroke-width="1.5"/>
     <line x1="${lx}" y1="${ly}" x2="${rx}" y2="${ry}" stroke="#fcd34d" stroke-width="3" stroke-linecap="round"/>
     <line x1="${lx}" y1="${ly}" x2="${lx}" y2="${ly+35}" stroke="rgba(16,185,129,0.6)" stroke-width="1.5"/>
@@ -1016,7 +1047,8 @@ function updateBottle() {
 }
 
 /* ── S2: Method Cards ── */
-function toggleMCard(el) {
+function toggleMCard(event, el) {
+  if (event && event.target.closest('.mcard-body')) return;
   const isOpen = el.classList.contains('open');
   document.querySelectorAll('.mcard').forEach(c => { c.classList.remove('open'); c.querySelector('.mcard-body').classList.remove('open'); });
   if (!isOpen) { el.classList.add('open'); el.querySelector('.mcard-body').classList.add('open'); }
@@ -1031,145 +1063,219 @@ function revealSteps(id) {
 
 /* ── S3: Example Problems ── */
 const exData = {
-  1: {
-    opts: ['(A) 3000 g','(B) 2500 g','(C) 3500 g','(D) 500 g','(E) 1000 g'],
-    ans: 0,
+  ex1: {
+    opts: [
+      {t:'(A) 3000 g', v:true},
+      {t:'(B) 2500 g', v:false},
+      {t:'(C) 3500 g', v:false},
+      {t:'(D) 500 g',  v:false}
+    ],
     guide: [
-      {q:'① 2.5 kg 等于多少 g？', a:'2500 g，因为 1 kg = 1000 g，2.5 × 1000 = 2500', vc:'2.5千克等于2500克，因��1千克等于1000克，所以乘以1000！'},
-      {q:'② 500 g 梨要不要换算？', a:'不用，已经是 g 了，可以直接加', vc:'500克梨已经是克了，不需要换算，可以直接加！'},
-      {q:'③ 2500 + 500 = ？', a:'3000 g', vc:'2500加500等于3000克！'},
-      {q:'④ 所以答案是？', a:'3000 g，选 (A)！🎉', vc:'答案是3000克，选A！'},
+      {q:'1 kg 等于多少 g？', a:'1000 g。这是重量换算的基础！1千克 = 1000克。', vc:'1千克等于1000克，这是重量单位换算最重要的一步！'},
+      {q:'那 2.5 kg 等于多少 g？', a:'2.5 × 1000 = 2500 g ✅', vc:'2.5千克，就是2.5乘以1000，等于2500克！'},
+      {q:'500 g 梨需要换算吗？', a:'不用！已经是 g 了，直接加。', vc:'500克已经是克了，不需要再换算，可以直接参与计算！'},
+      {q:'2500 + 500 = ？', a:'3000 g 🎉 这就是答案 (A)！', vc:'2500克加上500克，等于3000克，所以选A！'}
     ]
   },
-  2: {
-    opts: ['(A) 小明更快','(B) 小红更快','(C) 一样快','(D) 无法判断','(E) 小明慢一倍'],
-    ans: 1,
+  ex2: {
+    opts: [
+      {t:'(A) 小明更快', v:false},
+      {t:'(B) 小红更快', v:true},
+      {t:'(C) 一样快',   v:false},
+      {t:'(D) 无法判断', v:false}
+    ],
     guide: [
-      {q:'① 1 小时等于多少分钟？', a:'60 分钟，这是基本换算！', vc:'1小时等于60分钟，这是时间换算的基础！'},
-      {q:'② 1 小时 20 分 = 60 + 20 = ？分钟', a:'80 分钟', vc:'1小时20分等于60加20等于80分钟！'},
-      {q:'③ 80 分钟 vs 75 分钟，哪个更小？', a:'75 分钟更小，小红用时少', vc:'80分钟比75分钟多，所以小红用时更少！'},
-      {q:'④ 用时少说明跑得怎样？', a:'跑得更快！小红更快，选 (B)！🎉', vc:'用时少就是跑得快！小红更快，选B！'},
+      {q:'1 小时等于多少分钟？', a:'60 分钟。时间换算的起点！', vc:'1小时等于60分钟，这是时间换算最基础的换算！'},
+      {q:'1小时20分 用分钟表示是多少？', a:'60 + 20 = 80 分钟 ✅', vc:'1小时20分，就是60分钟加上20分钟，等于80分钟！'},
+      {q:'现在可以比较了：80分钟 和 75分钟，哪个更小？', a:'75 分钟更小，说明小红用的时间更少！', vc:'80分钟比75分钟多，所以75分钟的小红用时更少！'},
+      {q:'用时更少说明什么？', a:'跑得更快！所以小红更快 🏅 → 答案是 (B)！', vc:'用时少就是跑得快！所以小红更快，选B！'}
     ]
   }
 };
-function buildEx(n) {
-  const d = exData[n];
-  const og = document.getElementById(`ex${n}-opts`);
-  og.innerHTML = d.opts.map((t,i)=>`<button class="choice-btn" onclick="answerEx(${n},${i})">${t}</button>`).join('');
-  const gc = document.getElementById(`ex${n}-guide`);
-  gc.innerHTML = d.guide.map((g,i)=>`
-    <div class="guide-item ${i===0?'active':'locked'}" id="ex${n}g${i}">
-      <div class="guide-q" onclick="revealGuide(${n},${i})">
-        <span class="gq-icon">${i===0?'💬':'🔒'}</span>
-        <span class="gq-text">${g.q}</span>
-        <span class="gq-arrow">▶</span>
-      </div>
-      <div class="guide-a" id="ex${n}ga${i}">
-        ✅ <strong>${g.a}</strong>
-        <br><button class="va-btn" style="margin-top:8px" onclick="tv(this,'${g.vc}')">🔊 听讲解</button>
-      </div>
-    </div>`).join('');
+
+function initEx(id) {
+  exData[id].opts.forEach((o, i) => {
+    const btn = document.createElement('div');
+    btn.style.cssText = 'padding:12px 16px; border-radius:12px; border:1px solid var(--card-border); background:rgba(255,255,255,0.03); font-size:15px; font-weight:600; cursor:pointer; transition:all .25s; text-align:center; color:var(--muted); font-family:"Noto Sans SC",sans-serif;';
+    btn.className = 'choice-btn'; 
+    btn.textContent = o.t;
+    btn.onmouseenter = () => { if(!btn.classList.contains('dis')) { btn.style.borderColor = 'rgba(139,92,246,0.4)'; btn.style.background = 'rgba(139,92,246,0.08)'; btn.style.color = 'var(--text)'; btn.style.transform = 'translateY(-2px)'; } };
+    btn.onmouseleave = () => { if(!btn.classList.contains('dis') && !btn.classList.contains('correct') && !btn.classList.contains('wrong')) { btn.style.borderColor = 'var(--card-border)'; btn.style.background = 'rgba(255,255,255,0.03)'; btn.style.color = 'var(--muted)'; btn.style.transform = 'none'; } };
+    btn.onclick = () => handleEx(id, i);
+    document.getElementById(id+'-opts').appendChild(btn);
+  });
 }
-function answerEx(n, i) {
-  const d = exData[n];
-  const opts = document.querySelectorAll(`#ex${n}-opts .choice-btn`);
-  opts.forEach(b => b.classList.add('dis'));
-  const fb = document.getElementById(`ex${n}-fb`);
-  if (i === d.ans) {
-    opts[i].classList.add('correct');
-    fb.innerHTML = '🎉 答对了！太棒了！'; fb.style.color = '#6ee7b7';
-    document.getElementById(`ex${n}-guide`).style.display = 'flex';
+
+function handleEx(id, idx) {
+  const data = exData[id];
+  const opts = document.querySelectorAll('#'+id+'-opts .choice-btn');
+  const res = document.getElementById(id+'-result');
+  if (data.opts[idx].v) {
+    opts.forEach((o,i) => {
+      o.classList.add('dis'); o.style.pointerEvents = 'none'; o.style.opacity = '0.35'; o.style.transform='none';
+      if(data.opts[i].v) { o.classList.add('correct'); o.style.borderColor = 'rgba(16,185,129,0.5)'; o.style.background = 'rgba(16,185,129,0.1)'; o.style.color = '#6ee7b7'; o.style.opacity = '1'; }
+    });
+    res.style.cssText = 'display:block; background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.2); color:#6ee7b7; border-radius:12px; padding:14px 16px; font-size:14px; font-weight:600; line-height:1.7; margin-top:16px; animation:fadeUp 0.3s ease;';
+    res.innerHTML = '🎉 答对了！你真棒！一起看看解题思路——';
+    setTimeout(() => buildGuide(id, data), 700);
   } else {
-    opts[i].classList.add('wrong');
-    fb.innerHTML = '🤔 这个想法很有创意！不过让我们再看看……'; fb.style.color = '#fca5a5';
-    document.getElementById(`ex${n}-retry`).style.display = 'flex';
+    opts[idx].classList.add('wrong');
+    opts[idx].style.borderColor = 'rgba(239,68,68,0.5)'; opts[idx].style.background = 'rgba(239,68,68,0.08)'; opts[idx].style.color = '#fca5a5';
+    res.style.cssText = 'display:block; background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.2); color:#fcd34d; border-radius:12px; padding:14px 16px; font-size:14px; font-weight:600; line-height:1.7; margin-top:16px; animation:fadeUp 0.3s ease;';
+    res.innerHTML = `<div style="margin-bottom:10px">💡 这个答案不太对哦，没关系！</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button onclick="retryEx('${id}',${idx})" style="padding:7px 16px;border-radius:8px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);color:#6ee7b7;font-size:13px;font-weight:600;cursor:pointer;font-family:'Noto Sans SC',sans-serif; transition:all .25s;">🔄 再试试</button>
+        <button onclick="learnEx('${id}')" style="padding:7px 16px;border-radius:8px;background:rgba(96,165,250,0.12);border:1px solid rgba(96,165,250,0.25);color:#93c5fd;font-size:13px;font-weight:600;cursor:pointer;font-family:'Noto Sans SC',sans-serif; transition:all .25s;">📖 看解法</button>
+      </div>`;
   }
 }
-function retryEx(n) {
-  document.querySelectorAll(`#ex${n}-opts .choice-btn`).forEach(b => { b.classList.remove('dis','correct','wrong'); });
-  document.getElementById(`ex${n}-fb`).innerHTML = '';
-  document.getElementById(`ex${n}-retry`).style.display = 'none';
-}
-function showHint(n) {
-  const d = exData[n];
-  document.querySelectorAll(`#ex${n}-opts .choice-btn`).forEach((b,i) => { b.classList.add('dis'); if(i===d.ans) b.classList.add('correct'); });
-  document.getElementById(`ex${n}-retry`).style.display = 'none';
-  document.getElementById(`ex${n}-guide`).style.display = 'flex';
-}
-function revealGuide(n, i) {
-  const ga = document.getElementById(`ex${n}ga${i}`);
-  ga.style.display = 'block';
-  document.querySelector(`#ex${n}g${i} .gq-icon`).textContent = '✅';
-  const d = exData[n];
-  const next = document.getElementById(`ex${n}g${i+1}`);
-  if (next) { next.classList.remove('locked'); next.querySelector('.gq-icon').textContent = '💬'; }
-  if (i === d.guide.length - 1) document.getElementById(`ex${n}-feynman`).style.display = 'block';
-}
-buildEx(1); buildEx(2);
 
-/* ── S4: Quiz ── */
+function retryEx(id, wrongIdx) {
+  const opt = document.querySelectorAll('#'+id+'-opts .choice-btn')[wrongIdx];
+  opt.classList.remove('wrong');
+  opt.style.borderColor = 'var(--card-border)'; opt.style.background = 'rgba(255,255,255,0.03)'; opt.style.color = 'var(--muted)';
+  document.getElementById(id+'-result').style.display = 'none';
+}
+
+function learnEx(id) {
+  const data = exData[id];
+  document.querySelectorAll('#'+id+'-opts .choice-btn').forEach((o,i) => {
+    o.classList.add('dis'); o.style.pointerEvents = 'none'; o.style.opacity = '0.35';
+    if(data.opts[i].v) { o.classList.add('correct'); o.style.borderColor = 'rgba(16,185,129,0.5)'; o.style.background = 'rgba(16,185,129,0.1)'; o.style.color = '#6ee7b7'; o.style.opacity = '1'; }
+  });
+  const res = document.getElementById(id+'-result');
+  res.style.cssText = 'display:block; background:rgba(96,165,250,0.08); border:1px solid rgba(96,165,250,0.2); color:#93c5fd; border-radius:12px; padding:14px 16px; font-size:14px; font-weight:600; line-height:1.7; margin-top:16px; animation:fadeUp 0.3s ease;';
+  res.innerHTML = '📖 没关系！正确答案已标出，我们一起来看——';
+  setTimeout(() => buildGuide(id, data), 700);
+}
+
+function buildGuide(id, data) {
+  const chain = document.getElementById(id+'-guide');
+  chain.style.display = 'block';
+  setTimeout(()=>chain.scrollIntoView({behavior:'smooth',block:'center'}), 100);
+  if(chain.innerHTML) return; // Prevent duplicate build
+  data.guide.forEach((g, i) => {
+    const item = document.createElement('div');
+    item.style.cssText = 'margin-bottom:10px; border-radius:14px; overflow:hidden; border:1px solid rgba(255,255,255,0.06); transition:border-color .3s;';
+    item.id = id+'-g'+i;
+    if (i===0) item.style.borderColor = 'rgba(96,165,250,0.3)';
+    
+    const qd = document.createElement('div');
+    qd.style.cssText = 'padding:13px 18px; font-size:14px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:10px; color:'+(i===0?'var(--text)':'var(--muted2)')+'; background:'+(i===0?'rgba(96,165,250,0.05)':'transparent')+'; transition:all .25s;';
+    qd.innerHTML = `<span>${i<data.guide.length-1?'💬':'🚀'}</span>${g.q}<span class="guide-lock" style="margin-left:auto; font-size:11px; font-weight:600; color:var(--muted2);">${i===0?'👆 点击':'🔒'}</span>`;
+    
+    const ad = document.createElement('div');
+    ad.style.cssText = 'max-height:0; overflow:hidden; transition:max-height .4s; font-size:14px; line-height:1.8; color:var(--muted); background:rgba(0,0,0,0.2);';
+    ad.innerHTML = `<p style="padding:14px 18px 0;">${g.a}</p><button class="va-btn" style="margin:10px 18px 14px; padding:5px 12px; border-radius:8px; border:1px solid rgba(96,165,250,0.25); background:rgba(96,165,250,0.12); color:#93c5fd; cursor:pointer;" onclick="event.stopPropagation();tv(this,'${g.vc.replace(/'/g,"\\'")}')">🔊 听解析</button>`;
+    
+    qd.onclick = () => {
+      if (item.style.borderColor !== 'rgba(96, 165, 250, 0.3)' && i !== 0 && !item.classList.contains('unlocked')) return;
+      if (ad.style.maxHeight !== '0px') return; // already open
+      ad.style.maxHeight = '300px'; 
+      qd.querySelector('.guide-lock').textContent = '✅';
+      setTimeout(() => {
+        const nxt = document.getElementById(id+'-g'+(i+1));
+        if (nxt) {
+          nxt.style.borderColor = 'rgba(96,165,250,0.3)'; nxt.classList.add('unlocked');
+          nxt.querySelector('.guide-lock').textContent='👆 点击';
+          nxt.children[0].style.color = 'var(--text)'; nxt.children[0].style.background = 'rgba(96,165,250,0.05)';
+          nxt.scrollIntoView({behavior:'smooth',block:'center'});
+        } else {
+          const fb = document.getElementById(id+'-feynman');
+          fb.style.display = 'block'; fb.scrollIntoView({behavior:'smooth',block:'center'});
+        }
+      }, 500);
+    };
+    item.appendChild(qd); item.appendChild(ad); chain.appendChild(item);
+  });
+}
+
+initEx('ex1'); initEx('ex2');
+
+/* ── S4: Quiz (with exam-images structure) ── */
 const quizData = [
-  {diff:1, src:'换算基础', q:'5 cm = __ mm', opts:['(A) 30 mm','(B) 50 mm','(C) 500 mm','(D) 5 mm','(E) 0.5 mm'], ans:1, fb:'✅ 1 cm = 10 mm，5 × 10 = 50 mm！'},
-  {diff:1, src:'换算基础', q:'3 kg = __ g', opts:['(A) 300 g','(B) 30 g','(C) 3000 g','(D) 0.3 g','(E) 30000 g'], ans:2, fb:'✅ 1 kg = 1000 g，3 × 1000 = 3000 g！'},
-  {diff:1, src:'换算基础', q:'2 小时 = __ 分钟', opts:['(A) 60','(B) 200','(C) 120','(D) 20','(E) 12'], ans:2, fb:'✅ 1 小时 = 60 分，2 × 60 = 120 分！'},
-  {diff:2, src:'换算进阶', q:'1500 mL = __ L', opts:['(A) 15 L','(B) 150 L','(C) 0.15 L','(D) 1.5 L','(E) 1500 L'], ans:3, fb:'✅ 1 L = 1000 mL，1500 ÷ 1000 = 1.5 L！'},
-  {diff:2, src:'换算进阶', q:'250 cm = __ m', opts:['(A) 25 m','(B) 2.5 m','(C) 0.25 m','(D) 250 m','(E) 25000 m'], ans:1, fb:'✅ 1 m = 100 cm，250 ÷ 100 = 2.5 m！'},
-  {diff:2, src:'换算进阶', q:'4500 g = __ kg', opts:['(A) 45 kg','(B) 0.45 kg','(C) 450 kg','(D) 4.5 kg','(E) 4500 kg'], ans:3, fb:'✅ 1 kg = 1000 g，4500 ÷ 1000 = 4.5 kg！'},
-  {diff:2, src:'时间换算', q:'90 分钟 = __ 小时 __ 分', opts:['(A) 1时20分','(B) 1时30分','(C) 2时','(D) 1时45分','(E) 1时10分'], ans:1, fb:'✅ 90 = 60 + 30，所以是 1 小时 30 分！'},
-  {diff:2, src:'应用题', q:'一瓶饮料 330 mL，喝了 3 瓶共多少 mL？', opts:['(A) 990 mL','(B) 900 mL','(C) 3300 mL','(D) 99 mL','(E) 333 mL'], ans:0, fb:'✅ 330 × 3 = 990 mL！'},
-  {diff:3, src:'应用题', q:'跑道长 400 m，跑 5 圈 = __ km', opts:['(A) 20 km','(B) 0.2 km','(C) 200 km','(D) 2 km','(E) 2000 km'], ans:3, fb:'✅ 400 × 5 = 2000 m = 2 km！'},
-  {diff:3, src:'应用题', q:'小明身高 1 m 25 cm = __ cm', opts:['(A) 1025 cm','(B) 125 cm','(C) 225 cm','(D) 12.5 cm','(E) 25 cm'], ans:1, fb:'✅ 1 m = 100 cm，100 + 25 = 125 cm！'},
+  {src:'2024·Q3', d:'★', dc:'#10b981', diff:1,
+   q:'这支铅笔的长度是多少 cm？（注：起点不在0）',
+   // [真题占位] 请修改为测量部分的模块六第1题真实截图
+   qimg:'../assets/exam-images/2024/q03.png',
+   opts:[{t:'4 cm',img:null},{t:'5 cm',img:null},{t:'6 cm',img:null},{t:'1 cm',img:null}], ans:0, ok:'🎉 正确！末端 5 减去起点 1，5-1=4 cm！', no:'💡 记得用末端刻度减去起点刻度哦。'},
+  {src:'2023·Q5', d:'★★', dc:'#f59e0b', diff:2,
+   q:'小猫体重 2.5 kg，是一只小狗的一半重。小狗多重？',
+   // [真题占位]
+   qimg:'../assets/exam-images/2023/q05.png',
+   opts:[{t:'4 kg',img:null},{t:'5 kg',img:null},{t:'5.5 kg',img:null},{t:'500 g',img:null}], ans:1, ok:'🎉 正确！2.5 × 2 = 5 kg！', no:'💡 一半的意思是，小狗的重量是小猫的2倍！'},
+  {src:'2022·Q12', d:'★★★', dc:'#ec4899', diff:3,
+   q:'现在是早上 9:15，电影 10:45 开始。还要等多久？',
+   // [真题占位]
+   qimg:'../assets/exam-images/2022/q12.png',
+   opts:[{t:'1小时30分钟',img:null},{t:'1小时20分钟',img:null},{t:'80分钟',img:null},{t:'1小时45分钟',img:null}], ans:0, ok:'🎉 正确！10:45 - 9:15 = 1小时30分钟！', no:'💡 同位相减：10时-9时=1时，45分-15分=30分。'},
+  {src:'2021·Q8', d:'★★', dc:'#f59e0b', diff:2,
+   q:'一个水桶可以装 5 L 水，现在里面有 2000 mL，还能再装多少？',
+   // [真题占位]
+   qimg:'../assets/exam-images/2021/q08.png',
+   opts:[{t:'3 L',img:null},{t:'3000 L',img:null},{t:'2 L',img:null},{t:'1 L',img:null}], ans:0, ok:'🎉 正确！5 L = 5000 mL，5000 - 2000 = 3000 mL = 3 L！', no:'💡 先把L换成mL：5 L = 5000 mL，再相减！'},
+  {src:'基础换算', d:'★', dc:'#10b981', diff:1,
+   q:'2.5 m 等于多少 cm？',
+   qimg:null,
+   opts:[{t:'25 cm',img:null},{t:'205 cm',img:null},{t:'250 cm',img:null},{t:'2500 cm',img:null}], ans:2, ok:'🎉 正确！1 m = 100 cm，2.5 × 100 = 250 cm！', no:'💡 1 m = 100 cm，也就是把小数点向右移动两位！'}
 ];
-let curQ = 0;
-const qState = new Array(quizData.length).fill(null); // null|true|false
 
-function buildStarBar() {
-  document.getElementById('star-bar').innerHTML = quizData.map((_,i)=>`<span class="star ${qState[i]===true?'on':''}">⭐</span>`).join('');
+let curQ=0, starCount=0;
+let answered = new Array(quizData.length).fill(null);
+
+function renderStars() {
+  document.getElementById('stars').innerHTML = quizData.map((_,i) =>
+    `<span style="font-size:18px; transition:all .3s; opacity:${i<starCount?'1':'0.3'}; transform:${i<starCount?'scale(1)':'scale(0.8)'}">${i<starCount?'⭐':'☆'}</span>`).join('');
 }
-function buildDots() {
-  document.getElementById('q-dots').innerHTML = quizData.map((_,i)=>{
-    let cls = i === curQ ? 'on' : qState[i]===true ? 'ok' : qState[i]===false ? 'bad' : '';
-    return `<div class="q-dot ${cls}" onclick="jumpQ(${i})">${i+1}</div>`;
+
+function renderNav() {
+  document.getElementById('qnav').innerHTML = quizData.map((_,i) =>
+    `<div onclick="goQ(${i})" style="width:10px; height:10px; border-radius:50%; background:${answered[i]!==null?'var(--emerald)':'rgba(255,255,255,0.1)'}; transition:all .25s; cursor:pointer; transform:${i===curQ?'scale(1.4)':'none'}; box-shadow:${i===curQ?'0 0 0 2px var(--purple)': 'none'};"></div>`).join('');
+}
+
+function renderQuiz() {
+  renderStars(); renderNav();
+  const q = quizData[curQ]; const isDone = answered[curQ]!==null;
+  
+  let optsHtml = q.opts.map((o,i) => {
+    let style = 'padding:12px 16px; border-radius:12px; border:1px solid var(--card-border); background:rgba(255,255,255,0.03); font-size:14px; font-weight:600; cursor:pointer; transition:all .25s; text-align:center; color:var(--muted); font-family:"Noto Sans SC",sans-serif;';
+    if(isDone){ 
+      style += 'pointer-events:none; opacity:0.4;'; 
+      if(i===q.ans) { style += 'border-color:rgba(16,185,129,0.5); background:rgba(16,185,129,0.1); color:#6ee7b7; opacity:1;'; } 
+      else if(i===answered[curQ]) { style += 'border-color:rgba(239,68,68,0.5); background:rgba(239,68,68,0.08); color:#fca5a5; opacity:1;'; }
+    }
+    const imgTag = o.img ? `<img src="${o.img}" alt="选项" style="display:block;width:100%;margin-top:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.08)" loading="lazy">` : '';
+    return `<div style="${style}" onclick="checkQ(${i})" onmouseenter="if(!${isDone}){this.style.borderColor='rgba(139,92,246,0.4)';this.style.background='rgba(139,92,246,0.08)';this.style.color='var(--text)'}" onmouseleave="if(!${isDone}){this.style.borderColor='var(--card-border)';this.style.background='rgba(255,255,255,0.03)';this.style.color='var(--muted)'}">${o.t}${imgTag}</div>`;
   }).join('');
+  
+  const qimgHtml = q.qimg ? `<div style="margin:14px 0; border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,0.08); background:rgba(0,0,0,0.2);"><img src="${q.qimg}" alt="题目原图" style="display:block; width:100%; max-width:560px; margin:0 auto;" loading="lazy"></div>` : '';
+  
+  let fbHtml = isDone ? `<div style="margin-top:12px; padding:12px 16px; border-radius:12px; font-size:13px; font-weight:600; line-height:1.7; display:block; animation:fadeUp 0.3s ease; background:${answered[curQ]===q.ans?'rgba(16,185,129,0.08)':'rgba(245,158,11,0.08)'}; border:1px solid ${answered[curQ]===q.ans?'rgba(16,185,129,0.2)':'rgba(245,158,11,0.2)'}; color:${answered[curQ]===q.ans?'#6ee7b7':'#fcd34d'}">${answered[curQ]===q.ans?q.ok:q.no}</div>` : '';
+  
+  let navHtml = isDone ? `<div style="display:flex; gap:8px; margin-top:14px;">
+    ${curQ>0?`<button onclick="goQ(${curQ-1})" style="padding:8px 20px; border-radius:10px; border:1px solid var(--card-border); font-size:13px; font-weight:700; cursor:pointer; background:rgba(255,255,255,0.06); color:var(--muted); font-family:'Noto Sans SC',sans-serif;">← 上一题</button>`:''}
+    ${curQ<quizData.length-1?`<button onclick="goQ(${curQ+1})" style="padding:8px 20px; border-radius:10px; border:1px solid rgba(139,92,246,0.25); font-size:13px; font-weight:700; cursor:pointer; background:rgba(139,92,246,0.15); color:var(--purple-light); font-family:'Noto Sans SC',sans-serif;">下一题 →</button>`:''}
+  </div>` : '';
+  
+  document.getElementById('quiz-content').innerHTML = `
+    <div style="display:flex; gap:8px; margin-bottom:10px; align-items:center;">
+      <span style="font-size:11px; font-weight:700; padding:3px 10px; border-radius:999px; color:#fff; background:${q.dc}">${q.d} ${['','简单','中等','挑战'][q.diff]}</span>
+      <span style="font-size:11px; font-weight:600; padding:3px 10px; border-radius:999px; background:rgba(139,92,246,0.1); color:var(--purple-light); border:1px solid rgba(139,92,246,0.2);">${q.src}</span>
+    </div>
+    <div style="font-size:16px; font-weight:600; line-height:1.8; margin-bottom:14px; color:var(--text);">Q${curQ+1}. ${q.q}</div>
+    ${qimgHtml}
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">${optsHtml}</div>
+    ${fbHtml}${navHtml}`;
 }
-function renderQ(idx) {
-  const q = quizData[idx];
-  const answered = qState[idx] !== null;
-  const wrap = document.getElementById('qcard-wrap');
-  wrap.innerHTML = `
-    <div class="qcard">
-      <div class="q-meta">
-        <span class="q-badge q-diff-${q.diff}">${['','⭐ 简单','🔥 中等','💡 挑战'][q.diff]}</span>
-        <span class="q-src">${q.src}</span>
-      </div>
-      <div class="q-text">${q.q}</div>
-      <div class="q-opts">
-        ${q.opts.map((o,i)=>{
-          let cls = '';
-          if (answered) { cls = 'dis'; if(i===q.ans) cls+=' correct'; else if(qState[idx]===false && i===q._wrong) cls+=' wrong'; }
-          return `<button class="q-opt ${cls}" onclick="ansQ(${idx},${i})">${o}</button>`;
-        }).join('')}
-      </div>
-      <div class="qfb ${answered?'show':''}  ${qState[idx]===true?'ok':'no'}" id="qfb">${answered?q.fb:''}</div>
-    </div>`;
-  const nb = document.getElementById('qnext-btn');
-  nb.classList.toggle('show', answered);
-  buildDots(); buildStarBar();
+
+function checkQ(idx) {
+  if (answered[curQ]!==null) return;
+  answered[curQ]=idx;
+  if(idx===quizData[curQ].ans) starCount++;
+  renderQuiz();
 }
-function ansQ(idx, i) {
-  if (qState[idx] !== null) return;
-  const q = quizData[idx];
-  const correct = i === q.ans;
-  qState[idx] = correct;
-  q._wrong = correct ? -1 : i;
-  renderQ(idx);
-}
-function jumpQ(idx) { curQ = idx; renderQ(idx); }
-function quizNav(dir) {
-  curQ = Math.max(0, Math.min(quizData.length-1, curQ + dir));
-  renderQ(curQ);
-}
-renderQ(0); buildDots(); buildStarBar();
+function goQ(idx) { curQ=idx; renderQuiz(); }
+renderQuiz();
 </script>
 </body>
 </html>

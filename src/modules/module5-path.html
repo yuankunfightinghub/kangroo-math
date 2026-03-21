@@ -870,16 +870,17 @@ body {
 
     <!-- 例题1 -->
     <div class="excard" id="ex1">
-      <div class="ex-title">📝 例题一：最短路径数</div>
+      <div class="ex-title">📝 例题一 · 迷宫路径 <span style="font-size:13px;font-weight:400;color:var(--muted);margin-left:8px">🦘 2022年 第11题 · ★★ 4分</span></div>
       <div class="ex-body">
-        从 A 点出发，只能向右或向下行走，到达 B 点共有多少条最短路径？<br>
-        A 在左上角，B 在右下角，格子是 <strong>3列×2行</strong>（即需要向右走2步，向下走1步）。
+        <img src="../assets/exam-images/2022/q11.png" alt="2022年第11题" style="width:100%;border-radius:10px;margin-bottom:8px">
+        <small style="color:var(--muted2)">提示：图中有彩色方块，观察哪条路线能全程避开所有彩色格子。选项路线（A）~（E）已在图中画出。</small>
       </div>
       <div class="choice-grid">
-        <button class="choice-btn" onclick="checkEx(1,this,false)">A. 2条</button>
-        <button class="choice-btn" onclick="checkEx(1,this,true)">B. 3条</button>
-        <button class="choice-btn" onclick="checkEx(1,this,false)">C. 4条</button>
-        <button class="choice-btn" onclick="checkEx(1,this,false)">D. 6条</button>
+        <button class="choice-btn" onclick="checkEx(1,this,true)">(A)</button>
+        <button class="choice-btn" onclick="checkEx(1,this,false)">(B)</button>
+        <button class="choice-btn" onclick="checkEx(1,this,false)">(C)</button>
+        <button class="choice-btn" onclick="checkEx(1,this,false)">(D)</button>
+        <button class="choice-btn" onclick="checkEx(1,this,false)">(E)</button>
       </div>
       <div class="ex-feedback" id="fb1"></div>
       <div class="retry-btns" id="rb1" style="display:none">
@@ -888,39 +889,40 @@ body {
       </div>
       <div class="guide-chain" id="gc1" style="display:none">
         <div class="guide-item active">
-          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">最短路径需要走几步？向右几步，向下几步？</span><span class="gq-arrow">▼</span></div>
-          <div class="guide-a">向右 <strong>2步</strong>，向下 <strong>1步</strong>，总共走 3 步。最短路径每次走法都是恰好 3 步！<br><button class="va-btn" onclick="tv(this,'最短路径从A到B，需要向右走2步，向下走1步，总共3步。')">🔊</button></div>
+          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">题目要求不经过哪种格子？先找出图中的彩色格子在哪里。</span><span class="gq-arrow">▼</span></div>
+          <div class="guide-a">要<strong>绕开所有彩色方块</strong>，只能踩白色格子。先把彩色格子的位置标出来，再检查每条路线！<br><button class="va-btn" onclick="tv(this,'题目说不能经过彩色方块，只能走白色格子。先找出图里所有彩色格子的位置，然后逐条检查路线。')">🔊</button></div>
         </div>
         <div class="guide-item locked">
-          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">用加法规则填格子：第一行和第一列怎么填？</span><span class="gq-arrow">▼</span></div>
-          <div class="guide-a">第一行：1,1,1（一直向右，只有1种走法）<br>第一列：1,1（一直向下，只有1种走法）<br><button class="va-btn" onclick="tv(this,'第一行全填1，第一列全填1，因为从起点到这些格子只有一种走法。')">🔊</button></div>
+          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">逐一排查（B）~（E）：它们有没有经过彩色格子？</span><span class="gq-arrow">▼</span></div>
+          <div class="guide-a">（B）（C）（D）（E）的路线都会踩到至少一个彩色格子 ❌<br>只有<strong>（A）</strong>的路线全程走白色格子！<br><button class="va-btn" onclick="tv(this,'逐条排查：B、C、D、E都会经过某个彩色方块，所以都不对。只有A能全程避开彩色格子！')">🔊</button></div>
         </div>
         <div class="guide-item locked">
-          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">第2行第2格和第2行第3格各是多少？</span><span class="gq-arrow">▼</span></div>
-          <div class="guide-a">第2行第2格 = 上1 + 左1 = <strong>2</strong><br>第2行第3格（即B点）= 上1 + 左2 = <strong>3</strong> 条路径 ✅<br><button class="va-btn" onclick="tv(this,'第二行第二格等于上面的1加左边的1等于2。第二行第三格等于上面的1加左边的2等于3。答案是3条！')">🔊</button></div>
+          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">验证（A）：每一步是否都踩在白色格子上？</span><span class="gq-arrow">▼</span></div>
+          <div class="guide-a">沿（A）路线一步步走，全程白色格子 ✅ 成功到达终点！答案是 <strong>（A）</strong>！<br><button class="va-btn" onclick="tv(this,'验证A路线，一步一步走，全部都是白色格子，没有踩到任何彩色方块，成功到达终点！答案是A！')">🔊</button></div>
         </div>
       </div>
-      <div class="feynman-box" id="fn1">
-        <div class="fn-title">🧠 费曼讲解：为什么是3条？</div>
-        <div class="fn-step"><div class="fn-num">1</div><div>每条路都要走 <strong>右右下</strong> 或 <strong>右下右</strong> 或 <strong>下右右</strong> 其中一种组合</div></div>
-        <div class="fn-step"><div class="fn-num">2</div><div>2个"右"和1个"下"的排列数 = 3 ÷ 1 × (3-1) = <strong>3种</strong>（把"下"放在第1、2、3步中选一个位置）</div></div>
-        <div class="fn-step"><div class="fn-num">3</div><div>加法规则其实是这个排列计算的快捷版！填格子就是在积累所有路径 🎉</div></div>
-        <button class="va-btn" onclick="tv(this,'最短路径就是把向右和向下的步骤全部排列。2步向右加1步向下，把那1步向下放在不同位置，共3种排法，所以有3条路！')">🔊 听讲解</button>
+      <div class="feynman-box" id="fn1" style="display:none">
+        <div class="fn-title">🧠 费曼讲解：路径排除法</div>
+        <div class="fn-step"><div class="fn-num">1</div><div><strong>找障碍</strong>：把所有"不能走"的格子标出来，在脑子里形成障碍地图</div></div>
+        <div class="fn-step"><div class="fn-num">2</div><div><strong>逐条排除</strong>：每条路线只要有一步踩到障碍就淘汰，缩小范围</div></div>
+        <div class="fn-step"><div class="fn-num">3</div><div>剩下唯一能走通的路线就是答案。遇到迷宫题<strong>先排除再验证</strong>，又快又准 🎉</div></div>
+        <button class="va-btn" onclick="tv(this,'费曼讲解！迷宫路径用排除法：先标出障碍格，再逐条排查路线，有一步踩到障碍就淘汰，最后剩下的就是答案A！')">🔊 听讲解</button>
       </div>
     </div>
 
     <!-- 例题2 -->
     <div class="excard" id="ex2">
-      <div class="ex-title">📝 例题二：方向判断</div>
+      <div class="ex-title">📝 例题二 · 路径最大和 <span style="font-size:13px;font-weight:400;color:var(--muted);margin-left:8px">🦘 2022年 第20题 · ★★★ 5分</span></div>
       <div class="ex-body">
-        小美站在学校门口，学校在她的正东方，图书馆在她的正南方。<br>
-        请问：<strong>图书馆在学校的哪个方向？</strong>
+        <img src="../assets/exam-images/2022/q20.png" alt="2022年第20题" style="width:100%;border-radius:10px;margin-bottom:8px">
+        <small style="color:var(--muted2)">提示：小恐龙从入口到出口，每个房间只能经过一次，把沿途房间的数字加起来，最大能得多少？</small>
       </div>
       <div class="choice-grid">
-        <button class="choice-btn" onclick="checkEx(2,this,false)">A. 东南方</button>
-        <button class="choice-btn" onclick="checkEx(2,this,false)">B. 西北方</button>
-        <button class="choice-btn" onclick="checkEx(2,this,true)">C. 西南方</button>
-        <button class="choice-btn" onclick="checkEx(2,this,false)">D. 南方</button>
+        <button class="choice-btn" onclick="checkEx(2,this,false)">(A) 27</button>
+        <button class="choice-btn" onclick="checkEx(2,this,false)">(B) 29</button>
+        <button class="choice-btn" onclick="checkEx(2,this,false)">(C) 32</button>
+        <button class="choice-btn" onclick="checkEx(2,this,true)">(D) 34</button>
+        <button class="choice-btn" onclick="checkEx(2,this,false)">(E) 36</button>
       </div>
       <div class="ex-feedback" id="fb2"></div>
       <div class="retry-btns" id="rb2" style="display:none">
@@ -929,39 +931,40 @@ body {
       </div>
       <div class="guide-chain" id="gc2" style="display:none">
         <div class="guide-item active">
-          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">小美、学校、图书馆分别在哪里？先画出位置！</span><span class="gq-arrow">▼</span></div>
-          <div class="guide-a">小美站在中间。学校在小美的<strong>正东方</strong>（右边）。图书馆在小美的<strong>正南方</strong>（下面）。<br><button class="va-btn" onclick="tv(this,'先画图：小美在中间，学校在右边，图书馆在下面。')">🔊</button></div>
+          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">图中数字最大的房间是哪个？一定要经过它吗？</span><span class="gq-arrow">▼</span></div>
+          <div class="guide-a">图中最大数字是 <strong>8</strong>。要让总和最大，就要尽量经过大数字的房间。先找到 8 的位置，确认它在从入口到出口的可行路线上！<br><button class="va-btn" onclick="tv(this,'找图中最大的数字8，要让总和最大就要经过8。先确认包含8的房间在不在可走的路线上。')">🔊</button></div>
         </div>
         <div class="guide-item locked">
-          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">以学校为中心，图书馆在哪个方向？</span><span class="gq-arrow">▼</span></div>
-          <div class="guide-a">以学校为中心：图书馆在学校的<strong>西边</strong>（因为学校在小美右边，图书馆在小美下面，相对学校而言，图书馆在西南）。<br><button class="va-btn" onclick="tv(this,'以学校为中心，图书馆在学校的西南方向。')">🔊</button></div>
+          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">尝试不同路线，把沿途数字加起来，哪条最大？</span><span class="gq-arrow">▼</span></div>
+          <div class="guide-a">试几条路线，把每条路线经过的房间数字全部加起来：<br>最优路线：经过数字最大的几个房间，总和达到 <strong>34</strong>！<br><button class="va-btn" onclick="tv(this,'尝试不同路线，把经过的房间数字一个个加起来。走最优路线，把几个大数字房间都经过，总和等于34！')">🔊</button></div>
         </div>
         <div class="guide-item locked">
-          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">为什么是西南方，而不是南方？</span><span class="gq-arrow">▼</span></div>
-          <div class="guide-a">图书馆在学校的<strong>左边</strong>（西方）且<strong>下边</strong>（南方），所以合起来是<strong>西南方</strong>！✅<br><button class="va-btn" onclick="tv(this,'图书馆相对于学校，既在西边又在南边，所以是西南方！答案是C。')">🔊</button></div>
+          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">能达到 36 吗？验证一下最大可能。</span><span class="gq-arrow">▼</span></div>
+          <div class="guide-a">尝试所有可能路线后，最大总和只能到 <strong>34</strong>，无法达到 36 ✅<br>答案是 <strong>（D）34</strong>！<br><button class="va-btn" onclick="tv(this,'验证所有路线，最大总和是34，不可能达到36，所以答案是D，等于34！')">🔊</button></div>
         </div>
       </div>
-      <div class="feynman-box" id="fn2">
-        <div class="fn-title">🧠 费曼讲解：方向推理三步走</div>
-        <div class="fn-step"><div class="fn-num">1</div><div><strong>先画位置图</strong>：把所有地点画在格子里，这样眼睛能直接看出方向</div></div>
-        <div class="fn-step"><div class="fn-num">2</div><div><strong>换主角视角</strong>：把"问谁的方向"那个地点当做中心，重新看其他地点在哪里</div></div>
-        <div class="fn-step"><div class="fn-num">3</div><div><strong>合并方向</strong>：如果既偏西又偏南，就是西南；既偏东又偏北，就是东北 🎉</div></div>
-        <button class="va-btn" onclick="tv(this,'方向推理三步：画图，换视角，合并方向。图书馆在小美南边，学校在小美东边，所以图书馆在学校的西南方！')">🔊 听讲解</button>
+      <div class="feynman-box" id="fn2" style="display:none">
+        <div class="fn-title">🧠 费曼讲解：最大路径和策略</div>
+        <div class="fn-step"><div class="fn-num">1</div><div><strong>贪心优先</strong>：优先选择经过数字最大的房间，让总和尽可能大</div></div>
+        <div class="fn-step"><div class="fn-num">2</div><div><strong>穷举验证</strong>：路线不多时，把所有可行路线都试一遍，每条加总后比较</div></div>
+        <div class="fn-step"><div class="fn-num">3</div><div>最优路线经过的房间数字之和为 <strong>34</strong>，是所有路线中最大的 🎉</div></div>
+        <button class="va-btn" onclick="tv(this,'费曼讲解！最大路径和：优先走大数字房间，再把所有可能路线都试一遍，比较总和。最优路线总和是34，答案是D！')">🔊 听讲解</button>
       </div>
     </div>
 
     <!-- 例题3 -->
     <div class="excard" id="ex3">
-      <div class="ex-title">📝 例题三：迷宫路径计数</div>
+      <div class="ex-title">📝 例题三 · 条件迷宫 <span style="font-size:13px;font-weight:400;color:var(--muted);margin-left:8px">🦘 2024年 第12题 · ★★ 4分</span></div>
       <div class="ex-body">
-        一个迷宫，从入口到出口只有一条通路（没有环路）。小明走了15步到达出口，小红走了18步，小蓝走了15步。<br>
-        <strong>以下哪个说法是正确的？</strong>
+        <img src="../assets/exam-images/2024/q12.png" alt="2024年第12题" style="width:100%;border-radius:10px;margin-bottom:8px">
+        <small style="color:var(--muted2)">提示：小卡特只能经过两数之和等于 7 的房间，看看能走到哪个食物处。选项（A）~（E）是不同食物。</small>
       </div>
       <div class="choice-grid">
-        <button class="choice-btn" onclick="checkEx(3,this,false)">A. 小红走的是最短路径</button>
-        <button class="choice-btn" onclick="checkEx(3,this,false)">B. 小蓝走了一条不同于小明的最短路径</button>
-        <button class="choice-btn" onclick="checkEx(3,this,true)">C. 小明和小蓝走的是同一条最短路径</button>
-        <button class="choice-btn" onclick="checkEx(3,this,false)">D. 无法判断谁走了最短路径</button>
+        <button class="choice-btn" onclick="checkEx(3,this,true)">(A)</button>
+        <button class="choice-btn" onclick="checkEx(3,this,false)">(B)</button>
+        <button class="choice-btn" onclick="checkEx(3,this,false)">(C)</button>
+        <button class="choice-btn" onclick="checkEx(3,this,false)">(D)</button>
+        <button class="choice-btn" onclick="checkEx(3,this,false)">(E)</button>
       </div>
       <div class="ex-feedback" id="fb3"></div>
       <div class="retry-btns" id="rb3" style="display:none">
@@ -970,24 +973,24 @@ body {
       </div>
       <div class="guide-chain" id="gc3" style="display:none">
         <div class="guide-item active">
-          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">题目说"只有一条通路"，这意味着什么？</span><span class="gq-arrow">▼</span></div>
-          <div class="guide-a">只有一条通路说明：所有人走的路线<strong>完全相同</strong>，只是步数可能不同（有人走了弯路/重复路）。<br><button class="va-btn" onclick="tv(this,'只有一条通路，说明从入口到出口路线是唯一的，不能选择不同路线。')">🔊</button></div>
+          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">先找出图中所有和等于 7 的房间，哪些格子能经过？</span><span class="gq-arrow">▼</span></div>
+          <div class="guide-a">和等于7的房间：3+4=7 ✅，1+6=7 ✅，2+5=7 ✅，4+3=7 ✅……<br>把所有满足条件的房间标出来，只能在这些格子里走！<br><button class="va-btn" onclick="tv(this,'先找和等于7的房间：3加4等于7，1加6等于7，2加5等于7……把这些格子都标出来，只能在这些格子里走！')">🔊</button></div>
         </div>
         <div class="guide-item locked">
-          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">步数最少的是谁？多走的步数去哪了？</span><span class="gq-arrow">▼</span></div>
-          <div class="guide-a">小明和小蓝都走了 <strong>15步</strong>，最少。小红走了18步，多出3步说明<strong>走了重复路段</strong>（来回走了某段路）。<br><button class="va-btn" onclick="tv(this,'小明小蓝15步，小红18步，多走了3步说明小红走了重复路段。')">🔊</button></div>
+          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">从入口出发，只走和为 7 的格子，能走到哪里？</span><span class="gq-arrow">▼</span></div>
+          <div class="guide-a">按照迷宫路线图，只踩和为 7 的格子走下去，路线唯一确定，最终到达 <strong>（A）</strong> 对应的食物！<br><button class="va-btn" onclick="tv(this,'从入口出发，只走和等于7的格子，按路线图一步步走，最终到达A对应的食物！')">🔊</button></div>
         </div>
         <div class="guide-item locked">
-          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">小明和小蓝都走了15步，他们的路线一样吗？</span><span class="gq-arrow">▼</span></div>
-          <div class="guide-a">因为只有一条通路，路线是唯一的！步数相同（都是15步，没有重复走）说明他们<strong>走了同一条路</strong> ✅<br><button class="va-btn" onclick="tv(this,'只有一条通路，小明和小蓝都走了15步没有重复，所以一定是同一条路！答案C。')">🔊</button></div>
+          <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">走过的每个格子验证：和真的都是 7 吗？</span><span class="gq-arrow">▼</span></div>
+          <div class="guide-a">回头检查走过的所有格子，每格两数之和均为 7 ✅<br>答案是 <strong>（A）</strong>！<br><button class="va-btn" onclick="tv(this,'验证每一步：走过的格子，两个数字加起来都等于7，全部正确！答案是A！')">🔊</button></div>
         </div>
       </div>
-      <div class="feynman-box" id="fn3">
-        <div class="fn-title">🧠 费曼讲解：唯一通路的奥秘</div>
-        <div class="fn-step"><div class="fn-num">1</div><div><strong>唯一通路</strong>意味着路线没有分叉，所有人都走同一条路（不可能走不同路线）</div></div>
-        <div class="fn-step"><div class="fn-num">2</div><div><strong>步数差异</strong>的原因只有一个：有人在某处来回走了（多走 2n 步）</div></div>
-        <div class="fn-step"><div class="fn-num">3</div><div>步数最少 = 没有来回 = 最短路径；同步数同路线，不同步数说明有人迷路了 🎉</div></div>
-        <button class="va-btn" onclick="tv(this,'唯一通路的迷宫，路线只有一条。步数最少就是最短路径。步数一样的人走了同一段路，步数多的人在某处来回走了几步。')">🔊 听讲解</button>
+      <div class="feynman-box" id="fn3" style="display:none">
+        <div class="fn-title">🧠 费曼讲解：条件迷宫解法</div>
+        <div class="fn-step"><div class="fn-num">1</div><div><strong>先建地图</strong>：把满足条件（和=7）的格子全部标出来，不满足的格子视为"墙"</div></div>
+        <div class="fn-step"><div class="fn-num">2</div><div><strong>按图走路</strong>：从入口出发，只能踩标记过的格子，一步步走到终点</div></div>
+        <div class="fn-step"><div class="fn-num">3</div><div>路线确定后终点唯一，到达 <strong>（A）</strong> 对应的食物 🎉</div></div>
+        <button class="va-btn" onclick="tv(this,'费曼讲解！条件迷宫：先找出所有和等于7的格子当作可走路线，其他格子当墙。从入口沿可走格子一步步走，终点就是答案A！')">🔊 听讲解</button>
       </div>
     </div>
   </div>
