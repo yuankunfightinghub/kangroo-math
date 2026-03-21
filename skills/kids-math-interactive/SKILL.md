@@ -369,14 +369,19 @@ function revealSteps(id) {
 
 ```
 显示题目 → 儿童选择答案
-  ├─ 正确 → 显示 “🎉 答对了” → 开启引导链
+  ├─ 正确 → 显示 “🎉 答对了” + “📖 点击查看解题讲解 →” 按钮
+  │           点击按钮 → showExplanation(id)
   └─ 错误 → 显示两个按钮：
-       ├─ “🔄 再试试哦” → 重置，让儿童重试
-       └─ “📖 有点难哦，学学解法” → 标记正确答案，然后开启引导链
+       ├─ “🔄 再试试” → 重置，让儿童重试
+       └─ “📖 查看解法” → 标记正确答案，直接调用 showExplanation(id)（无需再次点击）
 
-引导链 (顺序解锁):
+showExplanation(id):
+  1. 查找 #exN-visual（互动可视化区，可选）
+  2. 若存在则 classList.add('show')，fadeUp 动画展开，滚动到该位置
+  3. 500ms 后（无 visual 则立即）调用 buildGuide(id, data)
+
+引导链 buildGuide (顺序解锁):
   问题 1 (已解锁) → 点击 → 显示答案 + 🔊 → 解锁问题 2
-  问题 2 → 点击 → 显示答案 + 🔊 → 解锁问题 3
   ...
   最后一个问题 → 点击 → 显示答案 → 自动显示费曼讲解框
 
@@ -385,10 +390,86 @@ function revealSteps(id) {
 ```
 
 **关键规则：**
-- 儿童必须先回答（或点击”学学解法”）才能看到任何解释
-- 引导提问逐一解锁 — 必须查看当前项才能解锁下一项
-- 费曼讲解框仅在所有引导问题查看后才会出现
-- 错误答案显示两个按钮（重试 + 学习），不自动消失
+- 儿童必须先回答才能看到任何解释（讲解入口在答题结果里）
+- 答对显示按钮入口，点击后才展开讲解
+- 答错点”查看解法”直接展开讲解（不需要再多点一次）
+- 互动可视化（`.ex-visual`）放在 `.ex-result` **后面**，CSS 默认 `display:none`，通过 `showExplanation` 添加 `.show` 类展开
+- 引导提问逐一解锁，费曼讲解框仅在所有引导问题查看后出现
+
+#### HTML 结构顺序（必须严格遵守）
+
+```html
+<div class=”excard-body”>
+  <!-- 1. 题目 -->
+  <div class=”qbox”>…</div>
+  <p style=”font-size:13px;color:var(--muted);margin-bottom:12px”>选择你的答案 ↓</p>
+
+  <!-- 2. 选项（JS initEx 生成） -->
+  <div class=”ex-opts” id=”exN-opts”></div>
+
+  <!-- 3. 答题结果 + 讲解入口按钮（JS handleEx 填充） -->
+  <div class=”ex-result” id=”exN-result”></div>
+
+  <!-- 4. 互动可视化（可选，默认隐藏，showExplanation 时展开） -->
+  <div class=”ex-visual” id=”exN-visual”>…</div>
+
+  <!-- 5. 引导链（JS buildGuide 生成） -->
+  <div class=”guide-chain” id=”exN-guide”></div>
+
+  <!-- 6. 费曼讲解框（引导链末尾自动出现） -->
+  <div class=”feynman-box” id=”exN-feynman”>…</div>
+</div>
+```
+
+> ⚠️ `ex-visual` 必须放在 `ex-result` **后面**，**绝不放在题目上方**。
+
+#### CSS（必须包含）
+
+```css
+.ex-visual { display: none; }
+.ex-visual.show { display: block; animation: fadeUp .4s ease both; }
+```
+
+#### JS 核心函数
+
+```javascript
+function handleEx(id, idx) {
+  const data = exData[id];
+  const opts = document.querySelectorAll('#'+id+'-opts .ex-opt');
+  const res = document.getElementById(id+'-result');
+  if (data.opts[idx].v) {
+    opts.forEach((o,i) => { o.classList.add('dim'); if(data.opts[i].v) o.classList.add('correct'); });
+    res.style.cssText = 'display:block;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);color:#6ee7b7';
+    res.innerHTML = `🎉 答对了！你真棒！<br><button onclick=”showExplanation('${id}')” style=”margin-top:10px;padding:8px 18px;border-radius:10px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.35);color:#6ee7b7;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif”>📖 点击查看解题讲解 →</button>`;
+  } else {
+    opts[idx].classList.add('wrong');
+    res.style.cssText = 'display:block;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);color:#fcd34d';
+    res.innerHTML = `<div style=”margin-bottom:10px”>💡 这个答案不太对哦，没关系！</div>
+      <div style=”display:flex;gap:8px;flex-wrap:wrap”>
+        <button onclick=”retryEx('${id}',${idx})” style=”…”>🔄 再试试</button>
+        <button onclick=”learnEx('${id}')” style=”…”>📖 查看解法</button>
+      </div>`;
+  }
+}
+
+function learnEx(id) {
+  const data = exData[id];
+  document.querySelectorAll('#'+id+'-opts .ex-opt').forEach((o,i) => {
+    o.classList.add('dim'); if(data.opts[i].v) o.classList.add('correct');
+  });
+  const res = document.getElementById(id+'-result');
+  res.style.cssText = 'display:block;background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.2);color:#93c5fd';
+  res.innerHTML = '📖 没关系！正确答案已标出，我们一起来看——';
+  setTimeout(() => showExplanation(id), 400);  // 直接展开，无需再点
+}
+
+function showExplanation(id) {
+  const data = exData[id];
+  const vis = document.getElementById(id+'-visual');
+  if (vis) { vis.classList.add('show'); vis.scrollIntoView({behavior:'smooth', block:'center'}); }
+  setTimeout(() => buildGuide(id, data), vis ? 500 : 0);
+}
+```
 
 #### 袋鼠真题截图处理规则 (Real Exam Question Screenshots)
 
@@ -397,7 +478,6 @@ function revealSteps(id) {
 **真题截图例题的 HTML 结构：**
 
 ```html
-<!-- excard 头部标明年份和考点 -->
 <div class=”excard”>
   <div class=”excard-hdr”>
     <span class=”ex-num”>例题X</span>
@@ -406,17 +486,15 @@ function revealSteps(id) {
   <div class=”excard-body”>
     <div class=”qbox”>
       🦘 <strong>袋鼠数学竞赛真题（20XX年 第N题）</strong><br><br>
-      <!-- 题目截图：全宽展示，圆角 -->
       <img src=”../assets/exam-images/20XX/qNN.png”
            alt=”20XX年第N题”
            style=”width:100%;border-radius:10px;margin:8px 0 4px”>
-      <!-- 必须有提示语，帮助儿童聚焦关键信息 -->
       <small>提示：……（针对该题关键切入点的一句话提示）</small>
     </div>
-    <!-- 以下结构与普通例题相同 -->
     <p style=”font-size:13px;color:var(--muted);margin-bottom:12px”>选择你的答案 ↓</p>
     <div class=”ex-opts” id=”exN-opts”></div>
     <div class=”ex-result” id=”exN-result”></div>
+    <!-- ex-visual 可选，放这里 -->
     <div class=”guide-chain” id=”exN-guide”></div>
     <div class=”feynman-box” id=”exN-feynman”>…</div>
   </div>

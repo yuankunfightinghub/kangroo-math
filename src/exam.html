@@ -592,7 +592,7 @@ function answer(key, chosen) {
     const record = {
       year: q.year,
       qnum: q.qnum,
-      module: getModule(q.qnum, q.pts),
+      module: getModuleLabel(q.mod || 0),
       chosen,           // 0-4
       chosenLetter: ['A','B','C','D','E'][chosen] || '?',
       ans: q.ans,       // correct answer index, null if unknown
@@ -762,17 +762,67 @@ function renderStats() {
       <div class="wrong-list">${wrongItems}</div>
     </div>` : ''}
 
-    <button class="export-btn" onclick="exportLog()">⬇ 导出答题记录 JSON</button>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px">
+      <button class="export-btn" style="margin-top:0" onclick="exportLog()">💾 导出保存到文件</button>
+      <button class="export-btn" style="margin-top:0;background:rgba(59,130,246,0.12);border-color:rgba(59,130,246,0.3);color:#93c5fd" onclick="importLog()">📂 导入本地文件</button>
+    </div>
     <button class="clear-btn" onclick="clearLog()">🗑 清空记录</button>
   `;
 }
 
 function exportLog() {
+  // 固定文件名，方便下次导入时快速找到
   const blob = new Blob([JSON.stringify(answerLog, null, 2)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = `kangroo_exam_log_${Date.now()}.json`; a.click();
+  a.href = url; a.download = 'kangroo_exam_log.json'; a.click();
   URL.revokeObjectURL(url);
+}
+
+function importLog() {
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = '.json,application/json';
+  input.onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      let imported;
+      try { imported = JSON.parse(ev.target.result); } catch {
+        alert('文件格式错误，请选择之前导出的 kangroo_exam_log.json');
+        return;
+      }
+      if (!Array.isArray(imported)) {
+        alert('文件内容不是有效的答题记录数组');
+        return;
+      }
+      // 合并：以 year+qnum+ts 三者联合去重
+      const existingKeys = new Set(answerLog.map(r => `${r.year}-${r.qnum}-${r.ts}`));
+      let added = 0;
+      imported.forEach(r => {
+        const k = `${r.year}-${r.qnum}-${r.ts}`;
+        if (!existingKeys.has(k)) {
+          answerLog.push(r);
+          existingKeys.add(k);
+          added++;
+        }
+      });
+      // 按时间排序保持有序
+      answerLog.sort((a, b) => (a.ts || 0) - (b.ts || 0));
+      // 同步 answered map（以最新一次作答为准）
+      answerLog.forEach(r => { answered[`${r.year}-${r.qnum}`] = r.chosen; });
+      saveLog(answerLog);
+      updateFabBadge();
+      render();
+      renderStats();
+      const msg = added > 0
+        ? `导入成功！合并了 ${added} 条新记录，当前共 ${answerLog.length} 条。`
+        : `文件中的记录已全部存在，无新增（共 ${answerLog.length} 条）。`;
+      alert(msg);
+    };
+    reader.readAsText(file);
+  };
+  input.click();
 }
 
 function clearLog() {
