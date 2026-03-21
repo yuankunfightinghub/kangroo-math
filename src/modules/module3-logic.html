@@ -468,6 +468,55 @@ body {
 @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
 @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
 
+/* ── 例题 Interactive Visual ── */
+.ex-visual {
+  background: rgba(6,182,212,0.04);
+  border: 1px solid rgba(6,182,212,0.15);
+  border-radius: 14px; padding: 14px 16px; margin-bottom: 16px;
+}
+.ex-vis-title {
+  font-size: 13px; font-weight: 700; color: #67e8f9;
+  margin-bottom: 10px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+}
+.ex-vis-btn {
+  padding: 7px 14px; border-radius: 8px; border: 1px solid rgba(6,182,212,0.3);
+  background: rgba(6,182,212,0.1); color: #67e8f9; font-size: 13px;
+  font-weight: 600; cursor: pointer; font-family: 'Noto Sans SC', sans-serif;
+  transition: all .2s; margin-top: 8px;
+}
+.ex-vis-btn:hover { background: rgba(6,182,212,0.2); }
+.ex-vis-btn:disabled { opacity: .4; cursor: default; }
+.ex-vis-btn.amber { border-color: rgba(245,158,11,0.4); background: rgba(245,158,11,0.1); color: #fcd34d; }
+.ex-vis-btn.amber:hover { background: rgba(245,158,11,0.2); }
+.truth2-card {
+  border: 1px solid rgba(255,255,255,0.07); border-radius: 12px;
+  padding: 10px 14px; font-size: 13px; line-height: 1.7; transition: all .3s;
+  background: rgba(255,255,255,0.02);
+}
+.truth2-card.true-hypo  { border-color: rgba(16,185,129,0.5); background: rgba(16,185,129,0.07); }
+.truth2-card.false-hypo { border-color: rgba(239,68,68,0.4); background: rgba(239,68,68,0.06); opacity: .7; }
+.truth2-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 999px; margin-left: 6px; }
+.truth2-badge.t { background: rgba(16,185,129,0.2); color: #6ee7b7; }
+.truth2-badge.f { background: rgba(239,68,68,0.2); color: #fca5a5; }
+.hypo2-btn {
+  padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 600;
+  cursor: pointer; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04);
+  color: var(--muted); font-family: 'Noto Sans SC', sans-serif; transition: all .2s;
+}
+.hypo2-btn.active { border-color: rgba(6,182,212,0.5); background: rgba(6,182,212,0.1); color: #67e8f9; }
+.dog-row {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px; padding: 12px 16px; font-size: 20px; font-weight: 700;
+}
+.dog-eq-badge {
+  font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px;
+  background: rgba(6,182,212,0.12); color: #67e8f9; border: 1px solid rgba(6,182,212,0.25);
+}
+.dog-reveal { animation: fadeUp .4s ease; }
+@keyframes diffPop { 0%{transform:scale(0) translateY(8px);opacity:0} 70%{transform:scale(1.2) translateY(-2px)} 100%{transform:scale(1) translateY(0);opacity:1} }
+.diff-label { animation: diffPop .4s ease both; }
+
 /* ── Responsive ── */
 @media (max-width: 640px) {
   .tab-nav { gap: 4px; padding: 4px; }
@@ -1840,6 +1889,47 @@ function truthHypo(person) {
 }
 
 initQuiz();
+</script>
+
+<script>
+/* ── 学习状态追踪 ── */
+(function(){
+  var IDX = 3;
+  var KEY = "km_status_" + IDX;
+  if (localStorage.getItem(KEY) !== "done") {
+    document.addEventListener("click", function h(){
+      if (!localStorage.getItem(KEY) || localStorage.getItem(KEY) === "open") {
+        localStorage.setItem(KEY, "inprogress");
+      }
+      document.removeEventListener("click", h);
+    }, {once:true});
+  }
+  window.addEventListener("DOMContentLoaded", function(){
+    var qt = document.querySelector(".quiz-title");
+    if (!qt) return;
+    var wrap = document.createElement("div");
+    wrap.style.cssText = "margin-top:20px;text-align:center;";
+    var btn = document.createElement("button");
+    function sync(){
+      var s = localStorage.getItem(KEY) || "open";
+      if(s === "done"){
+        btn.textContent = "↩ 取消完成，重新学习";
+        btn.style.cssText = "padding:10px 28px;border-radius:12px;background:rgba(167,139,250,0.12);color:#a78bfa;font-size:14px;font-weight:700;cursor:pointer;border:1px solid rgba(139,92,246,0.3);";
+      } else {
+        btn.textContent = "🎉 完成啦！标记此模块已完成";
+        btn.style.cssText = "padding:10px 28px;border-radius:12px;background:linear-gradient(135deg,#8b5cf6,#06b6d4);color:#fff;font-size:14px;font-weight:700;cursor:pointer;border:none;box-shadow:0 4px 16px rgba(139,92,246,0.3);";
+      }
+    }
+    btn.addEventListener("click", function(){
+      var cur = localStorage.getItem(KEY) || "open";
+      localStorage.setItem(KEY, cur === "done" ? "open" : "done");
+      sync();
+    });
+    sync();
+    wrap.appendChild(btn);
+    qt.parentElement.appendChild(wrap);
+  });
+})();
 </script>
 </body>
 </html>

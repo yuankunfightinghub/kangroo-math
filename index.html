@@ -236,7 +236,7 @@ body {
 
 /* ── MODULES SECTION ── */
 .modules-section {
-  padding: 80px 24px 120px;
+  padding: 80px 24px 60px;
   max-width: 1100px;
   margin: 0 auto;
 }
@@ -361,7 +361,21 @@ body {
 /* Divider line */
 .card-divider { height: 1px; background: var(--card-border); margin: 20px 0; }
 
-/* ── Progress bar ── */
+/* ── Status badge ── */
+.mod-status {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+.mod-status[data-s="open"]       { background:rgba(16,185,129,0.15); color:#34d399; border-color:rgba(16,185,129,0.3); }
+.mod-status[data-s="inprogress"] { background:rgba(245,158,11,0.12); color:#fcd34d; border-color:rgba(245,158,11,0.25); }
+.mod-status[data-s="done"]       { background:rgba(139,92,246,0.15); color:#a78bfa; border-color:rgba(139,92,246,0.35); }
+
+/* ── Progress section (bottom) ── */
 .progress-section {
   max-width: 1100px;
   margin: 0 auto;
@@ -372,18 +386,45 @@ body {
   border: 1px solid var(--card-border);
   border-radius: 20px;
   padding: 28px 32px;
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  flex-wrap: wrap;
   opacity: 0;
   transform: translateY(20px);
   transition: all 0.6s ease;
 }
 .progress-card.visible { opacity: 1; transform: none; }
-.progress-label { font-size: 14px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+.progress-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.progress-label { font-size: 15px; font-weight: 700; }
+.progress-count { font-size: 13px; font-weight: 700; color: var(--purple-light); }
+.progress-modules {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.pm-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.pm-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.1);
+}
+.pm-dot[data-s="open"]       { background: #34d399; }
+.pm-dot[data-s="inprogress"] { background: #fcd34d; }
+.pm-dot[data-s="done"]       { background: #a78bfa; }
 .ptrack {
-  flex: 1; min-width: 120px;
+  flex: 1;
   height: 6px;
   background: rgba(255,255,255,0.08);
   border-radius: 999px;
@@ -394,10 +435,22 @@ body {
   background: linear-gradient(90deg, var(--purple), var(--cyan));
   border-radius: 999px;
   width: 0%;
-  transition: width 1.2s cubic-bezier(0.23,1,0.32,1) 0.5s;
+  transition: width 1.2s cubic-bezier(0.23,1,0.32,1) 0.3s;
   box-shadow: 0 0 12px rgba(139,92,246,0.5);
 }
-.progress-count { font-size: 14px; font-weight: 700; color: var(--purple-light); white-space: nowrap; }
+.progress-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.progress-legend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+.legend-item { display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted); }
+.legend-dot { width:7px;height:7px;border-radius:50%; }
 
 /* ── Animations ── */
 @keyframes fadeUp {
@@ -411,6 +464,7 @@ body {
   .stat-div { display: none; }
   .module-grid { grid-template-columns: 1fr; }
   .hero-btns { flex-direction: column; align-items: center; }
+  .progress-modules { grid-template-columns: repeat(2, 1fr); }
 }
 </style>
 </head>
@@ -489,14 +543,6 @@ body {
 <!-- ── MODULES ── -->
 <section class="modules-section" id="modules">
 
-  <div class="progress-section" style="padding-bottom:40px">
-    <div class="progress-card" id="progressCard">
-      <span class="progress-label">📈 学习进度</span>
-      <div class="ptrack"><div class="pfill" id="pfill"></div></div>
-      <span class="progress-count" id="pcount">0 / 7 已解锁</span>
-    </div>
-  </div>
-
   <p class="section-label" id="sl">全部课程</p>
   <h2 class="section-title" id="st">选择你的<span class="grad-text">学习模块</span></h2>
   <p class="section-sub" id="ss">从计数到策略，7个模块覆盖袋鼠数学竞赛全部考察方向</p>
@@ -509,7 +555,7 @@ body {
       <div class="card-top">
         <div class="card-icon">🔢</div>
         <div style="display:flex;align-items:center;gap:8px">
-          <span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3)">✓ 已开放</span>
+          <span class="mod-status" data-idx="0"></span>
           <span class="card-num">01</span>
         </div>
       </div>
@@ -527,11 +573,11 @@ body {
 
     <!-- M2 -->
     <a class="module-card" id="mc1" href="src/modules/module2-geometry.html"
-       style="--glow: linear-gradient(135deg,#06b6d4,#3b82f6); --glow-bg: rgba(6,182,212,0.08); text-decoration:none; color:inherit; display:block;">
+       style="--glow: linear-gradient(135deg,#06b6d4,#3b82f6); --glow-bg: rgba(6,182,212,0.08)">
       <div class="card-top">
         <div class="card-icon">🔷</div>
         <div style="display:flex;align-items:center;gap:8px">
-          <span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(6,182,212,0.12);color:#67e8f9;border:1px solid rgba(6,182,212,0.25)">进行中</span>
+          <span class="mod-status" data-idx="1"></span>
           <span class="card-num">02</span>
         </div>
       </div>
@@ -543,7 +589,7 @@ body {
           <span class="tag" style="color:#67e8f9;border-color:rgba(103,232,249,0.2);background:rgba(6,182,212,0.06)">几何</span>
           <span class="tag" style="color:#818cf8;border-color:rgba(129,140,248,0.2);background:rgba(99,102,241,0.06)">对称</span>
         </div>
-        <span style="font-size:12px;color:#67e8f9">→ 开始学习</span>
+        <span class="card-arrow">→</span>
       </div>
     </a>
 
@@ -553,7 +599,7 @@ body {
       <div class="card-top">
         <div class="card-icon">🧩</div>
         <div style="display:flex;align-items:center;gap:8px">
-          <span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3)">✓ 已开放</span>
+          <span class="mod-status" data-idx="2"></span>
           <span class="card-num">03</span>
         </div>
       </div>
@@ -565,17 +611,17 @@ body {
           <span class="tag" style="color:#67e8f9;border-color:rgba(103,232,249,0.2);background:rgba(6,182,212,0.06)">逻辑</span>
           <span class="tag" style="color:#93c5fd;border-color:rgba(147,197,253,0.2);background:rgba(59,130,246,0.06)">规律</span>
         </div>
-        <span style="font-size:13px;color:#67e8f9">→</span>
+        <span class="card-arrow">→</span>
       </div>
     </a>
 
     <!-- M4 -->
     <a class="module-card" id="mc3" href="src/modules/module4-spatial.html"
-       style="--glow: linear-gradient(135deg,#f59e0b,#ef4444); --glow-bg: rgba(245,158,11,0.08); text-decoration:none; color:inherit; display:block;">
+       style="--glow: linear-gradient(135deg,#f59e0b,#ef4444); --glow-bg: rgba(245,158,11,0.08)">
       <div class="card-top">
         <div class="card-icon">🎲</div>
         <div style="display:flex;align-items:center;gap:8px">
-          <span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(100,116,139,0.15);color:#94a3b8;border:1px solid rgba(100,116,139,0.3)">🔒 即将开放</span>
+          <span class="mod-status" data-idx="3"></span>
           <span class="card-num">04</span>
         </div>
       </div>
@@ -587,21 +633,21 @@ body {
           <span class="tag" style="color:#fcd34d;border-color:rgba(252,211,77,0.2);background:rgba(245,158,11,0.06)">3D</span>
           <span class="tag" style="color:#fca5a5;border-color:rgba(252,165,165,0.2);background:rgba(239,68,68,0.06)">立体</span>
         </div>
-        <span style="font-size:12px;color:#fcd34d">→ 开始学习</span>
+        <span class="card-arrow">→</span>
       </div>
     </a>
 
     <!-- M5 -->
     <a class="module-card" id="mc4" href="src/modules/module5-path.html"
-       style="--glow: linear-gradient(135deg,#10b981,#06b6d4); --glow-bg: rgba(16,185,129,0.08); text-decoration:none; color:inherit; display:block;">
+       style="--glow: linear-gradient(135deg,#10b981,#06b6d4); --glow-bg: rgba(16,185,129,0.08)">
       <div class="card-top">
         <div class="card-icon">🗺️</div>
         <div style="display:flex;align-items:center;gap:8px">
-          <span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(245,158,11,0.12);color:#fcd34d;border:1px solid rgba(245,158,11,0.25)">进行中</span>
+          <span class="mod-status" data-idx="4"></span>
           <span class="card-num">05</span>
         </div>
       </div>
-      <div class="card-title" style="color:var(--muted)">路径、迷宫与方向</div>
+      <div class="card-title">路径、迷宫与方向</div>
       <div class="card-sub">最短路径、方向辨别、走迷宫……<br>成为最棒的小小导航家</div>
       <div class="card-divider"></div>
       <div class="card-footer">
@@ -609,7 +655,7 @@ body {
           <span class="tag" style="color:#6ee7b7;border-color:rgba(110,231,183,0.2);background:rgba(16,185,129,0.06)">路径</span>
           <span class="tag" style="color:#67e8f9;border-color:rgba(103,232,249,0.2);background:rgba(6,182,212,0.06)">方向</span>
         </div>
-        <span style="font-size:13px;color:#6ee7b7">→ 开始学习</span>
+        <span class="card-arrow">→</span>
       </div>
     </a>
 
@@ -618,7 +664,10 @@ body {
        style="--glow: linear-gradient(135deg,#f97316,#f59e0b); --glow-bg: rgba(249,115,22,0.08)">
       <div class="card-top">
         <div class="card-icon">📏</div>
-        <span class="card-num">06</span>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="mod-status" data-idx="5"></span>
+          <span class="card-num">06</span>
+        </div>
       </div>
       <div class="card-title">测量与单位</div>
       <div class="card-sub">长度、时间、重量换算……<br>生活中的数学就在身边</div>
@@ -632,7 +681,7 @@ body {
       </div>
     </a>
 
-    <!-- M7 — wide card -->
+    <!-- M7 — wide card, locked -->
     <div class="module-card locked" id="mc6"
        style="--glow: linear-gradient(135deg,#8b5cf6,#ec4899); --glow-bg: rgba(139,92,246,0.08); grid-column: 1 / -1; max-width: 640px; margin: 0 auto; width: 100%">
       <div class="card-top">
@@ -657,6 +706,25 @@ body {
   </div>
 </section>
 
+<!-- ── PROGRESS (底部) ── -->
+<section class="progress-section">
+  <div class="progress-card" id="progressCard">
+    <div class="progress-header">
+      <span class="progress-label">📈 我的学习进度</span>
+      <span class="progress-count" id="pcount"></span>
+    </div>
+    <div class="progress-modules" id="progressModules"></div>
+    <div class="progress-bar-row">
+      <div class="ptrack"><div class="pfill" id="pfill"></div></div>
+    </div>
+    <div class="progress-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#34d399"></div>已开放</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#fcd34d"></div>进行中</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div>已完成</div>
+    </div>
+  </div>
+</section>
+
 <!-- Bottom CTA -->
 <section style="text-align:center;padding:0 24px 120px;position:relative;z-index:1">
   <div style="max-width:600px;margin:0 auto;background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-radius:24px;padding:48px 32px">
@@ -676,12 +744,61 @@ body {
 </div><!-- /page -->
 
 <script>
+// ── Module metadata ──
+const MODULES = [
+  { name: '计数与数感' },
+  { name: '几何与图形' },
+  { name: '逻辑推理与规律' },
+  { name: '空间想象与立体' },
+  { name: '路径、迷宫与方向' },
+  { name: '测量与单位' },
+];
+
+const STATUS_TEXT = { open: '✓ 已开放', inprogress: '进行中', done: '★ 已完成' };
+const ACTIVE_COUNT = 6; // M1-M6 are active
+
+function getStatus(idx) {
+  return localStorage.getItem('km_status_' + idx) || 'open';
+}
+
+function renderStatuses() {
+  document.querySelectorAll('.mod-status[data-idx]').forEach(el => {
+    const idx = parseInt(el.dataset.idx);
+    const s = getStatus(idx);
+    el.dataset.s = s;
+    el.textContent = STATUS_TEXT[s];
+  });
+}
+
+function renderProgress() {
+  let done = 0, inprogress = 0;
+  const moduleItems = document.getElementById('progressModules');
+  moduleItems.innerHTML = '';
+
+  MODULES.forEach((m, i) => {
+    const s = getStatus(i);
+    if (s === 'done') done++;
+    if (s === 'inprogress') inprogress++;
+
+    const item = document.createElement('div');
+    item.className = 'pm-item';
+    item.innerHTML = `<div class="pm-dot" data-s="${s}"></div><span>${m.name}</span>`;
+    moduleItems.appendChild(item);
+  });
+
+  const pct = (done / ACTIVE_COUNT * 100).toFixed(0);
+  document.getElementById('pcount').textContent = `已完成 ${done} / ${ACTIVE_COUNT}  ·  进行中 ${inprogress}`;
+  setTimeout(() => { document.getElementById('pfill').style.width = pct + '%'; }, 400);
+}
+
+renderStatuses();
+renderProgress();
+
 // ── Intersection Observer for scroll animations ──
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
       e.target.classList.add('visible');
-      // Stagger module cards
       if (e.target.classList.contains('module-card')) {
         const idx = parseInt(e.target.id.replace('mc',''));
         e.target.style.transitionDelay = (idx * 0.08) + 's';
@@ -692,13 +809,6 @@ const observer = new IntersectionObserver((entries) => {
 
 ['sl','st','ss','progressCard', ...Array.from({length:7},(_,i)=>'mc'+i)]
   .forEach(id => { const el = document.getElementById(id); if(el) observer.observe(el); });
-
-// ── Progress ──
-const done = parseInt(localStorage.getItem('km_done') || '1');
-const pct = (done / 7 * 100).toFixed(0);
-document.getElementById('pcount').textContent = done + ' / 7 已解锁';
-// trigger fill after card becomes visible
-setTimeout(() => { document.getElementById('pfill').style.width = pct + '%'; }, 800);
 
 // ── Moving spotlight on mouse ──
 document.addEventListener('mousemove', e => {

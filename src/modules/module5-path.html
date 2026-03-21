@@ -1577,5 +1577,46 @@ function goQ(idx) { if (idx<0||idx>=quizData.length) return; renderQ(idx); }
 
 initQuiz();
 </script>
+
+<script>
+/* ── 学习状态追踪 ── */
+(function(){
+  var IDX = 5;
+  var KEY = "km_status_" + IDX;
+  if (localStorage.getItem(KEY) !== "done") {
+    document.addEventListener("click", function h(){
+      if (!localStorage.getItem(KEY) || localStorage.getItem(KEY) === "open") {
+        localStorage.setItem(KEY, "inprogress");
+      }
+      document.removeEventListener("click", h);
+    }, {once:true});
+  }
+  window.addEventListener("DOMContentLoaded", function(){
+    var qt = document.querySelector(".quiz-title");
+    if (!qt) return;
+    var wrap = document.createElement("div");
+    wrap.style.cssText = "margin-top:20px;text-align:center;";
+    var btn = document.createElement("button");
+    function sync(){
+      var s = localStorage.getItem(KEY) || "open";
+      if(s === "done"){
+        btn.textContent = "↩ 取消完成，重新学习";
+        btn.style.cssText = "padding:10px 28px;border-radius:12px;background:rgba(167,139,250,0.12);color:#a78bfa;font-size:14px;font-weight:700;cursor:pointer;border:1px solid rgba(139,92,246,0.3);";
+      } else {
+        btn.textContent = "🎉 完成啦！标记此模块已完成";
+        btn.style.cssText = "padding:10px 28px;border-radius:12px;background:linear-gradient(135deg,#8b5cf6,#06b6d4);color:#fff;font-size:14px;font-weight:700;cursor:pointer;border:none;box-shadow:0 4px 16px rgba(139,92,246,0.3);";
+      }
+    }
+    btn.addEventListener("click", function(){
+      var cur = localStorage.getItem(KEY) || "open";
+      localStorage.setItem(KEY, cur === "done" ? "open" : "done");
+      sync();
+    });
+    sync();
+    wrap.appendChild(btn);
+    qt.parentElement.appendChild(wrap);
+  });
+})();
+</script>
 </body>
 </html>
