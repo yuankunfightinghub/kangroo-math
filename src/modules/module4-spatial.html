@@ -157,7 +157,7 @@ body {
   position: absolute; top: 14px; right: 14px;
   display: inline-flex; align-items: center; gap: 5px;
   padding: 5px 12px; border-radius: 8px; border: none;
-  font-size: 12px; font-weight: 600; cursor: pointer; transition: all .25s;
+  font-size: 15px; font-weight: 600; cursor: pointer; transition: all .25s;
   font-family: 'Noto Sans SC', sans-serif;
 }
 .vbtn:hover { transform: scale(1.06); }
@@ -303,7 +303,7 @@ body {
 .qnbtn-next { background: rgba(245,158,11,0.15); color: #fcd34d; border: 1px solid rgba(245,158,11,0.25); }
 
 /* Inline voice btn */
-.va-btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 8px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .25s; font-family: 'Noto Sans SC', sans-serif; background: rgba(245,158,11,0.12); color: #fcd34d; border: 1px solid rgba(245,158,11,0.25); }
+.va-btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 8px; border: none; font-size: 15px; font-weight: 600; cursor: pointer; transition: all .25s; font-family: 'Noto Sans SC', sans-serif; background: rgba(245,158,11,0.12); color: #fcd34d; border: 1px solid rgba(245,158,11,0.25); }
 .va-btn:hover { background: rgba(245,158,11,0.2); }
 .va-btn.playing { opacity: .75; }
 
@@ -1216,8 +1216,7 @@ function handleEx(id, idx) {
   if (data.opts[idx].v) {
     opts.forEach((o,i) => { o.classList.add('dim'); if(data.opts[i].v) o.classList.add('correct'); });
     res.style.cssText = 'display:block;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);color:#6ee7b7';
-    res.innerHTML = '🎉 答对了！你真棒！一起看看解题思路——';
-    setTimeout(() => buildGuide(id, data), 700);
+    res.innerHTML = `🎉 答对了！你真棒！<br><button onclick="showExplanation('${id}')" style="margin-top:10px;padding:8px 18px;border-radius:10px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.35);color:#6ee7b7;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif">📖 点击查看解题讲解 →</button>`;
   } else {
     opts[idx].classList.add('wrong');
     res.style.cssText = 'display:block;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);color:#fcd34d';
@@ -1240,7 +1239,14 @@ function learnEx(id) {
   const res = document.getElementById(id+'-result');
   res.style.cssText = 'display:block;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);color:#fcd34d';
   res.innerHTML = '📖 没关系！正确答案已标出，我们一起来看——';
-  setTimeout(() => buildGuide(id, data), 700);
+  setTimeout(() => showExplanation(id), 400);
+}
+
+function showExplanation(id) {
+  const data = exData[id];
+  const vis = document.getElementById(id+'-visual');
+  if (vis) { vis.classList.add('show'); vis.scrollIntoView({behavior:'smooth', block:'center'}); }
+  setTimeout(() => buildGuide(id, data), vis ? 500 : 0);
 }
 
 function buildGuide(id, data) {

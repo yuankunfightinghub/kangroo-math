@@ -187,7 +187,7 @@ body {
   position: absolute; top: 14px; right: 14px;
   display: inline-flex; align-items: center; gap: 5px;
   padding: 5px 12px; border-radius: 8px; border: none;
-  font-size: 12px; font-weight: 600; cursor: pointer; transition: all .25s;
+  font-size: 15px; font-weight: 600; cursor: pointer; transition: all .25s;
   font-family: 'Noto Sans SC', sans-serif;
 }
 .vbtn:hover { transform: scale(1.06); }
@@ -456,7 +456,7 @@ body {
 .va-btn {
   display: inline-flex; align-items: center; gap: 5px;
   padding: 5px 12px; border-radius: 8px; border: none;
-  font-size: 12px; font-weight: 600; cursor: pointer; transition: all .25s;
+  font-size: 15px; font-weight: 600; cursor: pointer; transition: all .25s;
   font-family: 'Noto Sans SC', sans-serif;
   background: rgba(96,165,250,0.12); color: #93c5fd;
   border: 1px solid rgba(96,165,250,0.25);
@@ -473,7 +473,9 @@ body {
   background: rgba(6,182,212,0.04);
   border: 1px solid rgba(6,182,212,0.15);
   border-radius: 14px; padding: 14px 16px; margin-bottom: 16px;
+  display: none;
 }
+.ex-visual.show { display: block; animation: fadeUp .4s ease both; }
 .ex-vis-title {
   font-size: 13px; font-weight: 700; color: #67e8f9;
   margin-bottom: 10px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
@@ -1151,6 +1153,7 @@ body {
         <span class="ex-tag">2023年 · 规律数列</span>
       </div>
       <div class="excard-body">
+
         <div class="qbox">
           🔢 观察数列：<strong>2, 5, 10, 17, 26, ___</strong><br>
           <small>（来自袋鼠数学竞赛改编，考察差数规律）</small><br><br>
@@ -1159,6 +1162,16 @@ body {
         <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
         <div class="ex-opts" id="ex1-opts"></div>
         <div class="ex-result" id="ex1-result"></div>
+        <!-- ★ 互动可视化：逐步揭示差数 ★ -->
+        <div class="ex-visual" id="ex1-visual">
+          <div class="ex-vis-title">🔢 点击按钮，逐步揭示相邻差数</div>
+          <svg id="ex1-svg" viewBox="0 0 490 110" width="100%" style="overflow:visible;display:block"></svg>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px">
+            <button class="ex-vis-btn" id="ex1-next-btn" onclick="ex1Next()">👆 揭示下一个差</button>
+            <button class="ex-vis-btn" style="background:rgba(255,255,255,0.05);color:var(--muted);border-color:rgba(255,255,255,0.1)" onclick="ex1Reset()">🔄 重置</button>
+            <span id="ex1-vis-hint" style="font-size:13px;color:var(--muted);flex:1"></span>
+          </div>
+        </div>
         <div class="guide-chain" id="ex1-guide"></div>
         <div class="feynman-box" id="ex1-feynman">
           <div class="feynman-hdr">🧠 费曼讲解 — 差数找规律！</div>
@@ -1179,6 +1192,7 @@ body {
         <span class="ex-tag">2022年 · 逻辑推理</span>
       </div>
       <div class="excard-body">
+
         <div class="qbox">
           🦘 袋鼠数学竞赛真题（2022）：<br><br>
           甲、乙、丙、丁四位同学参加比赛，成绩各不相同。<br>
@@ -1191,6 +1205,18 @@ body {
         <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
         <div class="ex-opts" id="ex2-opts"></div>
         <div class="ex-result" id="ex2-result"></div>
+        <!-- ★ 互动可视化：假设法推演 ★ -->
+        <div class="ex-visual" id="ex2-visual" style="border-color:rgba(139,92,246,0.2);background:rgba(139,92,246,0.04)">
+          <div class="ex-vis-title" style="color:#c4b5fd">🔍 假设法——点击某人，假设他说真话，看结论是否满足"恰好两人说真话"</div>
+          <div id="ex2-statements" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px"></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+            <button class="hypo2-btn" id="hypo2-甲" onclick="ex2Hypo('甲')">假设甲说真话</button>
+            <button class="hypo2-btn" id="hypo2-乙" onclick="ex2Hypo('乙')">假设乙说真话</button>
+            <button class="hypo2-btn" id="hypo2-丙" onclick="ex2Hypo('丙')">假设丙说真话</button>
+            <button class="hypo2-btn" id="hypo2-丁" onclick="ex2Hypo('丁')">假设丁说真话</button>
+          </div>
+          <div id="ex2-vis-result" style="font-size:13px;font-weight:700;display:none;padding:8px 12px;border-radius:10px;margin-top:4px"></div>
+        </div>
         <div class="guide-chain" id="ex2-guide"></div>
         <div class="feynman-box" id="ex2-feynman">
           <div class="feynman-hdr">🧠 费曼讲解 — 假设法破局！</div>
@@ -1211,6 +1237,7 @@ body {
         <span class="ex-tag">2022年 · 符号与数字</span>
       </div>
       <div class="excard-body">
+
         <div class="qbox">
           🦘 <strong>袋鼠数学竞赛真题（2022年 第9题）</strong><br><br>
           <img src="../assets/exam-images/2022/q09.png" alt="2022年第9题" style="width:100%;border-radius:10px;margin:8px 0 4px">
@@ -1219,6 +1246,13 @@ body {
         <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
         <div class="ex-opts" id="ex3-opts"></div>
         <div class="ex-result" id="ex3-result"></div>
+        <!-- ★ 互动可视化：逐一检验选项 ★ -->
+        <div class="ex-visual" id="ex3-visual" style="border-color:rgba(245,158,11,0.2);background:rgba(245,158,11,0.04)">
+          <div class="ex-vis-title" style="color:#fcd34d">🔷 形状→数字规则：位置2和位置3是相同形状，所以那两位数字必须相同！</div>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:10px">点击每个选项，看它能否满足"相同位置=相同数字，不同位置=不同数字"：</p>
+          <div id="ex3-vis-opts" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px"></div>
+          <div id="ex3-vis-detail" style="font-size:13px;line-height:1.8;display:none;border-radius:10px;padding:10px 14px;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.07)"></div>
+        </div>
         <div class="guide-chain" id="ex3-guide"></div>
         <div class="feynman-box" id="ex3-feynman">
           <div class="feynman-hdr">🧠 费曼讲解 — 形状对应数字！</div>
@@ -1239,6 +1273,7 @@ body {
         <span class="ex-tag">2024年 · 符号代数</span>
       </div>
       <div class="excard-body">
+
         <div class="qbox">
           🦘 <strong>袋鼠数学竞赛真题（2024年 第11题）</strong><br><br>
           <img src="../assets/exam-images/2024/q16.png" alt="2024年第11题" style="width:100%;border-radius:10px;margin:8px 0 4px">
@@ -1247,6 +1282,15 @@ body {
         <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
         <div class="ex-opts" id="ex4-opts"></div>
         <div class="ex-result" id="ex4-result"></div>
+        <!-- ★ 互动可视化：代入消元步骤 ★ -->
+        <div class="ex-visual" id="ex4-visual" style="border-color:rgba(236,72,153,0.2);background:rgba(236,72,153,0.04)">
+          <div class="ex-vis-title" style="color:#f9a8d4">⭐ 代入消元法——逐步点击，跟我一起解"图案方程组"</div>
+          <div id="ex4-steps-vis" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px"></div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <button class="ex-vis-btn" id="ex4-vis-btn" onclick="ex4VisNext()" style="border-color:rgba(236,72,153,0.35);background:rgba(236,72,153,0.1);color:#f9a8d4">👆 下一步</button>
+            <span id="ex4-vis-hint" style="font-size:13px;color:var(--muted)"></span>
+          </div>
+        </div>
         <div class="guide-chain" id="ex4-guide"></div>
         <div class="feynman-box" id="ex4-feynman">
           <div class="feynman-hdr">🧠 费曼讲解 — 代入消元！</div>
@@ -1267,6 +1311,7 @@ body {
         <span class="ex-tag">2025年 · 逻辑推理</span>
       </div>
       <div class="excard-body">
+
         <div class="qbox">
           🦘 <strong>袋鼠数学竞赛真题（2025年 第12题）</strong><br><br>
           <img src="../assets/exam-images/2025/q12.png" alt="2025年第12题" style="width:100%;border-radius:10px;margin:8px 0 4px">
@@ -1275,6 +1320,46 @@ body {
         <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
         <div class="ex-opts" id="ex5-opts"></div>
         <div class="ex-result" id="ex5-result"></div>
+        <!-- ★ 互动可视化：差量法两步骤 ★ -->
+        <div class="ex-visual" id="ex5-visual" style="border-color:rgba(16,185,129,0.2);background:rgba(16,185,129,0.04)">
+          <div class="ex-vis-title" style="color:#6ee7b7">⚖️ 差量法——两张图对比，多出的就是"差"！</div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
+            <div class="dog-row">
+              <span style="font-size:22px">🐕</span>
+              <span style="color:var(--muted)">＋</span>
+              <span style="font-size:22px">🐩</span>
+              <span style="color:var(--muted)">＝</span>
+              <span class="dog-eq-badge">14 kg</span>
+              <span style="font-size:11px;color:var(--muted2);margin-left:4px">图1</span>
+            </div>
+            <div class="dog-row">
+              <span style="font-size:22px">🐕</span>
+              <span style="color:var(--muted)">＋</span>
+              <span style="font-size:22px">🐩</span>
+              <span style="color:var(--muted)">＋</span>
+              <span style="font-size:22px">🐩</span>
+              <span style="color:var(--muted)">＝</span>
+              <span class="dog-eq-badge">18 kg</span>
+              <span style="font-size:11px;color:var(--muted2);margin-left:4px">图2</span>
+            </div>
+          </div>
+          <div id="ex5-step1" style="display:none" class="dog-reveal">
+            <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:10px 14px;font-size:14px;font-weight:600;color:#6ee7b7;margin-bottom:8px">
+              图2 − 图1：多了 1只🐩 → 重量多了 18−14 = <strong>4 kg</strong><br>
+              <span style="font-size:13px;font-weight:400;color:var(--muted)">∴ 🐩小狗 = 4 kg ✅</span>
+            </div>
+          </div>
+          <div id="ex5-step2" style="display:none" class="dog-reveal">
+            <div style="background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.2);border-radius:10px;padding:10px 14px;font-size:14px;font-weight:600;color:#67e8f9">
+              代入图1：🐕大狗 = 14 − 4 = <strong>10 kg</strong> 🎉
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+            <button class="ex-vis-btn" id="ex5-btn1" onclick="ex5Step1()" style="border-color:rgba(16,185,129,0.35);background:rgba(16,185,129,0.1);color:#6ee7b7">① 两图作差，求小狗重量</button>
+            <button class="ex-vis-btn" id="ex5-btn2" onclick="ex5Step2()" disabled style="border-color:rgba(6,182,212,0.35);background:rgba(6,182,212,0.1);color:#67e8f9;opacity:.4">② 代入求大狗重量</button>
+            <button class="ex-vis-btn" style="background:rgba(255,255,255,0.05);color:var(--muted);border-color:rgba(255,255,255,0.1)" onclick="ex5Reset()">🔄 重置</button>
+          </div>
+        </div>
         <div class="guide-chain" id="ex5-guide"></div>
         <div class="feynman-box" id="ex5-feynman">
           <div class="feynman-hdr">🧠 费曼讲解 — 差量法！</div>
@@ -1438,15 +1523,14 @@ function handleEx(id, idx) {
   if (data.opts[idx].v) {
     opts.forEach((o,i) => { o.classList.add('dim'); if(data.opts[i].v) o.classList.add('correct'); });
     res.style.cssText = 'display:block;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);color:#6ee7b7';
-    res.innerHTML = '🎉 答对了！你真棒！一起看看解题思路——';
-    setTimeout(() => buildGuide(id, data), 700);
+    res.innerHTML = `🎉 答对了！你真棒！<br><button onclick="showExplanation('${id}')" style="margin-top:10px;padding:8px 18px;border-radius:10px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.35);color:#6ee7b7;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif">📖 点击查看解题讲解 →</button>`;
   } else {
     opts[idx].classList.add('wrong');
     res.style.cssText = 'display:block;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);color:#fcd34d';
     res.innerHTML = `<div style="margin-bottom:10px">💡 这个答案不太对哦，没关系！</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button onclick="retryEx('${id}',${idx})" style="padding:7px 16px;border-radius:8px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);color:#6ee7b7;font-size:13px;font-weight:600;cursor:pointer;font-family:'Noto Sans SC',sans-serif">🔄 再试试</button>
-        <button onclick="learnEx('${id}')" style="padding:7px 16px;border-radius:8px;background:rgba(96,165,250,0.12);border:1px solid rgba(96,165,250,0.25);color:#93c5fd;font-size:13px;font-weight:600;cursor:pointer;font-family:'Noto Sans SC',sans-serif">📖 看解法</button>
+        <button onclick="learnEx('${id}')" style="padding:7px 16px;border-radius:8px;background:rgba(96,165,250,0.12);border:1px solid rgba(96,165,250,0.25);color:#93c5fd;font-size:13px;font-weight:600;cursor:pointer;font-family:'Noto Sans SC',sans-serif">📖 查看解法</button>
       </div>`;
   }
 }
@@ -1462,7 +1546,14 @@ function learnEx(id) {
   const res = document.getElementById(id+'-result');
   res.style.cssText = 'display:block;background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.2);color:#93c5fd';
   res.innerHTML = '📖 没关系！正确答案已标出，我们一起来看——';
-  setTimeout(() => buildGuide(id, data), 700);
+  setTimeout(() => showExplanation(id), 400);
+}
+
+function showExplanation(id) {
+  const data = exData[id];
+  const vis = document.getElementById(id+'-visual');
+  if (vis) { vis.classList.add('show'); vis.scrollIntoView({behavior:'smooth', block:'center'}); }
+  setTimeout(() => buildGuide(id, data), vis ? 500 : 0);
 }
 
 function buildGuide(id, data) {
@@ -1490,6 +1581,216 @@ function buildGuide(id, data) {
 }
 
 initEx('ex1'); initEx('ex2'); initEx('ex3'); initEx('ex4'); initEx('ex5');
+
+/* ═══════════════ S3 可视化交互 ═══════════════ */
+
+/* ── 例题1：数列差数揭示 ── */
+const EX1_NUMS = [2, 5, 10, 17, 26];
+const EX1_DIFFS = [3, 5, 7, 9];
+let ex1DiffIdx = 0;
+
+function ex1DrawSVG(revealedDiffs) {
+  const svg = document.getElementById('ex1-svg');
+  const XS = [35, 105, 175, 245, 315, 420];
+  const CY = 60, R = 28;
+  const COLORS = ['#67e8f9','#a78bfa','#fcd34d','#f472b6','#6ee7b7'];
+  let html = '';
+  // Circles + numbers for known items
+  EX1_NUMS.forEach((n, i) => {
+    html += `<circle cx="${XS[i]}" cy="${CY}" r="${R}" fill="rgba(6,182,212,0.1)" stroke="${COLORS[i%COLORS.length]}" stroke-width="1.5"/>`;
+    html += `<text x="${XS[i]}" y="${CY+5}" text-anchor="middle" font-size="16" font-weight="700" fill="${COLORS[i%COLORS.length]}" font-family="Inter,sans-serif">${n}</text>`;
+  });
+  // Question mark bubble
+  const qx = XS[5], hidden = revealedDiffs < EX1_DIFFS.length;
+  const qColor = hidden ? '#94a3b8' : '#fcd34d';
+  const qFill = hidden ? 'rgba(255,255,255,0.03)' : 'rgba(253,224,71,0.15)';
+  const qText = revealedDiffs < EX1_DIFFS.length ? '?' : '37';
+  html += `<circle cx="${qx}" cy="${CY}" r="${R}" fill="${qFill}" stroke="${qColor}" stroke-width="${hidden?'1':'2'}" stroke-dasharray="${hidden?'4,3':'none'}"/>`;
+  html += `<text x="${qx}" y="${CY+5}" text-anchor="middle" font-size="${hidden?20:16}" font-weight="700" fill="${qColor}" font-family="Inter,sans-serif">${qText}</text>`;
+  // Diff arcs
+  for (let i = 0; i < revealedDiffs && i < EX1_DIFFS.length; i++) {
+    const x1 = XS[i] + R, x2 = XS[i+1] - R;
+    const mx = (x1+x2)/2, my = CY - 28;
+    html += `<path d="M${x1},${CY} Q${mx},${my} ${x2},${CY}" fill="none" stroke="${COLORS[i%COLORS.length]}" stroke-width="1.5" opacity="0.7" class="diff-label"/>`;
+    html += `<text x="${mx}" y="${my-6}" text-anchor="middle" font-size="13" font-weight="700" fill="${COLORS[i%COLORS.length]}" class="diff-label">+${EX1_DIFFS[i]}</text>`;
+  }
+  // Next diff preview arrow (when answer revealed)
+  if (revealedDiffs >= EX1_DIFFS.length) {
+    const i = EX1_DIFFS.length;
+    const x1 = XS[i-1] + R, x2 = XS[i] - R;
+    const mx = (x1+x2)/2, my = CY - 28;
+    html += `<path d="M${x1},${CY} Q${mx},${my} ${x2},${CY}" fill="none" stroke="#fcd34d" stroke-width="2" class="diff-label"/>`;
+    html += `<text x="${mx}" y="${my-6}" text-anchor="middle" font-size="13" font-weight="700" fill="#fcd34d" class="diff-label">+11</text>`;
+  }
+  svg.innerHTML = html;
+}
+
+function ex1Next() {
+  if (ex1DiffIdx < EX1_DIFFS.length) {
+    ex1DiffIdx++;
+    ex1DrawSVG(ex1DiffIdx);
+    const hints = ['差是 3，规律开始了…','差是 3、5，都是奇数！','差是 3、5、7，每次加 2！','差是 3、5、7、9，下一个差是 11 → 26+11=<strong>37</strong>！🎉'];
+    document.getElementById('ex1-vis-hint').innerHTML = hints[ex1DiffIdx-1];
+    if (ex1DiffIdx >= EX1_DIFFS.length) document.getElementById('ex1-next-btn').disabled = true;
+  }
+}
+function ex1Reset() {
+  ex1DiffIdx = 0;
+  ex1DrawSVG(0);
+  document.getElementById('ex1-vis-hint').textContent = '';
+  document.getElementById('ex1-next-btn').disabled = false;
+}
+ex1DrawSVG(0);
+
+/* ── 例题2：真假推理交互 ── */
+// statements[i] = {name, text, trueWhen: fn(first) -> bool}
+const EX2_STMTS = [
+  {name:'甲', text:'我不是第一名', trueFn: f => f !== '甲'},
+  {name:'乙', text:'我不是第一名，也不是最后一名', trueFn: f => f !== '乙' && f !== '甲_last_乙'},
+  {name:'丙', text:'我是第一名', trueFn: f => f === '丙'},
+  {name:'丁', text:'我是最后一名', trueFn: f => f === '丁_last'},
+];
+// Simplified truth evaluation given "person X says true as first assumption"
+// We compute who says true vs false given a hypothesized first place
+function ex2Evaluate(hypo) {
+  // hypo = '甲'|'乙'|'丙'|'丁' (assumed to say true)
+  // Try all possible "first place" assignments, find one consistent with hypo being true
+  const people = ['甲','乙','丙','丁'];
+  // Logic: each person's statement truth depends on who is first
+  // 甲: "我不是第一" → true iff first ≠ 甲
+  // 乙: "我不是第一，也不是最后" → 乙 is true iff 乙 is not first AND 乙 is not last
+  // 丙: "我是第一" → true iff first = 丙
+  // 丁: "我是最后" → depends on ordering
+  // Condition: exactly 2 people speak truth
+  // We try all first-place assignments and all last-place for non-first
+  for (const first of people) {
+    for (const last of people.filter(p => p !== first)) {
+      const truths = {};
+      truths['甲'] = first !== '甲';
+      truths['乙'] = first !== '乙' && last !== '乙';
+      truths['丙'] = first === '丙';
+      truths['丁'] = last === '丁';
+      const trueCount = Object.values(truths).filter(Boolean).length;
+      if (trueCount !== 2) continue;
+      // Check if hypo person is true in this scenario
+      if (!truths[hypo]) continue;
+      return {truths, first, last, trueCount, ok: true};
+    }
+  }
+  return {truths:{'甲':false,'乙':false,'丙':false,'丁':false}, first:'?', last:'?', trueCount:0, ok:false};
+}
+
+function ex2InitStatements() {
+  const container = document.getElementById('ex2-statements');
+  EX2_STMTS.forEach(s => {
+    const d = document.createElement('div');
+    d.className = 'truth2-card'; d.id = 'ex2-card-'+s.name;
+    d.innerHTML = `<strong style="color:var(--text)">${s.name}说：</strong>"${s.text}"`;
+    container.appendChild(d);
+  });
+}
+ex2InitStatements();
+
+function ex2Hypo(name) {
+  document.querySelectorAll('.hypo2-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('hypo2-'+name).classList.add('active');
+  const r = ex2Evaluate(name);
+  EX2_STMTS.forEach(s => {
+    const card = document.getElementById('ex2-card-'+s.name);
+    const t = r.truths[s.name];
+    card.className = 'truth2-card ' + (t ? 'true-hypo' : 'false-hypo');
+    const badge = t ? '<span class="truth2-badge t">真话</span>' : '<span class="truth2-badge f">假话</span>';
+    card.innerHTML = `<strong style="color:${t?'#6ee7b7':'#94a3b8'}">${s.name}说：</strong>"${s.text}" ${badge}`;
+  });
+  const res = document.getElementById('ex2-vis-result');
+  res.style.display = 'block';
+  if (r.ok) {
+    const trueNames = EX2_STMTS.filter(s => r.truths[s.name]).map(s => s.name).join('、');
+    res.style.background = 'rgba(16,185,129,0.1)'; res.style.border = '1px solid rgba(16,185,129,0.3)'; res.style.color = '#6ee7b7';
+    res.innerHTML = `✅ 恰好两人（${trueNames}）说真话，逻辑自洽！第一名是 <strong>${r.first}</strong>！`;
+  } else {
+    res.style.background = 'rgba(239,68,68,0.08)'; res.style.border = '1px solid rgba(239,68,68,0.25)'; res.style.color = '#fca5a5';
+    res.innerHTML = `❌ 假设${name}说真话时，无法得到"恰好两人说真话"的局面，矛盾！换一个试试。`;
+  }
+}
+
+/* ── 例题3：形状→数字选项检验 ── */
+const EX3_CHECKS = [
+  {label:'(A) 34426', digits:'34426', ok:true,  reason:'位置2和3都是4（✅ 相同），4个不同形状对应3,4,2,6（✅ 各不重复）'},
+  {label:'(B) 34526', digits:'34526', ok:false, reason:'位置2是4，位置3是5（❌ 不同，但这两个位置形状相同，应该一样！）'},
+  {label:'(C) 34423', digits:'34423', ok:false, reason:'位置2和3都是4（✅ 相同），但3和5位都是3（❌ 不同形状数字重复）'},
+  {label:'(D) 34424', digits:'34424', ok:false, reason:'位置2和3都是4（✅），但1位的3和5位的4与其他位重复分析→ 4出现3次，不同形状却有重复 ❌'},
+  {label:'(E) 32446', digits:'32446', ok:false, reason:'位置2是2，位置3是4（❌ 不同，但这两个位置形状相同！）'},
+];
+(function initEx3Vis() {
+  const c = document.getElementById('ex3-vis-opts');
+  EX3_CHECKS.forEach((item, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'ex-vis-btn';
+    btn.style.cssText = 'border-color:rgba(245,158,11,0.3);background:rgba(245,158,11,0.08);color:#fcd34d;margin-top:0';
+    btn.textContent = item.label;
+    btn.onclick = () => {
+      document.querySelectorAll('#ex3-vis-opts .ex-vis-btn').forEach(b => {
+        b.style.borderColor = 'rgba(245,158,11,0.3)'; b.style.background = 'rgba(245,158,11,0.08)'; b.style.color = '#fcd34d';
+      });
+      if (item.ok) {
+        btn.style.borderColor = 'rgba(16,185,129,0.5)'; btn.style.background = 'rgba(16,185,129,0.12)'; btn.style.color = '#6ee7b7';
+      } else {
+        btn.style.borderColor = 'rgba(239,68,68,0.4)'; btn.style.background = 'rgba(239,68,68,0.08)'; btn.style.color = '#fca5a5';
+      }
+      const detail = document.getElementById('ex3-vis-detail');
+      detail.style.display = 'block';
+      detail.innerHTML = `<strong>${item.label}：</strong>${item.ok?'✅':'❌'} ${item.reason}`;
+      detail.style.borderColor = item.ok ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.25)';
+    };
+    c.appendChild(btn);
+  });
+})();
+
+/* ── 例题4：代入消元步骤 ── */
+const EX4_STEPS = [
+  {icon:'🔍', color:'#f9a8d4', bg:'rgba(236,72,153,0.08)', border:'rgba(236,72,153,0.25)',
+   text:'<strong>第一步：找最简单的行</strong> — 图中某行只含两种图案，和最容易算！先从那里入手。'},
+  {icon:'🔢', color:'#c4b5fd', bg:'rgba(139,92,246,0.08)', border:'rgba(139,92,246,0.25)',
+   text:'<strong>第二步：确定第一个图案的值</strong> — 设 🌙=5，♦=3（由最简行推出）。'},
+  {icon:'↩️', color:'#67e8f9', bg:'rgba(6,182,212,0.08)', border:'rgba(6,182,212,0.25)',
+   text:'<strong>第三步：代入其他行</strong> — 把已知值代入，行和 = 15，所以 🌙+⭐+♦ = 5+⭐+3 = 15 → ⭐ = 7？继续验证。'},
+  {icon:'✅', color:'#6ee7b7', bg:'rgba(16,185,129,0.08)', border:'rgba(16,185,129,0.25)',
+   text:'<strong>最终：⭐ = 4</strong> — 代入题目所有行/列，每行和均正确 ✅ 答案是 <strong>(C) 4</strong>！'},
+];
+let ex4VisStep = 0;
+function ex4VisNext() {
+  if (ex4VisStep >= EX4_STEPS.length) return;
+  const s = EX4_STEPS[ex4VisStep];
+  const div = document.createElement('div');
+  div.style.cssText = `background:${s.bg};border:1px solid ${s.border};border-radius:10px;padding:10px 14px;font-size:14px;line-height:1.75;color:var(--muted);animation:fadeUp .4s ease`;
+  div.innerHTML = `<span style="margin-right:6px">${s.icon}</span>${s.text}`;
+  document.getElementById('ex4-steps-vis').appendChild(div);
+  ex4VisStep++;
+  if (ex4VisStep >= EX4_STEPS.length) {
+    document.getElementById('ex4-vis-btn').disabled = true;
+    document.getElementById('ex4-vis-hint').textContent = '步骤全部展开！可以自信作答了 🎉';
+  }
+}
+
+/* ── 例题5：差量法步骤 ── */
+function ex5Step1() {
+  document.getElementById('ex5-step1').style.display = 'block';
+  document.getElementById('ex5-btn1').disabled = true;
+  document.getElementById('ex5-btn2').disabled = false;
+  document.getElementById('ex5-btn2').style.opacity = '1';
+}
+function ex5Step2() {
+  document.getElementById('ex5-step2').style.display = 'block';
+  document.getElementById('ex5-btn2').disabled = true;
+}
+function ex5Reset() {
+  document.getElementById('ex5-step1').style.display = 'none';
+  document.getElementById('ex5-step2').style.display = 'none';
+  document.getElementById('ex5-btn1').disabled = false;
+  document.getElementById('ex5-btn2').disabled = true;
+  document.getElementById('ex5-btn2').style.opacity = '0.4';
+}
 
 // ── Quiz ──
 const quizData = [

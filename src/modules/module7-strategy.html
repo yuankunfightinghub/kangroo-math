@@ -137,7 +137,7 @@ body {
   position: absolute; top: 14px; right: 14px;
   display: inline-flex; align-items: center; gap: 5px;
   padding: 5px 12px; border-radius: 8px; border: none;
-  font-size: 12px; font-weight: 600; cursor: pointer; transition: all .25s;
+  font-size: 15px; font-weight: 600; cursor: pointer; transition: all .25s;
   font-family: 'Noto Sans SC', sans-serif;
 }
 .vbtn:hover { transform: scale(1.06); }
@@ -205,7 +205,7 @@ body {
 .va-btn {
   display: inline-flex; align-items: center; gap: 5px;
   padding: 5px 12px; border-radius: 8px; border: none;
-  font-size: 12px; font-weight: 600; cursor: pointer; transition: all .25s;
+  font-size: 15px; font-weight: 600; cursor: pointer; transition: all .25s;
   background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.25); color: #a78bfa;
   font-family: 'Noto Sans SC', sans-serif;
 }
@@ -1173,9 +1173,8 @@ function handleChoice(exId, isCorrect, btn) {
   btn.classList.add(isCorrect ? 'correct' : 'wrong');
   const fb = document.getElementById(exId+'-fb');
   if (isCorrect) {
-    fb.innerHTML = '🎉 <span style="color:#6ee7b7">回答正确！</span>';
+    fb.innerHTML = '🎉 <span style="color:#6ee7b7">回答正确！</span><br><button onclick="document.getElementById(\''+exId+'-guide\').style.display=\'block\'" style="margin-top:10px;padding:8px 18px;border-radius:10px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.35);color:#6ee7b7;font-size:13px;font-weight:700;cursor:pointer;font-family:\'Noto Sans SC\',sans-serif">📖 点击查看解题讲解 →</button>';
     document.getElementById(exId+'-retry').style.display='flex';
-    document.getElementById(exId+'-guide').style.display='block';
   } else {
     fb.innerHTML = '❌ <span style="color:#fca5a5">不对哦，再想想？</span>';
     document.getElementById(exId+'-retry').style.display='flex';
