@@ -432,7 +432,7 @@ body {
 
       <!-- ── 概念1：方向与罗盘 ── SVG 8方向罗盘 + 小地图 -->
       <div class="cbox" style="--accent:#6ee7b7;--accent-bg:rgba(16,185,129,0.06)">
-        <button class="vbtn vbtn-e" onclick="tv(this,'来认识八个方向！中间是你站的位置，周围有东南西北四个主方向，还有东北、东南、西南、西北四个斜方向。点击罗盘上的任意一个方向，看看它叫什么名字！然后在小地图上，点两个格子，看看它们的相对方向！')">🔊 听讲解</button>
+        <button class="vbtn vbtn-e" onclick="tv(this,'来认识八个方向！中间是你站的位置，周围有东南西北四个主方向，还有东北、东南、西南、西北四个斜方向。点击罗盘上的任意一个方向，看看它叫什么名字！然后在小地图上，点两个格子，看看它们的相对方向！','m5_s2_v1')">🔊 听讲解</button>
         <h4>🧭 方向辨认 — 点击罗盘探索八方</h4>
 
         <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;margin-top:10px">
@@ -453,7 +453,7 @@ body {
 
       <!-- ── 概念2：最短路径 ── Canvas 网格路径计数 -->
       <div class="cbox" style="--accent:#67e8f9;--accent-bg:rgba(6,182,212,0.06)">
-        <button class="vbtn vbtn-c" onclick="tv(this,'最短路径就是从起点到终点，每次只能向右或向下走，总步数最少的路线！步数 = 向右走的格数 + 向下走的格数。路径数的计算用加法规则：到达某个格子的路径数 = 上面格子的路径数 + 左边格子的路径数！')">🔊 听讲解</button>
+        <button class="vbtn vbtn-c" onclick="tv(this,'最短路径就是从起点到终点，每次只能向右或向下走，总步数最少的路线！步数等于向右走的格数加向下走的格数。路径数的计算用加法规则：到达某个格子的路径数等于上面格子的路径数加左边格子的路径数！','m5_s2_v2')">🔊 听讲解</button>
         <h4>🛤️ 最短路径 — 点格子看路径数</h4>
         <p style="font-size:13px;color:var(--muted);margin:6px 0 12px">从 <strong style="color:#67e8f9">🟢 起点</strong> 只能向右或向下走，到达每个格子的路径数 = 上方路径数 + 左方路径数。点击任意格子设为终点！</p>
 
@@ -472,7 +472,7 @@ body {
 
       <!-- ── 概念3：迷宫探索 ── SVG迷宫 + 方向按钮 -->
       <div class="cbox" style="--accent:#a78bfa;--accent-bg:rgba(139,92,246,0.06)">
-        <button class="vbtn vbtn-v" onclick="tv(this,'走迷宫！用方向按钮控制小人移动，找到通往出口的路！碰到墙壁不能通过。遇到岔路口，就用排除法：先试一条路，碰壁了退回来，再试另一条！尽量用最少的步数走出去，步数越少星越多！')">🔊 听讲解</button>
+        <button class="vbtn vbtn-v" onclick="tv(this,'走迷宫！用方向按钮控制小人移动，找到通往出口的路！碰到墙壁不能通过。遇到岔路口，就用排除法：先试一条路，碰壁了退回来，再试另一条！尽量用最少的步数走出去，步数越少星越多！','m5_s2_v3')">🔊 听讲解</button>
         <h4>🌀 迷宫探索 — 方向按钮控制小人</h4>
 
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 12px">
@@ -640,7 +640,7 @@ body {
               </div>
               <div class="step-label">③ 右下角即答案：<strong>6 条</strong>最短路径 ✅</div>
             </div>
-            <button class="va-btn" style="flex-basis:100%;margin-top:4px" onclick="event.stopPropagation();tv(this,'加法规则：第一行第一列全填1，其余每格等于上面格子加左边格子。一个3乘3节点的格子，右下角答案是6。这是最短路径数的快速算法！')">🔊 听讲解</button>
+            <button class="va-btn" style="flex-basis:100%;margin-top:4px" onclick="event.stopPropagation();tv(this,'加法规则：第一行第一列全填1，其余每格等于上面格子加左边格子。一个3乘3节点的格子，右下角答案是6。这是最短路径数的快速算法！','m5_s2_ms1')">🔊 听讲解</button>
           </div>
         </div>
       </div>
@@ -735,7 +735,7 @@ body {
               </div>
               <div class="step-label">③ 右手 = <strong>西</strong>！口诀：<strong>面南背北，左东右西</strong></div>
             </div>
-            <button class="va-btn" style="flex-basis:100%;margin-top:4px" onclick="event.stopPropagation();tv(this,'方向口诀：面北背南，左西右东。面南背北，左东右西。面东背西，左北右南。面西背东，左南右北！小明面朝南，右手边是西！')">🔊 听讲解</button>
+            <button class="va-btn" style="flex-basis:100%;margin-top:4px" onclick="event.stopPropagation();tv(this,'方向口诀：面北背南，左西右东。面南背北，左东右西。面东背西，左北右南。面西背东，左南右北！小明面朝南，右手边是西！','m5_s2_ms2')">🔊 听讲解</button>
           </div>
         </div>
       </div>
@@ -857,7 +857,7 @@ body {
               </div>
               <div class="step-label">③ 贴右墙走，路径自然延伸到<strong>出口 ✅</strong></div>
             </div>
-            <button class="va-btn" style="flex-basis:100%;margin-top:4px" onclick="event.stopPropagation();tv(this,'右手法则：进迷宫后，右手始终贴着右边的墙。遇到岔路，优先右转，不行直走，再不行左转，全堵就掉头。对于没有环形路段的迷宫，右手法则一定能走出去！')">🔊 听讲解</button>
+            <button class="va-btn" style="flex-basis:100%;margin-top:4px" onclick="event.stopPropagation();tv(this,'右手法则：进迷宫后，右手始终贴着右边的墙。遇到岔路，优先右转，不行直走，再不行左转，全堵就掉头。对于没有环形路段的迷宫，右手法则一定能走出去！','m5_s2_ms3')">🔊 听讲解</button>
           </div>
         </div>
       </div>
@@ -890,15 +890,15 @@ body {
       <div class="guide-chain" id="gc1" style="display:none">
         <div class="guide-item active">
           <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">题目要求不经过哪种格子？先找出图中的彩色格子在哪里。</span><span class="gq-arrow">▼</span></div>
-          <div class="guide-a">要<strong>绕开所有彩色方块</strong>，只能踩白色格子。先把彩色格子的位置标出来，再检查每条路线！<br><button class="va-btn" onclick="tv(this,'题目说不能经过彩色方块，只能走白色格子。先找出图里所有彩色格子的位置，然后逐条检查路线。')">🔊</button></div>
+          <div class="guide-a">要<strong>绕开所有彩色方块</strong>，只能踩白色格子。先把彩色格子的位置标出来，再检查每条路线！<br><button class="va-btn" onclick="tv(this,'题目说不能经过彩色方块，只能走白色格子。先找出图里所有彩色格子的位置，然后逐条检查路线。','m5_q1_g1')">🔊</button></div>
         </div>
         <div class="guide-item locked">
           <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">逐一排查（B）~（E）：它们有没有经过彩色格子？</span><span class="gq-arrow">▼</span></div>
-          <div class="guide-a">（B）（C）（D）（E）的路线都会踩到至少一个彩色格子 ❌<br>只有<strong>（A）</strong>的路线全程走白色格子！<br><button class="va-btn" onclick="tv(this,'逐条排查：B、C、D、E都会经过某个彩色方块，所以都不对。只有A能全程避开彩色格子！')">🔊</button></div>
+          <div class="guide-a">（B）（C）（D）（E）的路线都会踩到至少一个彩色格子 ❌<br>只有<strong>（A）</strong>的路线全程走白色格子！<br><button class="va-btn" onclick="tv(this,'逐条排查：B、C、D、E都会经过某个彩色方块，所以都不对。只有A能全程避开彩色格子！','m5_q1_g2')">🔊</button></div>
         </div>
         <div class="guide-item locked">
           <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">验证（A）：每一步是否都踩在白色格子上？</span><span class="gq-arrow">▼</span></div>
-          <div class="guide-a">沿（A）路线一步步走，全程白色格子 ✅ 成功到达终点！答案是 <strong>（A）</strong>！<br><button class="va-btn" onclick="tv(this,'验证A路线，一步一步走，全部都是白色格子，没有踩到任何彩色方块，成功到达终点！答案是A！')">🔊</button></div>
+          <div class="guide-a">沿（A）路线一步步走，全程白色格子 ✅ 成功到达终点！答案是 <strong>（A）</strong>！<br><button class="va-btn" onclick="tv(this,'验证A路线，一步一步走，全部都是白色格子，没有踩到任何彩色方块，成功到达终点！答案是A！','m5_q1_g3')">🔊</button></div>
         </div>
       </div>
       <div class="feynman-box" id="fn1" style="display:none">
@@ -906,7 +906,7 @@ body {
         <div class="fn-step"><div class="fn-num">1</div><div><strong>找障碍</strong>：把所有"不能走"的格子标出来，在脑子里形成障碍地图</div></div>
         <div class="fn-step"><div class="fn-num">2</div><div><strong>逐条排除</strong>：每条路线只要有一步踩到障碍就淘汰，缩小范围</div></div>
         <div class="fn-step"><div class="fn-num">3</div><div>剩下唯一能走通的路线就是答案。遇到迷宫题<strong>先排除再验证</strong>，又快又准 🎉</div></div>
-        <button class="va-btn" onclick="tv(this,'费曼讲解！迷宫路径用排除法：先标出障碍格，再逐条排查路线，有一步踩到障碍就淘汰，最后剩下的就是答案A！')">🔊 听讲解</button>
+        <button class="va-btn" onclick="tv(this,'费曼讲解！迷宫路径用排除法：先标出障碍格，再逐条排查路线，有一步踩到障碍就淘汰，最后剩下的就是答案A！','m5_s3_ex1')">🔊 听讲解</button>
       </div>
     </div>
 
@@ -932,15 +932,15 @@ body {
       <div class="guide-chain" id="gc2" style="display:none">
         <div class="guide-item active">
           <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">图中数字最大的房间是哪个？一定要经过它吗？</span><span class="gq-arrow">▼</span></div>
-          <div class="guide-a">图中最大数字是 <strong>8</strong>。要让总和最大，就要尽量经过大数字的房间。先找到 8 的位置，确认它在从入口到出口的可行路线上！<br><button class="va-btn" onclick="tv(this,'找图中最大的数字8，要让总和最大就要经过8。先确认包含8的房间在不在可走的路线上。')">🔊</button></div>
+          <div class="guide-a">图中最大数字是 <strong>8</strong>。要让总和最大，就要尽量经过大数字的房间。先找到 8 的位置，确认它在从入口到出口的可行路线上！<br><button class="va-btn" onclick="tv(this,'找图中最大的数字8，要让总和最大就要经过8。先确认包含8的房间在不在可走的路线上。','m5_q2_g1')">🔊</button></div>
         </div>
         <div class="guide-item locked">
           <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">尝试不同路线，把沿途数字加起来，哪条最大？</span><span class="gq-arrow">▼</span></div>
-          <div class="guide-a">试几条路线，把每条路线经过的房间数字全部加起来：<br>最优路线：经过数字最大的几个房间，总和达到 <strong>34</strong>！<br><button class="va-btn" onclick="tv(this,'尝试不同路线，把经过的房间数字一个个加起来。走最优路线，把几个大数字房间都经过，总和等于34！')">🔊</button></div>
+          <div class="guide-a">试几条路线，把每条路线经过的房间数字全部加起来：<br>最优路线：经过数字最大的几个房间，总和达到 <strong>34</strong>！<br><button class="va-btn" onclick="tv(this,'尝试不同路线，把经过的房间数字一个个加起来。走最优路线，把几个大数字房间都经过，总和等于34！','m5_q2_g2')">🔊</button></div>
         </div>
         <div class="guide-item locked">
           <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">能达到 36 吗？验证一下最大可能。</span><span class="gq-arrow">▼</span></div>
-          <div class="guide-a">尝试所有可能路线后，最大总和只能到 <strong>34</strong>，无法达到 36 ✅<br>答案是 <strong>（D）34</strong>！<br><button class="va-btn" onclick="tv(this,'验证所有路线，最大总和是34，不可能达到36，所以答案是D，等于34！')">🔊</button></div>
+          <div class="guide-a">尝试所有可能路线后，最大总和只能到 <strong>34</strong>，无法达到 36 ✅<br>答案是 <strong>（D）34</strong>！<br><button class="va-btn" onclick="tv(this,'验证所有路线，最大总和是34，不可能达到36，所以答案是D，等于34！','m5_q2_g3')">🔊</button></div>
         </div>
       </div>
       <div class="feynman-box" id="fn2" style="display:none">
@@ -948,7 +948,7 @@ body {
         <div class="fn-step"><div class="fn-num">1</div><div><strong>贪心优先</strong>：优先选择经过数字最大的房间，让总和尽可能大</div></div>
         <div class="fn-step"><div class="fn-num">2</div><div><strong>穷举验证</strong>：路线不多时，把所有可行路线都试一遍，每条加总后比较</div></div>
         <div class="fn-step"><div class="fn-num">3</div><div>最优路线经过的房间数字之和为 <strong>34</strong>，是所有路线中最大的 🎉</div></div>
-        <button class="va-btn" onclick="tv(this,'费曼讲解！最大路径和：优先走大数字房间，再把所有可能路线都试一遍，比较总和。最优路线总和是34，答案是D！')">🔊 听讲解</button>
+        <button class="va-btn" onclick="tv(this,'费曼讲解！最大路径和：优先走大数字房间，再把所有可能路线都试一遍，比较总和。最优路线总和是34，答案是D！','m5_s3_ex2')">🔊 听讲解</button>
       </div>
     </div>
 
@@ -974,15 +974,15 @@ body {
       <div class="guide-chain" id="gc3" style="display:none">
         <div class="guide-item active">
           <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">先找出图中所有和等于 7 的房间，哪些格子能经过？</span><span class="gq-arrow">▼</span></div>
-          <div class="guide-a">和等于7的房间：3+4=7 ✅，1+6=7 ✅，2+5=7 ✅，4+3=7 ✅……<br>把所有满足条件的房间标出来，只能在这些格子里走！<br><button class="va-btn" onclick="tv(this,'先找和等于7的房间：3加4等于7，1加6等于7，2加5等于7……把这些格子都标出来，只能在这些格子里走！')">🔊</button></div>
+          <div class="guide-a">和等于7的房间：3+4=7 ✅，1+6=7 ✅，2+5=7 ✅，4+3=7 ✅……<br>把所有满足条件的房间标出来，只能在这些格子里走！<br><button class="va-btn" onclick="tv(this,'先找和等于7的房间：3加4等于7，1加6等于7，2加5等于7……把这些格子都标出来，只能在这些格子里走！','m5_q3_g1')">🔊</button></div>
         </div>
         <div class="guide-item locked">
           <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">从入口出发，只走和为 7 的格子，能走到哪里？</span><span class="gq-arrow">▼</span></div>
-          <div class="guide-a">按照迷宫路线图，只踩和为 7 的格子走下去，路线唯一确定，最终到达 <strong>（A）</strong> 对应的食物！<br><button class="va-btn" onclick="tv(this,'从入口出发，只走和等于7的格子，按路线图一步步走，最终到达A对应的食物！')">🔊</button></div>
+          <div class="guide-a">按照迷宫路线图，只踩和为 7 的格子走下去，路线唯一确定，最终到达 <strong>（A）</strong> 对应的食物！<br><button class="va-btn" onclick="tv(this,'从入口出发，只走和等于7的格子，按路线图一步步走，最终到达A对应的食物！','m5_q3_g2')">🔊</button></div>
         </div>
         <div class="guide-item locked">
           <div class="guide-q" onclick="toggleGuide(this)"><span class="gq-icon">💭</span><span class="gq-text">走过的每个格子验证：和真的都是 7 吗？</span><span class="gq-arrow">▼</span></div>
-          <div class="guide-a">回头检查走过的所有格子，每格两数之和均为 7 ✅<br>答案是 <strong>（A）</strong>！<br><button class="va-btn" onclick="tv(this,'验证每一步：走过的格子，两个数字加起来都等于7，全部正确！答案是A！')">🔊</button></div>
+          <div class="guide-a">回头检查走过的所有格子，每格两数之和均为 7 ✅<br>答案是 <strong>（A）</strong>！<br><button class="va-btn" onclick="tv(this,'验证每一步：走过的格子，两个数字加起来都等于7，全部正确！答案是A！','m5_q3_g3')">🔊</button></div>
         </div>
       </div>
       <div class="feynman-box" id="fn3" style="display:none">
@@ -990,7 +990,7 @@ body {
         <div class="fn-step"><div class="fn-num">1</div><div><strong>先建地图</strong>：把满足条件（和=7）的格子全部标出来，不满足的格子视为"墙"</div></div>
         <div class="fn-step"><div class="fn-num">2</div><div><strong>按图走路</strong>：从入口出发，只能踩标记过的格子，一步步走到终点</div></div>
         <div class="fn-step"><div class="fn-num">3</div><div>路线确定后终点唯一，到达 <strong>（A）</strong> 对应的食物 🎉</div></div>
-        <button class="va-btn" onclick="tv(this,'费曼讲解！条件迷宫：先找出所有和等于7的格子当作可走路线，其他格子当墙。从入口沿可走格子一步步走，终点就是答案A！')">🔊 听讲解</button>
+        <button class="va-btn" onclick="tv(this,'费曼讲解！条件迷宫：先找出所有和等于7的格子当作可走路线，其他格子当墙。从入口沿可走格子一步步走，终点就是答案A！','m5_s3_ex3')">🔊 听讲解</button>
       </div>
     </div>
   </div>
@@ -1024,25 +1024,41 @@ allTabs.forEach(t => t.addEventListener('click', () => {
   const s = t.dataset.s;
   allTabs.forEach(x => x.classList.toggle('on', x.dataset.s === s));
   allSecs.forEach(x => { x.classList.toggle('on', x.id === s); });
-  if (cBtn) { speechSynthesis.cancel(); cBtn.classList.remove('playing'); cBtn.innerHTML = cBtn.dataset.orig; cBtn = null; }
+  if (cAudio) { cAudio.pause(); cAudio.currentTime = 0; cAudio = null; }
+  if (cBtn) { cBtn.classList.remove('playing'); cBtn.innerHTML = cBtn.dataset.o; cBtn = null; }
 }));
 
-/* ── Voice ── */
-let cBtn = null;
-function tv(btn, text) {
+/* ── 音频播放（edge-tts 预生成 MP3）── */
+let cAudio = null, cBtn = null;
+const AUDIO_BASE = '../../src/audio/';
+
+function tv(btn, fallbackText, audioFile) {
   const isSame = btn === cBtn;
-  if (cBtn) { speechSynthesis.cancel(); cBtn.classList.remove('playing'); cBtn.innerHTML = cBtn.dataset.orig; cBtn = null; }
+  if (cAudio) { cAudio.pause(); cAudio.currentTime = 0; cAudio = null; }
+  if (cBtn) { cBtn.classList.remove('playing'); cBtn.innerHTML = cBtn.dataset.o || '🔊 听讲解'; cBtn = null; }
   if (isSame) return;
-  btn.dataset.orig = btn.innerHTML;
+  btn.dataset.o = btn.innerHTML;
   btn.innerHTML = '⏹';
   btn.classList.add('playing');
   cBtn = btn;
+  if (audioFile) {
+    const audio = new Audio(AUDIO_BASE + audioFile + '.mp3');
+    cAudio = audio;
+    audio.play().catch(() => tvFallback(btn, fallbackText));
+    audio.onended = () => { btn.classList.remove('playing'); btn.innerHTML = btn.dataset.o; cBtn = null; cAudio = null; };
+  } else {
+    tvFallback(btn, fallbackText);
+  }
+}
+
+function tvFallback(btn, text) {
+  if (!('speechSynthesis' in window)) return;
   const u = new SpeechSynthesisUtterance(text);
   u.lang = 'zh-CN'; u.rate = 0.82; u.pitch = 1.1;
   const voices = speechSynthesis.getVoices();
   const best = voices.find(v => v.name.includes('Xiaoxiao') || v.name.includes('Tingting')) || voices.find(v => v.lang.startsWith('zh'));
   if (best) u.voice = best;
-  u.onend = () => { btn.classList.remove('playing'); btn.innerHTML = btn.dataset.orig; cBtn = null; };
+  u.onend = () => { btn.classList.remove('playing'); btn.innerHTML = btn.dataset.o; cBtn = null; };
   speechSynthesis.speak(u);
 }
 
