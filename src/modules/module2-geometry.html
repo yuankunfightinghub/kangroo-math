@@ -1358,33 +1358,79 @@ body {
           <div class="ex-opts" id="ex_q14_2022-opts"></div>
           <div class="ex-result" id="ex_q14_2022-result"></div>
 
-          <!-- 互动可视化：镜像盖章演示 -->
+          <!-- 互动可视化：镜像实验室 -->
           <div class="ex-visual" id="ex_q14_2022-visual">
-            <div style="background:rgba(255,255,255,0.03);border:1px solid var(--card-border);border-radius:16px;padding:24px;text-align:center">
-              <div style="font-size:14px;font-weight:700;color:#93c5fd;margin-bottom:15px">✨ 互动：印章镜像实验室</div>
-              
-              <div style="display:flex;justify-content:center;gap:30px;align-items:center;margin-bottom:20px">
+            <div style="background:rgba(255,255,255,0.03);border:1px solid var(--card-border);border-radius:16px;padding:22px;text-align:center;margin-bottom:24px">
+              <div style="font-size:14px;font-weight:700;color:#93c5fd;margin-bottom:18px">✨ 动手实验室：观察镜像翻转</div>
+              <div style="display:flex;justify-content:center;gap:35px;align-items:center;margin-bottom:20px">
                 <div style="text-align:center">
-                  <div id="stamp-handle" style="width:60px;height:70px;background:linear-gradient(to bottom, #ec4899, #be185d);margin:0 auto;border-radius:8px 8px 10px 10px;position:relative;transition:all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)">
-                    <div id="stamp-face" style="position:absolute;bottom:-3px;left:50%;transform:translateX(-50%);width:50px;height:12px;background:#fbcfe8;border:2px solid #be185d;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:#be185d">KANG</div>
+                  <div id="stamp-handle" style="width:60px;height:75px;background:linear-gradient(to bottom, #ec4899, #be185d);margin:0 auto;border-radius:8px 8px 10px 10px;position:relative;transition:all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)">
+                    <div id="stamp-face" style="position:absolute;bottom:-3px;left:50%;transform:translateX(-50%);width:50px;height:12px;background:#fbcfe8;border:2px solid #be185d;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:#be185d">KANG</div>
                   </div>
-                  <div style="margin-top:10px;font-size:11px;color:var(--muted)">印章本身</div>
+                  <div style="margin-top:10px;font-size:11px;color:var(--muted)">印章</div>
                 </div>
-                
-                <div style="font-size:24px;color:var(--muted2)">➔</div>
-                
+                <div style="font-size:24px;color:var(--muted2);opacity:0.5">➔</div>
                 <div style="text-align:center">
-                  <div id="paper-area" style="width:80px;height:80px;background:#fff;border-radius:6px;margin:0 auto;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:inset 0 0 10px rgba(0,0,0,0.1)">
-                    <div id="stamp-print" style="font-size:20px;font-weight:900;color:#be185d;opacity:0;transform:scaleX(-1) scale(0.8);transition:all 0.3s">KANG</div>
+                  <div id="paper-area" style="width:85px;height:85px;background:#fff;border-radius:8px;margin:0 auto;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:inset 0 0 12px rgba(0,0,0,0.1)">
+                    <div id="stamp-print" style="font-size:18px;font-weight:900;color:#be185d;opacity:0;transform:scaleX(-1) scale(0.8);transition:all 0.3s;letter-spacing:1px">KANG</div>
                   </div>
-                  <div style="margin-top:10px;font-size:11px;color:var(--muted)">印出的效果</div>
+                  <div style="margin-top:10px;font-size:11px;color:var(--muted)">印迹</div>
                 </div>
               </div>
+              <div style="display:flex;gap:10px;justify-content:center">
+                <button class="ex-vis-btn" id="stamp-action-btn" onclick="performStamping()">🖨 点击盖章</button>
+                <button class="ex-vis-btn" style="background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1);color:var(--muted)" onclick="resetStamp()">🔄 清除</button>
+              </div>
+            </div>
 
-              <button class="ex-vis-btn" id="stamp-action-btn" onclick="performStamping()">🖨 点击盖章</button>
-              <button class="ex-vis-btn" style="background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1);color:var(--muted);margin-left:8px" onclick="resetStamp()">🔄 清除</button>
-              
-              <div id="stamp-status" style="margin-top:12px;font-size:13px;color:var(--muted2)">镜像就是左右反过来！仔细观察字符的变化。</div>
+            <!-- 原理演示：三个例子 -->
+            <div style="margin-bottom:24px">
+              <div style="font-size:14px;font-weight:700;color:#fcd34d;margin-bottom:15px;text-align:center">🛠 原理演示：为什么会翻转？</div>
+              <div id="ms_q14" class="ms-container">
+                <div class="step">
+                  <div class="step-num">1</div>
+                  <div class="step-vis">
+                    <svg viewBox="0 0 100 60">
+                      <text x="25" y="35" text-anchor="middle" fill="#94a3b8" font-size="16">上</text>
+                      <line x1="50" y1="10" x2="50" y2="50" stroke="#4a5568" stroke-width="1" stroke-dasharray="2,2"/>
+                      <text class="sv pop" x="75" y="35" text-anchor="middle" fill="#ec4899" font-size="16" style="transform: scaleX(-1); transform-origin: 75px 35px;">上</text>
+                      <text x="50" y="55" text-anchor="middle" fill="var(--muted2)" font-size="8">例子 1：汉字镜像</text>
+                    </svg>
+                  </div>
+                  <div class="step-content"><b>汉字翻转</b>：印章就像镜子，汉字的左右顺序会完全反过来。</div>
+                </div>
+                <div class="step">
+                  <div class="step-num">2</div>
+                  <div class="step-vis">
+                    <svg viewBox="0 0 100 60">
+                      <g transform="translate(15,10)">
+                        <rect x="0" y="0" width="2" height="30" fill="#94a3b8"/>
+                        <path d="M2,0 L18,8 L2,16" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="1.5"/>
+                      </g>
+                      <line x1="50" y1="10" x2="50" y2="50" stroke="#4a5568" stroke-width="1" stroke-dasharray="2,2"/>
+                      <g transform="translate(85,10) scale(-1, 1)" class="sv pop">
+                        <rect x="0" y="0" width="2" height="30" fill="#fcd34d"/>
+                        <path d="M2,0 L18,8 L2,16" fill="rgba(252,211,77,0.2)" stroke="#fcd34d" stroke-width="1.5"/>
+                      </g>
+                      <text x="50" y="55" text-anchor="middle" fill="var(--muted2)" font-size="8">例子 2：图形镜像</text>
+                    </svg>
+                  </div>
+                  <div class="step-content"><b>图形转向</b>：原本向右的三角小旗，印出来就指向了左边。</div>
+                </div>
+                <div class="step">
+                  <div class="step-num">3</div>
+                  <div class="step-vis">
+                    <svg viewBox="0 0 100 60">
+                      <text x="25" y="35" text-anchor="middle" font-size="11" fill="#94a3b8">KANG</text>
+                      <line x1="50" y1="10" x2="50" y2="50" stroke="#4a5568" stroke-width="1" stroke-dasharray="2,2"/>
+                      <text class="sv pop" x="75" y="35" text-anchor="middle" fill="#10b981" font-size="11" style="transform: scaleX(-1); transform-origin: 75px 35px;">KANG</text>
+                      <text x="50" y="55" text-anchor="middle" fill="var(--muted2)" font-size="8">例子 3：字符排列</text>
+                    </svg>
+                  </div>
+                  <div class="step-content"><b>逻辑总结</b>：观察字母开口方向和排列顺序，反转后即是答案。</div>
+                </div>
+                <button class="va-btn" onclick="tv(this,'印章魔法就是镜像魔法！看清楚这三个例子：汉字的横笔、图形的指向、字母的开口，在纸上都会变成反方向。记住这个规律，袋鼠印章题就难不住你啦！','m2_q14_logic_fix')">🔊 听原理解析</button>
+              </div>
             </div>
           </div>
 
@@ -1417,32 +1463,103 @@ body {
           <div class="ex-opts" id="ex_q19_2024-opts"></div>
           <div class="ex-result" id="ex_q19_2024-result"></div>
 
-          <!-- 互动可视化：碎片拼接模拟 -->
-          <div class="ex-visual" id="ex_q19_2024-visual">
-            <div style="background:rgba(255,255,255,0.03);border:1px solid var(--card-border);border-radius:16px;padding:24px;text-align:center">
-              <div style="font-size:14px;font-weight:700;color:#6ee7b7;margin-bottom:15px">✨ 互动：碎片填空挑战</div>
+          <!-- 互动可视化：碎片填补实验室 -->
+          <div class="ex-visual" id="ex_q19_2024-visual" style="display:none; margin-bottom:20px">
+            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px;text-align:center">
+              <div style="font-size:14px;font-weight:700;color:#6ee7b7;margin-bottom:15px">✨ 互动：碎片咬合挑战</div>
               
-              <div style="display:flex;justify-content:center;gap:30px;align-items:center;flex-wrap:wrap">
-                <!-- 大方格缺口 -->
-                <div id="big-square" style="width:120px;height:120px;background:#1e293b;border:2px solid #334155;border-radius:8px;position:relative;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr)">
-                   <!-- 模拟缺口 -->
-                   <div style="grid-area:1/1/3/3;background:rgba(16,185,129,0.1);border:1px dashed #10b981;display:flex;align-items:center;justify-content:center;font-size:10px;color:#10b981">缺口</div>
+              <div style="display:flex;justify-content:center;gap:30px;align-items:center;flex-wrap:wrap;margin-bottom:20px">
+                <!-- 大方格 SVG (7x6网格) -->
+                <div style="position:relative;width:140px;height:120px;background:rgba(30,41,59,0.5);border:2px solid #334155;border-radius:8px">
+                   <svg width="140" height="120" viewBox="0 0 140 120">
+                      <!-- 基础网格线 -->
+                      <defs>
+                        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                          <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+                        </pattern>
+                      </defs>
+                      <rect width="140" height="120" fill="url(#grid)" />
+                      
+                      <!-- 这里的缺口模拟 2024-Q19 (坐标 simplified) -->
+                      <path d="M40,20 H80 V40 H100 V80 H80 V100 H40 V60 H60 V40 H40 Z" fill="#030712" stroke="#475569" stroke-width="1" id="puzzle-boundary"/>
+                      
+                      <!-- 碎片占位占位 (正确答案 1 和 3) -->
+                      <g id="fill-p1" style="opacity:0; transition:all 0.5s">
+                         <path d="M40,20 H80 V40 H60 V60 H40 Z" fill="#3b82f6" opacity="0.8"/>
+                      </g>
+                      <g id="fill-p3" style="opacity:0; transition:all 0.5s">
+                         <path d="M60,40 H80 V80 H100 V80 H100 V80 H100 V80 H100 V80 L100,80 V80 H100 V100 H80 V100 H40 V60 H60 Z" fill="#f59e0b" opacity="0.8"/>
+                      </g>
+                      <!-- 修正路径 -->
+                      <g id="fill-p1-v2" style="opacity:0; transition:all 0.5s">
+                         <path d="M40,20 H80 V40 H60 V60 H40 Z" fill="#3b82f6" />
+                      </g>
+                      <g id="fill-p3-v2" style="opacity:0; transition:all 0.5s">
+                         <path d="M60,40 H80 V40 H80 V100 H40 V100 H40 V60 H60 Z" fill="#f59e0b" opacity="0.6"/>
+                      </g>
+                   </svg>
                 </div>
 
-                <div style="display:flex;flex-direction:column;gap:10px">
-                   <div style="font-size:12px;color:var(--muted)">待选碎片:</div>
-                   <div style="display:flex;gap:8px">
-                      <div class="puzzle-piece" onclick="togglePiece(this, 'P1')" style="width:40px;height:40px;background:#3b82f6;border-radius:4px;cursor:pointer;border:2px solid transparent">1</div>
-                      <div class="puzzle-piece" onclick="togglePiece(this, 'P2')" style="width:60px;height:40px;background:#8b5cf6;border-radius:4px;cursor:pointer;border:2px solid transparent">2</div>
-                      <div class="puzzle-piece" onclick="togglePiece(this, 'P3')" style="width:40px;height:60px;background:#f59e0b;border-radius:4px;cursor:pointer;border:2px solid transparent">3</div>
+                <div style="display:flex;flex-direction:column;gap:12px">
+                   <div style="font-size:12px;color:var(--muted)">点击碎片放入缺口:</div>
+                   <div style="grid:repeat(2,1fr)/repeat(2,1fr);display:grid;gap:10px">
+                      <div class="puzzle-piece-v2" onclick="togglePieceV2('P1')" id="p1-btn">1</div>
+                      <div class="puzzle-piece-v2" onclick="togglePieceV2('P2')" id="p2-btn">2</div>
+                      <div class="puzzle-piece-v2" onclick="togglePieceV2('P3')" id="p3-btn">3</div>
+                      <div class="puzzle-piece-v2" onclick="togglePieceV2('P4')" id="p4-btn">4</div>
                    </div>
                 </div>
               </div>
 
-              <div id="puzzle-status" style="margin-top:15px;font-size:13px;color:var(--muted2)">点击两个碎片，看看它们能不能拼成正方形！</div>
-              <button class="ex-vis-btn" style="margin-top:10px" onclick="resetPuzzle()">🔄 重置</button>
+              <div id="puzzle-v2-status" style="margin-top:10px;font-size:13px;color:var(--muted2)">提示：观察缺口面积，碎片 1 和 3 能拼出它吗？</div>
+              <button class="ex-vis-btn" style="margin-top:15px" onclick="resetPuzzleV2()">🔄 重新开始挑战</button>
             </div>
+            <style>
+              .puzzle-piece-v2 { width:45px; height:45px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:800; cursor:pointer; cursor:pointer; transition:all 0.2s; }
+              .puzzle-piece-v2.active { background:#3b82f6; border-color:#93c5fd; color:#fff; transform:scale(1.05); box-shadow:0 0 10px rgba(59,130,246,0.5); }
+              .puzzle-piece-v2.correct-3 { background:#f59e0b; border-color:#fbbf24; }
+            </style>
           </div>
+
+          <!-- 原理演示：分步拆解 -->
+          <div style="margin-bottom:24px" id="ex_q19_steps">
+              <div style="font-size:14px;font-weight:700;color:#6ee7b7;margin-bottom:15px;text-align:center">🛠 拼图解析：为什么选 1 和 3？</div>
+              <div id="ms_q19" class="ms-container">
+                <div class="step">
+                  <div class="step-num">1</div>
+                  <div class="step-vis">
+                    <svg viewBox="0 0 100 60">
+                       <rect x="35" y="10" width="30" height="30" fill="none" stroke="#67e8f9" stroke-width="1.5" stroke-dasharray="3,2"/>
+                       <text x="50" y="30" text-anchor="middle" fill="#67e8f9" font-size="6">锁定缺口</text>
+                    </svg>
+                  </div>
+                  <div class="step-content"><b>第一步</b>：先把视线落在那个大方格缺口上，它是 10 个单位面积的“L”形底座。</div>
+                </div>
+                <div class="step">
+                  <div class="step-num">2</div>
+                  <div class="step-vis">
+                    <svg viewBox="0 0 100 60">
+                       <path d="M35,10 H55 V25 H45 V40 H35 Z" fill="#3b82f6" stroke="#93c5fd" stroke-width="1"/>
+                       <text x="50" y="50" text-anchor="middle" fill="#3b82f6" font-size="7">放入碎片 1</text>
+                    </svg>
+                  </div>
+                  <div class="step-content"><b>第二步</b>：放入碎片 1，它填补了缺口的左上角和上半部分。</div>
+                </div>
+                <div class="step">
+                  <div class="step-num">3</div>
+                  <div class="step-vis">
+                    <svg viewBox="0 0 100 60">
+                       <path d="M35,10 H55 V25 H45 V40 H35 Z" fill="#3b82f6" opacity="0.3"/>
+                       <path d="M45,25 H55 V40 H35 V45 H45 Z" fill="#f59e0b" stroke="#fbbf24" stroke-width="1" transform="translate(10,0)"/>
+                       <text x="50" y="55" text-anchor="middle" fill="#f59e0b" font-size="7">补全碎片 3</text>
+                    </svg>
+                  </div>
+                  <div class="step-content"><b>第三步</b>：最后放入碎片 3，它刚好卡住剩余的下半部。看，严丝合缝！</div>
+                </div>
+                <button class="va-btn" onclick="tv(this,'我们要找的是能拼成正方形的两个零件。看！1号碎片负责上半部，3号碎片负责下半部，它们加在一起，不多不少正好补全了大方格。这就是空间组合的奥秘！','m2_q19_logic')">🔊 听原理解析</button>
+              </div>
+          </div>
+
 
           <div class="guide-chain" id="ex_q19_2024-guide"></div>
           <div class="feynman-box" id="ex_q19_2024-feynman">
@@ -1465,37 +1582,49 @@ body {
         <div class="excard-body">
           <div class="qbox">
             🦘 <strong>袋鼠数学竞赛真题（2022年 第6题）</strong><br><br>
-            <img src="../assets/exam-images/2022/q6.png" alt="2022-Q6" style="width:100%;border-radius:10px;margin:8px 0 4px">
+            <img src="../assets/exam-images/2022/q06.png" alt="2022-Q06" style="width:100%;border-radius:10px;margin:8px 0 4px">
             <small>提示：这是一张残缺的寻宝图，哪一块地图碎片能刚好补全它？</small>
           </div>
           <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
           <div class="ex-opts" id="ex_q6_2022-opts"></div>
           <div class="ex-result" id="ex_q6_2022-result"></div>
 
-          <!-- 互动可视化：地图轮廓扫描仪 -->
-          <div class="ex-visual" id="ex_q6_2022-visual">
-            <div style="background:rgba(255,255,255,0.03);border:1px solid var(--card-border);border-radius:16px;padding:24px;text-align:center">
+          <!-- 互动可视化：寻宝图边缘咬合仪 -->
+          <div class="ex-visual" id="ex_q6_2022-visual" style="display:none; margin-bottom:20px">
+            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px;text-align:center">
               <div style="font-size:14px;font-weight:700;color:#67e8f9;margin-bottom:15px">✨ 互动：寻宝图边缘匹配</div>
               
-              <div style="position:relative;width:200px;height:120px;margin:0 auto 20px;background:rgba(245,158,11,0.05);border:1px dashed rgba(245,158,11,0.2);border-radius:8px;overflow:hidden">
-                 <!-- 模拟地图 -->
-                 <div style="position:absolute;left:10px;top:10px;right:40px;bottom:10px;background:#92400e;border-radius:4px;opacity:0.8">
-                    <!-- 锯齿缺口 -->
-                    <div style="position:absolute;right:-10px;top:20px;width:30px;height:60px;background:var(--bg);clip-path:polygon(0% 0%, 100% 50%, 0% 100%)"></div>
-                 </div>
-                 <div id="map-target" style="position:absolute;right:25px;top:45px;width:15px;height:15px;border:2px solid #67e8f9;border-radius:50%;opacity:0.5"></div>
+              <div style="position:relative;width:240px;height:120px;margin:0 auto 20px;background:rgba(245,158,11,0.05);border:1px dashed rgba(245,158,11,0.2);border-radius:8px">
+                 <!-- 主地图 -->
+                 <svg width="240" height="120">
+                   <!-- 地图主体 -->
+                   <path d="M10,10 H200 V40 L185,55 L200,70 V110 H10 Z" fill="#92400e" opacity="0.8" id="ex_q6_map_body" style="transition:all 0.4s"/>
+                   <!-- 目标缺口参考线 -->
+                   <path d="M200,40 L185,55 L200,70" fill="none" stroke="#67e8f9" stroke-width="2" stroke-dasharray="3,2" id="ex_q6_gap_line"/>
+                   
+                   <!-- 正确碎片动画占位区 -->
+                   <g id="ex_q6_piece_anim" style="opacity:0; transition:all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)">
+                      <path d="M200,40 L215,55 L200,70 Z" fill="#92400e" stroke="#10b981" stroke-width="2"/>
+                   </g>
+                 </svg>
               </div>
 
               <div id="map-pieces" style="display:flex;justify-content:center;gap:12px">
-                 <div class="puzzle-piece" onclick="matchMap('F1', false)" style="width:40px;height:40px;background:#92400e;clip-path:polygon(0% 0%, 100% 100%, 0% 100%)">A</div>
-                 <div class="puzzle-piece" onclick="matchMap('F2', true)" style="width:40px;height:40px;background:#92400e;clip-path:polygon(0% 0%, 100% 50%, 0% 100%)">D</div>
-                 <div class="puzzle-piece" onclick="matchMap('F3', false)" style="width:40px;height:40px;background:#92400e;clip-path:polygon(0% 50%, 100% 0%, 100% 100%)">E</div>
+                 <div class="ex6-piece-btn" onclick="matchMap('A', false)" style="clip-path:polygon(0% 0%, 100% 100%, 0% 100%)">A</div>
+                 <div class="ex6-piece-btn" id="ex6-correct-btn" onclick="matchMap('D', true)" style="clip-path:polygon(50% 0%, 100% 50%, 50% 100%)">D</div>
+                 <div class="ex6-piece-btn" onclick="matchMap('E', false)" style="clip-path:polygon(0% 50%, 100% 0%, 100% 100%)">E</div>
               </div>
 
-              <div id="map-status" style="margin-top:15px;font-size:13px;color:var(--muted2)">点击碎片 D，看看它能不能卡进地图的齿缝！</div>
+              <div id="map-status" style="margin-top:15px;font-size:13px;color:var(--muted2)">点击碎片 D，观察它如何咬合！</div>
               <button class="ex-vis-btn" style="margin-top:10px;background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1);color:var(--muted)" onclick="resetMap()">🔄 复原地图</button>
             </div>
+            <style>
+              .ex6-piece-btn { width:50px; height:50px; background:#92400e; border:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; cursor:pointer; transition:all 0.3s; }
+              .ex6-piece-btn:hover { background:#b45309; transform:scale(1.1); box-shadow:0 10px 20px rgba(0,0,0,0.3); }
+              .ex6-piece-btn.correct { background:#10b981; border-color:#6ee7b7; box-shadow:0 0 15px #10b981; }
+            </style>
           </div>
+
 
           <div class="guide-chain" id="ex_q6_2022-guide"></div>
           <div class="feynman-box" id="ex_q6_2022-feynman">
@@ -1641,11 +1770,11 @@ const exData = {
     ]
   },
   ex_q6_2022: {
-    opts: [{t:'(A) 选项 A',v:false},{t:'(B) 选项 B',v:false},{t:'(C) 选项 C',v:false},{t:'(D) 选项 D',v:true},{t:'(E) 选项 E',v:false}],
+    opts: [{t:'(A) 碎片 A',v:false},{t:'(B) 碎片 B',v:false},{t:'(C) 碎片 C',v:false},{t:'(D) 碎片 D',v:true},{t:'(E) 碎片 E',v:false}],
     guide: [
-      {q:'寻宝图的边缘轮廓有什么关键细节？', a:'注意边缘的凹凸、尖角以及线条的走向。', vc:'盯着缺口的边缘看：哪里有个小山峰？哪里有两个连在一起的小坑？', va:'m2_q6_g1'},
-      {q:'怎么快速排除明显不符的选项？', a:'观察地图缺口的特征点与其对应的碎片边缘。', vc:'如果一张碎片的角是圆的，但地图缺口是尖的，那就赶紧把它Pass掉。', va:'m2_q6_g2'},
-      {q:'哪个碎片能与原图无缝衔接？', a:'对比选项 (D) 的每一条边，发现它与寻宝图缺口完美契合。', vc:'把放大镜对准 (D) 选项。看，每一条细线都接上了，这就是我们要找的那块地图！', va:'m2_q6_g3'}
+      {q:'寻宝图的缺口边缘长什么样？', a:'看，右侧边缘有两个小的凹槽，像一个小锯齿。', vc:'快看地图右边！这一块缺口有两个像牙齿一样的小坑，我们要找的碎片必须得有相应的凸起才能卡进去。', va:'m2_q6_g1'},
+      {q:'怎么用“排除法”筛选碎片？', a:'点击互动区的 A 和 E，你会发现它们的边缘和地图完全对不上。', vc:'我们可以先试试 A 选项，点一下它，你会发现它的形状太尖了。再看 E，方向反了！所以这两个都是干扰项。', va:'m2_q6_g2'},
+      {q:'哪个碎片能实现无缝衔接？', a:'现在点击碎片 D，观察它是如何完美咬合的！', vc:'就是现在！点击那个碎片 D。看，它像不像最后一块拼图，完美补上了所有的缺口？这就是我们要找的答案！', va:'m2_q6_g3'}
     ]
   }
 };
@@ -1695,7 +1824,17 @@ function learnEx(id) {
 function showExplanation(id) {
   const data = exData[id];
   const vis = document.getElementById(id+'-visual');
-  if (vis) { vis.classList.add('show'); vis.scrollIntoView({behavior:'smooth', block:'center'}); }
+  if (vis) { 
+    vis.classList.add('show'); 
+    vis.scrollIntoView({behavior:'smooth', block:'center'}); 
+    // 自动播放配套的动画步骤
+    const msId = (id === 'ex_q14_2022' ? 'ms_q14' : 
+                 id === 'ex_q19_2024' ? 'ms_q19' : 
+                 id === 'ex_q6_2022' ? 'ms_q6' : '');
+    if (msId && document.getElementById(msId)) {
+      setTimeout(() => revealSteps(msId), 400);
+    }
+  }
   setTimeout(() => buildGuide(id, data), vis ? 500 : 0);
 }
 
@@ -2057,13 +2196,9 @@ initEx('ex1'); initEx('ex2'); initEx('ex3'); initEx('ex_q14_2022'); initEx('ex_q
       label: '直角三角形',
       formula: '面积 = 整格5 + 半格4÷2 = 7 格',
       cells: (r,c) => {
-        // 5×5 区域内画直角三角形
         if (r<1||r>5||c<1||c>5) return 'empty';
-        // 底边在row5，直角在(5,1)，斜边从(1,1)到(5,5)
-        const inFull = (r >= c+1); // 严格在斜线左下
-        const onDiag = (r === c+1) ? false : (r === c); // 斜线格为半格
-        if (r > c) return 'filled';      // 完整格
-        if (r === c) return 'filled-half'; // 斜边半格
+        if (r > c) return 'filled';
+        if (r === c) return 'filled-half';
         return 'empty';
       },
       count: 7
@@ -2274,17 +2409,33 @@ function toggleEx1(type) {
 }
 
 /* ── 2. Ex2 字母对称逻辑 ── */
-function testEx2(char, axisCount) {
-  const display = document.getElementById('ex2-axis-display');
+function testEx2(char) {
+  const svgChar = document.getElementById('ex2-svg-char');
   const status = document.getElementById('ex2-status');
-  display.textContent = `字母 ${char} 有 ${axisCount} 条对称轴`;
+  const axes = {
+    v: document.getElementById('ex2-axis-v'),
+    h: document.getElementById('ex2-axis-h'),
+    d1: document.getElementById('ex2-axis-d1'),
+    d2: document.getElementById('ex2-axis-d2')
+  };
   
-  if (axisCount === 1) {
-    status.textContent = `🎯 找到了！字母 ${char} 刚好只有 1 条轴！`;
-    status.style.color = '#6ee7b7';
-  } else {
-    status.textContent = `虽然它是对称的，但不止 1 条哦。`;
-    status.style.color = '';
+  if(!svgChar) return;
+  svgChar.textContent = char;
+  Object.values(axes).forEach(a => { if(a) a.style.opacity = '0' });
+  
+  if (char === 'A') {
+    if(axes.v) axes.v.style.opacity = '1';
+    status.textContent = '🎯 字母 A 刚好只有 1 条垂直对称轴！';
+  } else if (char === 'H') {
+    if(axes.v) axes.v.style.opacity = '1';
+    if(axes.h) axes.h.style.opacity = '1';
+    status.textContent = '字母 H 有 2 条对称轴（横着和竖着）。';
+  } else if (char === 'X') {
+    Object.values(axes).forEach(a => { if(a) a.style.opacity = '1' });
+    status.textContent = '字母 X 有 4 条对称轴，是个“全能”选手！';
+  } else if (char === 'O') {
+    Object.values(axes).forEach(a => { if(a) a.style.opacity = '1' });
+    status.textContent = '圆形字母 O 有无数条轴哦（这里只展示了4条）。';
   }
 }
 
@@ -2352,87 +2503,119 @@ function resetStamp() {
   if(btn) btn.disabled = false;
 }
 
-/* ── 2. Q19: 图形拼接逻辑 ── */
-let selectedPieces = new Set();
-function togglePiece(el, id) {
-  if (selectedPieces.has(id)) {
-    selectedPieces.delete(id);
-    el.style.borderColor = 'transparent';
-    el.style.boxShadow = 'none';
-  } else {
-    if (selectedPieces.size >= 2) return;
-    selectedPieces.add(id);
-    el.style.borderColor = '#10b981';
-    el.style.boxShadow = '0 0 10px rgba(16,185,129,0.3)';
-  }
-  checkPuzzle();
-}
-
-function checkPuzzle() {
-  const status = document.getElementById('puzzle-status');
-  if(!status) return;
+/* ── 2. Q19: 不重叠覆盖逻辑 (SVG 互动版) ── */
+let pSelected = new Set();
+function togglePieceV2(pid) {
+  const status = document.getElementById('puzzle-v2-status');
+  const btn = document.getElementById(pid.toLowerCase() + '-btn');
   
-  if (selectedPieces.size === 2) {
-    // 假设 P1 和 P2 是正确组合
-    if (selectedPieces.has('P1') && selectedPieces.has('P2')) {
-      status.textContent = '🎉 太棒了！这两块碎片刚好能补全缺口！';
-      status.style.color = '#6ee7b7';
-    } else {
-      status.textContent = '🤔 这两块好像拼不拢哦，换一组试试？';
-      status.style.color = '#fca5a5';
-    }
-  } else if (selectedPieces.size === 1) {
-    status.textContent = '还差一块就能填满啦，继续选！';
-    status.style.color = '';
+  if (pid === 'P2' || pid === 'P4') {
+    status.textContent = '❌ 这个碎片形状或旋转方向不对，试试 1 和 3 吧！';
+    status.style.color = '#fca5a5';
+    return;
+  }
+  
+  const fillId = 'fill-' + pid.toLowerCase() + '-v2';
+  const fillEl = document.getElementById(fillId);
+  
+  if (pSelected.has(pid)) {
+    pSelected.delete(pid);
+    btn.classList.remove('active');
+    if(pid === 'P3') btn.classList.remove('correct-3');
+    if(fillEl) fillEl.style.opacity = '0';
   } else {
-    status.textContent = '点击两个碎片，看看它们能不能拼出正方形！';
+    pSelected.add(pid);
+    btn.classList.add('active');
+    if(pid === 'P3') btn.classList.add('correct-3');
+    if(fillEl) fillEl.style.opacity = '1';
+  }
+  
+  if (pSelected.has('P1') && pSelected.has('P3')) {
+    status.textContent = '🎯 太棒了！1号和3号碎片完美补全了大方格。';
+    status.style.color = '#6ee7b7';
+  } else {
+    status.textContent = '点击碎片 1 和 3，看它们如何填满缺口。';
     status.style.color = '';
   }
 }
 
-function resetPuzzle() {
-  selectedPieces.clear();
-  document.querySelectorAll('.puzzle-piece').forEach(p => {
-    p.style.borderColor = 'transparent';
-    p.style.boxShadow = 'none';
+function resetPuzzleV2() {
+  pSelected.clear();
+  document.querySelectorAll('.puzzle-piece-v2').forEach(b => {
+    b.classList.remove('active');
+    b.classList.remove('correct-3');
   });
-  checkPuzzle();
+  const f1 = document.getElementById('fill-p1-v2');
+  const f3 = document.getElementById('fill-p3-v2');
+  if(f1) f1.style.opacity = '0';
+  if(f3) f3.style.opacity = '0';
+  const st = document.getElementById('puzzle-v2-status');
+  if(st) {
+    st.textContent = '点击碎片 1 和 3，看它们如何填满缺口。';
+    st.style.color = '';
+  }
 }
 
 /* ── 3. Q6: 地图匹配逻辑 ── */
 function matchMap(fragmentId, isCorrect) {
   const status = document.getElementById('map-status');
+  const animPiece = document.getElementById('ex_q6_piece_anim');
+  const mapBody = document.getElementById('ex_q6_map_body');
+  const correctBtn = document.getElementById('ex6-correct-btn');
+  
   if(!status) return;
   
   if (isCorrect) {
-    status.textContent = '🎯 完美契合！这个锯齿形状刚好补齐了地图的缺口！';
+    status.textContent = '🎯 完美契合！这块碎片和地图边缘严丝合缝！';
     status.style.color = '#6ee7b7';
-    // 简单的视觉反馈
-    document.getElementById('map-target').style.borderColor = '#10b981';
-    document.getElementById('map-target').style.transform = 'scale(1.2)';
+    
+    // 显示嵌入动画
+    if(animPiece) {
+      animPiece.style.opacity = '1';
+      animPiece.style.transform = 'scale(1)';
+    }
+    if(mapBody) {
+      mapBody.style.fill = '#10b981';
+      mapBody.style.opacity = '1';
+    }
+    if(correctBtn) {
+      correctBtn.classList.add('correct');
+    }
   } else {
-    status.textContent = '❌ 形状不对哦。看，它的尖角方向或者大小和地图对不上。';
+    status.textContent = '❌ 形状不匹配。仔细看它的边缘弧度和方向！';
     status.style.color = '#fca5a5';
-    document.getElementById('map-target').style.borderColor = '#fca5a5';
+    // 抖动效果
+    status.style.animation = 'none';
+    void status.offsetHeight;
+    status.style.animation = 'shake 0.4s ease-in-out';
   }
 }
 
 function resetMap() {
   const status = document.getElementById('map-status');
-  const target = document.getElementById('map-target');
+  const animPiece = document.getElementById('ex_q6_piece_anim');
+  const mapBody = document.getElementById('ex_q6_map_body');
+  const correctBtn = document.getElementById('ex6-correct-btn');
+  
   if(status) {
-    status.textContent = '点击碎片 D，看看它能不能卡进地图的齿缝！';
+    status.textContent = '点击碎片 D，观察它如何咬合！';
     status.style.color = '';
   }
-  if(target) {
-    target.style.borderColor = '#67e8f9';
-    target.style.transform = 'scale(1)';
+  if(animPiece) {
+    animPiece.style.opacity = '0';
+  }
+  if(mapBody) {
+    mapBody.style.fill = '#92400e';
+    mapBody.style.opacity = '0.8';
+  }
+  if(correctBtn) {
+    correctBtn.classList.remove('correct');
   }
 }
 
 // 初始化几何实验室
 resetStamp();
-resetPuzzle();
+resetPuzzleV2();
 resetMap();
 </script>
 

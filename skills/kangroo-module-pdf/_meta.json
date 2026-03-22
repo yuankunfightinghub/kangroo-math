@@ -1,0 +1,9 @@
+{
+  "clawdbot": {
+    "emoji": "📚",
+    "requires": {
+      "bins": ["python3"],
+      "python_packages": ["reportlab", "Pillow", "PyMuPDF"]
+    }
+  }
+}

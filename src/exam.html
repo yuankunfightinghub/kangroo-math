@@ -250,6 +250,19 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Noto San
 .wrong-diff { font-size: 11px; color: var(--muted); }
 .wrong-ans { margin-left: auto; font-size: 12px; color: var(--muted); white-space: nowrap; }
 
+/* module stat blocks */
+.mod-stat-block {
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px; padding: 10px 14px; margin-bottom: 8px;
+}
+.mod-stat-hd {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+}
+.mod-stat-name { font-size: 13px; font-weight: 700; flex: 1; }
+.mod-stat-pct { font-size: 16px; font-weight: 900; }
+.mod-stat-cnt { font-size: 11px; color: var(--muted); width: 40px; text-align: right; }
+.mod-stat-bars .diff-row { margin-bottom: 5px; }
+
 /* qnum heatmap */
 .qnum-grid { display: flex; flex-wrap: wrap; gap: 6px; }
 .qnum-cell {
@@ -655,36 +668,77 @@ function renderStats() {
     return;
   }
 
-  const known = answerLog.filter(r => r.ans !== null); // only graded
+  const known = answerLog.filter(r => r.ans !== null);
   const total = known.length;
   const correct = known.filter(r => r.correct).length;
   const wrong = known.filter(r => !r.correct);
   const pct = total ? Math.round(correct / total * 100) : 0;
 
-  // By module (difficulty)
-  const modules = {};
+  // ── 各难度正确率 ──
+  const diffMap = {};
   known.forEach(r => {
-    if (!modules[r.d]) modules[r.d] = { total:0, correct:0, color:'', pts:r.pts };
-    modules[r.d].total++;
-    if (r.correct) modules[r.d].correct++;
-    modules[r.d].color = r.d === '★' ? '#10b981' : r.d === '★★' ? '#f59e0b' : '#ec4899';
+    if (!diffMap[r.d]) diffMap[r.d] = { total:0, correct:0 };
+    diffMap[r.d].total++;
+    if (r.correct) diffMap[r.d].correct++;
+  });
+  const diffColor = { '★':'#10b981', '★★':'#f59e0b', '★★★':'#ec4899' };
+  const diffRows = ['★','★★','★★★'].filter(d => diffMap[d]).map(d => {
+    const m = diffMap[d]; const p = Math.round(m.correct/m.total*100);
+    return `<div class="diff-row">
+      <span class="diff-label" style="color:${diffColor[d]}">${d}</span>
+      <div class="diff-bar-wrap"><div class="diff-bar-fill" style="width:${p}%;background:${diffColor[d]}"></div></div>
+      <span class="diff-pct">${p}%</span>
+      <span class="diff-count">${m.correct}/${m.total}</span>
+    </div>`;
+  }).join('');
+
+  // ── 按模块分类统计（各难度正确率）──
+  // 需要从 examData 查找每条记录的 mod
+  const qKeyToMod = {};
+  examData.forEach(q => { qKeyToMod[`${q.year}-${q.qnum}`] = q.mod || 0; });
+
+  // modStats[modId][diff] = {total, correct}
+  const modStats = {};
+  known.forEach(r => {
+    const modId = qKeyToMod[`${r.year}-${r.qnum}`] ?? 0;
+    if (!modStats[modId]) modStats[modId] = {};
+    if (!modStats[modId][r.d]) modStats[modId][r.d] = { total:0, correct:0 };
+    modStats[modId][r.d].total++;
+    if (r.correct) modStats[modId][r.d].correct++;
   });
 
-  // By qnum distribution (wrong qnums)
-  const qnumStats = {}; // qnum → {correct, wrong}
+  const modRows = Object.entries(modStats)
+    .sort((a,b) => +a[0] - +b[0])
+    .map(([modId, diffs]) => {
+      const mod = MODULES.find(m => m.id === +modId) || MODULES[0];
+      const totalM = Object.values(diffs).reduce((s,v)=>s+v.total, 0);
+      const correctM = Object.values(diffs).reduce((s,v)=>s+v.correct, 0);
+      const pctM = Math.round(correctM/totalM*100);
+      const diffBars = ['★','★★','★★★'].filter(d => diffs[d]).map(d => {
+        const v = diffs[d]; const p = Math.round(v.correct/v.total*100);
+        return `<div class="diff-row" style="margin-bottom:5px">
+          <span class="diff-label" style="color:${diffColor[d]};font-size:11px">${d}</span>
+          <div class="diff-bar-wrap"><div class="diff-bar-fill" style="width:${p}%;background:${diffColor[d]}"></div></div>
+          <span class="diff-pct">${p}%</span>
+          <span class="diff-count">${v.correct}/${v.total}</span>
+        </div>`;
+      }).join('');
+      return `<div class="mod-stat-block">
+        <div class="mod-stat-hd">
+          <span class="mod-stat-name">${mod.emoji} ${mod.label}</span>
+          <span class="mod-stat-pct" style="color:${pctM>=80?'#34d399':pctM>=60?'#f59e0b':'#f87171'}">${pctM}%</span>
+          <span class="mod-stat-cnt">${correctM}/${totalM}</span>
+        </div>
+        <div class="mod-stat-bars">${diffBars}</div>
+      </div>`;
+    }).join('');
+
+  // ── 题号热力图 ──
+  const qnumStats = {};
   known.forEach(r => {
     if (!qnumStats[r.qnum]) qnumStats[r.qnum] = {correct:0, wrong:0};
     r.correct ? qnumStats[r.qnum].correct++ : qnumStats[r.qnum].wrong++;
   });
-
-  // Wrong qnums sorted by wrong count
-  const wrongQnums = Object.entries(qnumStats)
-    .filter(([,v]) => v.wrong > 0)
-    .sort((a,b) => b[1].wrong - a[1].wrong)
-    .map(([q,v]) => ({ qnum:+q, wrongCount:v.wrong, total:v.correct+v.wrong }));
-
-  // Heatmap: all answered qnums 1-20
-  const allQnums = [...new Set(known.map(r=>r.qnum))].sort((a,b)=>a-b);
   const heatCells = Array.from({length:20},(_,i)=>i+1).map(n => {
     const s = qnumStats[n];
     if (!s) return `<div class="qnum-cell qc-none">${n}</div>`;
@@ -692,34 +746,27 @@ function renderStats() {
     return `<div class="qnum-cell ${cls}" title="第${n}题: 答对${s.correct}次, 答错${s.wrong}次">${n}</div>`;
   }).join('');
 
-  // Module rows
-  const diffOrder = ['★','★★','★★★'];
-  const diffRows = diffOrder.filter(d => modules[d]).map(d => {
-    const m = modules[d];
-    const p = Math.round(m.correct / m.total * 100);
-    const barColor = m.color;
-    return `<div class="diff-row">
-      <span class="diff-label" style="color:${barColor}">${d}</span>
-      <div class="diff-bar-wrap"><div class="diff-bar-fill" style="width:${p}%;background:${barColor}"></div></div>
-      <span class="diff-pct">${p}%</span>
-      <span class="diff-count">${m.correct}/${m.total}</span>
-    </div>`;
-  }).join('');
-
-  // Wrong items (last 20)
-  const OPTS_LETTERS = ['A','B','C','D','E'];
-  const wrongItems = wrong.slice(-20).reverse().map(r =>
-    `<div class="wrong-item">
-      <span class="wrong-year-q">${r.year} · 第${r.qnum}题</span>
-      <span class="wrong-diff" style="color:${r.d==='★'?'#10b981':r.d==='★★'?'#f59e0b':'#ec4899'}">${r.d}</span>
-      <span class="wrong-ans">选了 ${r.chosenLetter} · 答案 ${r.ansLetter}</span>
-    </div>`
-  ).join('');
-
-  // High-error qnum analysis
+  // ── 高频错题 ──
+  const wrongQnums = Object.entries(qnumStats)
+    .filter(([,v]) => v.wrong > 0)
+    .sort((a,b) => b[1].wrong - a[1].wrong)
+    .map(([q,v]) => ({ qnum:+q, wrongCount:v.wrong, total:v.correct+v.wrong }));
   const topWrong = wrongQnums.slice(0,5).map(w =>
     `第<strong>${w.qnum}</strong>题（错${w.wrongCount}/${w.total}次）`
   ).join('、') || '暂无';
+
+  // ── 错题记录 ──
+  const OPTS_LETTERS = ['A','B','C','D','E'];
+  const wrongItems = wrong.slice(-20).reverse().map(r => {
+    const modId = qKeyToMod[`${r.year}-${r.qnum}`] ?? 0;
+    const mod = MODULES.find(m => m.id === modId) || MODULES[0];
+    return `<div class="wrong-item">
+      <span class="wrong-year-q">${r.year} · 第${r.qnum}题</span>
+      <span class="wrong-diff" style="color:${diffColor[r.d]||'var(--muted)'}">${r.d}</span>
+      <span style="font-size:11px;color:var(--muted)">${mod.emoji} ${mod.label}</span>
+      <span class="wrong-ans">选了 ${r.chosenLetter} · 答案 ${r.ansLetter}</span>
+    </div>`;
+  }).join('');
 
   el.innerHTML = `
     <div class="stat-cards">
@@ -743,6 +790,11 @@ function renderStats() {
     </div>
 
     <div class="stats-section">
+      <div class="stats-section-title">模块分类统计</div>
+      ${modRows || '<div style="color:var(--muted);font-size:13px">暂无数据</div>'}
+    </div>
+
+    <div class="stats-section">
       <div class="stats-section-title">题号热力图（绿=多对 · 红=多错）</div>
       <div class="qnum-grid">${heatCells}</div>
     </div>
@@ -758,8 +810,11 @@ function renderStats() {
 
     ${wrong.length ? `
     <div class="stats-section">
-      <div class="stats-section-title">错题记录（最近 ${Math.min(wrong.length,20)} 条）</div>
-      <div class="wrong-list">${wrongItems}</div>
+      <div class="stats-section-title wrong-toggle" onclick="toggleWrongList(this)" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none">
+        <span>错题记录（共 ${wrong.length} 条）</span>
+        <span class="wrong-toggle-arr" style="font-size:12px;transition:transform .25s">▶</span>
+      </div>
+      <div class="wrong-list" id="wrongListBody" style="display:none">${wrongItems}</div>
     </div>` : ''}
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px">
@@ -768,6 +823,14 @@ function renderStats() {
     </div>
     <button class="clear-btn" onclick="clearLog()">🗑 清空记录</button>
   `;
+}
+
+function toggleWrongList(titleEl) {
+  const body = document.getElementById('wrongListBody');
+  const arr = titleEl.querySelector('.wrong-toggle-arr');
+  const isHidden = body.style.display === 'none';
+  body.style.display = isHidden ? 'flex' : 'none';
+  arr.style.transform = isHidden ? 'rotate(90deg)' : '';
 }
 
 function exportLog() {

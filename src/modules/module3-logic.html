@@ -419,6 +419,11 @@ body {
 }
 .quiz-q { font-size: 16px; font-weight: 600; line-height: 1.8; margin-bottom: 14px; color: var(--text); }
 
+.ex-visual, .guide-chain, .feynman-box { display: none; }
+.ex-visual.show { display: block; animation: fadeUp .4s ease both; }
+.guide-chain.show { display: block; animation: fadeUp .5s ease .2s both; }
+.feynman-box.show { display: block; animation: fadeUp .5s ease .4s both; }
+
 .qopts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .qopt {
   padding: 12px 16px; border-radius: 12px;
@@ -1163,14 +1168,54 @@ body {
         <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
         <div class="ex-opts" id="ex1-opts"></div>
         <div class="ex-result" id="ex1-result"></div>
-        <!-- ★ 互动可视化：逐步揭示差数 ★ -->
         <div class="ex-visual" id="ex1-visual">
-          <div class="ex-vis-title">🔢 点击按钮，逐步揭示相邻差数</div>
-          <svg id="ex1-svg" viewBox="0 0 490 110" width="100%" style="overflow:visible;display:block"></svg>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px">
-            <button class="ex-vis-btn" id="ex1-next-btn" onclick="ex1Next()">👆 揭示下一个差</button>
-            <button class="ex-vis-btn" style="background:rgba(255,255,255,0.05);color:var(--muted);border-color:rgba(255,255,255,0.1)" onclick="ex1Reset()">🔄 重置</button>
-            <span id="ex1-vis-hint" style="font-size:13px;color:var(--muted);flex:1"></span>
+          <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;text-align:center;margin-bottom:20px">
+            <div class="ex-vis-title">🔢 交互实验室：逐步揭示数列规律</div>
+            <svg id="ex1-svg" viewBox="0 0 490 110" width="100%" style="overflow:visible;display:block"></svg>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px">
+              <button class="ex-vis-btn" id="ex1-next-btn" onclick="ex1Next()">👆 揭示下一个差</button>
+              <button class="ex-vis-btn" style="background:rgba(255,255,255,0.05);color:var(--muted);border-color:rgba(255,255,255,0.1)" onclick="ex1Reset()">🔄 重置</button>
+              <span id="ex1-vis-hint" style="font-size:13px;color:var(--muted);flex:1"></span>
+            </div>
+          </div>
+
+          <!-- 动画讲解 -->
+          <div style="margin-bottom:24px">
+            <div style="font-size:14px;font-weight:700;color:#fcd34d;margin-bottom:12px">🛠 动画讲解：寻找隐藏的规律</div>
+            <div id="ms_ex1">
+              <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-vis">
+                  <svg viewBox="0 0 100 50">
+                    <text x="50" y="25" text-anchor="middle" fill="#67e8f9" font-size="12" font-weight="900">2, 5, 10, ...</text>
+                    <path d="M10,35 Q30,45 50,35 T90,35" stroke="#67e8f9" stroke-width="1.5" fill="none" class="sv-draw"/>
+                  </svg>
+                </div>
+                <div class="step-content">看相邻两个数，它们之间相差多少？</div>
+              </div>
+              <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-vis">
+                  <svg viewBox="0 0 100 50">
+                    <text x="30" y="20" text-anchor="middle" fill="#94a3b8" font-size="10">+3, +5, +7</text>
+                    <path class="sv pop" d="M10,30 L90,30" stroke="#fcd34d" stroke-width="2" marker-end="url(#arrow)"/>
+                    <text class="sv" x="50" y="45" text-anchor="middle" fill="#fcd34d" font-size="9">差也在变大！</text>
+                  </svg>
+                </div>
+                <div class="step-content">把差连起来看：3, 5, 7... 每次<b>多加 2</b>！</div>
+              </div>
+              <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-vis">
+                  <svg viewBox="0 0 100 50">
+                    <rect x="20" y="15" width="60" height="25" rx="5" fill="rgba(16,185,129,0.1)" stroke="#10b981" stroke-width="1.5"/>
+                    <text class="sv pop" x="50" y="32" text-anchor="middle" fill="#10b981" font-size="12" font-weight="900">26 + 11 = 37</text>
+                  </svg>
+                </div>
+                <div class="step-content">规律是加奇数，下一个加 <b>11</b>，得出 37。</div>
+              </div>
+              <button class="va-btn" onclick="tv(this,'找数列规律，最管用的就是“作差法”。用后面的数减去前面的数，你会发现差本身是个奇数序列：3、5、7、9，每步多加2。那么26后面就要加11，答案就是37啦！','m3_ex1_anim')">🔊 听深入讲解</button>
+            </div>
           </div>
         </div>
         <div class="guide-chain" id="ex1-guide"></div>
@@ -1206,17 +1251,58 @@ body {
         <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
         <div class="ex-opts" id="ex2-opts"></div>
         <div class="ex-result" id="ex2-result"></div>
-        <!-- ★ 互动可视化：假设法推演 ★ -->
         <div class="ex-visual" id="ex2-visual" style="border-color:rgba(139,92,246,0.2);background:rgba(139,92,246,0.04)">
-          <div class="ex-vis-title" style="color:#c4b5fd">🔍 假设法——点击某人，假设他说真话，看结论是否满足"恰好两人说真话"</div>
-          <div id="ex2-statements" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px"></div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
-            <button class="hypo2-btn" id="hypo2-甲" onclick="ex2Hypo('甲')">假设甲说真话</button>
-            <button class="hypo2-btn" id="hypo2-乙" onclick="ex2Hypo('乙')">假设乙说真话</button>
-            <button class="hypo2-btn" id="hypo2-丙" onclick="ex2Hypo('丙')">假设丙说真话</button>
-            <button class="hypo2-btn" id="hypo2-丁" onclick="ex2Hypo('丁')">假设丁说真话</button>
+          <div style="margin-bottom:20px">
+            <div class="ex-vis-title" style="color:#c4b5fd">🔍 交互实验室：假设法推演</div>
+            <div id="ex2-statements" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px"></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+              <button class="hypo2-btn" id="hypo2-甲" onclick="ex2Hypo('甲')">假设甲说真话</button>
+              <button class="hypo2-btn" id="hypo2-乙" onclick="ex2Hypo('乙')">假设乙说真话</button>
+              <button class="hypo2-btn" id="hypo2-丙" onclick="ex2Hypo('丙')">假设丙说真话</button>
+              <button class="hypo2-btn" id="hypo2-丁" onclick="ex2Hypo('丁')">假设丁说真话</button>
+            </div>
+            <div id="ex2-vis-result" style="font-size:13px;font-weight:700;display:none;padding:8px 12px;border-radius:10px;margin-top:4px"></div>
           </div>
-          <div id="ex2-vis-result" style="font-size:13px;font-weight:700;display:none;padding:8px 12px;border-radius:10px;margin-top:4px"></div>
+
+          <!-- 动画讲解 -->
+          <div style="margin-bottom:24px;text-align:left">
+            <div style="font-size:14px;font-weight:700;color:#fcd34d;margin-bottom:12px">🛠 动画讲解：排除不可能，剩下即真相</div>
+            <div id="ms_ex2">
+              <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-vis">
+                  <svg viewBox="0 0 100 50">
+                    <circle cx="30" cy="25" r="10" fill="rgba(139,92,246,0.2)" stroke="#a78bfa" stroke-width="1"/>
+                    <text x="30" y="29" text-anchor="middle" font-size="10">丙</text>
+                    <text x="65" y="29" text-anchor="middle" fill="#6ee7b7" font-size="12" font-weight="900" class="sv pop">#1</text>
+                  </svg>
+                </div>
+                <div class="step-content">假设核心人物<b>丙是第一名</b>（他说了真话）。</div>
+              </div>
+              <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-vis">
+                  <svg viewBox="0 0 100 50">
+                    <text x="50" y="15" text-anchor="middle" fill="#94a3b8" font-size="9">由于丙是第一</text>
+                    <text x="50" y="35" text-anchor="middle" fill="#67e8f9" font-size="10">甲说"我不是第一" ✅</text>
+                    <circle class="sv" cx="85" cy="31" r="5" fill="#10b981"/>
+                  </svg>
+                </div>
+                <div class="step-content">那么<b>甲也说了真话</b>。这时已有两个真话，符合。</div>
+              </div>
+              <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-vis">
+                  <svg viewBox="0 0 100 50">
+                    <rect x="10" y="10" width="80" height="30" rx="5" fill="rgba(0,0,0,0.2)" stroke="#334155"/>
+                    <text x="50" y="30" text-anchor="middle" fill="#10b981" font-size="10" font-weight="900" class="sv pop">逻辑完全吻合！</text>
+                  </svg>
+                </div>
+                <div class="step-content">检查乙丁，必须是假话。逻辑<b>自洽</b>，丙就是冠军！</div>
+              </div>
+              <button class="va-btn" onclick="tv(this,'逻辑推理题要大胆假设。我们试试“丙是第一名”，这时候丙说的是真话。甲说他不是第一名，正好也是真话。两个人说真话，条件完全成立！如果换成其他人做第一，真话人数就对不上啦！','m3_ex2_anim')">🔊 听深入讲解</button>
+            </div>
+          </div>
         </div>
         <div class="guide-chain" id="ex2-guide"></div>
         <div class="feynman-box" id="ex2-feynman">
@@ -1283,13 +1369,55 @@ body {
         <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
         <div class="ex-opts" id="ex4-opts"></div>
         <div class="ex-result" id="ex4-result"></div>
-        <!-- ★ 互动可视化：代入消元步骤 ★ -->
         <div class="ex-visual" id="ex4-visual" style="border-color:rgba(236,72,153,0.2);background:rgba(236,72,153,0.04)">
-          <div class="ex-vis-title" style="color:#f9a8d4">⭐ 代入消元法——逐步点击，跟我一起解"图案方程组"</div>
-          <div id="ex4-steps-vis" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px"></div>
-          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-            <button class="ex-vis-btn" id="ex4-vis-btn" onclick="ex4VisNext()" style="border-color:rgba(236,72,153,0.35);background:rgba(236,72,153,0.1);color:#f9a8d4">👆 下一步</button>
-            <span id="ex4-vis-hint" style="font-size:13px;color:var(--muted)"></span>
+          <div style="margin-bottom:20px">
+            <div class="ex-vis-title" style="color:#f9a8d4">交互实验室：⭐ 代入消元法解“图案方程”</div>
+            <div id="ex4-steps-vis" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px"></div>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+              <button class="ex-vis-btn" id="ex4-vis-btn" onclick="ex4VisNext()" style="border-color:rgba(236,72,153,0.35);background:rgba(236,72,153,0.1);color:#f9a8d4">👆 下一步</button>
+              <span id="ex4-vis-hint" style="font-size:13px;color:var(--muted)"></span>
+            </div>
+          </div>
+
+          <!-- 动画讲解 -->
+          <div style="margin-bottom:24px">
+            <div style="font-size:14px;font-weight:700;color:#fcd34d;margin-bottom:12px">🛠 动画讲解：寻找突破口</div>
+            <div id="ms_ex4">
+              <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-vis">
+                  <svg viewBox="0 0 100 50">
+                    <text x="30" y="25" font-size="12">🍎+🍎</text>
+                    <text x="65" y="25" font-size="12">= 10</text>
+                    <path class="sv-draw" d="M20,35 L45,35" stroke="#ec4899" stroke-width="1.5"/>
+                  </svg>
+                </div>
+                <div class="step-content">找最容易算的一行。比如 10 ÷ 2，得出 <b>🍎 = 5</b>。</div>
+              </div>
+              <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-vis">
+                  <svg viewBox="0 0 100 50">
+                    <text x="25" y="25" font-size="12">🍎+⭐</text>
+                    <text x="60" y="25" font-size="12">= 9</text>
+                    <text class="sv pop" x="25" y="45" text-anchor="middle" fill="#ec4899" font-size="10" font-weight="900">5</text>
+                    <path class="sv-draw" d="M50,30 L70,30" stroke="#fcd34d" stroke-width="1.5"/>
+                  </svg>
+                </div>
+                <div class="step-content">把算出的 5 <b>代入</b>另一行。5 + ⭐ = 9。</div>
+              </div>
+              <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-vis">
+                  <svg viewBox="0 0 100 50">
+                    <circle cx="50" cy="25" r="18" fill="rgba(249,168,212,0.2)" stroke="#f9a8d4" stroke-width="2"/>
+                    <text class="sv pop" x="50" y="31" text-anchor="middle" fill="#f9a8d4" font-size="18" font-weight="900">4</text>
+                  </svg>
+                </div>
+                <div class="step-content">算出 <b>⭐ = 4</b>！其他也代入验证一下吧。</div>
+              </div>
+              <button class="va-btn" onclick="tv(this,'这种题就像侦探破解密码。我们先找最简单的“突破口”，也就是那种两个图案都一样的行或列。比如两个苹果加起来是10，那一个苹果肯定是5！拿到5这个“钥匙”后，代入到星星的算式里，5加星星等于9，星星就是4啦！','m3_ex4_anim')">🔊 听深入讲解</button>
+            </div>
           </div>
         </div>
         <div class="guide-chain" id="ex4-guide"></div>
@@ -1321,44 +1449,85 @@ body {
         <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
         <div class="ex-opts" id="ex5-opts"></div>
         <div class="ex-result" id="ex5-result"></div>
-        <!-- ★ 互动可视化：差量法两步骤 ★ -->
         <div class="ex-visual" id="ex5-visual" style="border-color:rgba(16,185,129,0.2);background:rgba(16,185,129,0.04)">
-          <div class="ex-vis-title" style="color:#6ee7b7">⚖️ 差量法——两张图对比，多出的就是"差"！</div>
-          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
-            <div class="dog-row">
-              <span style="font-size:22px">🐕</span>
-              <span style="color:var(--muted)">＋</span>
-              <span style="font-size:22px">🐩</span>
-              <span style="color:var(--muted)">＝</span>
-              <span class="dog-eq-badge">14 kg</span>
-              <span style="font-size:11px;color:var(--muted2);margin-left:4px">图1</span>
+          <div style="margin-bottom:20px">
+            <div class="ex-vis-title" style="color:#6ee7b7">⚖️ 交互实验室：差量法对比</div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
+              <div class="dog-row">
+                <span style="font-size:22px">🐕</span>
+                <span style="color:var(--muted)">＋</span>
+                <span style="font-size:22px">🐩</span>
+                <span style="color:var(--muted)">＝</span>
+                <span class="dog-eq-badge">14 kg</span>
+                <span style="font-size:11px;color:var(--muted2);margin-left:4px">图1</span>
+              </div>
+              <div class="dog-row">
+                <span style="font-size:22px">🐕</span>
+                <span style="color:var(--muted)">＋</span>
+                <span style="font-size:22px">🐩</span>
+                <span style="color:var(--muted)">＋</span>
+                <span style="font-size:22px">🐩</span>
+                <span style="color:var(--muted)">＝</span>
+                <span class="dog-eq-badge">18 kg</span>
+                <span style="font-size:11px;color:var(--muted2);margin-left:4px">图2</span>
+              </div>
             </div>
-            <div class="dog-row">
-              <span style="font-size:22px">🐕</span>
-              <span style="color:var(--muted)">＋</span>
-              <span style="font-size:22px">🐩</span>
-              <span style="color:var(--muted)">＋</span>
-              <span style="font-size:22px">🐩</span>
-              <span style="color:var(--muted)">＝</span>
-              <span class="dog-eq-badge">18 kg</span>
-              <span style="font-size:11px;color:var(--muted2);margin-left:4px">图2</span>
+            <div id="ex5-step1" style="display:none" class="dog-reveal">
+              <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:10px 14px;font-size:14px;font-weight:600;color:#6ee7b7;margin-bottom:8px">
+                图2 − 图1：多了 1只🐩 → 重量多了 18−14 = <strong>4 kg</strong><br>
+                <span style="font-size:13px;font-weight:400;color:var(--muted)">∴ 🐩小狗 = 4 kg ✅</span>
+              </div>
+            </div>
+            <div id="ex5-step2" style="display:none" class="dog-reveal">
+              <div style="background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.2);border-radius:10px;padding:10px 14px;font-size:14px;font-weight:600;color:#67e8f9">
+                代入图1：🐕大狗 = 14 − 4 = <strong>10 kg</strong> 🎉
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+              <button class="ex-vis-btn" id="ex5-btn1" onclick="ex5Step1()">① 两图作差，求小狗重量</button>
+              <button class="ex-vis-btn" id="ex5-btn2" onclick="ex5Step2()" disabled style="opacity:.4">② 代入求大狗重量</button>
+              <button class="ex-vis-btn" style="background:rgba(255,255,255,0.05);color:var(--muted);border-color:rgba(255,255,255,0.1)" onclick="ex5Reset()">🔄 重置</button>
             </div>
           </div>
-          <div id="ex5-step1" style="display:none" class="dog-reveal">
-            <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:10px 14px;font-size:14px;font-weight:600;color:#6ee7b7;margin-bottom:8px">
-              图2 − 图1：多了 1只🐩 → 重量多了 18−14 = <strong>4 kg</strong><br>
-              <span style="font-size:13px;font-weight:400;color:var(--muted)">∴ 🐩小狗 = 4 kg ✅</span>
+
+          <!-- 动画讲解 -->
+          <div style="margin-bottom:24px">
+            <div style="font-size:14px;font-weight:700;color:#fcd34d;margin-bottom:12px">🛠 动画讲解：看清谁是多出的“差”</div>
+            <div id="ms_ex5">
+              <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-vis">
+                  <svg viewBox="0 0 100 50">
+                    <text x="35" y="25" font-size="20">🐕🐩</text>
+                    <text x="65" y="25" font-size="20" class="sv pop">🐩</text>
+                    <path class="sv-draw" d="M30,45 L70,45" stroke="#fcd34d" stroke-width="1.5"/>
+                  </svg>
+                </div>
+                <div class="step-content">对比两张图，第二张图刚好<b>多出了一只小狗</b>。</div>
+              </div>
+              <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-vis">
+                  <svg viewBox="0 0 100 50">
+                    <rect x="15" y="15" width="70" height="25" rx="5" fill="rgba(16,185,129,0.15)" stroke="#10b981"/>
+                    <text x="50" y="32" text-anchor="middle" fill="#10b981" font-size="13" font-weight="900" class="sv pop">18 - 14 = 4kg</text>
+                  </svg>
+                </div>
+                <div class="step-content">多了小狗，重量也多了 4kg，所以<b>小狗 = 4kg</b>。</div>
+              </div>
+              <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-vis">
+                  <svg viewBox="0 0 100 50">
+                    <text x="35" y="25" font-size="18">🐕</text>
+                    <text x="70" y="35" text-anchor="middle" fill="#67e8f9" font-size="18" font-weight="900" class="sv pop">10</text>
+                    <path d="M45,25 L55,25" stroke="#94a3b8" stroke-width="1.5"/>
+                  </svg>
+                </div>
+                <div class="step-content">在大狗+小狗=14中，扣掉4，<b>大狗就是10kg</b>！</div>
+              </div>
+              <button class="va-btn" onclick="tv(this,'这是一道经典的“差量法”题目。我们盯着两张图看，第二张比第一张多了一只小狗，重量也多出了4千克。这就说明一只小狗重4千克！再用总重14减去小狗的4，大狗的10千克就一目了然啦！','m3_ex5_anim')">🔊 听深入讲解</button>
             </div>
-          </div>
-          <div id="ex5-step2" style="display:none" class="dog-reveal">
-            <div style="background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.2);border-radius:10px;padding:10px 14px;font-size:14px;font-weight:600;color:#67e8f9">
-              代入图1：🐕大狗 = 14 − 4 = <strong>10 kg</strong> 🎉
-            </div>
-          </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-            <button class="ex-vis-btn" id="ex5-btn1" onclick="ex5Step1()" style="border-color:rgba(16,185,129,0.35);background:rgba(16,185,129,0.1);color:#6ee7b7">① 两图作差，求小狗重量</button>
-            <button class="ex-vis-btn" id="ex5-btn2" onclick="ex5Step2()" disabled style="border-color:rgba(6,182,212,0.35);background:rgba(6,182,212,0.1);color:#67e8f9;opacity:.4">② 代入求大狗重量</button>
-            <button class="ex-vis-btn" style="background:rgba(255,255,255,0.05);color:var(--muted);border-color:rgba(255,255,255,0.1)" onclick="ex5Reset()">🔄 重置</button>
           </div>
         </div>
         <div class="guide-chain" id="ex5-guide"></div>
@@ -1731,14 +1900,24 @@ function learnEx(id) {
 function showExplanation(id) {
   const data = exData[id];
   const vis = document.getElementById(id+'-visual');
-  if (vis) { vis.classList.add('show'); vis.scrollIntoView({behavior:'smooth', block:'center'}); }
+  if (vis) { 
+    vis.classList.add('show'); 
+    vis.scrollIntoView({behavior:'smooth', block:'center'}); 
+    // 自动播放配套的动画步骤容器（如果有）
+    const msId = 'ms_' + id;
+    if (document.getElementById(msId)) {
+      setTimeout(() => revealSteps(msId), 300);
+    }
+  }
   setTimeout(() => buildGuide(id, data), vis ? 500 : 0);
 }
 
 function buildGuide(id, data) {
   const chain = document.getElementById(id+'-guide');
-  chain.style.display = 'block';
-  chain.scrollIntoView({behavior:'smooth',block:'center'});
+  if (chain) {
+    chain.classList.add('show');
+    chain.scrollIntoView({behavior:'smooth',block:'center'});
+  }
   data.guide.forEach((g, i) => {
     const item = document.createElement('div'); item.className = 'guide-item'; item.id = id+'-g'+i;
     if (i===0) item.classList.add('unlocked');
@@ -2398,9 +2577,9 @@ function toggleLadybug(i) {
 
 function renderLadybugCell(cell, val) {
   if (val === 0) { cell.textContent = ''; cell.style.background = 'rgba(255,255,255,0.03)'; }
-  else if (val === 1) { cell.textContent = '🐞'; cell.style.fontSize = '20px'; }
-  else if (val === 2) { cell.textContent = '🐞🐞'; cell.style.fontSize = '14px'; }
-  else if (val === 3) { cell.textContent = '🐞🐞🐞'; cell.style.fontSize = '11px'; }
+  else if (val === 1) { cell.textContent = '🐞'; cell.style.fontSize = '36px'; }
+  else if (val === 2) { cell.textContent = '🐞🐞'; cell.style.fontSize = '24px'; }
+  else if (val === 3) { cell.textContent = '🐞🐞🐞'; cell.style.fontSize = '20px'; }
 }
 
 function checkLadybug() {

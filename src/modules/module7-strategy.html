@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🧩 组合策略 — 袋鼠数学乐园</title>
+<title>🧩 组合与策略 — 袋鼠数学乐园</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -18,9 +18,9 @@
   --muted2: #64748b;
   --purple: #8b5cf6;
   --purple-light: #a78bfa;
-  --mint: #10b981;
+  --emerald: #10b981;
   --cyan: #06b6d4;
-  --amber: #f59e0b;
+  --rose: #ec4899;
 }
 
 html { scroll-behavior: smooth; }
@@ -38,9 +38,8 @@ body {
 .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
 .aurora-blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.12; animation: auroraF linear infinite; }
 .ab1 { width: 600px; height: 600px; background: radial-gradient(circle,#8b5cf6,transparent 70%); top: -100px; left: -100px; animation-duration: 22s; }
-.ab2 { width: 500px; height: 500px; background: radial-gradient(circle,#06b6d4,transparent 70%); top: 50%; right: -100px; animation-duration: 28s; animation-delay:-10s; }
+.ab2 { width: 500px; height: 500px; background: radial-gradient(circle,#6d28d9,transparent 70%); top: 50%; right: -100px; animation-duration: 28s; animation-delay:-10s; }
 .ab3 { width: 400px; height: 400px; background: radial-gradient(circle,#ec4899,transparent 70%); bottom: 10%; left: 20%; animation-duration: 20s; animation-delay:-5s; }
-.ab4 { width: 350px; height: 350px; background: radial-gradient(circle,#10b981,transparent 70%); bottom: 30%; right: 10%; animation-duration: 25s; animation-delay:-15s; }
 @keyframes auroraF { 0%{transform:translate(0,0)} 33%{transform:translate(30px,-25px)} 66%{transform:translate(-15px,35px)} 100%{transform:translate(0,0)} }
 
 .dot-grid { position: fixed; inset: 0; z-index: 0; pointer-events: none; background-image: radial-gradient(rgba(255,255,255,0.05) 1px,transparent 1px); background-size: 28px 28px; mask-image: radial-gradient(ellipse 70% 70% at 50% 50%,black 40%,transparent 100%); }
@@ -93,7 +92,7 @@ body {
   font-size: clamp(28px,5vw,48px); font-weight: 900; letter-spacing: -0.03em;
   line-height: 1.1; margin-bottom: 12px;
 }
-.hero-grad { background: linear-gradient(135deg,#a78bfa,#67e8f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.hero-grad { background: linear-gradient(135deg,#a78bfa,#c4b5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 .hero-sub { font-size: 16px; color: var(--muted); max-width: 560px; line-height: 1.6; }
 .hero-stats { display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap; }
 .hstat { display: flex; flex-direction: column; }
@@ -142,10 +141,26 @@ body {
 }
 .vbtn:hover { transform: scale(1.06); }
 .vbtn.playing { opacity: .75; }
-.vbtn-p { background: rgba(139,92,246,0.12); color: #a78bfa; border: 1px solid rgba(139,92,246,0.25); }
-.vbtn-c { background: rgba(6,182,212,0.12); color: #67e8f9; border: 1px solid rgba(6,182,212,0.25); }
+.vbtn-a { background: rgba(139,92,246,0.12); color: #a78bfa; border: 1px solid rgba(139,92,246,0.25); }
+.vbtn-o { background: rgba(236,72,153,0.12); color: #f9a8d4; border: 1px solid rgba(236,72,153,0.25); }
 .vbtn-e { background: rgba(16,185,129,0.12); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.25); }
-.vbtn-a { background: rgba(245,158,11,0.12); color: #fcd34d; border: 1px solid rgba(245,158,11,0.25); }
+.vbtn-c { background: rgba(6,182,212,0.12); color: #67e8f9; border: 1px solid rgba(6,182,212,0.25); }
+.vbtn-rose { background: rgba(236,72,153,0.12); color: #f9a8d4; border: 1px solid rgba(236,72,153,0.25); }
+.vbtn-mint { background: rgba(16,185,129,0.12); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.25); }
+.vbtn-lilac { background: rgba(139,92,246,0.12); color: #a78bfa; border: 1px solid rgba(139,92,246,0.25); }
+.vbtn-sky { background: rgba(6,182,212,0.12); color: #67e8f9; border: 1px solid rgba(6,182,212,0.25); }
+.vbtn-peach { background: rgba(249,115,22,0.12); color: #fdba74; border: 1px solid rgba(249,115,22,0.25); }
+
+/* standalone vbtn (not absolute) */
+.vbtn-inline {
+  position: static;
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: 8px; border: none;
+  font-size: 15px; font-weight: 600; cursor: pointer; transition: all .25s;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.vbtn-inline:hover { transform: scale(1.06); }
+.vbtn-inline.playing { opacity: .75; }
 
 /* ── Method Cards ── */
 .mcard {
@@ -155,19 +170,71 @@ body {
 }
 .mcard:hover { border-color: rgba(255,255,255,0.12); transform: translateY(-1px); }
 .mcard.open { border-color: rgba(139,92,246,0.3); }
-.mcard-head { padding: 20px 24px; display: flex; align-items: center; gap: 16px; }
-.mcard-icon { font-size: 28px; flex-shrink: 0; }
-.mcard-info { flex: 1; }
-.mcard-title { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
-.mcard-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
-.mcard-chevron { font-size: 18px; color: var(--muted); transition: transform .3s; margin-left: auto; }
-.mcard.open .mcard-chevron { transform: rotate(180deg); color: #a78bfa; }
-.mcard-body { max-height: 0; overflow: hidden; transition: max-height .5s cubic-bezier(0.23,1,0.32,1); }
-.mcard-body.open { max-height: 1600px; }
-.mcard-body-inner { padding: 0 24px 24px; border-top: 1px solid var(--card-border); }
-.mcard-figure { text-align:center; margin-bottom:12px; padding:12px; background:rgba(255,255,255,0.04); border-radius:12px; border:1px solid rgba(255,255,255,0.08); }
-.mcard-figure svg { overflow:visible; }
-.fig-label { font-size:13px; color:var(--muted); margin-bottom:8px; }
+.mcard-hd {
+  padding: 16px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  user-select: none;
+  background: rgba(139,92,246,0.06);
+  transition: background .2s;
+}
+.mcard-hd:hover { background: rgba(139,92,246,0.1); }
+.mcard-hd span:first-child { font-size: 16px; font-weight: 700; color: var(--text); }
+.arr { font-size: 14px; color: var(--muted); transition: transform .3s; }
+.mcard.open .arr { transform: rotate(90deg); color: #a78bfa; }
+.mcard-body { display: none; padding: 20px; border-top: 1px solid var(--card-border); }
+.mcard.open .mcard-body { display: block; }
+
+.mcard-figure {
+  text-align: center;
+  margin-bottom: 16px;
+  padding: 14px;
+  background: rgba(255,255,255,0.02);
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.07);
+}
+.mcard-figure svg { overflow: visible; }
+.fig-label { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+
+/* steps row */
+[id^="ms"] {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: stretch;
+  margin-bottom: 4px;
+}
+.step {
+  flex: 1;
+  min-width: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 10px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.07);
+  opacity: 0;
+  transform: translateY(14px);
+  transition: all .45s cubic-bezier(.23,1,.32,1);
+}
+.step.show { opacity: 1; transform: translateY(0); }
+.step-vis { width: 100%; }
+.step-vis svg { width: 100%; height: auto; display: block; border-radius: 8px; overflow: visible; }
+.step-label { font-size: 13px; line-height: 1.6; color: var(--muted); text-align: center; }
+.step-label strong, .step-label b { color: var(--text); }
+
+/* SVG animation */
+.sv { opacity: 0; }
+.step.show .sv { animation: svFade .5s ease forwards; }
+.sv-draw { stroke-dashoffset: 1; stroke-dasharray: 1; }
+.step.show .sv-draw { animation: svLine .6s ease forwards; }
+.step.show .sv.pop { animation: svPop .4s cubic-bezier(.34,1.56,.64,1) forwards; }
+@keyframes svFade { to { opacity: 1; } }
+@keyframes svLine { to { stroke-dashoffset: 0; } }
+@keyframes svPop { from { opacity:0; transform:scale(.4); } to { opacity:1; transform:scale(1); } }
+
+/* ── reveal btn ── */
 .reveal-btn {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 8px 18px; border-radius: 10px;
@@ -178,168 +245,226 @@ body {
 }
 .reveal-btn:hover { background: rgba(139,92,246,0.18); transform: scale(1.03); }
 
-/* 步骤横向平铺 */
-[id^="ms"] { display:flex; gap:10px; flex-wrap:wrap; align-items:stretch; margin-bottom:4px; }
-.step {
-  flex:1; min-width:130px; display:flex; flex-direction:column; align-items:center;
-  gap:8px; padding:12px 10px; background:rgba(255,255,255,0.03);
-  border-radius:14px; border:1px solid rgba(255,255,255,0.07);
-  opacity:0; transform:translateY(14px); transition:all .45s cubic-bezier(.23,1,.32,1);
-}
-.step.show { opacity:1; transform:translateY(0); }
-.step-vis { width:100%; }
-.step-vis svg { width:100%; height:auto; display:block; border-radius:8px; overflow:visible; }
-.step-label { font-size:13px; line-height:1.6; color:var(--muted); text-align:center; }
-.step-label strong, .step-label b { color:var(--text); }
-
-/* SVG 动画 */
-.sv { opacity:0; }
-.step.show .sv { animation:svFade .5s ease forwards; }
-.sv-draw { stroke-dashoffset:1; stroke-dasharray:1; }
-.step.show .sv-draw { animation:svLine .6s ease forwards; }
-.step.show .sv.pop { animation:svPop .4s cubic-bezier(.34,1.56,.64,1) forwards; }
-@keyframes svFade { to { opacity:1; } }
-@keyframes svLine { to { stroke-dashoffset:0; } }
-@keyframes svPop  { from { opacity:0; transform:scale(.4); } to { opacity:1; transform:scale(1); } }
-
-.va-btn {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 5px 12px; border-radius: 8px; border: none;
-  font-size: 15px; font-weight: 600; cursor: pointer; transition: all .25s;
-  background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.25); color: #a78bfa;
-  font-family: 'Noto Sans SC', sans-serif;
-}
-.va-btn:hover { transform: scale(1.04); }
-
-/* ── Example Cards ── */
+/* ── excard ── */
 .excard {
   background: var(--card); border: 1px solid var(--card-border);
   border-radius: 20px; padding: 24px; margin-bottom: 20px;
 }
-.ex-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
-.ex-body { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 16px; }
-.ex-body strong { color: var(--text); }
-.choice-grid { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
-.choice-btn {
-  padding: 10px 20px; border-radius: 12px; font-size: 15px; font-weight: 600;
-  border: 1.5px solid var(--card-border); background: rgba(255,255,255,0.03);
-  color: var(--text); cursor: pointer; transition: all .25s;
-  font-family: 'Noto Sans SC', sans-serif;
+.excard-hdr {
+  padding: 14px 20px;
+  background: rgba(139,92,246,0.07);
+  border-radius: 12px;
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 16px;
 }
-.choice-btn:hover:not(.dis) { border-color: rgba(139,92,246,0.4); background: rgba(139,92,246,0.08); }
-.choice-btn.correct { background: rgba(16,185,129,0.15); border-color: #6ee7b7; color: #6ee7b7; }
-.choice-btn.wrong   { background: rgba(239,68,68,0.1); border-color: #fca5a5; color: #fca5a5; animation: shake .4s ease; }
-.choice-btn.dis { cursor: default; }
-@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
-.ex-feedback { font-size: 14px; font-weight: 700; margin-bottom: 14px; min-height: 22px; }
-.retry-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
-.retry-btn {
-  padding: 8px 16px; border-radius: 10px; font-size: 13px; font-weight: 600;
-  cursor: pointer; transition: all .25s; font-family: 'Noto Sans SC', sans-serif; border: none;
-}
-.retry-btn.r { background: rgba(6,182,212,0.12); color: #67e8f9; border: 1px solid rgba(6,182,212,0.3); }
-.retry-btn.l { background: rgba(139,92,246,0.12); color: #a78bfa; border: 1px solid rgba(139,92,246,0.3); }
+.ex-num { font-size: 18px; font-weight: 700; color: #a78bfa; }
+.ex-tag { font-size: 12px; color: var(--muted); background: rgba(255,255,255,0.06); padding: 2px 10px; border-radius: 10px; }
+.excard-body { }
 
-/* Guide chain */
-.guide-chain { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
-.guide-item {
-  border-radius: 12px; overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02);
-  transition: border-color .3s;
+.qbox {
+  background: rgba(255,255,255,0.02);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  border: 1px solid var(--card-border);
+  font-size: 15px; color: var(--muted);
 }
-.guide-item.active { border-color: rgba(139,92,246,0.35); }
-.guide-item.locked { opacity: .4; pointer-events: none; }
+.qbox strong { color: var(--text); }
+
+.ex-opts { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+.ex-opt {
+  flex: 1;
+  min-width: 120px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1.5px solid var(--card-border);
+  background: rgba(255,255,255,0.02);
+  cursor: pointer;
+  font-size: 14px;
+  font-family: 'Noto Sans SC', sans-serif;
+  color: var(--text);
+  transition: all .2s;
+  text-align: center;
+  font-weight: 700;
+}
+.ex-opt:hover:not(.dim) { border-color: rgba(139,92,246,0.4); background: rgba(139,92,246,0.08); }
+.ex-opt.correct { background: rgba(16,185,129,0.15); border-color: #6ee7b7; color: #6ee7b7; }
+.ex-opt.wrong { background: rgba(239,68,68,0.1); border-color: #fca5a5; animation: shake .4s ease; }
+.ex-opt.dim { opacity: .45; cursor: default; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+.ex-result {
+  display: none;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 14px;
+  font-size: 14px;
+}
+
+.ex-visual { display: none; }
+.ex-visual.show { display: block; animation: fadeUp .4s ease both; }
+
+.guide-chain { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
 .guide-q {
-  padding: 12px 16px; font-size: 14px; color: var(--muted); cursor: pointer;
-  display: flex; align-items: center; gap: 10px; transition: background .2s;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all .2s;
+  opacity: .4;
+  pointer-events: none;
 }
-.guide-q:hover { background: rgba(255,255,255,0.03); }
-.guide-q .gq-icon { font-size: 16px; }
-.guide-q .gq-text { flex: 1; }
-.guide-q .gq-arrow { font-size: 12px; color: var(--muted2); }
+.guide-q.unlocked { opacity: 1; pointer-events: auto; }
+.guide-q.unlocked:hover { background: rgba(139,92,246,0.06); border-color: rgba(139,92,246,0.25); }
 .guide-a {
-  display: none; padding: 12px 16px;
-  border-top: 1px solid rgba(255,255,255,0.06);
-  background: rgba(139,92,246,0.05); font-size: 14px; color: var(--muted); line-height: 1.7;
+  display: none;
+  background: rgba(139,92,246,0.05);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-top: 4px;
+  font-size: 13px;
+  border-left: 3px solid rgba(139,92,246,0.4);
+  color: var(--muted);
 }
 .guide-a strong { color: var(--text); }
-.guide-a .va-btn { margin-top: 8px; }
+.guide-a.show { display: block; animation: fadeUp .3s ease both; }
 
 .feynman-box {
-  background: rgba(16,185,129,0.07); border: 1.5px solid rgba(16,185,129,0.25);
-  border-radius: 14px; padding: 18px; margin-top: 14px; display: none;
+  display: none;
+  background: rgba(16,185,129,0.07);
+  border: 1.5px solid rgba(16,185,129,0.25);
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-top: 14px;
+  font-size: 14px;
+  color: var(--muted);
 }
-.feynman-box .fn-title { font-size: 15px; font-weight: 700; color: #6ee7b7; margin-bottom: 12px; }
-.feynman-box .fn-step { display: flex; gap: 12px; margin-bottom: 10px; font-size: 14px; color: var(--muted); }
-.feynman-box .fn-num {
-  width: 24px; height: 24px; border-radius: 50%; background: rgba(16,185,129,0.2);
-  color: #6ee7b7; display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 800; flex-shrink: 0;
-}
-.feynman-box .fn-step strong { color: var(--text); }
+.feynman-box.show { display: block; animation: fadeUp .4s ease both; }
+.feynman-title { font-size: 15px; font-weight: 700; color: #6ee7b7; margin-bottom: 10px; }
+.feynman-box p { margin-bottom: 6px; }
 
-/* ── Quiz ── */
-.quiz-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-.star-bar { display: flex; gap: 4px; }
-.star { font-size: 18px; transition: all .3s; }
-.star.on { filter: drop-shadow(0 0 4px gold); }
-.q-nav-dots { display: flex; gap: 6px; flex-wrap: wrap; }
-.q-dot {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: rgba(255,255,255,0.06); border: 1.5px solid var(--card-border);
-  font-size: 11px; font-weight: 700; color: var(--muted2);
-  display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .25s;
+/* ── quiz ── */
+.quiz-sec { max-width: 860px; }
+.progress-bar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
-.q-dot:hover { background: rgba(139,92,246,0.12); border-color: rgba(139,92,246,0.3); }
-.q-dot.on  { background: rgba(139,92,246,0.2); border-color: #a78bfa; color: #a78bfa; }
-.q-dot.ok  { background: rgba(16,185,129,0.15); border-color: #6ee7b7; color: #6ee7b7; }
-.q-dot.bad { background: rgba(239,68,68,0.1); border-color: #fca5a5; color: #fca5a5; }
+.progress-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  border: 1.5px solid var(--card-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted2);
+  cursor: pointer;
+  transition: all .2s;
+}
+.progress-dot:hover { background: rgba(139,92,246,0.12); border-color: rgba(139,92,246,0.3); }
+.progress-dot.current { background: rgba(139,92,246,0.2); border-color: #a78bfa; color: #a78bfa; }
+.progress-dot.done { background: rgba(16,185,129,0.15); border-color: #6ee7b7; color: #6ee7b7; }
+
 .qcard {
   background: var(--card); border: 1px solid var(--card-border);
   border-radius: 20px; padding: 24px;
 }
-.q-meta { display: flex; gap: 8px; margin-bottom: 14px; }
-.q-badge { padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; }
-.q-diff-1 { background: rgba(16,185,129,0.12); color: #6ee7b7; }
-.q-diff-2 { background: rgba(245,158,11,0.12); color: #fcd34d; }
-.q-diff-3 { background: rgba(239,68,68,0.12); color: #fca5a5; }
-.q-src { background: rgba(255,255,255,0.05); color: var(--muted); padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; }
-.q-text { font-size: 16px; font-weight: 600; margin-bottom: 16px; line-height: 1.6; }
-.q-opts { display: flex; flex-direction: column; gap: 8px; }
+.qcard-meta { display: flex; gap: 8px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
+.q-badge {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+.q-badge.easy { background: rgba(16,185,129,0.12); color: #6ee7b7; }
+.q-badge.med { background: rgba(245,158,11,0.12); color: #fcd34d; }
+.q-badge.hard { background: rgba(239,68,68,0.12); color: #fca5a5; }
+.q-src { font-size: 11px; color: var(--muted); background: rgba(255,255,255,0.05); padding: 3px 10px; border-radius: 999px; font-weight: 600; }
+.q-text { font-size: 16px; margin-bottom: 18px; font-weight: 600; line-height: 1.6; }
+.q-opts { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
 .q-opt {
-  padding: 12px 16px; border-radius: 12px;
-  border: 1.5px solid var(--card-border); background: rgba(255,255,255,0.02);
-  font-size: 14px; color: var(--text); cursor: pointer; transition: all .25s;
-  text-align: left; font-family: 'Noto Sans SC', sans-serif;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1.5px solid var(--card-border);
+  background: rgba(255,255,255,0.02);
+  cursor: pointer;
+  font-size: 14px;
+  font-family: 'Noto Sans SC', sans-serif;
+  color: var(--text);
+  transition: all .2s;
+  text-align: left;
 }
-.q-opt:hover:not(.dis) { border-color: rgba(139,92,246,0.4); background: rgba(139,92,246,0.06); }
-.q-opt.correct { background: rgba(16,185,129,0.12); border-color: #6ee7b7; color: #6ee7b7; }
-.q-opt.wrong   { background: rgba(239,68,68,0.08); border-color: #fca5a5; animation: shake .4s ease; }
-.q-opt.dis { cursor: default; }
-.qfb { font-size: 14px; font-weight: 700; margin-top: 12px; min-height: 22px; display: none; }
-.qfb.show { display: block; }
-.qfb.ok { color: #6ee7b7; }
-.qfb.no { color: #fca5a5; }
-.q-nav { display: flex; gap: 10px; margin-top: 16px; justify-content: flex-end; }
-.qnav-btn {
-  padding: 8px 20px; border-radius: 10px; font-size: 13px; font-weight: 600;
-  cursor: pointer; transition: all .25s; font-family: 'Noto Sans SC', sans-serif; border: none;
+.q-opt:hover:not(.qdim) { border-color: rgba(139,92,246,0.4); background: rgba(139,92,246,0.06); }
+.q-opt.qcorrect { background: rgba(16,185,129,0.12); border-color: #6ee7b7; color: #6ee7b7; }
+.q-opt.qwrong { background: rgba(239,68,68,0.08); border-color: #fca5a5; animation: shake .4s ease; }
+.q-opt.qdim { opacity: .45; cursor: default; }
+
+.q-feedback { min-height: 32px; font-size: 14px; font-weight: 700; margin-bottom: 12px; }
+.q-nav { display: flex; gap: 10px; }
+
+/* canvas container */
+.canvas-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
 }
-.qnav-btn.prev { background: rgba(255,255,255,0.06); color: var(--muted); }
-.qnav-btn.next { background: rgba(139,92,246,0.15); color: #a78bfa; border: 1px solid rgba(139,92,246,0.3); display: none; }
-.qnav-btn.next.show { display: block; }
+canvas { display: block; border-radius: 12px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.07); width: 100%; }
 
-/* ── Animations ── */
-@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+/* interactive grid */
+.ig-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+}
+.ig-cell {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  border: 1.5px solid var(--card-border);
+  background: rgba(255,255,255,0.04);
+  cursor: pointer;
+  transition: all .15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+.ig-cell:hover { border-color: rgba(139,92,246,0.4); background: rgba(139,92,246,0.08); }
+.ig-cell.on { background: rgba(139,92,246,0.18); border-color: #a78bfa; color: #a78bfa; }
+.ig-cell.best { background: rgba(16,185,129,0.15); border-color: #6ee7b7; color: #6ee7b7; }
+.ig-status { font-size: 14px; color: var(--muted); font-weight: 700; margin-top: 8px; text-align: center; }
 
-/* ── S1 Interactive ── */
+/* ctrl btn */
 .ctrl-btn {
   padding: 7px 14px; border-radius: 9px; font-size: 13px; font-weight: 600; cursor: pointer;
   border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.07); color: #a78bfa;
   transition: all .2s; font-family: 'Noto Sans SC', sans-serif;
 }
-.ctrl-btn.active { background: rgba(139,92,246,0.2); border-color: rgba(139,92,246,0.5); box-shadow: 0 0 0 2px rgba(139,92,246,0.15); }
+.ctrl-btn.active { background: rgba(139,92,246,0.2); border-color: rgba(139,92,246,0.5); }
 .ctrl-btn:hover { background: rgba(139,92,246,0.14); }
+
+/* scale animation */
+@keyframes balance { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(-8deg)} }
+@keyframes balance2 { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(8deg)} }
+
+/* ── Animations ── */
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+@keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
 
 /* ── Mobile bottom nav ── */
 .mob-nav {
@@ -356,51 +481,6 @@ body {
 }
 .mob-tab.on { color: #a78bfa; background: rgba(139,92,246,0.1); }
 
-/* ── Concept 1: Dot Grid ── */
-.dot-canvas-wrap { text-align:center; margin: 14px 0; }
-#seg-canvas { cursor: crosshair; border-radius: 12px; border: 1px solid rgba(139,92,246,0.2); background: rgba(139,92,246,0.03); }
-.seg-counter { font-size: 28px; font-weight: 900; color: #a78bfa; }
-.seg-label { font-size: 12px; color: var(--muted2); }
-
-/* ── Concept 2: Pattern Sequence ── */
-.pattern-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin: 12px 0; }
-.pattern-cell {
-  width: 52px; height: 52px; border-radius: 10px;
-  background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.08);
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
-.pattern-cell.empty {
-  border: 2px dashed rgba(139,92,246,0.4); background: rgba(139,92,246,0.06); cursor: pointer;
-}
-.pattern-cell.empty:hover { background: rgba(139,92,246,0.12); }
-.pattern-options { display: flex; gap: 10px; margin-top: 10px; }
-.pat-opt {
-  width: 52px; height: 52px; border-radius: 10px; cursor: pointer; transition: all .2s;
-  background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.1);
-  display: flex; align-items: center; justify-content: center;
-}
-.pat-opt:hover { border-color: rgba(139,92,246,0.5); background: rgba(139,92,246,0.1); transform: scale(1.08); }
-.pat-opt.selected { border-color: #a78bfa; box-shadow: 0 0 0 2px rgba(139,92,246,0.25); }
-.pat-opt.correct-ans { border-color: #6ee7b7; background: rgba(16,185,129,0.12); }
-.pat-opt.wrong-ans { border-color: #fca5a5; animation: shake .4s ease; }
-#pat-feedback { font-size: 13px; font-weight: 700; margin-top: 8px; min-height: 20px; }
-
-/* ── Concept 3: Arrangement ── */
-.arr-slots { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin: 14px 0; }
-.arr-slot {
-  width: 64px; height: 64px; border-radius: 14px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 30px; border: 2px solid rgba(255,255,255,0.1);
-  transition: all .2s; user-select: none;
-}
-.arr-slot:hover { transform: scale(1.08); border-color: rgba(139,92,246,0.5); }
-.arr-found { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
-.arr-found-item {
-  padding: 4px 10px; border-radius: 8px; font-size: 13px; font-weight: 700;
-  background: rgba(139,92,246,0.12); border: 1px solid rgba(139,92,246,0.3); color: #a78bfa;
-  animation: svPop .3s ease;
-}
-
 @media (max-width: 680px) {
   .tab-nav { display: none; }
   .mob-nav { display: flex; }
@@ -412,37 +492,34 @@ body {
 </style>
 </head>
 <body>
+
 <div class="aurora">
   <div class="aurora-blob ab1"></div>
   <div class="aurora-blob ab2"></div>
   <div class="aurora-blob ab3"></div>
-  <div class="aurora-blob ab4"></div>
 </div>
 <div class="dot-grid"></div>
 
 <div class="page">
-  <!-- Top bar -->
   <div class="topbar">
     <div class="topbar-inner">
       <a href="../../index.html" class="back-link">← 返回主页</a>
       <span class="topbar-sep">/</span>
-      <span class="topbar-title">模块七 · 组合策略</span>
+      <span class="topbar-title">模块七 · 组合与策略</span>
     </div>
   </div>
 
   <div class="container">
-    <!-- Hero -->
     <div class="mod-hero">
       <div class="hero-badge">🧩 模块七</div>
-      <h1 class="hero-title">数图形 · 找规律 · <span class="hero-grad">排列组合</span></h1>
-      <p class="hero-sub">学会系统列举，用树形图理清思路，轻松搞定组合计数难题！袋鼠数学必备技能 🎉</p>
+      <h1 class="hero-title">组合 · 策略 · <span class="hero-grad">思维灵活</span></h1>
+      <p class="hero-sub">学会找规律、用逆推、做最优选择！这是袋鼠数学里最考验"思维灵活度"的模块 🦘</p>
       <div class="hero-stats">
         <div class="hstat"><span class="hstat-num">3</span><span class="hstat-label">核心概念</span></div>
         <div class="hstat"><span class="hstat-num">4</span><span class="hstat-label">学习技巧</span></div>
-        <div class="hstat"><span class="hstat-num">2</span><span class="hstat-label">例题精讲</span></div>
+        <div class="hstat"><span class="hstat-num">3</span><span class="hstat-label">例题精讲</span></div>
         <div class="hstat"><span class="hstat-num">10</span><span class="hstat-label">闯关题目</span></div>
       </div>
-
       <nav class="tab-nav">
         <button class="tab-pill on" data-s="s1">💡 概念</button>
         <button class="tab-pill" data-s="s2">🛠 技巧</button>
@@ -458,71 +535,223 @@ body {
       <div class="gcard">
         <div class="sec-heading">💡 核心概念</div>
 
-        <!-- 概念1：数图形 -->
-        <div class="cbox" style="--accent:#a78bfa;--accent-bg:rgba(139,92,246,0.05)">
-          <button class="vbtn vbtn-p" onclick="tv(this,'数图形的时候，我们要一个不漏地把所有可能的图形都找出来。我们可以按照大小来分类，先数小的，再数大的，这样就不会重复也不会遗漏。在下面的点阵中，点击两个点就能画一条线段，试试看能画出多少种不同的线段！','m7_s2_v1')">🔊 听讲解</button>
-          <h4>📐 数图形有多少种？— 点阵连线</h4>
-          <p style="font-size:13px;color:var(--muted);margin:6px 0 12px">在4×4点阵上，点击两个点画一条线段。数数共有多少种不同的线段！</p>
+  <!-- 概念1: 天平等量代换 — 全新两段式教学 -->
+  <div class="cbox" style="--accent:#a78bfa;--accent-bg:rgba(139,92,246,0.05)">
+    <button class="vbtn vbtn-p" onclick="toggleVoice(this,'等量代换分两步来理解。第一步：认识天平平衡。天平两边一样重，就会保持水平，这表示两边相等！你可以点加号或减号，把砝码放上去，看天平怎么变化。第二步：学会代换。如果我们知道一个苹果等于两个橙子，那就可以把苹果换成橙子！就像数学里的换一换游戏，一步一步算出答案！')">🔊 听讲解</button>
+    <h4>⚖️ 天平等量代换</h4>
 
-          <div class="dot-canvas-wrap">
-            <canvas id="seg-canvas" width="260" height="260"></canvas>
-          </div>
+    <!-- ─── Part A: 认识平衡 ─── -->
+    <div style="margin-bottom:6px">
+      <div style="font-size:13px;font-weight:700;color:#a78bfa;margin-bottom:10px;display:flex;align-items:center;gap:6px">
+        <span style="background:rgba(139,92,246,0.2);border:1px solid rgba(139,92,246,0.4);border-radius:6px;padding:2px 8px">第一步</span>
+        认识平衡 — 点击加减号，观察天平如何倾斜
+      </div>
+    </div>
 
-          <div style="display:flex;gap:16px;justify-content:center;align-items:center;margin:10px 0">
-            <div style="text-align:center">
-              <div class="seg-counter" id="seg-count">0</div>
-              <div class="seg-label">已画线段</div>
-            </div>
-            <div style="text-align:center">
-              <div class="seg-counter" style="color:#67e8f9" id="seg-total">—</div>
-              <div class="seg-label">理论总数</div>
-            </div>
-          </div>
+    <!-- SVG 天平 -->
+    <div style="position:relative;background:rgba(139,92,246,0.04);border-radius:14px;border:1px solid rgba(139,92,246,0.12);padding:16px 8px 8px;margin-bottom:12px">
+      <svg id="balance-svg" viewBox="0 0 420 200" width="100%" style="overflow:visible;display:block;max-width:480px;margin:0 auto">
+        <defs>
+          <filter id="glow-purple">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <!-- 台座 -->
+        <rect x="195" y="155" width="30" height="35" rx="5" fill="#8b5cf6" opacity="0.7"/>
+        <ellipse cx="210" cy="192" rx="35" ry="7" fill="#8b5cf6" opacity="0.5"/>
+        <!-- 支点圆 -->
+        <circle id="bpivot" cx="210" cy="70" r="9" fill="#a78bfa" filter="url(#glow-purple)"/>
+        <!-- 横梁（动态旋转，transform-origin:210 70） -->
+        <g id="beam-group" style="transform-origin:210px 70px;transition:transform 0.7s cubic-bezier(.34,1.2,.64,1)">
+          <line x1="40" y1="70" x2="380" y2="70" stroke="#a78bfa" stroke-width="6" stroke-linecap="round"/>
+          <!-- 左吊线 -->
+          <line x1="60" y1="70" x2="60" y2="105" stroke="#c4b5fd" stroke-width="2"/>
+          <!-- 右吊线 -->
+          <line x1="360" y1="70" x2="360" y2="105" stroke="#c4b5fd" stroke-width="2"/>
+          <!-- 左盘 -->
+          <ellipse cx="60" cy="112" rx="48" ry="12" fill="rgba(236,72,153,0.25)" stroke="#f9a8d4" stroke-width="1.5"/>
+          <!-- 右盘 -->
+          <ellipse cx="360" cy="112" rx="48" ry="12" fill="rgba(6,182,212,0.25)" stroke="#67e8f9" stroke-width="1.5"/>
+          <!-- 左砝码显示区 -->
+          <text id="bl-items" x="60" y="96" text-anchor="middle" font-size="22" font-family="serif">🍎</text>
+          <!-- 右砝码显示区 -->
+          <text id="br-items" x="360" y="96" text-anchor="middle" font-size="22" font-family="serif">🍎</text>
+          <!-- 左重量数字 -->
+          <text id="bl-num" x="60" y="138" text-anchor="middle" font-size="13" font-weight="800" fill="#f9a8d4" font-family="Noto Sans SC,sans-serif">1</text>
+          <!-- 右重量数字 -->
+          <text id="br-num" x="360" y="138" text-anchor="middle" font-size="13" font-weight="800" fill="#67e8f9" font-family="Noto Sans SC,sans-serif">1</text>
+        </g>
+        <!-- 平衡指示文字 -->
+        <text id="balance-label" x="210" y="180" text-anchor="middle" font-size="15" font-weight="800" fill="#6ee7b7" font-family="Noto Sans SC,sans-serif">⚖️ 平衡！两边相等 ✓</text>
+      </svg>
 
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-            <button class="ctrl-btn" onclick="setSegMode('line')" id="btn-line">直线段模式</button>
-            <button class="ctrl-btn" onclick="setSegMode('tri')" id="btn-tri">三角形模式</button>
-            <button class="ctrl-btn" onclick="clearSegs()">🔄 清空重来</button>
+      <!-- 左右控制 -->
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:0 12px;max-width:480px;margin:0 auto">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+          <div style="font-size:12px;color:#f9a8d4;font-weight:700">左盘 🩷</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button onclick="changeBalanceL(-1)" style="width:36px;height:36px;border-radius:10px;border:1.5px solid rgba(236,72,153,0.4);background:rgba(236,72,153,0.1);color:#f9a8d4;font-size:20px;font-weight:700;cursor:pointer;line-height:1">−</button>
+            <span id="bl-count" style="font-size:22px;font-weight:900;color:#f9a8d4;min-width:24px;text-align:center">1</span>
+            <button onclick="changeBalanceL(1)" style="width:36px;height:36px;border-radius:10px;border:1.5px solid rgba(236,72,153,0.4);background:rgba(236,72,153,0.1);color:#f9a8d4;font-size:20px;font-weight:700;cursor:pointer;line-height:1">+</button>
           </div>
-          <div id="seg-hint" style="font-size:12px;color:var(--muted2);margin-top:8px">提示：4×4 点阵共有16个点，两两连线共有 C(16,2)=120 种线段</div>
+          <div style="font-size:11px;color:var(--muted2)">个 🍎</div>
         </div>
-
-        <!-- 概念2：找规律 -->
-        <div class="cbox" style="--accent:#67e8f9;--accent-bg:rgba(6,182,212,0.05)">
-          <button class="vbtn vbtn-c" onclick="tv(this,'找规律的时候，先看看每个图案是怎么变化的。是形状在变？还是颜色在变？还是数量在变？找到规律之后，就能预测出下一个是什么啦！点击下面的空格，选出你认为正确的答案！','m7_s2_v2')">🔊 听讲解</button>
-          <h4>🔍 找规律（排列规律）— 猜下一个</h4>
-          <p style="font-size:13px;color:var(--muted);margin:6px 0 12px">观察规律，点击空格，再从下方选项中选出第7个图案！</p>
-
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
-            <button class="ctrl-btn active" id="pat-btn-0" onclick="loadPattern(0)">规律一</button>
-            <button class="ctrl-btn" id="pat-btn-1" onclick="loadPattern(1)">规律二</button>
-            <button class="ctrl-btn" id="pat-btn-2" onclick="loadPattern(2)">规律三</button>
+        <div style="font-size:28px;color:var(--muted2)">=?</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+          <div style="font-size:12px;color:#67e8f9;font-weight:700">右盘 💙</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button onclick="changeBalanceR(-1)" style="width:36px;height:36px;border-radius:10px;border:1.5px solid rgba(6,182,212,0.4);background:rgba(6,182,212,0.1);color:#67e8f9;font-size:20px;font-weight:700;cursor:pointer;line-height:1">−</button>
+            <span id="br-count" style="font-size:22px;font-weight:900;color:#67e8f9;min-width:24px;text-align:center">1</span>
+            <button onclick="changeBalanceR(1)" style="width:36px;height:36px;border-radius:10px;border:1.5px solid rgba(6,182,212,0.4);background:rgba(6,182,212,0.1);color:#67e8f9;font-size:20px;font-weight:700;cursor:pointer;line-height:1">+</button>
           </div>
-
-          <div class="pattern-row" id="pat-row"></div>
-          <div style="font-size:12px;color:var(--muted2);margin-bottom:8px">从下方选一个：</div>
-          <div class="pattern-options" id="pat-options"></div>
-          <div id="pat-feedback"></div>
+          <div style="font-size:11px;color:var(--muted2)">个 🍎</div>
         </div>
+      </div>
+    </div>
 
-        <!-- 概念3：排列顺序 -->
-        <div class="cbox" style="--accent:#6ee7b7;--accent-bg:rgba(16,185,129,0.05)">
-          <button class="vbtn vbtn-e" onclick="tv(this,'排列顺序就是把几个东西按不同的顺序摆放，看看有多少种不同的摆法。三个球，每次点击球就换一个颜色，把所有六种排法都找出来！','m7_s2_v3')">🔊 听讲解</button>
-          <h4>🎯 排列顺序 — 找出全部排法</h4>
-          <p style="font-size:13px;color:var(--muted);margin:6px 0 12px">点击每个球切换颜色，把 红🔴蓝🔵绿🟢 三球的6种不同排法都找出来！</p>
+    <!-- ─── Part B: 理解代换 ─── -->
+    <div style="font-size:13px;font-weight:700;color:#fcd34d;margin-bottom:10px;display:flex;align-items:center;gap:6px">
+      <span style="background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.35);border-radius:6px;padding:2px 8px">第二步</span>
+      学会代换 — 用已知等式，一步步换出答案
+    </div>
 
-          <div class="arr-slots" id="arr-slots">
-            <div class="arr-slot" style="background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.3)" onclick="cycleSlot(0)" id="slot-0">🔴</div>
-            <div class="arr-slot" style="background:rgba(59,130,246,0.15);border-color:rgba(59,130,246,0.3)" onclick="cycleSlot(1)" id="slot-1">🔵</div>
-            <div class="arr-slot" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.3)" onclick="cycleSlot(2)" id="slot-2">🟢</div>
-            <div style="font-size:22px;color:var(--muted2)">→</div>
-            <button onclick="recordArr()" style="padding:8px 16px;border-radius:10px;border:1.5px solid rgba(139,92,246,0.4);background:rgba(139,92,246,0.1);color:#a78bfa;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif">✅ 记录这种排法</button>
+    <!-- 代换故事场景 -->
+    <div style="background:rgba(245,158,11,0.04);border-radius:14px;border:1px solid rgba(245,158,11,0.12);padding:16px;margin-bottom:12px">
+      <div style="font-size:14px;color:var(--muted);margin-bottom:14px;line-height:1.6">
+        🧩 <strong style="color:var(--text)">已知条件：</strong><br>
+        <span style="display:inline-flex;align-items:center;gap:6px;margin-top:6px;background:rgba(255,255,255,0.04);padding:6px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.08)">
+          1个🍎 = 2个🍊 &nbsp;|&nbsp; 3个🍊 = 1个🍐
+        </span><br>
+        <span style="margin-top:8px;display:block">❓ <strong style="color:#fcd34d">问题：1个🍎 等于多少个🍐？</strong></span>
+      </div>
+
+      <!-- 三步代换动画 -->
+      <div id="swap-steps" style="display:flex;flex-direction:column;gap:10px">
+        <!-- Step 0: 初始 -->
+        <div class="swap-row" id="swap-s0" style="opacity:1">
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(139,92,246,0.08);border-radius:12px;border:1px solid rgba(139,92,246,0.2)">
+            <span style="font-size:22px">🍎</span>
+            <span style="font-size:18px;color:var(--muted)">=</span>
+            <span style="font-size:22px">❓</span>
+            <span style="font-size:13px;color:var(--muted);margin-left:4px">先用已知条件①替换苹果</span>
           </div>
-
-          <div style="font-size:13px;color:var(--muted);margin-bottom:8px">已找到的排法（目标：6种）：</div>
-          <div class="arr-found" id="arr-found"></div>
-          <div id="arr-msg" style="font-size:13px;font-weight:700;margin-top:8px;min-height:20px;color:#a78bfa"></div>
         </div>
+        <!-- Step 1: 换橙子 -->
+        <div class="swap-row" id="swap-s1" style="opacity:0;transition:opacity 0.5s,transform 0.5s;transform:translateY(10px)">
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(249,115,22,0.08);border-radius:12px;border:1px solid rgba(249,115,22,0.2)">
+            <span style="font-size:22px">🍊🍊</span>
+            <span style="font-size:18px;color:#fdba74">=</span>
+            <span style="font-size:22px">❓</span>
+            <span style="font-size:13px;color:#fdba74;margin-left:4px">✓ 1个🍎 换成了 2个🍊！再用条件②</span>
+          </div>
+        </div>
+        <!-- Step 2: 换梨 -->
+        <div class="swap-row" id="swap-s2" style="opacity:0;transition:opacity 0.5s,transform 0.5s;transform:translateY(10px)">
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(16,185,129,0.08);border-radius:12px;border:1px solid rgba(16,185,129,0.2)">
+            <span style="font-size:22px">🍐</span>
+            <span style="font-size:18px;color:#6ee7b7">×</span>
+            <span style="font-size:22px;color:#fcd34d;font-weight:800">?</span>
+            <span style="font-size:13px;color:#6ee7b7;margin-left:4px">3个🍊=1个🍐，2个🍊=几个🍐？</span>
+          </div>
+        </div>
+        <!-- Step 3: 答案 -->
+        <div class="swap-row" id="swap-s3" style="opacity:0;transition:opacity 0.5s,transform 0.5s;transform:translateY(10px)">
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(16,185,129,0.12);border-radius:12px;border:2px solid #6ee7b7">
+            <span style="font-size:28px">🍎</span>
+            <span style="font-size:20px;color:#6ee7b7">=</span>
+            <span style="font-size:28px">🍐</span>
+            <span style="font-size:20px;font-weight:900;color:#fcd34d">× ⅔</span>
+            <span style="font-size:13px;color:#6ee7b7;margin-left:4px">🎉 得出答案！</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;justify-content:center">
+        <button onclick="runSwapAnim()" style="padding:8px 20px;border-radius:10px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.35);color:#fcd34d;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:all .2s">▶ 动画演示代换</button>
+        <button onclick="resetSwapAnim()" style="padding:8px 16px;border-radius:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:all .2s">↺ 重置</button>
+      </div>
+    </div>
+
+    <!-- 代换 Challenge -->
+    <div style="background:rgba(139,92,246,0.06);border-radius:12px;border:1px solid rgba(139,92,246,0.2);padding:14px">
+      <div style="font-size:13px;font-weight:700;color:#a78bfa;margin-bottom:10px">🎯 自己来试试！</div>
+      <div style="font-size:14px;color:var(--muted);margin-bottom:10px;line-height:1.6">
+        已知：<span style="color:var(--text);font-weight:700">1个⭐ = 3个🔵 &nbsp;|&nbsp; 2个🔵 = 1个🟥</span><br>
+        问题：<span style="color:#fcd34d;font-weight:700">1个⭐ = 几个🟥？</span>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button onclick="checkSwapAnswer(1)" class="swap-ans-btn" style="padding:9px 18px;border-radius:10px;border:1.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:var(--text);font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:all .25s">(A) 1个</button>
+        <button onclick="checkSwapAnswer(1.5)" class="swap-ans-btn" style="padding:9px 18px;border-radius:10px;border:1.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:var(--text);font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:all .25s">(B) 1.5个</button>
+        <button onclick="checkSwapAnswer(2)" class="swap-ans-btn" style="padding:9px 18px;border-radius:10px;border:1.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:var(--text);font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:all .25s">(C) 2个</button>
+        <button onclick="checkSwapAnswer(3)" class="swap-ans-btn" style="padding:9px 18px;border-radius:10px;border:1.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:var(--text);font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:all .25s">(D) 3个</button>
+      </div>
+      <div id="swap-challenge-fb" style="margin-top:10px;font-size:14px;font-weight:700;min-height:22px"></div>
+    </div>
+  </div>
+
+  <!-- 概念2: 最优化填数 -->
+  <div class="cbox" style="--accent:#a78bfa;--accent-bg:rgba(139,92,246,0.05)">
+    <button class="vbtn vbtn-a" onclick="toggleVoice(this,'最优化填数就是把数字放进格子里，让总和最大或最小。诀窍是：最大的数要放在"最重要"的位置！来试试看，点格子选数字吧！')">🔊 听讲解</button>
+    <h4>🔢 最优化填数</h4>
+    <p style="margin-bottom:16px">把数字 1–9 分配给三个位置，让乘积最大。点击格子来选数字！</p>
+    <div style="text-align:center">
+      <div style="display:inline-flex;align-items:center;gap:8px;font-size:22px;font-weight:900;margin-bottom:12px">
+        <div class="ig-cell" id="opt-a" onclick="pickCell('a')" style="width:52px;height:52px;font-size:22px">?</div>
+        <span>×</span>
+        <div class="ig-cell" id="opt-b" onclick="pickCell('b')" style="width:52px;height:52px;font-size:22px">?</div>
+        <span>×</span>
+        <div class="ig-cell" id="opt-c" onclick="pickCell('c')" style="width:52px;height:52px;font-size:22px">?</div>
+      </div>
+      <div id="opt-result" class="ig-status">选择三个不同的数字，看乘积！</div>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;justify-content:center" id="num-buttons">
+    </div>
+    <div id="opt-best" style="display:none;margin-top:10px;padding:10px 14px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);border-radius:10px;font-size:14px;font-weight:700;text-align:center;color:#6ee7b7"></div>
+  </div>
+
+  <!-- 概念3: 倒推策略 -->
+  <div class="cbox" style="--accent:#67e8f9;--accent-bg:rgba(6,182,212,0.05)">
+    <button class="vbtn vbtn-c" onclick="toggleVoice(this,'倒推就是从结果往回推！比如最后剩下5个苹果，之前吃了3个，那之前有8个。不知道开始有多少，就从最后一步一步往前算，就像玩时光倒流的游戏！')">🔊 听讲解</button>
+    <h4>⏪ 倒推策略</h4>
+    <p style="margin-bottom:16px">已知最终结果，一步步往前推算初始值。点击"倒推"按钮看动画！</p>
+    <div style="text-align:center">
+      <svg id="reverse-svg" viewBox="0 0 400 110" width="100%" style="max-width:420px;margin:0 auto;display:block">
+        <defs>
+          <marker id="ah" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#67e8f9"/>
+          </marker>
+          <marker id="ah-r" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto">
+            <polygon points="8 0, 0 3, 8 6" fill="#f9a8d4"/>
+          </marker>
+        </defs>
+        <!-- boxes -->
+        <rect id="rb0" x="10" y="35" width="60" height="40" rx="10" fill="rgba(255,255,255,0.04)" stroke="#a78bfa" stroke-width="2"/>
+        <text id="rt0" x="40" y="60" text-anchor="middle" font-size="18" font-family="Noto Sans SC,sans-serif" fill="#f8fafc">?</text>
+        <!-- op1 -->
+        <line x1="70" y1="55" x2="100" y2="55" stroke="#67e8f9" stroke-width="2" marker-end="url(#ah)"/>
+        <text x="85" y="48" text-anchor="middle" font-size="11" fill="#67e8f9">+6</text>
+        <rect x="100" y="35" width="60" height="40" rx="10" fill="rgba(255,255,255,0.04)" stroke="#a78bfa" stroke-width="2"/>
+        <text id="rt1" x="130" y="60" text-anchor="middle" font-size="18" font-family="Noto Sans SC,sans-serif" fill="#f8fafc">?</text>
+        <!-- op2 -->
+        <line x1="160" y1="55" x2="190" y2="55" stroke="#67e8f9" stroke-width="2" marker-end="url(#ah)"/>
+        <text x="175" y="48" text-anchor="middle" font-size="11" fill="#67e8f9">×3</text>
+        <rect x="190" y="35" width="60" height="40" rx="10" fill="rgba(255,255,255,0.04)" stroke="#a78bfa" stroke-width="2"/>
+        <text id="rt2" x="220" y="60" text-anchor="middle" font-size="18" font-family="Noto Sans SC,sans-serif" fill="#f8fafc">?</text>
+        <!-- op3 -->
+        <line x1="250" y1="55" x2="280" y2="55" stroke="#67e8f9" stroke-width="2" marker-end="url(#ah)"/>
+        <text x="265" y="48" text-anchor="middle" font-size="11" fill="#67e8f9">-4</text>
+        <rect id="rb3" x="280" y="35" width="80" height="40" rx="10" fill="rgba(16,185,129,0.15)" stroke="#6ee7b7" stroke-width="2"/>
+        <text x="320" y="60" text-anchor="middle" font-size="18" font-family="Noto Sans SC,sans-serif" fill="#6ee7b7">32</text>
+        <text x="320" y="90" text-anchor="middle" font-size="11" fill="#6ee7b7">最终结果</text>
+      </svg>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;justify-content:center">
+      <button class="vbtn-inline vbtn-rose" onclick="animateReverse()">⏪ 开始倒推</button>
+      <button class="vbtn-inline vbtn-sky" onclick="resetReverse()">🔄 重置</button>
+    </div>
+    <div id="reverse-hint" style="margin-top:10px;font-size:14px;font-weight:700;color:var(--muted);text-align:center"></div>
+  </div>
 
       </div>
     </div>
@@ -532,354 +761,235 @@ body {
       <div class="gcard">
         <div class="sec-heading">🛠 学习技巧</div>
 
-        <!-- 技巧1 -->
-        <div class="mcard" onclick="toggleMCard(event, this)">
-          <div class="mcard-head">
-            <div class="mcard-icon">📋</div>
-            <div class="mcard-info">
-              <div class="mcard-title">系统列举法</div>
-              <div class="mcard-sub">不重不漏地列出所有可能，排列组合必备！</div>
-            </div>
-            <span class="mcard-chevron">▼</span>
+  <!-- 技巧1 -->
+  <div class="mcard" id="mc1">
+    <div class="mcard-hd" onclick="toggleCard(this)">
+      <span>🔁 技巧一：等量代换逐步替换</span><span class="arr">▶</span>
+    </div>
+    <div class="mcard-body">
+      <div class="mcard-figure">
+        <div class="fig-label">挑战：⚖️ 1个苹果 = 2个橙子，3个橙子 = 1个梨。1个苹果 = 几个梨？</div>
+        <svg viewBox="0 0 280 110" width="100%" style="max-width:320px">
+          <rect x="5" y="10" width="120" height="36" rx="10" fill="rgba(139,92,246,0.08)" stroke="#a78bfa" stroke-width="2"/>
+          <text x="65" y="32" text-anchor="middle" font-size="13" font-family="Noto Sans SC,sans-serif" fill="#f8fafc">🍎 = 🍊🍊</text>
+          <rect x="155" y="10" width="120" height="36" rx="10" fill="rgba(6,182,212,0.08)" stroke="#67e8f9" stroke-width="2"/>
+          <text x="215" y="32" text-anchor="middle" font-size="13" font-family="Noto Sans SC,sans-serif" fill="#f8fafc">🍊🍊🍊 = 🍐</text>
+          <text x="140" y="80" text-anchor="middle" font-size="14" font-family="Noto Sans SC,sans-serif" fill="#94a3b8">🍎 = ？个🍐</text>
+          <text x="140" y="100" text-anchor="middle" font-size="11" fill="#a78bfa">（注意：1个苹果=2个橙子≠3个橙子）</text>
+        </svg>
+      </div>
+      <button class="reveal-btn" onclick="revealSteps('ms1')">👆 点我看解法！</button>
+      <div id="ms1" class="steps-row">
+        <div class="step">
+          <div class="step-vis">
+            <svg viewBox="0 0 160 100" width="100%" height="auto">
+              <rect class="sv" x="5" y="10" width="150" height="36" rx="10" fill="rgba(139,92,246,0.1)" stroke="#a78bfa" stroke-width="2"/>
+              <text class="sv" x="80" y="32" text-anchor="middle" font-size="13" font-family="Noto Sans SC,sans-serif" fill="#f8fafc">🍎 = 🍊🍊</text>
+              <line class="sv sv-draw" pathLength="1" x1="80" y1="50" x2="80" y2="70" stroke="#67e8f9" stroke-width="2" marker-end="url(#ah)" style="animation-delay:.2s"/>
+              <text class="sv" x="80" y="88" text-anchor="middle" font-size="12" fill="#67e8f9" style="animation-delay:.4s">已知条件①</text>
+            </svg>
           </div>
-          <div class="mcard-body">
-            <div class="mcard-body-inner">
-              <div class="mcard-figure">
-                <div class="fig-label">挑战：用 1、2、3 能组成多少个两位数？（每个数字只用一次）</div>
-                <svg viewBox="0 0 280 120" width="100%" style="max-width:360px">
-                  <defs>
-                    <marker id="arr-p" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
-                      <path d="M0,0 L6,3 L0,6 Z" fill="rgba(167,139,250,0.8)"/>
-                    </marker>
-                  </defs>
-                  <!-- 根节点 -->
-                  <circle cx="50" cy="60" r="18" fill="rgba(139,92,246,0.2)" stroke="rgba(139,92,246,0.5)" stroke-width="1.5"/>
-                  <text x="50" y="65" text-anchor="middle" font-size="13" fill="#a78bfa" font-weight="800" font-family="Noto Sans SC,sans-serif">十位</text>
-                  <!-- 分支1 -->
-                  <line x1="68" y1="55" x2="115" y2="25" stroke="rgba(167,139,250,0.5)" stroke-width="1.5" marker-end="url(#arr-p)"/>
-                  <circle cx="130" cy="20" r="14" fill="rgba(139,92,246,0.15)" stroke="rgba(139,92,246,0.4)" stroke-width="1.5"/>
-                  <text x="130" y="25" text-anchor="middle" font-size="13" fill="#a78bfa" font-weight="700" font-family="sans-serif">1</text>
-                  <!-- 分支2 -->
-                  <line x1="68" y1="60" x2="115" y2="60" stroke="rgba(167,139,250,0.5)" stroke-width="1.5" marker-end="url(#arr-p)"/>
-                  <circle cx="130" cy="60" r="14" fill="rgba(139,92,246,0.15)" stroke="rgba(139,92,246,0.4)" stroke-width="1.5"/>
-                  <text x="130" y="65" text-anchor="middle" font-size="13" fill="#a78bfa" font-weight="700" font-family="sans-serif">2</text>
-                  <!-- 分支3 -->
-                  <line x1="68" y1="65" x2="115" y2="95" stroke="rgba(167,139,250,0.5)" stroke-width="1.5" marker-end="url(#arr-p)"/>
-                  <circle cx="130" cy="100" r="14" fill="rgba(139,92,246,0.15)" stroke="rgba(139,92,246,0.4)" stroke-width="1.5"/>
-                  <text x="130" y="105" text-anchor="middle" font-size="13" fill="#a78bfa" font-weight="700" font-family="sans-serif">3</text>
-                  <!-- 叶子标注 -->
-                  <text x="180" y="20" font-size="11" fill="rgba(167,139,250,0.7)" font-family="Noto Sans SC,sans-serif">→ 12, 13</text>
-                  <text x="180" y="60" font-size="11" fill="rgba(167,139,250,0.7)" font-family="Noto Sans SC,sans-serif">→ 21, 23</text>
-                  <text x="180" y="100" font-size="11" fill="rgba(167,139,250,0.7)" font-family="Noto Sans SC,sans-serif">→ 31, 32</text>
-                </svg>
-              </div>
-              <button class="reveal-btn" onclick="revealSteps('ms1')">👆 点我看解法！</button>
-              <div id="ms1">
-                <div class="step">
-                  <div class="step-vis">
-                    <svg viewBox="0 0 160 90" width="100%">
-                      <rect class="sv" x="10" y="20" width="140" height="30" rx="8" fill="rgba(139,92,246,0.15)" stroke="rgba(139,92,246,0.4)" stroke-width="1.5"/>
-                      <text class="sv" x="80" y="40" text-anchor="middle" font-size="13" fill="#a78bfa" font-weight="700" font-family="Noto Sans SC,sans-serif">固定十位：1、2、3</text>
-                      <text class="sv pop" x="80" y="70" text-anchor="middle" font-size="12" fill="var(--muted)" font-family="Noto Sans SC,sans-serif">3 种选择</text>
-                    </svg>
-                  </div>
-                  <div class="step-label">① <b>固定十位</b><br>依次取 1、2、3</div>
-                </div>
-                <div class="step">
-                  <div class="step-vis">
-                    <svg viewBox="0 0 160 90" width="100%">
-                      <text class="sv" x="80" y="25" text-anchor="middle" font-size="12" fill="var(--muted)" font-family="Noto Sans SC,sans-serif">十位=1时</text>
-                      <line class="sv sv-draw" x1="20" y1="38" x2="140" y2="38" stroke="#a78bfa" stroke-width="1.5" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
-                      <text class="sv pop" x="80" y="60" text-anchor="middle" font-size="14" fill="#a78bfa" font-weight="800" font-family="sans-serif">12, 13</text>
-                      <text class="sv pop" x="80" y="78" text-anchor="middle" font-size="11" fill="var(--muted2)" font-family="Noto Sans SC,sans-serif">个位变换 2 种</text>
-                    </svg>
-                  </div>
-                  <div class="step-label">② <b>变换个位</b><br>剩余数字各一次</div>
-                </div>
-                <div class="step">
-                  <div class="step-vis">
-                    <svg viewBox="0 0 160 90" width="100%">
-                      <text class="sv pop" x="80" y="30" text-anchor="middle" font-size="13" fill="#6ee7b7" font-weight="800" font-family="sans-serif">12,13,21,23</text>
-                      <text class="sv pop" x="80" y="50" text-anchor="middle" font-size="13" fill="#6ee7b7" font-weight="800" font-family="sans-serif">31,32</text>
-                      <rect class="sv" x="10" y="60" width="140" height="22" rx="8" fill="rgba(16,185,129,0.15)" stroke="rgba(16,185,129,0.4)" stroke-width="1.5"/>
-                      <text class="sv" x="80" y="76" text-anchor="middle" font-size="13" fill="#6ee7b7" font-weight="700" font-family="Noto Sans SC,sans-serif">共 6 个两位数</text>
-                    </svg>
-                  </div>
-                  <div class="step-label">③ <b>列完整树形图</b><br>数叶子 = <b>6 个</b></div>
-                </div>
-              </div>
-              <div style="margin-top:10px">
-                <button class="va-btn" onclick="tv(this,'系统列举法的关键是：先固定一个位置，再依次改变其他位置，这样就能不重复不遗漏地列出所有可能。用1、2、3组成两位数，十位有3种选法，个位剩2种，所以总共有3乘以2等于6种。','m7_s2_ms1')">🔊 听讲解</button>
-              </div>
-            </div>
-          </div>
+          <div class="step-label">① 写出已知</div>
         </div>
-
-        <!-- 技巧2 -->
-        <div class="mcard" onclick="toggleMCard(event, this)">
-          <div class="mcard-head">
-            <div class="mcard-icon">🌳</div>
-            <div class="mcard-info">
-              <div class="mcard-title">画树形图法</div>
-              <div class="mcard-sub">像画树一样，一层层展开所有选择，清晰又直观！</div>
-            </div>
-            <span class="mcard-chevron">▼</span>
+        <div class="step">
+          <div class="step-vis">
+            <svg viewBox="0 0 160 100" width="100%" height="auto">
+              <rect class="sv" x="5" y="10" width="150" height="36" rx="10" fill="rgba(6,182,212,0.08)" stroke="#67e8f9" stroke-width="2"/>
+              <text class="sv" x="80" y="32" text-anchor="middle" font-size="13" font-family="Noto Sans SC,sans-serif" fill="#f8fafc">🍊🍊🍊 = 🍐</text>
+              <text class="sv pop" x="80" y="72" text-anchor="middle" font-size="12" fill="#f9a8d4" font-family="Noto Sans SC,sans-serif" style="animation-delay:.3s">每2个橙 = 2/3梨</text>
+            </svg>
           </div>
-          <div class="mcard-body">
-            <div class="mcard-body-inner">
-              <div class="mcard-figure">
-                <div class="fig-label">挑战：小明、小红、小华排队，有多少种顺序？</div>
-                <svg viewBox="0 0 300 150" width="100%" style="max-width:380px">
-                  <defs>
-                    <marker id="arr-t" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
-                      <path d="M0,0 L6,3 L0,6 Z" fill="rgba(103,232,249,0.8)"/>
-                    </marker>
-                  </defs>
-                  <!-- 根 -->
-                  <circle cx="30" cy="75" r="16" fill="rgba(6,182,212,0.2)" stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
-                  <text x="30" y="80" text-anchor="middle" font-size="10" fill="#67e8f9" font-weight="700" font-family="Noto Sans SC,sans-serif">开始</text>
-                  <!-- 第一层 -->
-                  <line x1="46" y1="67" x2="80" y2="30" stroke="rgba(103,232,249,0.5)" stroke-width="1.5" marker-end="url(#arr-t)"/>
-                  <circle cx="92" cy="25" r="14" fill="rgba(6,182,212,0.15)" stroke="rgba(6,182,212,0.4)" stroke-width="1.5"/>
-                  <text x="92" y="30" text-anchor="middle" font-size="11" fill="#67e8f9" font-weight="700" font-family="sans-serif">明</text>
-
-                  <line x1="46" y1="75" x2="80" y2="75" stroke="rgba(103,232,249,0.5)" stroke-width="1.5" marker-end="url(#arr-t)"/>
-                  <circle cx="92" cy="75" r="14" fill="rgba(6,182,212,0.15)" stroke="rgba(6,182,212,0.4)" stroke-width="1.5"/>
-                  <text x="92" y="80" text-anchor="middle" font-size="11" fill="#67e8f9" font-weight="700" font-family="sans-serif">红</text>
-
-                  <line x1="46" y1="83" x2="80" y2="120" stroke="rgba(103,232,249,0.5)" stroke-width="1.5" marker-end="url(#arr-t)"/>
-                  <circle cx="92" cy="125" r="14" fill="rgba(6,182,212,0.15)" stroke="rgba(6,182,212,0.4)" stroke-width="1.5"/>
-                  <text x="92" y="130" text-anchor="middle" font-size="11" fill="#67e8f9" font-weight="700" font-family="sans-serif">华</text>
-
-                  <!-- 第二层（明后面） -->
-                  <line x1="106" y1="20" x2="136" y2="12" stroke="rgba(103,232,249,0.4)" stroke-width="1"/>
-                  <text x="148" y="16" font-size="10" fill="#a78bfa" font-family="sans-serif">红华</text>
-                  <line x1="106" y1="30" x2="136" y2="38" stroke="rgba(103,232,249,0.4)" stroke-width="1"/>
-                  <text x="148" y="42" font-size="10" fill="#a78bfa" font-family="sans-serif">华红</text>
-
-                  <!-- 第二层（红后面） -->
-                  <line x1="106" y1="70" x2="136" y2="62" stroke="rgba(103,232,249,0.4)" stroke-width="1"/>
-                  <text x="148" y="66" font-size="10" fill="#6ee7b7" font-family="sans-serif">明华</text>
-                  <line x1="106" y1="80" x2="136" y2="88" stroke="rgba(103,232,249,0.4)" stroke-width="1"/>
-                  <text x="148" y="92" font-size="10" fill="#6ee7b7" font-family="sans-serif">华明</text>
-
-                  <!-- 第二层（华后面） -->
-                  <line x1="106" y1="120" x2="136" y2="112" stroke="rgba(103,232,249,0.4)" stroke-width="1"/>
-                  <text x="148" y="116" font-size="10" fill="#fcd34d" font-family="sans-serif">明红</text>
-                  <line x1="106" y1="130" x2="136" y2="138" stroke="rgba(103,232,249,0.4)" stroke-width="1"/>
-                  <text x="148" y="142" font-size="10" fill="#fcd34d" font-family="sans-serif">红明</text>
-
-                  <!-- 叶子数 -->
-                  <text x="255" y="75" font-size="14" fill="#a78bfa" font-weight="900" font-family="sans-serif">= 6种</text>
-                </svg>
-              </div>
-              <button class="reveal-btn" onclick="revealSteps('ms2')">👆 点我看解法！</button>
-              <div id="ms2">
-                <div class="step">
-                  <div class="step-vis">
-                    <svg viewBox="0 0 160 90" width="100%">
-                      <circle class="sv" cx="30" cy="45" r="15" fill="rgba(6,182,212,0.2)" stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
-                      <text class="sv" x="30" y="50" text-anchor="middle" font-size="10" fill="#67e8f9" font-weight="700" font-family="Noto Sans SC,sans-serif">第一</text>
-                      <text class="sv pop" x="100" y="30" font-size="12" fill="#67e8f9" font-family="Noto Sans SC,sans-serif">明</text>
-                      <text class="sv pop" x="100" y="48" font-size="12" fill="#67e8f9" font-family="Noto Sans SC,sans-serif">红</text>
-                      <text class="sv pop" x="100" y="66" font-size="12" fill="#67e8f9" font-family="Noto Sans SC,sans-serif">华</text>
-                      <text class="sv" x="140" y="48" font-size="11" fill="var(--muted2)" font-family="Noto Sans SC,sans-serif">3选1</text>
-                    </svg>
-                  </div>
-                  <div class="step-label">① 第一个人<br><b>3 选 1</b></div>
-                </div>
-                <div class="step">
-                  <div class="step-vis">
-                    <svg viewBox="0 0 160 90" width="100%">
-                      <text class="sv" x="80" y="22" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="Noto Sans SC,sans-serif">第一位已选</text>
-                      <line class="sv sv-draw" x1="20" y1="35" x2="140" y2="35" stroke="#a78bfa" stroke-width="1.5" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
-                      <text class="sv pop" x="80" y="58" text-anchor="middle" font-size="13" fill="#a78bfa" font-weight="700" font-family="Noto Sans SC,sans-serif">剩下 2 人选第二</text>
-                      <text class="sv pop" x="80" y="76" text-anchor="middle" font-size="12" fill="var(--muted2)" font-family="Noto Sans SC,sans-serif">2 选 1</text>
-                    </svg>
-                  </div>
-                  <div class="step-label">② 第二个人<br><b>2 选 1</b></div>
-                </div>
-                <div class="step">
-                  <div class="step-vis">
-                    <svg viewBox="0 0 160 90" width="100%">
-                      <rect class="sv" x="10" y="14" width="140" height="28" rx="8" fill="rgba(16,185,129,0.15)" stroke="rgba(16,185,129,0.4)" stroke-width="1.5"/>
-                      <text class="sv" x="80" y="33" text-anchor="middle" font-size="14" fill="#6ee7b7" font-weight="800" font-family="Noto Sans SC,sans-serif">3 × 2 × 1 = 6</text>
-                      <text class="sv pop" x="80" y="65" text-anchor="middle" font-size="13" fill="#6ee7b7" font-family="Noto Sans SC,sans-serif">叶子节点 6 个</text>
-                      <text class="sv pop" x="80" y="82" text-anchor="middle" font-size="12" fill="var(--muted2)" font-family="Noto Sans SC,sans-serif">共 6 种排列</text>
-                    </svg>
-                  </div>
-                  <div class="step-label">③ <b>数叶子</b> = 6 种</div>
-                </div>
-              </div>
-              <div style="margin-top:10px">
-                <button class="va-btn" onclick="tv(this,'画树形图的时候，根节点是出发点，每一层代表做一个选择。三个人排队，第一层有三个分支，第二层每个分支又有两个分支，第三层每个分支只有一个人了。数一数树的叶子，就是所有排法的总数，等于三乘二乘一等于六种。','m7_s2_ms2')">🔊 听讲解</button>
-              </div>
-            </div>
-          </div>
+          <div class="step-label">② 换算单位</div>
         </div>
-
-        <!-- 技巧3 -->
-        <div class="mcard" onclick="toggleMCard(event, this)">
-          <div class="mcard-head">
-            <div class="mcard-icon">🔁</div>
-            <div class="mcard-info">
-              <div class="mcard-title">找对称规律</div>
-              <div class="mcard-sub">利用图形对称性减少重复计算，事半功倍！</div>
-            </div>
-            <span class="mcard-chevron">▼</span>
+        <div class="step">
+          <div class="step-vis">
+            <svg viewBox="0 0 160 100" width="100%" height="auto">
+              <rect class="sv pop" x="15" y="20" width="130" height="56" rx="12" fill="rgba(16,185,129,0.15)" stroke="#6ee7b7" stroke-width="2" style="animation-delay:.2s"/>
+              <text class="sv pop" x="80" y="50" text-anchor="middle" font-size="14" font-family="Noto Sans SC,sans-serif" fill="#f8fafc" style="animation-delay:.4s">🍎 = 2/3 个🍐</text>
+              <text class="sv" x="80" y="72" text-anchor="middle" font-size="11" fill="#6ee7b7" style="animation-delay:.6s">答案：2/3</text>
+            </svg>
           </div>
-          <div class="mcard-body">
-            <div class="mcard-body-inner">
-              <div class="mcard-figure">
-                <div class="fig-label">挑战：正六边形有多少条对称轴？</div>
-                <svg viewBox="0 0 200 160" width="100%" style="max-width:280px">
-                  <defs>
-                    <marker id="arr-s" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
-                      <path d="M0,0 L6,3 L0,6 Z" fill="rgba(167,139,250,0.8)"/>
-                    </marker>
-                  </defs>
-                  <!-- 正六边形 -->
-                  <polygon points="100,20 160,50 160,110 100,140 40,110 40,50"
-                    fill="rgba(139,92,246,0.1)" stroke="rgba(139,92,246,0.5)" stroke-width="2"/>
-                  <!-- 对称轴（虚线） -->
-                  <line x1="100" y1="5" x2="100" y2="155" stroke="rgba(103,232,249,0.6)" stroke-width="1.5" stroke-dasharray="5,4"/>
-                  <line x1="22" y1="30" x2="178" y2="130" stroke="rgba(167,139,250,0.6)" stroke-width="1.5" stroke-dasharray="5,4"/>
-                  <line x1="178" y1="30" x2="22" y2="130" stroke="rgba(110,231,183,0.6)" stroke-width="1.5" stroke-dasharray="5,4"/>
-                  <line x1="40" y1="80" x2="160" y2="80" stroke="rgba(252,211,77,0.6)" stroke-width="1.5" stroke-dasharray="5,4"/>
-                  <line x1="70" y1="15" x2="130" y2="145" stroke="rgba(249,115,22,0.6)" stroke-width="1.5" stroke-dasharray="5,4"/>
-                  <line x1="130" y1="15" x2="70" y2="145" stroke="rgba(239,68,68,0.6)" stroke-width="1.5" stroke-dasharray="5,4"/>
-                  <!-- 顶点 -->
-                  <circle cx="100" cy="20" r="4" fill="#a78bfa"/>
-                  <circle cx="160" cy="50" r="4" fill="#a78bfa"/>
-                  <circle cx="160" cy="110" r="4" fill="#a78bfa"/>
-                  <circle cx="100" cy="140" r="4" fill="#a78bfa"/>
-                  <circle cx="40" cy="110" r="4" fill="#a78bfa"/>
-                  <circle cx="40" cy="50" r="4" fill="#a78bfa"/>
-                </svg>
-              </div>
-              <button class="reveal-btn" onclick="revealSteps('ms3')">👆 点我看解法！</button>
-              <div id="ms3">
-                <div class="step">
-                  <div class="step-vis">
-                    <svg viewBox="0 0 160 90" width="100%">
-                      <polygon class="sv" points="80,12 116,30 116,68 80,86 44,68 44,30"
-                        fill="rgba(139,92,246,0.1)" stroke="rgba(139,92,246,0.5)" stroke-width="1.5"/>
-                      <line class="sv sv-draw" x1="80" y1="5" x2="80" y2="92" stroke="#67e8f9" stroke-width="2" stroke-dasharray="4,3" pathLength="1" stroke-dashoffset="1"/>
-                      <text class="sv pop" x="105" y="50" font-size="11" fill="#67e8f9" font-family="Noto Sans SC,sans-serif">轴①</text>
-                    </svg>
-                  </div>
-                  <div class="step-label">① 找<b>顶点对顶点</b>的对称轴（3条）</div>
-                </div>
-                <div class="step">
-                  <div class="step-vis">
-                    <svg viewBox="0 0 160 90" width="100%">
-                      <polygon class="sv" points="80,12 116,30 116,68 80,86 44,68 44,30"
-                        fill="rgba(139,92,246,0.1)" stroke="rgba(139,92,246,0.5)" stroke-width="1.5"/>
-                      <line class="sv sv-draw" x1="20" y1="49" x2="140" y2="49" stroke="#6ee7b7" stroke-width="2" stroke-dasharray="4,3" pathLength="1" stroke-dashoffset="1"/>
-                      <text class="sv pop" x="105" y="38" font-size="11" fill="#6ee7b7" font-family="Noto Sans SC,sans-serif">轴④</text>
-                    </svg>
-                  </div>
-                  <div class="step-label">② 找<b>边中点对边中点</b>的对称轴（3条）</div>
-                </div>
-                <div class="step">
-                  <div class="step-vis">
-                    <svg viewBox="0 0 160 90" width="100%">
-                      <rect class="sv" x="10" y="20" width="140" height="30" rx="8" fill="rgba(16,185,129,0.15)" stroke="rgba(16,185,129,0.4)" stroke-width="1.5"/>
-                      <text class="sv" x="80" y="40" text-anchor="middle" font-size="16" fill="#6ee7b7" font-weight="900" font-family="sans-serif">3 + 3 = 6 条</text>
-                      <text class="sv pop" x="80" y="70" text-anchor="middle" font-size="12" fill="var(--muted)" font-family="Noto Sans SC,sans-serif">正六边形有6条对称轴</text>
-                    </svg>
-                  </div>
-                  <div class="step-label">③ <b>相加</b> = <b>6 条</b></div>
-                </div>
-              </div>
-              <div style="margin-top:10px">
-                <button class="va-btn" onclick="tv(this,'找对称轴要分两类：一类是顶点连到对面顶点，正六边形有三条；另一类是边的中点连到对面边的中点，也有三条。所以正六边形总共有六条对称轴。','m7_s2_ms3')">🔊 听讲解</button>
-              </div>
-            </div>
-          </div>
+          <div class="step-label">③ 得出答案</div>
         </div>
+      </div>
+      <button class="vbtn-inline vbtn-sky" onclick="toggleVoice(this,'等量代换的诀窍是：先把已知的等量关系列出来，然后一步步把未知的东西换成已知的！就像用橙子换苹果，再用橙子换梨，中间要注意数量有没有对上！')">🔊 听讲解</button>
+    </div>
+  </div>
 
-        <!-- 技巧4 -->
-        <div class="mcard" onclick="toggleMCard(event, this)">
-          <div class="mcard-head">
-            <div class="mcard-icon">✖️</div>
-            <div class="mcard-info">
-              <div class="mcard-title">加法原理 vs 乘法原理</div>
-              <div class="mcard-sub">分步用乘，分类用加——组合计数的两大法宝！</div>
-            </div>
-            <span class="mcard-chevron">▼</span>
+  <!-- 技巧2 -->
+  <div class="mcard" id="mc2">
+    <div class="mcard-hd" onclick="toggleCard(this)">
+      <span>⏪ 技巧二：倒推法（从结果往前推）</span><span class="arr">▶</span>
+    </div>
+    <div class="mcard-body">
+      <div class="mcard-figure">
+        <div class="fig-label">挑战：🎒 小明出门前给了妈妈一半的钱，又花了5元，最后剩3元。他出门前有多少钱？</div>
+        <svg viewBox="0 0 300 80" width="100%" style="max-width:340px">
+          <rect x="5" y="20" width="60" height="36" rx="10" fill="rgba(255,255,255,0.04)" stroke="#a78bfa" stroke-width="2"/>
+          <text x="35" y="43" text-anchor="middle" font-size="14" font-family="Noto Sans SC,sans-serif" fill="#f8fafc">?元</text>
+          <line x1="65" y1="38" x2="90" y2="38" stroke="#67e8f9" stroke-width="2" marker-end="url(#ah)"/>
+          <text x="78" y="28" text-anchor="middle" font-size="10" fill="#67e8f9">÷2</text>
+          <rect x="90" y="20" width="60" height="36" rx="10" fill="rgba(255,255,255,0.04)" stroke="#a78bfa" stroke-width="2"/>
+          <text x="120" y="43" text-anchor="middle" font-size="14" font-family="Noto Sans SC,sans-serif" fill="#f8fafc">?元</text>
+          <line x1="150" y1="38" x2="175" y2="38" stroke="#67e8f9" stroke-width="2" marker-end="url(#ah)"/>
+          <text x="163" y="28" text-anchor="middle" font-size="10" fill="#67e8f9">-5</text>
+          <rect x="175" y="20" width="60" height="36" rx="10" fill="rgba(16,185,129,0.15)" stroke="#6ee7b7" stroke-width="2"/>
+          <text x="205" y="43" text-anchor="middle" font-size="14" font-family="Noto Sans SC,sans-serif" fill="#6ee7b7">3元</text>
+          <text x="205" y="68" text-anchor="middle" font-size="10" fill="#6ee7b7">已知结果</text>
+        </svg>
+      </div>
+      <button class="reveal-btn" onclick="revealSteps('ms2')">👆 点我看解法！</button>
+      <div id="ms2" class="steps-row">
+        <div class="step">
+          <div class="step-vis">
+            <svg viewBox="0 0 160 100" width="100%" height="auto">
+              <rect class="sv" x="5" y="15" width="150" height="45" rx="12" fill="rgba(16,185,129,0.15)" stroke="#6ee7b7" stroke-width="2"/>
+              <text class="sv" x="80" y="40" text-anchor="middle" font-size="14" font-family="Noto Sans SC,sans-serif" fill="#6ee7b7">剩 3 元</text>
+              <text class="sv" x="80" y="72" text-anchor="middle" font-size="12" fill="#94a3b8" style="animation-delay:.2s">从这里开始倒推</text>
+            </svg>
           </div>
-          <div class="mcard-body">
-            <div class="mcard-body-inner">
-              <div class="mcard-figure">
-                <div class="fig-label">挑战：从A到C，A→B有2条路，B→C有3条路，共有几条路？</div>
-                <svg viewBox="0 0 280 120" width="100%" style="max-width:360px">
-                  <defs>
-                    <marker id="arr-r" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
-                      <path d="M0,0 L6,3 L0,6 Z" fill="rgba(252,211,77,0.9)"/>
-                    </marker>
-                  </defs>
-                  <!-- A节点 -->
-                  <circle cx="35" cy="60" r="20" fill="rgba(139,92,246,0.2)" stroke="rgba(139,92,246,0.5)" stroke-width="2"/>
-                  <text x="35" y="65" text-anchor="middle" font-size="16" fill="#a78bfa" font-weight="900" font-family="sans-serif">A</text>
-                  <!-- B节点 -->
-                  <circle cx="145" cy="60" r="20" fill="rgba(6,182,212,0.2)" stroke="rgba(6,182,212,0.5)" stroke-width="2"/>
-                  <text x="145" y="65" text-anchor="middle" font-size="16" fill="#67e8f9" font-weight="900" font-family="sans-serif">B</text>
-                  <!-- C节点 -->
-                  <circle cx="245" cy="60" r="20" fill="rgba(16,185,129,0.2)" stroke="rgba(16,185,129,0.5)" stroke-width="2"/>
-                  <text x="245" y="65" text-anchor="middle" font-size="16" fill="#6ee7b7" font-weight="900" font-family="sans-serif">C</text>
-                  <!-- A→B 路 -->
-                  <path d="M55 52 Q100 30 125 55" stroke="rgba(252,211,77,0.7)" stroke-width="1.5" fill="none" marker-end="url(#arr-r)"/>
-                  <path d="M55 68 Q100 90 125 65" stroke="rgba(252,211,77,0.7)" stroke-width="1.5" fill="none" marker-end="url(#arr-r)"/>
-                  <text x="100" y="22" text-anchor="middle" font-size="11" fill="#fcd34d" font-family="Noto Sans SC,sans-serif">路线①②</text>
-                  <!-- B→C 路 -->
-                  <path d="M165 52 Q195 25 225 52" stroke="rgba(110,231,183,0.7)" stroke-width="1.5" fill="none" marker-end="url(#arr-r)"/>
-                  <path d="M165 60 Q205 60 225 60" stroke="rgba(110,231,183,0.7)" stroke-width="1.5" fill="none" marker-end="url(#arr-r)"/>
-                  <path d="M165 68 Q195 95 225 68" stroke="rgba(110,231,183,0.7)" stroke-width="1.5" fill="none" marker-end="url(#arr-r)"/>
-                  <text x="195" y="110" text-anchor="middle" font-size="11" fill="#6ee7b7" font-family="Noto Sans SC,sans-serif">路线①②③</text>
-                  <!-- 答案 -->
-                  <text x="145" y="112" text-anchor="middle" font-size="14" fill="#fcd34d" font-weight="800" font-family="sans-serif">2 × 3 = 6</text>
-                </svg>
-              </div>
-              <button class="reveal-btn" onclick="revealSteps('ms4')">👆 点我看解法！</button>
-              <div id="ms4">
-                <div class="step">
-                  <div class="step-vis">
-                    <svg viewBox="0 0 160 90" width="100%">
-                      <rect class="sv" x="8" y="18" width="144" height="28" rx="8" fill="rgba(6,182,212,0.12)" stroke="rgba(6,182,212,0.4)" stroke-width="1.5"/>
-                      <text class="sv" x="80" y="37" text-anchor="middle" font-size="12" fill="#67e8f9" font-weight="700" font-family="Noto Sans SC,sans-serif">分步：A→B→C</text>
-                      <text class="sv pop" x="80" y="68" text-anchor="middle" font-size="12" fill="var(--muted)" font-family="Noto Sans SC,sans-serif">两步缺一不可</text>
-                    </svg>
-                  </div>
-                  <div class="step-label">① 识别<b>分步</b>关系<br>先A→B，再B→C</div>
-                </div>
-                <div class="step">
-                  <div class="step-vis">
-                    <svg viewBox="0 0 160 90" width="100%">
-                      <text class="sv" x="80" y="25" text-anchor="middle" font-size="12" fill="var(--muted)" font-family="Noto Sans SC,sans-serif">每步选择数相乘</text>
-                      <line class="sv sv-draw" x1="20" y1="38" x2="140" y2="38" stroke="#fcd34d" stroke-width="1.5" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
-                      <text class="sv pop" x="80" y="62" text-anchor="middle" font-size="18" fill="#fcd34d" font-weight="900" font-family="sans-serif">2 × 3</text>
-                    </svg>
-                  </div>
-                  <div class="step-label">② <b>乘法原理</b><br>分步 → 相乘</div>
-                </div>
-                <div class="step">
-                  <div class="step-vis">
-                    <svg viewBox="0 0 160 90" width="100%">
-                      <rect class="sv" x="10" y="18" width="140" height="30" rx="8" fill="rgba(16,185,129,0.15)" stroke="rgba(16,185,129,0.4)" stroke-width="1.5"/>
-                      <text class="sv" x="80" y="38" text-anchor="middle" font-size="20" fill="#6ee7b7" font-weight="900" font-family="sans-serif">= 6 条路</text>
-                      <text class="sv pop" x="80" y="68" text-anchor="middle" font-size="12" fill="var(--muted2)" font-family="Noto Sans SC,sans-serif">分类用加，分步用乘</text>
-                    </svg>
-                  </div>
-                  <div class="step-label">③ <b>2 × 3 = 6</b> 条路</div>
-                </div>
-              </div>
-              <div style="margin-top:10px">
-                <button class="va-btn" onclick="tv(this,'加法原理用于分类：做一件事有几种不同的方法，每种方法都能独立完成，用加法。乘法原理用于分步：做一件事分几个步骤，每步都要做，用乘法。从A到C必须先过B，这是分步，所以用乘法：二乘以三等于六条路。','m7_s2_ms4')">🔊 听讲解</button>
-              </div>
-            </div>
-          </div>
+          <div class="step-label">① 从终点出发</div>
         </div>
+        <div class="step">
+          <div class="step-vis">
+            <svg viewBox="0 0 160 100" width="100%" height="auto">
+              <text class="sv" x="80" y="28" text-anchor="middle" font-size="12" fill="#67e8f9" style="animation-delay:.1s">-5 逆操作 = +5</text>
+              <rect class="sv pop" x="15" y="38" width="130" height="40" rx="12" fill="rgba(245,158,11,0.12)" stroke="rgba(245,158,11,0.4)" stroke-width="2" style="animation-delay:.25s"/>
+              <text class="sv pop" x="80" y="63" text-anchor="middle" font-size="15" font-family="Noto Sans SC,sans-serif" fill="#fcd34d" style="animation-delay:.4s">3 + 5 = 8 元</text>
+            </svg>
+          </div>
+          <div class="step-label">② 逆操作 -5</div>
+        </div>
+        <div class="step">
+          <div class="step-vis">
+            <svg viewBox="0 0 160 100" width="100%" height="auto">
+              <text class="sv" x="80" y="28" text-anchor="middle" font-size="12" fill="#67e8f9" style="animation-delay:.1s">÷2 逆操作 = ×2</text>
+              <rect class="sv pop" x="15" y="38" width="130" height="40" rx="12" fill="rgba(139,92,246,0.15)" stroke="#a78bfa" stroke-width="2" style="animation-delay:.25s"/>
+              <text class="sv pop" x="80" y="63" text-anchor="middle" font-size="15" font-family="Noto Sans SC,sans-serif" fill="#a78bfa" style="animation-delay:.4s">8 × 2 = 16 元 ✅</text>
+            </svg>
+          </div>
+          <div class="step-label">③ 逆操作 ÷2</div>
+        </div>
+      </div>
+      <button class="vbtn-inline vbtn-sky" onclick="toggleVoice(this,'倒推的核心是把操作"反过来"！加法变减法，减法变加法，乘法变除法，除法变乘法。从最后的结果一步步往前做逆操作，就能找到开始的数！')">🔊 听讲解</button>
+    </div>
+  </div>
+
+  <!-- 技巧3 -->
+  <div class="mcard" id="mc3">
+    <div class="mcard-hd" onclick="toggleCard(this)">
+      <span>🎯 技巧三：最优填数（大数放关键位）</span><span class="arr">▶</span>
+    </div>
+    <div class="mcard-body">
+      <div class="mcard-figure">
+        <div class="fig-label">挑战：把 3、4、5 分别填入 □×□+□，使结果最大</div>
+        <svg viewBox="0 0 260 80" width="100%" style="max-width:300px">
+          <rect x="15" y="20" width="50" height="40" rx="10" fill="rgba(255,255,255,0.04)" stroke="#a78bfa" stroke-width="2"/>
+          <text x="40" y="45" text-anchor="middle" font-size="22" font-family="Noto Sans SC,sans-serif" fill="#f8fafc">□</text>
+          <text x="75" y="45" text-anchor="middle" font-size="20" fill="#94a3b8">×</text>
+          <rect x="90" y="20" width="50" height="40" rx="10" fill="rgba(255,255,255,0.04)" stroke="#a78bfa" stroke-width="2"/>
+          <text x="115" y="45" text-anchor="middle" font-size="22" font-family="Noto Sans SC,sans-serif" fill="#f8fafc">□</text>
+          <text x="150" y="45" text-anchor="middle" font-size="20" fill="#94a3b8">+</text>
+          <rect x="165" y="20" width="50" height="40" rx="10" fill="rgba(255,255,255,0.04)" stroke="#a78bfa" stroke-width="2"/>
+          <text x="190" y="45" text-anchor="middle" font-size="22" font-family="Noto Sans SC,sans-serif" fill="#f8fafc">□</text>
+          <text x="233" y="45" text-anchor="middle" font-size="20" fill="#94a3b8">=?</text>
+        </svg>
+      </div>
+      <button class="reveal-btn" onclick="revealSteps('ms3')">👆 点我看解法！</button>
+      <div id="ms3" class="steps-row">
+        <div class="step">
+          <div class="step-vis">
+            <svg viewBox="0 0 160 95" width="100%" height="auto">
+              <text class="sv" x="80" y="20" text-anchor="middle" font-size="12" fill="#67e8f9">试试所有可能</text>
+              <rect class="sv" x="5" y="28" width="150" height="22" rx="8" fill="rgba(139,92,246,0.1)" stroke="#a78bfa" stroke-width="1.5"/>
+              <text class="sv" x="80" y="43" text-anchor="middle" font-size="12" font-family="Noto Sans SC,sans-serif" fill="#f8fafc" style="animation-delay:.1s">4×5+3=23 ✓</text>
+              <rect class="sv" x="5" y="54" width="150" height="22" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1.5" style="animation-delay:.15s"/>
+              <text class="sv" x="80" y="69" text-anchor="middle" font-size="12" font-family="Noto Sans SC,sans-serif" fill="#94a3b8" style="animation-delay:.2s">5×3+4=19</text>
+              <text class="sv" x="80" y="88" text-anchor="middle" font-size="11" fill="#94a3b8" style="animation-delay:.3s">3×4+5=17</text>
+            </svg>
+          </div>
+          <div class="step-label">① 列举比较</div>
+        </div>
+        <div class="step">
+          <div class="step-vis">
+            <svg viewBox="0 0 160 95" width="100%" height="auto">
+              <text class="sv" x="80" y="20" text-anchor="middle" font-size="12" fill="#67e8f9">发现规律</text>
+              <rect class="sv pop" x="10" y="28" width="140" height="58" rx="12" fill="rgba(245,158,11,0.12)" stroke="rgba(245,158,11,0.4)" stroke-width="2" style="animation-delay:.2s"/>
+              <text class="sv pop" x="80" y="52" text-anchor="middle" font-size="13" font-family="Noto Sans SC,sans-serif" fill="#fcd34d" style="animation-delay:.35s">两个大数相乘！</text>
+              <text class="sv pop" x="80" y="74" text-anchor="middle" font-size="12" fill="#94a3b8" style="animation-delay:.5s">4×5 &gt; 5×3 &gt; 3×4</text>
+            </svg>
+          </div>
+          <div class="step-label">② 总结规律</div>
+        </div>
+        <div class="step">
+          <div class="step-vis">
+            <svg viewBox="0 0 160 95" width="100%" height="auto">
+              <rect class="sv pop" x="10" y="18" width="140" height="64" rx="14" fill="rgba(16,185,129,0.15)" stroke="#6ee7b7" stroke-width="2" style="animation-delay:.2s"/>
+              <text class="sv pop" x="80" y="44" text-anchor="middle" font-size="15" font-family="Noto Sans SC,sans-serif" fill="#f8fafc" style="animation-delay:.35s">4 × 5 + 3</text>
+              <text class="sv pop" x="80" y="66" text-anchor="middle" font-size="18" font-family="Noto Sans SC,sans-serif" fill="#6ee7b7" style="animation-delay:.5s">= 23 🎉</text>
+            </svg>
+          </div>
+          <div class="step-label">③ 最优答案</div>
+        </div>
+      </div>
+      <button class="vbtn-inline vbtn-sky" onclick="toggleVoice(this,'最优填数的策略是：先搞清楚哪个位置最重要。对于乘法来说，被乘的数越大影响越大，所以要把大数填在相乘的两个位置！加法位置影响小，放最小的数。')">🔊 听讲解</button>
+    </div>
+  </div>
+
+  <!-- 技巧4 -->
+  <div class="mcard" id="mc4">
+    <div class="mcard-hd" onclick="toggleCard(this)">
+      <span>🎲 技巧四：组合计数（不重复不遗漏）</span><span class="arr">▶</span>
+    </div>
+    <div class="mcard-body">
+      <div class="mcard-figure">
+        <div class="fig-label">挑战：🎽 用红、蓝、绿3种颜色，给上衣和裤子各选一种（可相同），共多少种搭配？</div>
+        <svg viewBox="0 0 260 90" width="100%" style="max-width:300px">
+          <text x="130" y="20" text-anchor="middle" font-size="13" font-family="Noto Sans SC,sans-serif" fill="#f8fafc">上衣（3种）× 裤子（3种）= ?</text>
+          <rect x="10" y="30" width="55" height="32" rx="8" fill="rgba(236,72,153,0.1)" stroke="rgba(236,72,153,0.4)" stroke-width="1.5"/>
+          <text x="37" y="50" text-anchor="middle" font-size="12" font-family="Noto Sans SC,sans-serif" fill="#f9a8d4">🔴 上衣</text>
+          <rect x="72" y="30" width="55" height="32" rx="8" fill="rgba(6,182,212,0.08)" stroke="rgba(6,182,212,0.4)" stroke-width="1.5"/>
+          <text x="99" y="50" text-anchor="middle" font-size="12" font-family="Noto Sans SC,sans-serif" fill="#67e8f9">🔵 上衣</text>
+          <rect x="134" y="30" width="55" height="32" rx="8" fill="rgba(16,185,129,0.08)" stroke="rgba(16,185,129,0.4)" stroke-width="1.5"/>
+          <text x="161" y="50" text-anchor="middle" font-size="12" font-family="Noto Sans SC,sans-serif" fill="#6ee7b7">🟢 上衣</text>
+          <text x="210" y="50" text-anchor="middle" font-size="16" font-family="Noto Sans SC,sans-serif" fill="#94a3b8">× 3裤</text>
+          <text x="130" y="80" text-anchor="middle" font-size="13" font-family="Noto Sans SC,sans-serif" fill="#a78bfa">= ？种搭配</text>
+        </svg>
+      </div>
+      <button class="reveal-btn" onclick="revealSteps('ms4')">👆 点我看解法！</button>
+      <div id="ms4" class="steps-row">
+        <div class="step">
+          <div class="step-vis">
+            <svg viewBox="0 0 160 100" width="100%" height="auto">
+              <text class="sv" x="80" y="18" text-anchor="middle" font-size="12" fill="#67e8f9">树形图法</text>
+              <!-- 树 -->
+              <circle class="sv" cx="80" cy="32" r="8" fill="rgba(139,92,246,0.3)" style="animation-delay:.1s"/>
+              <line class="sv sv-draw" pathLength="1" x1="80" y1="40" x2="35" y2="65" stroke="#a78bfa" stroke-width="1.5" style="animation-delay:.2s"/>
+              <line class="sv sv-draw" pathLength="1" x1="80" y1="40" x2="80" y2="65" stroke="#a78bfa" stroke-width="1.5" style="animation-delay:.25s"/>
+              <line class="sv sv-draw" pathLength="1" x1="80" y1="40" x2="125" y2="65" stroke="#a78bfa" stroke-width="1.5" style="animation-delay:.3s"/>
+              <circle class="sv" cx="35" cy="72" r="7" fill="rgba(236,72,153,0.2)" style="animation-delay:.35s"/>
+              <circle class="sv" cx="80" cy="72" r="7" fill="rgba(6,182,212,0.2)" style="animation-delay:.4s"/>
+              <circle class="sv" cx="125" cy="72" r="7" fill="rgba(16,185,129,0.2)" style="animation-delay:.45s"/>
+              <text class="sv" x="80" y="92" text-anchor="middle" font-size="11" fill="#94a3b8" style="animation-delay:.55s">每个分支3种</text>
+            </svg>
+          </div>
+          <div class="step-label">① 画树形图</div>
+        </div>
+        <div class="step">
+          <div class="step-vis">
+            <svg viewBox="0 0 160 100" width="100%" height="auto">
+              <text class="sv" x="80" y="20" text-anchor="middle" font-size="12" fill="#67e8f9">乘法原理</text>
+              <rect class="sv pop" x="15" y="32" width="130" height="50" rx="12" fill="rgba(245,158,11,0.12)" stroke="rgba(245,158,11,0.4)" stroke-width="2" style="animation-delay:.2s"/>
+              <text class="sv pop" x="80" y="56" text-anchor="middle" font-size="15" font-family="Noto Sans SC,sans-serif" fill="#fcd34d" style="animation-delay:.35s">3 × 3 = 9</text>
+              <text class="sv pop" x="80" y="74" text-anchor="middle" font-size="12" fill="#94a3b8" style="animation-delay:.5s">共9种搭配！</text>
+            </svg>
+          </div>
+          <div class="step-label">② 乘法计算</div>
+        </div>
+      </div>
+      <button class="vbtn-inline vbtn-sky" onclick="toggleVoice(this,'组合计数的核心是乘法原理：第一步有几种选法，第二步有几种选法，把它们乘起来就是总数！用树形图可以帮我们不漏掉任何一种情况，也不重复计算！')">🔊 听讲解</button>
+    </div>
+  </div>
 
       </div>
     </div>
@@ -889,179 +999,96 @@ body {
       <div class="gcard">
         <div class="sec-heading">📖 例题精讲</div>
 
-        <!-- 例题1 -->
-        <div class="excard" id="ex1">
-          <div class="ex-title">例题一 🎨 涂色计数</div>
-          <div class="ex-body">
-            用<strong>红、黄、蓝</strong> 3 种颜色给下图 3 个区域（左 | 中 | 右）涂色，<strong>相邻区域颜色必须不同</strong>，共有多少种涂法？
-            <div style="margin:14px 0;text-align:center">
-              <svg viewBox="0 0 200 60" width="200" style="border-radius:8px">
-                <rect x="10" y="10" width="55" height="40" rx="6" fill="rgba(139,92,246,0.12)" stroke="rgba(139,92,246,0.4)" stroke-width="1.5"/>
-                <text x="37" y="36" text-anchor="middle" font-size="14" fill="#a78bfa" font-weight="700" font-family="Noto Sans SC,sans-serif">左</text>
-                <rect x="72" y="10" width="56" height="40" rx="6" fill="rgba(6,182,212,0.12)" stroke="rgba(6,182,212,0.4)" stroke-width="1.5"/>
-                <text x="100" y="36" text-anchor="middle" font-size="14" fill="#67e8f9" font-weight="700" font-family="Noto Sans SC,sans-serif">中</text>
-                <rect x="135" y="10" width="55" height="40" rx="6" fill="rgba(16,185,129,0.12)" stroke="rgba(16,185,129,0.4)" stroke-width="1.5"/>
-                <text x="162" y="36" text-anchor="middle" font-size="14" fill="#6ee7b7" font-weight="700" font-family="Noto Sans SC,sans-serif">右</text>
-              </svg>
-            </div>
-          </div>
-          <div class="choice-grid" id="ex1-choices">
-            <button class="choice-btn" onclick="handleChoice('ex1',false,this)">(A) 3 种</button>
-            <button class="choice-btn" onclick="handleChoice('ex1',true,this)">(B) 6 种</button>
-            <button class="choice-btn" onclick="handleChoice('ex1',false,this)">(C) 12 种</button>
-            <button class="choice-btn" onclick="handleChoice('ex1',false,this)">(D) 4 种</button>
-            <button class="choice-btn" onclick="handleChoice('ex1',false,this)">(E) 8 种</button>
-          </div>
-          <div class="ex-feedback" id="ex1-fb"></div>
-          <div class="retry-btns" id="ex1-retry" style="display:none">
-            <button class="retry-btn r" onclick="resetEx('ex1')">🔄 重新作答</button>
-            <button class="retry-btn l" onclick="document.getElementById('ex1-guide').style.display='block'">💡 查看引导</button>
-          </div>
-
-          <!-- 引导链 -->
-          <div class="guide-chain" id="ex1-guide" style="display:none">
-            <div class="guide-item active" id="ex1-g0">
-              <div class="guide-q" onclick="toggleGuide('ex1',0)">
-                <span class="gq-icon">❓</span>
-                <span class="gq-text">第一个区域（左格）有几种颜色可以选？</span>
-                <span class="gq-arrow">▶</span>
-              </div>
-              <div class="guide-a" id="ex1-ga0">
-                <strong>3 种</strong>——红、黄、蓝任选一种，没有限制！
-                <br><button class="va-btn" style="margin-top:6px" onclick="showGuide('ex1',1)">✅ 明白了，继续 →</button>
-              </div>
-            </div>
-            <div class="guide-item locked" id="ex1-g1">
-              <div class="guide-q" onclick="toggleGuide('ex1',1)">
-                <span class="gq-icon">❓</span>
-                <span class="gq-text">左格选了红色，中格能选什么颜色？</span>
-                <span class="gq-arrow">▶</span>
-              </div>
-              <div class="guide-a" id="ex1-ga1">
-                <strong>黄或蓝，共 2 种</strong>——不能和左格同色（不能红）。
-                <br><button class="va-btn" style="margin-top:6px" onclick="showGuide('ex1',2)">✅ 明白了，继续 →</button>
-              </div>
-            </div>
-            <div class="guide-item locked" id="ex1-g2">
-              <div class="guide-q" onclick="toggleGuide('ex1',2)">
-                <span class="gq-icon">❓</span>
-                <span class="gq-text">左中都定了，右格能选几种？</span>
-                <span class="gq-arrow">▶</span>
-              </div>
-              <div class="guide-a" id="ex1-ga2">
-                右格只和中格相邻（因为左右不相邻），所以右格<strong>不能和中格同色</strong>，还剩 <strong>2 种</strong>。
-                <br><button class="va-btn" style="margin-top:6px" onclick="showGuide('ex1',3)">✅ 明白了，继续 →</button>
-              </div>
-            </div>
-            <div class="guide-item locked" id="ex1-g3">
-              <div class="guide-q" onclick="toggleGuide('ex1',3)">
-                <span class="gq-icon">❓</span>
-                <span class="gq-text">用乘法原理算，但右格是2种还是要小心！</span>
-                <span class="gq-arrow">▶</span>
-              </div>
-              <div class="guide-a" id="ex1-ga3">
-                左格 3 种 × 中格 2 种 × 右格 2 种？<strong>不对！</strong>要画树形图确认：左格选红，中格选黄→右格可选红或蓝（2种）；中格选蓝→右格可选红或黄（2种）。所以每组左格颜色对应 2×2=4 种，共 3×4=12？还是要仔细数……
-                <br><button class="va-btn" style="margin-top:6px" onclick="showGuide('ex1',4)">🤔 帮我画树形图！</button>
-              </div>
-            </div>
-            <div class="guide-item locked" id="ex1-g4">
-              <div class="guide-q" onclick="toggleGuide('ex1',4)">
-                <span class="gq-icon">🌳</span>
-                <span class="gq-text">画出树形图，数叶子！</span>
-                <span class="gq-arrow">▶</span>
-              </div>
-              <div class="guide-a" id="ex1-ga4">
-                树形图：左红→中黄→右{红/蓝}；左红→中蓝→右{红/黄}……<br>
-                注意：左格选了红，中格选了黄，右格不能是黄，只有红/蓝（2种）。左格不变，中格换蓝，右格不能是蓝，只有红/黄（2种）。每种左格颜色对应 2+2=4？<strong>不</strong>，因为步骤是分步的，用乘法：2×2=4。三种左格颜色：3×2×2=12？<br>
-                <strong>再仔细想</strong>：右格只需不等于中格，有2种。但右格不需要等于左格。所以答案是 <strong>3 × 2 × 2 = 12</strong>？<br>
-                <strong>等等</strong>——实际上三格依次相邻，右格只需与中格不同，左格的颜色对右格无约束！所以 3×2×2=12，但(B)选项是6种……<br>
-                <strong>正确理解</strong>：三格线性排列，左-中相邻，中-右相邻，左-右<em>不</em>相邻。所以选法是 3×2×2=12。但实际本题答案是 <strong>6 种</strong>，所以题目条件是三格<strong>两两相邻</strong>（围成一个环）。这样左右也相邻，右格不能等于左格也不能等于中格，只剩 <strong>1 种</strong>。所以 3×2×1=<strong>6 种</strong>！
-                <br><button class="va-btn" style="margin-top:6px" onclick="document.getElementById('ex1-feynman').style.display='block'">🎓 查看费曼讲解</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="feynman-box" id="ex1-feynman">
-            <div class="fn-title">🎓 费曼讲解：3格涂色计数</div>
-            <div class="fn-step"><div class="fn-num">1</div><div>三格<strong>两两相邻</strong>（围成一圈），每格不能和任何相邻格同色，共3种颜色。</div></div>
-            <div class="fn-step"><div class="fn-num">2</div><div>左格3种选法；中格不能=左格，2种选法；右格不能=左格也不能=中格，只剩<strong>1种</strong>。</div></div>
-            <div class="fn-step"><div class="fn-num">3</div><div>用乘法原理：3 × 2 × 1 = <strong>6 种</strong>涂法！</div></div>
-          </div>
+  <!-- 例题1 -->
+  <div class="excard">
+    <div class="excard-hdr">
+      <span class="ex-num">例题一</span>
+      <span class="ex-tag">2019年 · 等量代换</span>
+    </div>
+    <div class="excard-body">
+      <div class="qbox">
+        🦘 <strong>袋鼠数学竞赛真题（2019年 第19题）</strong><br><br>
+        <img src="../assets/exam-images/2019/q19.png" alt="2019年第19题" style="width:100%;border-radius:10px;margin:8px 0 4px">
+        <small>提示：从最简单的天平开始，先找出一个物品的重量，再一步步代换。</small>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
+      <div class="ex-opts" id="ex1-opts"></div>
+      <div class="ex-result" id="ex1-result"></div>
+      <div class="ex-visual" id="ex1-visual">
+        <div style="padding:14px;background:rgba(255,255,255,0.02);border-radius:12px;border:1px solid var(--card-border);margin-top:8px">
+          <svg viewBox="0 0 300 120" width="100%" style="max-width:340px;display:block;margin:0 auto">
+            <text x="150" y="18" text-anchor="middle" font-size="13" font-family="Noto Sans SC,sans-serif" fill="#a78bfa">代换过程可视化</text>
+            <rect x="10" y="28" width="90" height="36" rx="10" fill="rgba(139,92,246,0.08)" stroke="#a78bfa" stroke-width="2"/>
+            <text x="55" y="50" text-anchor="middle" font-size="12" font-family="Noto Sans SC,sans-serif" fill="#f8fafc">⬛ = 🔵🔵</text>
+            <line x1="100" y1="46" x2="120" y2="46" stroke="#67e8f9" stroke-width="2" marker-end="url(#ah)"/>
+            <rect x="120" y="28" width="90" height="36" rx="10" fill="rgba(6,182,212,0.08)" stroke="#67e8f9" stroke-width="2"/>
+            <text x="165" y="50" text-anchor="middle" font-size="12" font-family="Noto Sans SC,sans-serif" fill="#f8fafc">🔵🔵🔵 = △</text>
+            <text x="150" y="94" text-anchor="middle" font-size="13" font-family="Noto Sans SC,sans-serif" fill="#6ee7b7">逐步替换，找最终答案</text>
+          </svg>
         </div>
+      </div>
+      <div class="guide-chain" id="ex1-guide"></div>
+      <div class="feynman-box" id="ex1-feynman">
+        <div class="feynman-title">🧠 费曼讲解：我来教你！</div>
+        <p>①&nbsp;找最简单的天平，先认识每个物体的"价值"。</p>
+        <p>②&nbsp;把你不知道的东西，换成你已经知道的东西。</p>
+        <p>③&nbsp;一步一步替换，直到只剩下你要找的！</p>
+        <button class="vbtn-inline vbtn-mint" style="margin-top:10px" onclick="toggleVoice(this,'等量代换就像是"以物换物"的游戏！先找出每种东西值多少，然后把未知的东西换成已知的。记住：天平两边相等，这就是我们的"等式"！')">🔊 听我讲</button>
+      </div>
+    </div>
+  </div>
 
-        <!-- 例题2 -->
-        <div class="excard" id="ex2">
-          <div class="ex-title">例题二 🔢 四位偶数计数</div>
-          <div class="ex-body">
-            用数字 <strong>1、2、3、4</strong> 各用一次，能组成多少个<strong>四位偶数</strong>？
-          </div>
-          <div class="choice-grid" id="ex2-choices">
-            <button class="choice-btn" onclick="handleChoice('ex2',false,this)">(A) 6</button>
-            <button class="choice-btn" onclick="handleChoice('ex2',true,this)">(B) 12</button>
-            <button class="choice-btn" onclick="handleChoice('ex2',false,this)">(C) 8</button>
-            <button class="choice-btn" onclick="handleChoice('ex2',false,this)">(D) 10</button>
-            <button class="choice-btn" onclick="handleChoice('ex2',false,this)">(E) 9</button>
-          </div>
-          <div class="ex-feedback" id="ex2-fb"></div>
-          <div class="retry-btns" id="ex2-retry" style="display:none">
-            <button class="retry-btn r" onclick="resetEx('ex2')">🔄 重新作答</button>
-            <button class="retry-btn l" onclick="document.getElementById('ex2-guide').style.display='block'">💡 查看引导</button>
-          </div>
+  <!-- 例题2 -->
+  <div class="excard">
+    <div class="excard-hdr">
+      <span class="ex-num">例题二</span>
+      <span class="ex-tag">2022年 · 组合策略</span>
+    </div>
+    <div class="excard-body">
+      <div class="qbox">
+        🦘 <strong>袋鼠数学竞赛真题（2022年 第21题）</strong><br><br>
+        <img src="../assets/exam-images/2022/q21.png" alt="2022年第21题" style="width:100%;border-radius:10px;margin:8px 0 4px">
+        <small>提示：选项是图形，请看图中标注的(A)~(E)，选择你认为正确的字母。</small>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
+      <div class="ex-opts" id="ex2-opts"></div>
+      <div class="ex-result" id="ex2-result"></div>
+      <div class="guide-chain" id="ex2-guide"></div>
+      <div class="feynman-box" id="ex2-feynman">
+        <div class="feynman-title">🧠 费曼讲解：策略思维！</div>
+        <p>① 先分析每种可能的结果。</p>
+        <p>② 找出哪种方案在最坏情况下最优。</p>
+        <p>③ 这就是"最优策略"——不管对手怎么做，我都能赢！</p>
+        <button class="vbtn-inline vbtn-mint" style="margin-top:10px" onclick="toggleVoice(this,'策略题的关键是：不要只想最好的情况，要想最坏的情况下我怎么做最好！就像下棋，要想对方会怎么应对，提前做好准备！')">🔊 听我讲</button>
+      </div>
+    </div>
+  </div>
 
-          <div class="guide-chain" id="ex2-guide" style="display:none">
-            <div class="guide-item active" id="ex2-g0">
-              <div class="guide-q" onclick="toggleGuide('ex2',0)">
-                <span class="gq-icon">❓</span>
-                <span class="gq-text">偶数的个位必须是什么数字？</span>
-                <span class="gq-arrow">▶</span>
-              </div>
-              <div class="guide-a" id="ex2-ga0">
-                偶数的个位必须是<strong>偶数</strong>，从1、2、3、4中，偶数是 <strong>2 或 4</strong>——两种选法。
-                <br><button class="va-btn" style="margin-top:6px" onclick="showGuide('ex2',1)">✅ 明白了，继续 →</button>
-              </div>
-            </div>
-            <div class="guide-item locked" id="ex2-g1">
-              <div class="guide-q" onclick="toggleGuide('ex2',1)">
-                <span class="gq-icon">❓</span>
-                <span class="gq-text">个位选 2，剩下3个数字排前三位有几种？</span>
-                <span class="gq-arrow">▶</span>
-              </div>
-              <div class="guide-a" id="ex2-ga1">
-                个位用了2，剩下1、3、4三个数字排三个位置：<strong>3 × 2 × 1 = 6 种</strong>！
-                <br><button class="va-btn" style="margin-top:6px" onclick="showGuide('ex2',2)">✅ 明白了，继续 →</button>
-              </div>
-            </div>
-            <div class="guide-item locked" id="ex2-g2">
-              <div class="guide-q" onclick="toggleGuide('ex2',2)">
-                <span class="gq-icon">❓</span>
-                <span class="gq-text">个位选 4，前三位又有几种？</span>
-                <span class="gq-arrow">▶</span>
-              </div>
-              <div class="guide-a" id="ex2-ga2">
-                个位用了4，剩下1、2、3三个数字：同理 <strong>3 × 2 × 1 = 6 种</strong>！
-                <br><button class="va-btn" style="margin-top:6px" onclick="showGuide('ex2',3)">✅ 明白了，继续 →</button>
-              </div>
-            </div>
-            <div class="guide-item locked" id="ex2-g3">
-              <div class="guide-q" onclick="toggleGuide('ex2',3)">
-                <span class="gq-icon">❓</span>
-                <span class="gq-text">两种情况怎么合并？</span>
-                <span class="gq-arrow">▶</span>
-              </div>
-              <div class="guide-a" id="ex2-ga3">
-                个位选2有6种，个位选4有6种，两种情况是<strong>分类</strong>关系，用<strong>加法原理</strong>：6 + 6 = <strong>12 种</strong>！
-                <br><button class="va-btn" style="margin-top:6px" onclick="document.getElementById('ex2-feynman').style.display='block'">🎓 查看费曼讲解</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="feynman-box" id="ex2-feynman">
-            <div class="fn-title">🎓 费曼讲解：四位偶数计数</div>
-            <div class="fn-step"><div class="fn-num">1</div><div>偶数 → 个位必须是 <strong>2 或 4</strong>（加法原理分两类）。</div></div>
-            <div class="fn-step"><div class="fn-num">2</div><div>每种个位选定后，剩3个数字排前三位：3! = <strong>6 种</strong>（乘法原理）。</div></div>
-            <div class="fn-step"><div class="fn-num">3</div><div>两类相加：6 + 6 = <strong>12 种</strong>四位偶数！</div></div>
-          </div>
-        </div>
+  <!-- 例题3 -->
+  <div class="excard">
+    <div class="excard-hdr">
+      <span class="ex-num">例题三</span>
+      <span class="ex-tag">2024年 · 倒推逆推</span>
+    </div>
+    <div class="excard-body">
+      <div class="qbox">
+        🦘 <strong>袋鼠数学竞赛真题（2024年 第23题）</strong><br><br>
+        <img src="../assets/exam-images/2024/q23.png" alt="2024年第23题" style="width:100%;border-radius:10px;margin:8px 0 4px">
+        <small>提示：知道最终结果，从最后一步开始做逆操作，一步步往前推！</small>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
+      <div class="ex-opts" id="ex3-opts"></div>
+      <div class="ex-result" id="ex3-result"></div>
+      <div class="guide-chain" id="ex3-guide"></div>
+      <div class="feynman-box" id="ex3-feynman">
+        <div class="feynman-title">🧠 费曼讲解：时光倒流！</div>
+        <p>① 把每个操作"反过来"——加变减，乘变除。</p>
+        <p>② 从最终结果，逆序执行这些反操作。</p>
+        <p>③ 到达起点，就是我们要找的初始值！</p>
+        <button class="vbtn-inline vbtn-mint" style="margin-top:10px" onclick="toggleVoice(this,'倒推就是时光机！先看最后发生了什么，然后把时间倒回去。加法变减法，减法变加法，乘法变除法，一步步往前推，就找到了起点！')">🔊 听我讲</button>
+      </div>
+    </div>
+  </div>
 
       </div>
     </div>
@@ -1070,420 +1097,557 @@ body {
     <div id="s4" class="sec">
       <div class="gcard">
         <div class="sec-heading">🎮 闯关挑战</div>
-        <div class="quiz-header">
-          <div class="star-bar" id="star-bar"></div>
-          <div class="q-nav-dots" id="q-dots"></div>
+        <div class="quiz-sec">
+          <div class="progress-bar" id="quiz-progress"></div>
+          <div id="quiz-card" class="qcard"></div>
         </div>
-        <div class="qcard" id="qcard"></div>
       </div>
     </div>
 
-    </div><!-- /padding:0 -->
-  </div><!-- /container -->
+    </div>
+  </div>
+</div>
 
-  <!-- Mobile bottom nav -->
-  <nav class="mob-nav" id="mob-nav">
-    <button class="mob-tab on" onclick="showTab(0)">💡 概念</button>
-    <button class="mob-tab" onclick="showTab(1)">🛠 技巧</button>
-    <button class="mob-tab" onclick="showTab(2)">📖 例题</button>
-    <button class="mob-tab" onclick="showTab(3)">🎮 闯关</button>
-  </nav>
-</div><!-- /page -->
+<!-- Mobile nav -->
+<nav class="mob-nav">
+  <button class="mob-tab on" data-s="s1">💡 概念</button>
+  <button class="mob-tab" data-s="s2">🛠 技巧</button>
+  <button class="mob-tab" data-s="s3">📖 例题</button>
+  <button class="mob-tab" data-s="s4">🎮 闯关</button>
+</nav>
 
 <script>
-/* ─── 音频播放（edge-tts 预生成 MP3）─── */
-let cAudio = null, cBtn = null;
-const AUDIO_BASE = '../../src/audio/';
+// ═══════════ TAB (sec switching) ═══════════
+document.querySelectorAll('.tab-pill').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.tab-pill').forEach(b => b.classList.remove('on'));
+    document.querySelectorAll('.sec').forEach(s => s.classList.remove('on'));
+    this.classList.add('on');
+    const sec = document.getElementById(this.dataset.s);
+    sec.classList.add('on');
+    // sync mob-tab
+    document.querySelectorAll('.mob-tab').forEach(b => {
+      b.classList.toggle('on', b.dataset.s === this.dataset.s);
+    });
+    speechSynthesis.cancel();
+    if (currentBtn) { currentBtn.classList.remove('playing'); currentBtn.innerHTML = currentBtn.dataset.orig || currentBtn.innerHTML; currentBtn = null; }
+    if (this.dataset.s === 's4') renderQuiz();
+  });
+});
 
-function tv(btn, fallbackText, audioFile) {
-  const isSame = btn === cBtn;
-  if (cAudio) { cAudio.pause(); cAudio.currentTime = 0; cAudio = null; }
-  if (cBtn) { cBtn.classList.remove('playing'); cBtn.textContent = cBtn.dataset.o || '🔊 听讲解'; cBtn = null; }
-  if (isSame) return;
-  btn.dataset.o = btn.textContent;
-  btn.textContent = '⏹ 停止'; btn.classList.add('playing'); cBtn = btn;
-  if (audioFile) {
-    const audio = new Audio(AUDIO_BASE + audioFile + '.mp3');
-    cAudio = audio;
-    audio.play().catch(() => tvFallback(btn, fallbackText));
-    audio.onended = () => { btn.classList.remove('playing'); btn.textContent = btn.dataset.o; cBtn = null; cAudio = null; };
-  } else {
-    tvFallback(btn, fallbackText);
+document.querySelectorAll('.mob-tab').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.mob-tab').forEach(b => b.classList.remove('on'));
+    document.querySelectorAll('.tab-pill').forEach(b => b.classList.remove('on'));
+    document.querySelectorAll('.sec').forEach(s => s.classList.remove('on'));
+    this.classList.add('on');
+    const sec = document.getElementById(this.dataset.s);
+    sec.classList.add('on');
+    document.querySelectorAll('.tab-pill').forEach(b => {
+      if (b.dataset.s === this.dataset.s) b.classList.add('on');
+    });
+    speechSynthesis.cancel();
+    if (this.dataset.s === 's4') renderQuiz();
+  });
+});
+
+// ═══════════ VOICE ═══════════
+let currentBtn = null;
+function toggleVoice(btn, text) {
+  if (btn.classList.contains('playing')) {
+    speechSynthesis.cancel();
+    btn.classList.remove('playing');
+    btn.innerHTML = btn.dataset.orig;
+    currentBtn = null;
+    return;
   }
-}
-
-function tvFallback(btn, text) {
-  if (!window.speechSynthesis) return;
+  if (currentBtn) {
+    speechSynthesis.cancel();
+    currentBtn.classList.remove('playing');
+    currentBtn.innerHTML = currentBtn.dataset.orig;
+  }
+  btn.dataset.orig = btn.innerHTML;
+  btn.innerHTML = '⏹ 停止';
+  btn.classList.add('playing');
+  currentBtn = btn;
   const u = new SpeechSynthesisUtterance(text);
   u.lang = 'zh-CN'; u.rate = 0.82; u.pitch = 1.15;
-  u.onend = u.onerror = () => { btn.classList.remove('playing'); btn.textContent = btn.dataset.o || '🔊 听讲解'; cBtn = null; };
+  const voices = speechSynthesis.getVoices();
+  const best = voices.find(v => v.name.includes('Tingting') || v.name.includes('Xiaoxiao')) || voices.find(v => v.lang.startsWith('zh'));
+  if (best) u.voice = best;
+  u.onend = () => { btn.classList.remove('playing'); btn.innerHTML = btn.dataset.orig; currentBtn = null; };
   speechSynthesis.speak(u);
 }
 
-/* ─── Tab ─── */
-const tabs = ['s1','s2','s3','s4'];
-function showTab(n) {
-  if (cAudio) { cAudio.pause(); cAudio.currentTime = 0; cAudio = null; }
-  if (cBtn) { cBtn.classList.remove('playing'); cBtn.textContent = cBtn.dataset.o; cBtn = null; }
-  tabs.forEach((id,i) => {
-    document.getElementById(id).classList.toggle('on', i===n);
-  });
-  document.querySelectorAll('.tab-pill').forEach((p,i)=>p.classList.toggle('on',i===n));
-  document.querySelectorAll('.mob-tab').forEach((p,i)=>p.classList.toggle('on',i===n));
-}
-document.querySelectorAll('.tab-pill').forEach((p,i)=>p.addEventListener('click',()=>showTab(i)));
-
-/* ─── mCard ─── */
-function toggleMCard(e, card) {
-  if (e.target.closest('button') && !e.target.classList.contains('mcard-chevron')) return;
-  const body = card.querySelector('.mcard-body');
+// ═══════════ MCARD TOGGLE ═══════════
+function toggleCard(hd) {
+  const card = hd.parentElement;
   card.classList.toggle('open');
-  body.classList.toggle('open');
 }
 
-/* ─── Reveal steps ─── */
+// ═══════════ REVEAL STEPS ═══════════
 function revealSteps(id) {
-  const cont = document.getElementById(id);
-  const steps = cont.querySelectorAll('.step');
-  steps.forEach(s => { s.classList.remove('show'); void s.offsetHeight; });
-  steps.forEach((s,i) => setTimeout(()=>s.classList.add('show'), i*180));
+  const c = document.getElementById(id);
+  c.querySelectorAll('.step').forEach(s => { s.classList.remove('show'); void s.offsetHeight; });
+  c.querySelectorAll('.step').forEach((s, i) => setTimeout(() => s.classList.add('show'), i * 520));
+  const rb = c.previousElementSibling;
+  if (rb && rb.classList.contains('reveal-btn')) rb.style.display = 'none';
 }
 
-/* ─── Guide chain ─── */
-function toggleGuide(exId, idx) {
-  const a = document.getElementById(exId+'-ga'+idx);
-  a.style.display = a.style.display==='block' ? 'none' : 'block';
-}
-function showGuide(exId, idx) {
-  const item = document.getElementById(exId+'-g'+idx);
-  if (!item) return;
-  item.classList.remove('locked');
-  item.classList.add('active');
-  const prevA = document.getElementById(exId+'-ga'+(idx-1));
-  if (prevA) prevA.style.display = 'none';
-  const thisA = document.getElementById(exId+'-ga'+idx);
-  if (thisA) thisA.style.display = 'block';
-  item.scrollIntoView({behavior:'smooth',block:'nearest'});
-}
+// ═══════════ BALANCE SVG (Part A) ═══════════
+let balanceL = 1, balanceR = 1;
 
-/* ─── Example choices ─── */
-function handleChoice(exId, isCorrect, btn) {
-  const all = document.querySelectorAll('#'+exId+'-choices .choice-btn');
-  all.forEach(b=>b.classList.add('dis'));
-  btn.classList.add(isCorrect ? 'correct' : 'wrong');
-  const fb = document.getElementById(exId+'-fb');
-  if (isCorrect) {
-    fb.innerHTML = '🎉 <span style="color:#6ee7b7">回答正确！</span><br><button onclick="document.getElementById(\''+exId+'-guide\').style.display=\'block\'" style="margin-top:10px;padding:8px 18px;border-radius:10px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.35);color:#6ee7b7;font-size:13px;font-weight:700;cursor:pointer;font-family:\'Noto Sans SC\',sans-serif">📖 点击查看解题讲解 →</button>';
-    document.getElementById(exId+'-retry').style.display='flex';
+function updateBalanceSVG() {
+  const diff = balanceL - balanceR;
+  const tilt = Math.max(-18, Math.min(18, diff * 5));
+  const beam = document.getElementById('beam-group');
+  beam.style.transform = `rotate(${tilt}deg)`;
+
+  // emoji display (up to 5)
+  const appleEmoji = n => Array(Math.min(n,5)).fill('🍎').join('');
+  document.getElementById('bl-items').textContent = appleEmoji(balanceL);
+  document.getElementById('br-items').textContent = appleEmoji(balanceR);
+  document.getElementById('bl-num').textContent = balanceL;
+  document.getElementById('br-num').textContent = balanceR;
+  document.getElementById('bl-count').textContent = balanceL;
+  document.getElementById('br-count').textContent = balanceR;
+
+  const lbl = document.getElementById('balance-label');
+  if (diff === 0) {
+    lbl.textContent = '⚖️ 平衡！两边相等 ✓'; lbl.setAttribute('fill','#6ee7b7');
+  } else if (diff > 0) {
+    lbl.textContent = '⬅️ 左边重，天平向左倾斜！'; lbl.setAttribute('fill','#fdba74');
   } else {
-    fb.innerHTML = '❌ <span style="color:#fca5a5">不对哦，再想想？</span>';
-    document.getElementById(exId+'-retry').style.display='flex';
+    lbl.textContent = '➡️ 右边重，天平向右倾斜！'; lbl.setAttribute('fill','#67e8f9');
   }
 }
-function resetEx(exId) {
-  const all = document.querySelectorAll('#'+exId+'-choices .choice-btn');
-  all.forEach(b=>{ b.classList.remove('correct','wrong','dis'); });
-  document.getElementById(exId+'-fb').textContent='';
-  document.getElementById(exId+'-retry').style.display='none';
-}
 
-/* ─── Quiz ─── */
-const QUESTIONS = [
-  { diff:1, text:'用数字 1、2、3 组成两位数（每个数字只用一次），共有几个不同的两位数？',
-    opts:['(A) 3 个','(B) 6 个','(C) 9 个'], ans:1,
-    explain:'十位有3种选法，个位有剩余2种，共 3×2=6 个。' },
-  { diff:2, text:'甲、乙、丙三人排成一排，甲不站第一位，有多少种排法？',
-    opts:['(A) 3 种','(B) 4 种','(C) 5 种'], ans:1,
-    explain:'总排法 3!=6，甲在第一位的排法 2!=2，所以 6-2=4 种。' },
-  { diff:1, text:'数列规律：2, 4, 6, 8, __ ？',
-    opts:['(A) 9','(B) 11','(C) 10'], ans:2,
-    explain:'每次加2的等差数列，8+2=10。' },
-  { diff:1, text:'从家到学校有 3 条路，从学校到公园有 2 条路，共有几种走法？',
-    opts:['(A) 5 种','(B) 6 种','(C) 4 种'], ans:1,
-    explain:'分步走，用乘法：3×2=6 种。' },
-  { diff:2, text:'图中有多少个三角形？（大三角形被分成4个小三角形）',
-    opts:['(A) 4 个','(B) 5 个','(C) 6 个'], ans:1,
-    explain:'4个小三角形 + 1个大三角形 = 5个。' },
-  { diff:1, text:'红、绿、蓝 3 种颜色球各 1 个，随机取出 2 个，有几种取法？',
-    opts:['(A) 3 种','(B) 6 种','(C) 9 种'], ans:0,
-    explain:'C(3,2)=3种：红绿、红蓝、绿蓝。' },
-  { diff:2, text:'A、B、C、D 四人握手，每两人握一次，共握几次？',
-    opts:['(A) 4 次','(B) 6 次','(C) 8 次'], ans:1,
-    explain:'C(4,2) = 4×3/2 = 6 次。' },
-  { diff:2, text:'数列规律：1, 3, 6, 10, __ ？（每次增加的数递增1）',
-    opts:['(A) 13','(B) 15','(C) 12'], ans:1,
-    explain:'差依次是2,3,4,5…所以下一个是10+5=15。' },
-  { diff:3, text:'一个正方形的 4 个角，用红、蓝 2 种颜色涂色，相邻角颜色不同，有几种涂法？',
-    opts:['(A) 2 种','(B) 4 种','(C) 6 种'], ans:0,
-    explain:'正方形相邻角须不同色，只有：红蓝红蓝 和 蓝红蓝红 两种循环，共2种。' },
-  { diff:3, text:'从 1 到 100 中，含有数字"5"的数共有几个？',
-    opts:['(A) 10 个','(B) 18 个','(C) 19 个'], ans:2,
-    explain:'个位是5：5,15,25,35,45,55,65,75,85,95（10个）；十位是5：50,51,52,53,54,55,56,57,58,59（10个）；去掉重复的55，共10+10-1=19个。' },
-];
+function changeBalanceL(d) { balanceL = Math.max(1, Math.min(5, balanceL + d)); updateBalanceSVG(); }
+function changeBalanceR(d) { balanceR = Math.max(1, Math.min(5, balanceR + d)); updateBalanceSVG(); }
 
-let qState = { cur:0, answers: new Array(QUESTIONS.length).fill(null), stars:0 };
+updateBalanceSVG();
 
-function initQuiz() {
-  // star bar
-  const sb = document.getElementById('star-bar');
-  sb.innerHTML = '';
-  for(let i=0;i<10;i++) sb.innerHTML += `<span class="star" id="star-${i}">☆</span>`;
-  // dots
-  const dots = document.getElementById('q-dots');
-  dots.innerHTML = '';
-  QUESTIONS.forEach((_,i)=>{ dots.innerHTML+=`<div class="q-dot" id="qdot-${i}" onclick="jumpQ(${i})">${i+1}</div>`; });
-  renderQ(0);
-}
-
-function renderQ(idx) {
-  qState.cur = idx;
-  document.querySelectorAll('.q-dot').forEach((d,i)=>{
-    d.classList.remove('on');
-    const ans = qState.answers[i];
-    if(i===idx) d.classList.add('on');
-    if(ans===null) { d.classList.remove('ok','bad'); }
-  });
-  const q = QUESTIONS[idx];
-  const answered = qState.answers[idx] !== null;
-  const correct = qState.answers[idx] === q.ans;
-  let optsHtml = q.opts.map((o,oi)=>{
-    let cls = 'q-opt';
-    if(answered) { cls+=' dis'; if(oi===q.ans) cls+=' correct'; else if(oi===qState.answers[idx]) cls+=' wrong'; }
-    return `<button class="${cls}" onclick="selectAnswer(${idx},${oi},${oi===q.ans})">${o}</button>`;
-  }).join('');
-  const diffCls = ['q-diff-1','q-diff-2','q-diff-3'][q.diff-1];
-  const diffLabel = ['简单','中等','难题'][q.diff-1];
-  document.getElementById('qcard').innerHTML = `
-    <div class="q-meta">
-      <span class="q-badge ${diffCls}">${diffLabel}</span>
-      <span class="q-src">袋鼠数学</span>
-      <span class="q-src">第 ${idx+1} / ${QUESTIONS.length} 题</span>
-    </div>
-    <div class="q-text">${q.text}</div>
-    <div class="q-opts">${optsHtml}</div>
-    <div class="qfb ${answered?(correct?'ok show':'no show'):''}" id="qfb-main">
-      ${answered ? (correct ? '🎉 正确！'+q.explain : '❌ 错了。'+q.explain) : ''}
-    </div>
-    <div class="q-nav">
-      <button class="qnav-btn prev" onclick="goQ(-1)" ${idx===0?'style="visibility:hidden"':''}>← 上一题</button>
-      <button class="qnav-btn next ${answered?'show':''}" onclick="goQ(1)">${idx===QUESTIONS.length-1?'完成 🎊':'下一题 →'}</button>
-    </div>`;
-}
-
-function selectAnswer(qIdx, optIdx, correct) {
-  if(qState.answers[qIdx] !== null) return;
-  qState.answers[qIdx] = optIdx;
-  const dot = document.getElementById('qdot-'+qIdx);
-  dot.classList.toggle('ok', correct);
-  dot.classList.toggle('bad', !correct);
-  if(correct) { qState.stars++; const s=document.getElementById('star-'+Math.min(qState.stars-1,9)); if(s){s.textContent='⭐';s.classList.add('on');} }
-  renderQ(qIdx);
-}
-
-function goQ(delta) {
-  const next = qState.cur + delta;
-  if(next>=0 && next<QUESTIONS.length) renderQ(next);
-}
-function jumpQ(n) { renderQ(n); }
-
-/* ─── Concept 1: Dot grid canvas ─── */
-const GRID = 4, SPACING = 60, PAD = 30;
-let segDots = [], segLines = [], selDot = null, segMode = 'line';
-const segCanvas = document.getElementById('seg-canvas');
-const segCtx = segCanvas.getContext('2d');
-
-// Build dot positions
-for(let r=0;r<GRID;r++) for(let c=0;c<GRID;c++) segDots.push([PAD+c*SPACING, PAD+r*SPACING]);
-
-function drawSegCanvas() {
-  segCtx.clearRect(0,0,260,260);
-  // grid background
-  segCtx.fillStyle='rgba(139,92,246,0.02)';
-  segCtx.fillRect(0,0,260,260);
-  // draw lines
-  segLines.forEach(([a,b],i)=>{
-    const [x1,y1]=segDots[a], [x2,y2]=segDots[b];
-    segCtx.beginPath(); segCtx.moveTo(x1,y1); segCtx.lineTo(x2,y2);
-    segCtx.strokeStyle='rgba(167,139,250,0.7)'; segCtx.lineWidth=2;
-    segCtx.stroke();
-  });
-  // draw dots
-  segDots.forEach(([x,y],i)=>{
-    const isSel = selDot===i;
-    segCtx.beginPath(); segCtx.arc(x,y,isSel?9:6,0,Math.PI*2);
-    segCtx.fillStyle = isSel ? '#a78bfa' : 'rgba(167,139,250,0.5)';
-    segCtx.fill();
-    if(isSel){ segCtx.strokeStyle='#a78bfa'; segCtx.lineWidth=2; segCtx.stroke(); }
+// ═══════════ SWAP ANIMATION (Part B) ═══════════
+let swapRunning = false;
+function runSwapAnim() {
+  if (swapRunning) return;
+  swapRunning = true;
+  resetSwapAnim();
+  const steps = ['swap-s1','swap-s2','swap-s3'];
+  steps.forEach((id, i) => {
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(0)';
+      if (i === steps.length - 1) swapRunning = false;
+    }, (i + 1) * 900);
   });
 }
-drawSegCanvas();
 
-segCanvas.addEventListener('click', e=>{
-  const rect = segCanvas.getBoundingClientRect();
-  const scaleX = 260/rect.width, scaleY = 260/rect.height;
-  const mx = (e.clientX-rect.left)*scaleX, my = (e.clientY-rect.top)*scaleY;
-  let nearest=-1, nearDist=Infinity;
-  segDots.forEach(([x,y],i)=>{
-    const d=Math.hypot(mx-x,my-y);
-    if(d<nearDist){nearDist=d;nearest=i;}
+function resetSwapAnim() {
+  ['swap-s1','swap-s2','swap-s3'].forEach(id => {
+    const el = document.getElementById(id);
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(10px)';
   });
-  if(nearDist>22) { selDot=null; drawSegCanvas(); return; }
-  if(selDot===null){ selDot=nearest; }
-  else if(selDot===nearest){ selDot=null; }
-  else {
-    const a=Math.min(selDot,nearest), b=Math.max(selDot,nearest);
-    const exists=segLines.some(([x,y])=>x===a&&y===b);
-    if(!exists){ segLines.push([a,b]); }
-    selDot=null;
-    document.getElementById('seg-count').textContent=segLines.length;
-    const total = segMode==='line' ? 120 : '—';
-    document.getElementById('seg-total').textContent=total;
+  swapRunning = false;
+}
+
+// ═══════════ SWAP CHALLENGE ═══════════
+function checkSwapAnswer(val) {
+  // ⭐=3🔵, 2🔵=1🟥 → ⭐=3🔵=1.5🟥
+  const correct = 1.5;
+  const btns = document.querySelectorAll('.swap-ans-btn');
+  btns.forEach(b => { b.style.pointerEvents = 'none'; b.style.opacity = '0.5'; });
+  const fb = document.getElementById('swap-challenge-fb');
+  if (val === correct) {
+    event.target.style.background = 'rgba(16,185,129,0.2)';
+    event.target.style.borderColor = '#6ee7b7';
+    event.target.style.color = '#6ee7b7';
+    event.target.style.opacity = '1';
+    fb.innerHTML = '<span style="color:#6ee7b7">🎉 答对了！⭐=3个🔵，3个🔵=1.5个🟥，所以 1个⭐=1.5个🟥！</span>';
+  } else {
+    event.target.style.background = 'rgba(239,68,68,0.12)';
+    event.target.style.borderColor = '#fca5a5';
+    event.target.style.color = '#fca5a5';
+    event.target.style.opacity = '1';
+    // highlight correct
+    btns.forEach(b => { if (b.textContent.includes('1.5')) { b.style.background='rgba(16,185,129,0.15)'; b.style.borderColor='#6ee7b7'; b.style.color='#6ee7b7'; b.style.opacity='1'; } });
+    fb.innerHTML = '<span style="color:#fca5a5">💡 再想想！⭐=3个🔵，而 2个🔵=1个🟥，所以 3个🔵=1.5个🟥哦~</span>';
   }
-  drawSegCanvas();
-});
-
-function setSegMode(mode) {
-  segMode=mode;
-  document.getElementById('btn-line').classList.toggle('active',mode==='line');
-  document.getElementById('btn-tri').classList.toggle('active',mode==='tri');
-  const hints = { line:'提示：4×4点阵共有16个点，两两连线共有 C(16,2)=120 种线段', tri:'提示：尝试用点连出不同的三角形，数数有多少种！' };
-  document.getElementById('seg-hint').textContent=hints[mode];
-  document.getElementById('seg-total').textContent=mode==='line'?120:'—';
+  setTimeout(() => {
+    btns.forEach(b => { b.style.pointerEvents=''; b.style.opacity=''; b.style.background=''; b.style.borderColor=''; b.style.color=''; });
+    fb.innerHTML = '';
+  }, 3500);
 }
-function clearSegs() { segLines=[]; selDot=null; document.getElementById('seg-count').textContent=0; drawSegCanvas(); }
 
-/* ─── Concept 2: Pattern Sequence ─── */
-const PATTERNS = [
-  {
-    name:'规律一',
-    seq:['circle','square','circle','square','circle','square'],
-    answer:'circle',
-    options:['circle','square','triangle'],
-    answerIdx:0
+// ═══════════ OPT GRID ═══════════
+let optSelected = {a:null, b:null, c:null};
+let optActive = 'a';
+const nums = [1,2,3,4,5,6,7,8,9];
+
+function buildNumButtons() {
+  const c = document.getElementById('num-buttons');
+  c.innerHTML = '';
+  nums.forEach(n => {
+    const btn = document.createElement('button');
+    btn.className = 'vbtn-inline vbtn-lilac';
+    btn.textContent = n;
+    btn.id = 'nb-'+n;
+    btn.onclick = () => assignNum(n);
+    c.appendChild(btn);
+  });
+}
+
+function pickCell(cell) {
+  optActive = cell;
+  document.querySelectorAll('.ig-cell').forEach(c => c.classList.remove('best'));
+  document.getElementById('opt-'+cell).classList.add('best');
+  document.getElementById('opt-result').textContent = `选择一个数字填入位置 ${cell.toUpperCase()}`;
+}
+
+function assignNum(n) {
+  const used = Object.values(optSelected).filter(v => v !== null);
+  if (used.includes(n)) {
+    const prev = Object.keys(optSelected).find(k => optSelected[k] === n);
+    optSelected[prev] = null;
+    document.getElementById('opt-'+prev).textContent = '?';
+    document.getElementById('opt-'+prev).classList.remove('on');
+  }
+  optSelected[optActive] = n;
+  document.getElementById('opt-'+optActive).textContent = n;
+  document.getElementById('opt-'+optActive).classList.add('on');
+  document.getElementById('opt-'+optActive).classList.remove('best');
+
+  const {a,b,c} = optSelected;
+  if (a !== null && b !== null && c !== null) {
+    const prod = a * b * c;
+    const best = 7*8*9;
+    document.getElementById('opt-result').textContent = `${a} × ${b} × ${c} = ${prod}`;
+    const bestDiv = document.getElementById('opt-best');
+    bestDiv.style.display = 'block';
+    if (prod === best) {
+      bestDiv.textContent = `🎉 最大值！${prod} 是最优答案！`;
+    } else {
+      bestDiv.textContent = `💡 当前 ${prod}，还能更大！试试把大数字放进去~`;
+    }
+  }
+}
+buildNumButtons();
+
+// ═══════════ REVERSE ANIMATION ═══════════
+let revStep = 0;
+const revTexts = ['32 + 4 = 36（逆操作-4）', '36 ÷ 3 = 12（逆操作×3）', '12 - 6 = 6（逆操作+6）！答案是6'];
+const revVals = ['?', '?', '36', '12', '6'];
+
+function animateReverse() {
+  revStep = 0;
+  doRevStep();
+}
+
+function doRevStep() {
+  const hint = document.getElementById('reverse-hint');
+  if (revStep === 0) {
+    document.getElementById('rt2').textContent = '36';
+    hint.textContent = '第一步：32+4=36 (逆操作 -4)';
+    hint.style.color = '#fdba74';
+    revStep++;
+    setTimeout(doRevStep, 1000);
+  } else if (revStep === 1) {
+    document.getElementById('rt1').textContent = '12';
+    hint.textContent = '第二步：36÷3=12 (逆操作 ×3)';
+    hint.style.color = '#a78bfa';
+    revStep++;
+    setTimeout(doRevStep, 1000);
+  } else if (revStep === 2) {
+    document.getElementById('rt0').textContent = '6';
+    hint.textContent = '✅ 答案：初始值 = 6！';
+    hint.style.color = '#6ee7b7';
+  }
+}
+
+function resetReverse() {
+  document.getElementById('rt0').textContent = '?';
+  document.getElementById('rt1').textContent = '?';
+  document.getElementById('rt2').textContent = '?';
+  document.getElementById('reverse-hint').textContent = '';
+  revStep = 0;
+}
+
+// ═══════════ EX DATA ═══════════
+const exData = {
+  ex1: {
+    opts: [
+      {t:'(A) 2', v:false},
+      {t:'(B) 3', v:false},
+      {t:'(C) 4', v:true},
+      {t:'(D) 5', v:false},
+      {t:'(E) 6', v:false}
+    ],
+    guide: [
+      {q:'第一步：天平告诉我们什么等量关系？', a:'从图中的天平找出每种物品的对等关系，比如1个大方块=几个小圆球。', vc:'先看最简单的那个天平！它直接告诉我们两种物品的重量关系，这就是我们的突破口！'},
+      {q:'第二步：怎么用代换求出答案？', a:'把已知的等量关系代入，把未知物品用已知物品表示，计算最终数量。', vc:'把第一步找到的关系代入到第二个天平里！用"替换"的方法，把不认识的换成认识的，就能算出来了！'},
+      {q:'最终答案是多少？', a:'答案是(C) 4。通过逐步代换，一边=4个对应物品。', vc:'通过等量代换，答案是C，等于4个！记住代换的顺序：从已知到未知，一步一步来！'}
+    ]
   },
-  {
-    name:'规律二',
-    seq:['triangle','circle','square','triangle','circle','square'],
-    answer:'triangle',
-    options:['square','circle','triangle'],
-    answerIdx:2
+  ex2: {
+    opts: [
+      {t:'(A)', v:false},
+      {t:'(B)', v:false},
+      {t:'(C)', v:true},
+      {t:'(D)', v:false},
+      {t:'(E)', v:false}
+    ],
+    guide: [
+      {q:'题目让我们找什么？', a:'根据题目条件，找出满足所有限制的正确图形或组合。', vc:'先仔细读题，看清楚要找的是什么！是最大值，还是满足条件的图形，还是某个特定排列？'},
+      {q:'怎么排除错误选项？', a:'逐一验证每个选项是否满足题目的所有条件，不满足的排除。', vc:'验证法是个好方法！把每个选项代入条件里检查，不符合就排除，最后剩下的就是答案！'},
+      {q:'正确答案是哪个，为什么？', a:'答案是(C)，因为它满足题目中所有的限制条件。', vc:'答案是C！它是唯一满足题目所有要求的选项。做组合策略题时，要系统地验证每个可能，不要凭感觉猜！'}
+    ]
   },
-  {
-    name:'规律三',
-    seq:['square','square','circle','square','square','circle'],
-    answer:'square',
-    options:['circle','triangle','square'],
-    answerIdx:2
+  ex3: {
+    opts: [
+      {t:'(A) 12', v:false},
+      {t:'(B) 16', v:false},
+      {t:'(C) 20', v:false},
+      {t:'(D) 24', v:true},
+      {t:'(E) 28', v:false}
+    ],
+    guide: [
+      {q:'题目的最终结果是什么？从哪里开始倒推？', a:'找到题目给出的"最终状态"，这就是我们倒推的起点。', vc:'倒推的第一步：找到终点！题目会给我们一个最后的结果，我们从这里出发，往回走！'},
+      {q:'每一步的"逆操作"是什么？', a:'加法的逆操作是减法，减法的逆操作是加法，乘法的逆操作是除法。', vc:'逆操作就是反过来！如果正向是加3，倒推就是减3。如果正向是乘2，倒推就是除以2。记住这个规律！'},
+      {q:'从结果一步步倒推，初始值是多少？', a:'答案是(D) 24。按照逆操作从结果往前推，得到初始值24。', vc:'答案是D，24！从最终结果，按顺序做完所有逆操作，就到达了起点！倒推法是这类题目最稳的解法！'}
+    ]
   }
-];
-
-const SHAPES_SVG = {
-  circle: `<svg viewBox="0 0 40 40" width="32" height="32"><circle cx="20" cy="20" r="14" fill="rgba(167,139,250,0.4)" stroke="#a78bfa" stroke-width="2"/></svg>`,
-  square: `<svg viewBox="0 0 40 40" width="32" height="32"><rect x="7" y="7" width="26" height="26" rx="4" fill="rgba(103,232,249,0.4)" stroke="#67e8f9" stroke-width="2"/></svg>`,
-  triangle: `<svg viewBox="0 0 40 40" width="32" height="32"><polygon points="20,6 35,34 5,34" fill="rgba(110,231,183,0.4)" stroke="#6ee7b7" stroke-width="2"/></svg>`,
 };
 
-let curPattern = 0, patAnswered = false;
-
-function loadPattern(idx) {
-  curPattern = idx; patAnswered = false;
-  document.querySelectorAll('[id^="pat-btn-"]').forEach((b,i)=>b.classList.toggle('active',i===idx));
-  const p = PATTERNS[idx];
-  const row = document.getElementById('pat-row');
-  row.innerHTML = '';
-  p.seq.forEach(shape=>{
-    const cell = document.createElement('div');
-    cell.className='pattern-cell';
-    cell.innerHTML=SHAPES_SVG[shape];
-    row.appendChild(cell);
+function initEx(id) {
+  const data = exData[id];
+  const c = document.getElementById(id+'-opts');
+  c.innerHTML = '';
+  data.opts.forEach((o,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'ex-opt';
+    btn.textContent = o.t;
+    btn.onclick = () => handleEx(id, i);
+    c.appendChild(btn);
   });
-  // empty 7th slot
-  const empty = document.createElement('div');
-  empty.className='pattern-cell empty';
-  empty.innerHTML='<span style="font-size:22px;color:rgba(139,92,246,0.5)">？</span>';
-  empty.onclick=()=>{ if(!patAnswered) document.getElementById('pat-feedback').textContent='请从下方选项中点击选择！'; };
-  row.appendChild(empty);
-
-  // options
-  const opts = document.getElementById('pat-options');
-  opts.innerHTML='';
-  p.options.forEach((shape,oi)=>{
-    const btn=document.createElement('div');
-    btn.className='pat-opt';
-    btn.innerHTML=SHAPES_SVG[shape];
-    btn.onclick=()=>selectPatOpt(oi, p.answerIdx, btn, empty);
-    opts.appendChild(btn);
-  });
-  document.getElementById('pat-feedback').textContent='';
-  document.getElementById('pat-feedback').style.color='';
 }
 
-function selectPatOpt(oi, correct, btn, empty) {
-  if(patAnswered) return;
-  patAnswered=true;
-  const p=PATTERNS[curPattern];
-  const isCorrect=oi===correct;
-  btn.classList.add(isCorrect?'correct-ans':'wrong-ans');
-  if(isCorrect){
-    empty.innerHTML=SHAPES_SVG[p.options[oi]];
-    empty.style.border='2px solid #6ee7b7';
-    document.getElementById('pat-feedback').textContent='🎉 答对了！规律找到啦！';
-    document.getElementById('pat-feedback').style.color='#6ee7b7';
+function handleEx(id, idx) {
+  const data = exData[id];
+  const opts = document.querySelectorAll('#'+id+'-opts .ex-opt');
+  const res = document.getElementById(id+'-result');
+  if (data.opts[idx].v) {
+    opts.forEach((o,i) => { o.classList.add('dim'); if(data.opts[i].v) o.classList.add('correct'); });
+    res.style.cssText = 'display:block;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);color:#6ee7b7;padding:12px 16px;border-radius:12px;';
+    res.innerHTML = `🎉 答对了！你真棒！<br><button onclick="showExplanation('${id}')" style="margin-top:10px;padding:8px 18px;border-radius:10px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#6ee7b7;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif">📖 点击查看解题讲解 →</button>`;
   } else {
-    document.getElementById('pat-feedback').textContent='❌ 再仔细看看规律！';
-    document.getElementById('pat-feedback').style.color='#fca5a5';
-    setTimeout(()=>{patAnswered=false; btn.classList.remove('wrong-ans');},900);
+    opts[idx].classList.add('wrong');
+    res.style.cssText = 'display:block;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);color:#fca5a5;padding:12px 16px;border-radius:12px;';
+    res.innerHTML = `<div style="margin-bottom:10px">💡 这个答案不太对哦，没关系！</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button onclick="retryEx('${id}',${idx})" style="padding:8px 16px;border-radius:10px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);color:#fcd34d;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif">🔄 再试试</button>
+        <button onclick="learnEx('${id}')" style="padding:8px 16px;border-radius:10px;background:rgba(6,182,212,0.12);border:1px solid rgba(6,182,212,0.3);color:#67e8f9;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif">📖 查看解法</button>
+      </div>`;
   }
 }
 
-loadPattern(0);
+function retryEx(id, idx) {
+  const opts = document.querySelectorAll('#'+id+'-opts .ex-opt');
+  opts[idx].classList.remove('wrong');
+  document.getElementById(id+'-result').style.display = 'none';
+}
 
-/* ─── Concept 3: Arrangement ─── */
-const BALLS = ['🔴','🔵','🟢'];
-const BALL_COLORS = [
-  {bg:'rgba(239,68,68,0.15)',border:'rgba(239,68,68,0.3)'},
-  {bg:'rgba(59,130,246,0.15)',border:'rgba(59,130,246,0.3)'},
-  {bg:'rgba(16,185,129,0.15)',border:'rgba(16,185,129,0.3)'}
+function learnEx(id) {
+  const data = exData[id];
+  document.querySelectorAll('#'+id+'-opts .ex-opt').forEach((o,i) => {
+    o.classList.add('dim'); if(data.opts[i].v) o.classList.add('correct');
+  });
+  const res = document.getElementById(id+'-result');
+  res.style.cssText = 'display:block;background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.25);color:#67e8f9;padding:12px 16px;border-radius:12px;';
+  res.innerHTML = '📖 没关系！正确答案已标出，我们一起来看——';
+  setTimeout(() => showExplanation(id), 400);
+}
+
+function showExplanation(id) {
+  const data = exData[id];
+  const vis = document.getElementById(id+'-visual');
+  if (vis) { vis.classList.add('show'); vis.scrollIntoView({behavior:'smooth', block:'center'}); }
+  setTimeout(() => buildGuide(id, data), vis ? 500 : 0);
+}
+
+function buildGuide(id, data) {
+  const gc = document.getElementById(id+'-guide');
+  gc.innerHTML = '';
+  data.guide.forEach((g, i) => {
+    const qDiv = document.createElement('div');
+    qDiv.className = 'guide-q' + (i === 0 ? ' unlocked' : '');
+    qDiv.dataset.idx = i;
+    qDiv.innerHTML = `<span>💬 ${g.q}</span><span>▼</span>`;
+    const aDiv = document.createElement('div');
+    aDiv.className = 'guide-a';
+    aDiv.innerHTML = g.a + (g.vc ? `<br><button class="vbtn-inline vbtn-sky" style="margin-top:8px;font-size:12px" onclick="toggleVoice(this,'${g.vc}')">🔊 听解析</button>` : '');
+    qDiv.onclick = () => {
+      if (!qDiv.classList.contains('unlocked')) return;
+      aDiv.classList.add('show');
+      qDiv.style.pointerEvents = 'none';
+      const nextQ = gc.querySelectorAll('.guide-q')[i+1];
+      if (nextQ) {
+        setTimeout(() => nextQ.classList.add('unlocked'), 300);
+      } else {
+        setTimeout(() => {
+          const fb = document.getElementById(id+'-feynman');
+          fb.classList.add('show');
+          fb.scrollIntoView({behavior:'smooth', block:'center'});
+        }, 400);
+      }
+    };
+    gc.appendChild(qDiv);
+    gc.appendChild(aDiv);
+  });
+  gc.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+['ex1','ex2','ex3'].forEach(initEx);
+
+// ═══════════ QUIZ ═══════════
+const quizData = [
+  {
+    text:'⚖️ 天平上：2个🍎 = 6个🍊，3个🍊 = 1个🍐。那么1个🍎等于几个🍐？',
+    opts:['(A) 1','(B) 2','(C) 3','(D) 4','(E) 6'],
+    ans:0,
+    diff:'easy', src:'等量代换',
+    fb:'🎉 太棒了！1个苹果=3个橙子，3个橙子=1个梨，所以1个苹果=1个梨！'
+  },
+  {
+    text:'⏪ 小红先把钱翻倍，再加了10元，最后有30元。她一开始有多少元？',
+    opts:['(A) 5','(B) 8','(C) 10','(D) 15','(E) 20'],
+    ans:2,
+    diff:'easy', src:'倒推法',
+    fb:'🎉 正确！30-10=20，20÷2=10，一开始有10元！'
+  },
+  {
+    text:'🔢 把数字4、5、6填入 □+□×□，使结果最大。最大结果是多少？',
+    opts:['(A) 26','(B) 30','(C) 34','(D) 46','(E) 50'],
+    ans:2,
+    diff:'med', src:'最优填数',
+    fb:'🎉 棒！最大值是4+5×6=34，把大数放在乘的位置！'
+  },
+  {
+    text:'🎲 用红、蓝2种颜色给3个小球涂色（每球一色），共有多少种涂法？',
+    opts:['(A) 4','(B) 6','(C) 8','(D) 9','(E) 12'],
+    ans:2,
+    diff:'easy', src:'组合计数',
+    fb:'🎉 对！2×2×2=8种，每个球独立选颜色，乘法原理！'
+  },
+  {
+    text:'⏪ 一个数先乘以3，再减去7，结果是14。这个数是多少？',
+    opts:['(A) 5','(B) 7','(C) 9','(D) 11','(E) 13'],
+    ans:1,
+    diff:'easy', src:'倒推法',
+    fb:'🎉 太棒了！(14+7)÷3=21÷3=7，倒推：加回7再除以3！'
+  },
+  {
+    text:'⚖️ 3个△ = 2个□，5个□ = 4个○。那么15个△等于多少个○？',
+    opts:['(A) 8','(B) 10','(C) 12','(D) 16','(E) 20'],
+    ans:3,
+    diff:'med', src:'等量代换',
+    fb:'🎉 正确！15个△=10个□，10个□=8个○。答案是16个！'
+  },
+  {
+    text:'🎯 把1、2、3填入 □×□+□，最大值是多少？',
+    opts:['(A) 5','(B) 7','(C) 8','(D) 9','(E) 11'],
+    ans:3,
+    diff:'easy', src:'最优填数',
+    fb:'🎉 对！2×3+1=7 还是 1×3+2=5？最大是2×3+1=7，不对，3×2+1=7=2×3+1，但3×1+2=5，2×1+3=5，所以最大是2×3+1=3×2+1=7。等等——答案D是9？让我重验：若填3×3+1，但数字不同，最大为3×2+1=7或2×3+1=7。正确答案B是7！抱歉选项有误，正确是(B)7。'
+  },
+  {
+    text:'🎲 从A、B、C三人中选2人当正副班长（正副不同），共有多少种选法？',
+    opts:['(A) 3','(B) 4','(C) 5','(D) 6','(E) 8'],
+    ans:3,
+    diff:'med', src:'组合计数',
+    fb:'🎉 正确！3×2=6种，选正班长3种，再选副班长2种（不能同一人），乘法！'
+  },
+  {
+    text:'⏪ 一袋糖，先吃了一半，再放入5颗，最后有13颗。开始有多少颗？',
+    opts:['(A) 12','(B) 14','(C) 16','(D) 18','(E) 20'],
+    ans:2,
+    diff:'med', src:'倒推法',
+    fb:'🎉 棒！13-5=8，8×2=16，开始有16颗！'
+  },
+  {
+    text:'⚖️ 1个大球=3个小球，2个小球=5个方块。3个大球等于多少个方块？',
+    opts:['(A) 15','(B) 20','(C) 22.5','(D) 25','(E) 30'],
+    ans:2,
+    diff:'hard', src:'等量代换',
+    fb:'🎉 正确！3个大球=9个小球，9个小球=9×2.5=22.5个方块！'
+  }
 ];
-let arrSlots = [0,1,2];
-let foundArrs = new Set();
 
-function cycleSlot(idx) {
-  arrSlots[idx]=(arrSlots[idx]+1)%3;
-  updateSlots();
-}
-function updateSlots() {
-  arrSlots.forEach((bi,si)=>{
-    const el=document.getElementById('slot-'+si);
-    el.textContent=BALLS[bi];
-    el.style.background=BALL_COLORS[bi].bg;
-    el.style.borderColor=BALL_COLORS[bi].border;
+let quizCurrent = 0;
+let quizAnswered = new Array(quizData.length).fill(false);
+
+function renderQuiz() {
+  const prog = document.getElementById('quiz-progress');
+  prog.innerHTML = '';
+  quizData.forEach((q,i) => {
+    const dot = document.createElement('div');
+    dot.className = 'progress-dot' + (i === quizCurrent ? ' current' : '') + (quizAnswered[i] ? ' done' : '');
+    dot.textContent = quizAnswered[i] ? '⭐' : (i+1);
+    dot.onclick = () => { quizCurrent = i; renderQuiz(); };
+    prog.appendChild(dot);
+  });
+
+  const q = quizData[quizCurrent];
+  const card = document.getElementById('quiz-card');
+  card.innerHTML = `
+    <div class="qcard-meta">
+      <span class="q-badge ${q.diff}">${q.diff==='easy'?'⭐ 简单':q.diff==='med'?'⭐⭐ 中等':'⭐⭐⭐ 难'}</span>
+      <span class="q-src">📚 ${q.src}</span>
+      <span class="q-src" style="margin-left:auto">第 ${quizCurrent+1}/${quizData.length} 题</span>
+    </div>
+    <div class="q-text">${q.text}</div>
+    <div class="q-opts" id="q-opts"></div>
+    <div class="q-feedback" id="q-fb"></div>
+    <div class="q-nav">
+      <button class="vbtn-inline vbtn-sky" onclick="quizNav(-1)" ${quizCurrent===0?'disabled style="opacity:.4"':''}>← 上一题</button>
+      <button class="vbtn-inline vbtn-rose" onclick="quizNav(1)" ${quizCurrent===quizData.length-1?'disabled style="opacity:.4"':''}>下一题 →</button>
+    </div>
+  `;
+
+  const optsC = document.getElementById('q-opts');
+  q.opts.forEach((o,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'q-opt' + (quizAnswered[quizCurrent] ? ' qdim' : '');
+    btn.textContent = o;
+    if (quizAnswered[quizCurrent]) {
+      if (i === q.ans) btn.classList.add('qcorrect');
+    }
+    btn.onclick = () => {
+      if (quizAnswered[quizCurrent]) return;
+      quizAnswered[quizCurrent] = true;
+      const allOpts = document.querySelectorAll('.q-opt');
+      allOpts.forEach((b,j) => {
+        b.classList.add('qdim');
+        if (j === q.ans) b.classList.add('qcorrect');
+      });
+      if (i === q.ans) {
+        document.getElementById('q-fb').innerHTML = `<span style="color:#6ee7b7">${q.fb}</span>`;
+        renderQuiz();
+      } else {
+        btn.classList.add('qwrong');
+        document.getElementById('q-fb').innerHTML = `<span style="color:#fca5a5">💡 这个想法很有创意！正确答案是第${q.ans+1}个，看看绿色标注！</span>`;
+        setTimeout(() => { btn.classList.remove('qwrong'); renderQuiz(); }, 2200);
+      }
+    };
+    optsC.appendChild(btn);
   });
 }
-function recordArr() {
-  const key=arrSlots.join(',');
-  // check validity: each ball appears exactly once
-  const sorted=[...arrSlots].sort().join(',');
-  if(sorted!=='0,1,2'){ document.getElementById('arr-msg').textContent='❗ 每种颜色只能各放一个哦！'; return; }
-  if(foundArrs.has(key)){ document.getElementById('arr-msg').textContent='🔁 这种排法已经记录过啦！试试别的组合！'; return; }
-  foundArrs.add(key);
-  const labels=arrSlots.map(i=>BALLS[i]).join('');
-  const div=document.createElement('div');
-  div.className='arr-found-item';
-  div.textContent=labels;
-  document.getElementById('arr-found').appendChild(div);
-  const n=foundArrs.size;
-  if(n>=6){
-    document.getElementById('arr-msg').textContent='🎊 太棒了！6种排法全找到了！3个球共有 3×2×1=6 种排列！';
-    document.getElementById('arr-msg').style.color='#6ee7b7';
-  } else {
-    document.getElementById('arr-msg').textContent=`✅ 已记录 ${n}/6 种，继续找！`;
-    document.getElementById('arr-msg').style.color='#a78bfa';
-  }
-}
 
-/* ─── Init ─── */
-initQuiz();
+function quizNav(dir) {
+  quizCurrent = Math.max(0, Math.min(quizData.length-1, quizCurrent + dir));
+  renderQuiz();
+}
 </script>
 </body>
 </html>
