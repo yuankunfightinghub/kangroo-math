@@ -723,11 +723,13 @@ function renderStats() {
           <span class="diff-count">${v.correct}/${v.total}</span>
         </div>`;
       }).join('');
+      const totalInDB = examData.filter(q => (q.mod||0) === +modId).length;
       return `<div class="mod-stat-block">
         <div class="mod-stat-hd">
           <span class="mod-stat-name">${mod.emoji} ${mod.label}</span>
+          <span style="font-size:11px;color:var(--muted)">共${totalInDB}题</span>
           <span class="mod-stat-pct" style="color:${pctM>=80?'#34d399':pctM>=60?'#f59e0b':'#f87171'}">${pctM}%</span>
-          <span class="mod-stat-cnt">${correctM}/${totalM}</span>
+          <span class="mod-stat-cnt">${correctM}/${totalM}已答</span>
         </div>
         <div class="mod-stat-bars">${diffBars}</div>
       </div>`;
