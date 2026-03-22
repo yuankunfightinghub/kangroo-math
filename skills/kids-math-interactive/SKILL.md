@@ -1,6 +1,6 @@
 ---
 name: kids-math-interactive
-description: "为 5-10 岁儿童创建互动数学学习网站。当用户想要构建教育类数学 Web 应用、互动学习页面、数学测验游戏或任何适合儿童的基于 HTML 的数学教学工具时，请使用此技能。触发展现包括：请求“数学学习网站”、“儿童互动数学”、“数学测验游戏”、“儿童教育 Web 应用”、“数学练习网站”，或任何提到为儿童构建 Web 端数学学习体验的场景。当用户提供数学知识点、练习题或课程内容并希望将其转化为互动 Web 体验时，也会触发。此技能处理全流程：马卡龙色系主题、语音合成集成、引导式示例讲解、互动测验以及循序渐进的揭示动画。即使由于数学内容较多，用户只说“把这个做成有趣的教学页面”，也要使用此技能。"
+description: “为 5-10 岁儿童创建互动数学学习网站。当用户想要构建教育类数学 Web 应用、互动学习页面、数学测验游戏或任何适合儿童的基于 HTML 的数学教学工具时，请使用此技能。触发展现包括：请求”数学学习网站”、”儿童互动数学”、”数学测验游戏”、”儿童教育 Web 应用”、”数学练习网站”，或任何提到为儿童构建 Web 端数学学习体验的场景。当用户提供数学知识点、练习题或课程内容并希望将其转化为互动 Web 体验时，也会触发。此技能处理全流程：深色极光主题、语音合成集成、引导式示例讲解、互动测验以及循序渐进的揭示动画。即使由于数学内容较多，用户只说”把这个做成有趣的教学页面”，也要使用此技能。”
 ---
 
 # 少儿数学互动 (Kids Math Interactive) — 儿童友好型学习网站生成器
@@ -8,7 +8,7 @@ description: "为 5-10 岁儿童创建互动数学学习网站。当用户想要
 ## 概述 (Overview)
 
 为儿童（5-10 岁）构建生产级的互动数学学习网站，具备以下特性：
-- 马卡龙奶油色系（柔和、护眼）
+- **深色极光主题**（深蓝黑背景 + 模块专属主题色 + Aurora 动效 + 点阵背景）
 - 中文 Web Speech API 语音播报（支持播放/停止切换）
 - 互动方法卡片，带有循序渐进的揭示动画
 - 引导式题解流程（答案 → 引导提问 → 费曼讲解）
@@ -17,39 +17,240 @@ description: "为 5-10 岁儿童创建互动数学学习网站。当用户想要
 
 ## 设计系统 (Design System)
 
-### 马卡龙调色板 (必须使用)
+### 深色极光调色板 (必须使用)
 
 ```css
 :root {
-  --bg: #FDF6F0;        /* 奶油淡暖白背景 */
-  --card: #FFFFFF;
-  --rose: #F4A7BB;       /* 玫瑰粉 — 主色调 */
-  --rose-deep: #E8839E;
-1:   --mint: #A8D8CB;        /* 薄荷绿 — 成功态、费曼讲解 */
-29:   --mint-deep: #7CC4B2;
-30:   --lemon: #F9E4A7;       /* 柠檬黄 — 高亮 */
-31:   --lemon-deep: #F0D078;
-32:   --lilac: #C5B3D9;       /* 丁香紫 — 练习、挑战 */
-33:   --lilac-deep: #A68EC1;
-34:   --sky: #A7CBE8;          /* 天空蓝 — 引导、概念 */
-35:   --sky-deep: #7DB4D9;
-36:   --peach: #F5C5A3;        /* 蜜桃橙 — 警告、逆向思维 */
-37:   --peach-deep: #E8A87C;
-38:   --dark: #4A3728;         /* 暖深棕 — 正文文字 */
-39:   --muted: #8B7D75;        /* 柔和棕 — 次要文字 */
+  --bg: #030712;               /* 深蓝黑背景 */
+  --bg2: #0a0f1e;
+  --card: rgba(255,255,255,0.03);
+  --card-border: rgba(255,255,255,0.08);
+  --text: #f8fafc;             /* 主文字 */
+  --muted: #94a3b8;            /* 次要文字 */
+  --muted2: #64748b;           /* 更淡的次要文字 */
+  /* 模块主题色（每个模块选一个，用于 tab active、hero badge、hover 等） */
+  --amber: #f59e0b; --amber-light: #fcd34d;   /* 模块1 几何 */
+  --orange: #f97316; --orange-light: #fdba74; /* 模块2 数与运算 */
+  --emerald: #10b981;                          /* 成功/正确 */
+  --cyan: #06b6d4;                             /* 引导/概念 */
+  --purple: #8b5cf6; --purple-light: #a78bfa; /* 模块7 策略 */
 }
 ```
 
+**模块主题色对照（各模块使用对应主题色）：**
+
+| 模块 | 主题色 | 主题色值 |
+|-----|-------|---------|
+| 模块一 几何与图形 | amber | `#f59e0b` / `#fcd34d` |
+| 模块二 数与运算 | orange | `#f97316` / `#fdba74` |
+| 模块三 逻辑推理 | cyan | `#06b6d4` / `#67e8f9` |
+| 模块四 空间立体 | blue | `#3b82f6` / `#93c5fd` |
+| 模块五 数据统计 | rose | `#f43f5e` / `#fda4af` |
+| 模块六 测量单位 | amber | `#f59e0b` / `#fcd34d` |
+| 模块七 组合策略 | purple | `#8b5cf6` / `#a78bfa` |
+
+**通用语义色（不随模块变化）：**
+- 正确/成功：`#10b981` (emerald) / `#6ee7b7`
+- 错误/警告：`#ef4444` (red) / `#fca5a5`
+- 引导提示：`#06b6d4` (cyan) / `#67e8f9`
+
 ### 字体 (Typography)
 
-- 标题字体：`'ZCOOL KuaiLe', cursive` (来自 Google Fonts) — 活泼、儿童友好
-- 正文字体：`'Noto Sans SC', sans-serif` (来自 Google Fonts) — 清爽的中文支持
-- 基础字号：`17px` (比普通字号大，适合平板电脑上的儿童)
+- 主字体：`'Inter'` — 现代清晰
+- 中文字体：`'Noto Sans SC', sans-serif` — 清爽的中文支持
+- 基础字号：`16px`
 - 行高：`1.7`
 
 ### 字体引入 (必须包含)
 ```html
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+```
+
+### Aurora 背景动效 (必须包含)
+
+```html
+<!-- 放在 <body> 开始，.page 之前 -->
+<div class="aurora">
+  <div class="aurora-blob ab1"></div>
+  <div class="aurora-blob ab2"></div>
+  <div class="aurora-blob ab3"></div>
+</div>
+<div class="dot-grid"></div>
+<div class="page">
+  <!-- 所有页面内容 -->
+</div>
+```
+
+```css
+/* Aurora blobs — 颜色根据模块主题色调整 */
+.aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.aurora-blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.12; animation: auroraF linear infinite; }
+/* 以模块七（紫色）为例 */
+.ab1 { width: 600px; height: 600px; background: radial-gradient(circle,#8b5cf6,transparent 70%); top: -100px; left: -100px; animation-duration: 22s; }
+.ab2 { width: 500px; height: 500px; background: radial-gradient(circle,#6d28d9,transparent 70%); top: 50%; right: -100px; animation-duration: 28s; animation-delay:-10s; }
+.ab3 { width: 400px; height: 400px; background: radial-gradient(circle,#ec4899,transparent 70%); bottom: 10%; left: 20%; animation-duration: 20s; animation-delay:-5s; }
+@keyframes auroraF { 0%{transform:translate(0,0)} 33%{transform:translate(30px,-25px)} 66%{transform:translate(-15px,35px)} 100%{transform:translate(0,0)} }
+
+/* 点阵背景 */
+.dot-grid { position: fixed; inset: 0; z-index: 0; pointer-events: none; background-image: radial-gradient(rgba(255,255,255,0.05) 1px,transparent 1px); background-size: 28px 28px; mask-image: radial-gradient(ellipse 70% 70% at 50% 50%,black 40%,transparent 100%); }
+.page { position: relative; z-index: 1; }
+```
+
+### Topbar、Hero、Tab Nav 结构模板
+
+```html
+<!-- Sticky topbar -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="../../index.html" class="back-link">← 返回主页</a>
+    <span class="topbar-sep">/</span>
+    <span class="topbar-title">模块X · 模块名称</span>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Hero -->
+  <div class="mod-hero">
+    <div class="hero-badge">🔷 模块X</div>
+    <h1 class="hero-title">关键词 · 关键词 · <span class="hero-grad">亮点词</span></h1>
+    <p class="hero-sub">一句话描述模块内容</p>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-num">N</span><span class="hstat-label">核心概念</span></div>
+      <div class="hstat"><span class="hstat-num">N</span><span class="hstat-label">学习技巧</span></div>
+      <div class="hstat"><span class="hstat-num">N</span><span class="hstat-label">例题精讲</span></div>
+      <div class="hstat"><span class="hstat-num">N</span><span class="hstat-label">闯关题目</span></div>
+    </div>
+    <nav class="tab-nav">
+      <button class="tab-pill on" data-s="s1">💡 概念</button>
+      <button class="tab-pill" data-s="s2">🛠 技巧</button>
+      <button class="tab-pill" data-s="s3">📖 例题</button>
+      <button class="tab-pill" data-s="s4">🎮 闯关</button>
+    </nav>
+  </div>
+
+  <!-- Sections (tab panels) -->
+  <div id="s1" class="sec on">…</div>
+  <div id="s2" class="sec">…</div>
+  <div id="s3" class="sec">…</div>
+  <div id="s4" class="sec">…</div>
+</div>
+```
+
+**Tab 切换 JS（必须使用）：**
+```javascript
+document.querySelectorAll('.tab-pill').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.tab-pill').forEach(b => b.classList.remove('on'));
+    document.querySelectorAll('.sec').forEach(s => s.classList.remove('on'));
+    this.classList.add('on');
+    document.getElementById(this.dataset.s).classList.add('on');
+    speechSynthesis.cancel();
+    if (currentBtn) { currentBtn.classList.remove('playing'); currentBtn.innerHTML = currentBtn.dataset.orig || currentBtn.innerHTML; currentBtn = null; }
+  });
+});
+```
+
+### 核心 CSS（必须包含，主题色用模块对应颜色替换 `--theme-*`）
+
+```css
+/* Topbar */
+.topbar { position: sticky; top: 0; z-index: 100; background: rgba(3,7,18,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--card-border); padding: 0 24px; }
+.topbar-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; gap: 16px; height: 60px; }
+.back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 13px; font-weight: 500; text-decoration: none; transition: color .2s; padding: 6px 12px; border-radius: 8px; }
+.back-link:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+.topbar-sep { color: var(--muted2); font-size: 14px; }
+.topbar-title { font-size: 14px; font-weight: 600; color: var(--muted); }
+
+/* Tab Nav */
+.tab-nav { display: inline-flex; gap: 6px; background: rgba(255,255,255,0.04); border: 1px solid var(--card-border); border-radius: 16px; padding: 6px; margin-top: 24px; }
+.tab-pill { padding: 10px 22px; border-radius: 10px; font-size: 14px; font-weight: 600; border: none; background: transparent; color: var(--muted); cursor: pointer; transition: all .25s; white-space: nowrap; font-family: 'Noto Sans SC', sans-serif; display: flex; align-items: center; gap: 6px; }
+.tab-pill:hover { background: rgba(255,255,255,0.06); color: var(--text); }
+/* 模块主题色 — 以 amber 为例，替换为对应模块颜色 */
+.tab-pill.on { background: rgba(245,158,11,0.18); color: #fcd34d; box-shadow: 0 0 0 1px rgba(245,158,11,0.35); }
+
+/* Hero */
+.mod-hero { padding: 40px 0 32px; animation: fadeUp .5s ease both; }
+.hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); font-size: 12px; font-weight: 700; color: #fcd34d; margin-bottom: 16px; }
+.hero-title { font-size: clamp(28px,5vw,48px); font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 12px; }
+.hero-grad { background: linear-gradient(135deg,#fcd34d,#fdba74); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.hero-sub { font-size: 16px; color: var(--muted); max-width: 560px; line-height: 1.6; }
+.hero-stats { display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap; }
+.hstat { display: flex; flex-direction: column; }
+.hstat-num { font-size: 22px; font-weight: 800; color: #fcd34d; }
+.hstat-label { font-size: 11px; color: var(--muted2); font-weight: 500; }
+
+/* Container & Sections */
+.container { max-width: 960px; margin: 0 auto; padding: 0 24px 80px; }
+.sec { display: none; animation: fadeUp .4s ease; }
+.sec.on { display: block; }
+.sec-heading { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--card-border); }
+
+/* Glass Card */
+.gcard { background: var(--card); border: 1px solid var(--card-border); border-radius: 20px; padding: 28px; margin-bottom: 20px; position: relative; transition: border-color .3s; }
+.gcard:hover { border-color: rgba(245,158,11,0.25); }
+
+/* Concept Box */
+.cbox { border-radius: 16px; padding: 20px 20px 20px 24px; margin: 14px 0; position: relative; border-left: 3px solid var(--accent, #f59e0b); background: var(--accent-bg, rgba(245,158,11,0.05)); }
+.cbox h4 { font-size: 17px; font-weight: 700; margin-bottom: 8px; color: var(--accent, #fcd34d); }
+.cbox p, .cbox ul { font-size: 15px; color: var(--muted); line-height: 1.8; }
+
+/* Voice Button */
+.vbtn { position: absolute; top: 14px; right: 14px; display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 8px; border: none; font-size: 15px; font-weight: 600; cursor: pointer; transition: all .25s; font-family: 'Noto Sans SC', sans-serif; }
+.vbtn-a { background: rgba(245,158,11,0.12); color: #fcd34d; border: 1px solid rgba(245,158,11,0.25); }
+.vbtn-o { background: rgba(249,115,22,0.12); color: #fdba74; border: 1px solid rgba(249,115,22,0.25); }
+.vbtn-e { background: rgba(16,185,129,0.12); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.25); }
+.vbtn-c { background: rgba(6,182,212,0.12); color: #67e8f9; border: 1px solid rgba(6,182,212,0.25); }
+.vbtn-p { background: rgba(139,92,246,0.12); color: #a78bfa; border: 1px solid rgba(139,92,246,0.25); }
+
+/* Inline voice button (non-absolute) */
+.va-btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 8px; border: none; font-size: 15px; font-weight: 600; cursor: pointer; transition: all .25s; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); color: #fcd34d; font-family: 'Noto Sans SC', sans-serif; }
+
+/* Method Card */
+.mcard { background: var(--card); border: 1px solid var(--card-border); border-radius: 16px; margin-bottom: 12px; cursor: pointer; transition: all .3s; overflow: hidden; }
+.mcard-head { padding: 20px 24px; display: flex; align-items: center; gap: 16px; }
+.mcard-chevron { font-size: 18px; color: var(--muted); transition: transform .3s; margin-left: auto; }
+.mcard.open .mcard-chevron { transform: rotate(180deg); color: #fcd34d; }
+.mcard-body { max-height: 0; overflow: hidden; transition: max-height .5s cubic-bezier(0.23,1,0.32,1); }
+.mcard-body.open { max-height: 1400px; }
+.mcard-body-inner { padding: 0 24px 24px; border-top: 1px solid var(--card-border); }
+
+/* Reveal button */
+.reveal-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; border-radius: 10px; background: rgba(245,158,11,0.1); border: 1px dashed rgba(245,158,11,0.35); color: #fcd34d; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .25s; margin-bottom: 12px; font-family: 'Noto Sans SC', sans-serif; }
+
+/* Choice buttons (example & quiz) */
+.choice-btn { padding: 10px 20px; border-radius: 12px; font-size: 15px; font-weight: 600; border: 1.5px solid var(--card-border); background: rgba(255,255,255,0.03); color: var(--text); cursor: pointer; transition: all .25s; font-family: 'Noto Sans SC', sans-serif; }
+.choice-btn:hover:not(.dis) { border-color: rgba(245,158,11,0.4); background: rgba(245,158,11,0.08); }
+.choice-btn.correct { background: rgba(16,185,129,0.15); border-color: #6ee7b7; color: #6ee7b7; }
+.choice-btn.wrong { background: rgba(239,68,68,0.1); border-color: #fca5a5; color: #fca5a5; animation: shake .4s ease; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+/* Guide chain */
+.guide-item { border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02); margin-bottom: 8px; }
+.guide-item.active { border-color: rgba(245,158,11,0.35); }
+.guide-item.locked { opacity: .4; pointer-events: none; }
+.guide-q { padding: 12px 16px; font-size: 14px; color: var(--muted); cursor: pointer; display: flex; align-items: center; gap: 10px; }
+.guide-a { display: none; padding: 12px 16px; border-top: 1px solid rgba(255,255,255,0.06); background: rgba(245,158,11,0.05); font-size: 14px; color: var(--muted); line-height: 1.7; }
+.guide-a strong { color: var(--text); }
+
+/* Feynman box */
+.feynman-box { background: rgba(16,185,129,0.07); border: 1.5px solid rgba(16,185,129,0.25); border-radius: 14px; padding: 18px; margin-top: 14px; display: none; }
+.feynman-box.show { display: block; }
+.feynman-box .fn-title { font-size: 15px; font-weight: 700; color: #6ee7b7; margin-bottom: 12px; }
+
+/* Quiz */
+.q-dot { width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.06); border: 1.5px solid var(--card-border); font-size: 11px; font-weight: 700; color: var(--muted2); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .25s; }
+.q-dot.on { background: rgba(245,158,11,0.2); border-color: #fcd34d; color: #fcd34d; }
+.q-dot.ok { background: rgba(16,185,129,0.15); border-color: #6ee7b7; color: #6ee7b7; }
+.q-dot.bad { background: rgba(239,68,68,0.1); border-color: #fca5a5; color: #fca5a5; }
+.q-opt { padding: 12px 16px; border-radius: 12px; border: 1.5px solid var(--card-border); background: rgba(255,255,255,0.02); font-size: 14px; color: var(--text); cursor: pointer; transition: all .25s; text-align: left; font-family: 'Noto Sans SC', sans-serif; }
+.q-opt:hover:not(.dis) { border-color: rgba(245,158,11,0.4); background: rgba(245,158,11,0.06); }
+.q-opt.correct { background: rgba(16,185,129,0.12); border-color: #6ee7b7; color: #6ee7b7; }
+.q-opt.wrong { background: rgba(239,68,68,0.08); border-color: #fca5a5; animation: shake .4s ease; }
+
+/* ctrl-btn */
+.ctrl-btn { padding: 7px 14px; border-radius: 9px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid rgba(245,158,11,0.3); background: rgba(245,158,11,0.07); color: #fcd34d; transition: all .2s; font-family: 'Noto Sans SC', sans-serif; }
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
 ```
 
 ## 架构 — 4 个板块 (Architecture)
@@ -439,15 +640,15 @@ function handleEx(id, idx) {
   const res = document.getElementById(id+'-result');
   if (data.opts[idx].v) {
     opts.forEach((o,i) => { o.classList.add('dim'); if(data.opts[i].v) o.classList.add('correct'); });
-    res.style.cssText = 'display:block;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);color:#6ee7b7';
+    res.style.cssText = 'display:block;padding:12px 16px;border-radius:12px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);color:#6ee7b7;margin-bottom:12px';
     res.innerHTML = `🎉 答对了！你真棒！<br><button onclick=”showExplanation('${id}')” style=”margin-top:10px;padding:8px 18px;border-radius:10px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.35);color:#6ee7b7;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif”>📖 点击查看解题讲解 →</button>`;
   } else {
     opts[idx].classList.add('wrong');
-    res.style.cssText = 'display:block;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);color:#fcd34d';
+    res.style.cssText = 'display:block;padding:12px 16px;border-radius:12px;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);color:#fcd34d;margin-bottom:12px';
     res.innerHTML = `<div style=”margin-bottom:10px”>💡 这个答案不太对哦，没关系！</div>
       <div style=”display:flex;gap:8px;flex-wrap:wrap”>
-        <button onclick=”retryEx('${id}',${idx})” style=”…”>🔄 再试试</button>
-        <button onclick=”learnEx('${id}')” style=”…”>📖 查看解法</button>
+        <button onclick=”retryEx('${id}',${idx})” style=”padding:8px 16px;border-radius:10px;background:rgba(6,182,212,0.12);border:1px solid rgba(6,182,212,0.3);color:#67e8f9;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif”>🔄 再试试</button>
+        <button onclick=”learnEx('${id}')” style=”padding:8px 16px;border-radius:10px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);color:#fcd34d;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans SC',sans-serif”>📖 查看解法</button>
       </div>`;
   }
 }
@@ -458,7 +659,7 @@ function learnEx(id) {
     o.classList.add('dim'); if(data.opts[i].v) o.classList.add('correct');
   });
   const res = document.getElementById(id+'-result');
-  res.style.cssText = 'display:block;background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.2);color:#93c5fd';
+  res.style.cssText = 'display:block;padding:12px 16px;border-radius:12px;background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.2);color:#93c5fd;margin-bottom:12px';
   res.innerHTML = '📖 没关系！正确答案已标出，我们一起来看——';
   setTimeout(() => showExplanation(id), 400);  // 直接展开，无需再点
 }
@@ -619,13 +820,19 @@ function toggleVoice(btn, text) {
 
 ## CSS 组件参考 (CSS Component Reference)
 
-阅读 `references/components.md` 以获取完整的 CSS 类参考，包括：
-- `.vbtn` 变体 (`.vbtn-rose`, `.vbtn-mint`, `.vbtn-lilac`, `.vbtn-sky`, `.vbtn-peach`)
-- `.cbox` 概念框
-- `.mcard` 技巧卡片（含 `.mdetail` 和 `.mstep`）
-- `.excard` 示例卡片（含 `.guide-chain` 和 `.feynman-box`）
-- `.quiz-sec` 测验板块组件
-- 动画关键帧
+完整 CSS 在「核心 CSS」章节中列出，主要组件：
+- `.vbtn-a/o/e/c/p` — 语音按钮（amber/orange/emerald/cyan/purple 五色变体）
+- `.va-btn` — 内联语音按钮（非绝对定位）
+- `.ctrl-btn` — 交互控制按钮
+- `.cbox` — 概念框（`--accent` 和 `--accent-bg` 自定义颜色）
+- `.mcard` + `.mcard-head` + `.mcard-body` — 可折叠技巧卡片
+- `.gcard` — 玻璃感卡片容器
+- `.reveal-btn` — 步骤揭示按钮
+- `.choice-btn` / `.q-opt` — 选择题选项按钮
+- `.guide-item` / `.guide-q` / `.guide-a` — 引导链
+- `.feynman-box` — 费曼讲解框
+- `.q-dot` — 题目导航点
+- 动画关键帧：`fadeUp`、`shake`、`auroraF`
 
 ## 内容准则 (Content Guidelines)
 

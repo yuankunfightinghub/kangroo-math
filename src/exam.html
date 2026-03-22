@@ -129,9 +129,22 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Noto San
 
 /* Question image — the main content */
 .exam-q-img-wrap {
-  padding: 16px 20px 0;
+  padding: 0 20px 0;
   background: rgba(255,255,255,0.01);
 }
+.exam-q-img-wrap.expanded { padding: 16px 20px 0; }
+.img-toggle-btn {
+  display: flex; align-items: center; gap: 6px;
+  width: 100%; padding: 10px 20px;
+  background: none; border: none; border-top: 1px solid rgba(255,255,255,0.05);
+  color: var(--muted); font-size: 12px; font-weight: 600; font-family: inherit;
+  cursor: pointer; text-align: left; transition: color 0.2s;
+}
+.img-toggle-btn:hover { color: var(--text); }
+.img-toggle-btn .toggle-arrow { font-size: 10px; transition: transform 0.2s; }
+.img-toggle-btn.open .toggle-arrow { transform: rotate(90deg); }
+.exam-q-img-body { display: none; }
+.exam-q-img-body.show { display: block; padding-bottom: 12px; }
 .exam-q-img {
   display: block; width: 100%; border-radius: 10px;
   border: 1px solid rgba(255,255,255,0.07);
@@ -436,6 +449,9 @@ function getModuleLabel(mod) {
 function parseSearch(s) {
   s = (s || '').trim();
   if (!s) return {};
+  // "1512" → 2015年第12题 (4位: 前两位+2000=年份, 后两位=题号)
+  const compact = s.match(/^(\d{2})(\d{2})$/);
+  if (compact) return { year: 2000 + +compact[1], qnum: +compact[2] };
   // "2018 5" / "2018-5" / "2018·5" / "2018，5"
   const m = s.match(/^(\d{4})[\s\-·,，、]+(\d+)$/);
   if (m) return { year: +m[1], qnum: +m[2] };
@@ -473,9 +489,16 @@ function buildYearBar() {
     .join('');
 }
 
+function toggleImg(btn) {
+  btn.classList.toggle('open');
+  const body = btn.nextElementSibling;
+  body.classList.toggle('show');
+  btn.querySelector('.toggle-arrow').textContent = body.classList.contains('show') ? '▼' : '▶';
+  btn.childNodes[1].textContent = body.classList.contains('show') ? ' 收起题目图片' : ' 查看题目图片';
+}
+
 function setYear(val) {
   activeYear = val;
-  activeMod = 'all';
   document.getElementById('searchInput').value = '';
   searchVal = '';
   buildYearBar();
@@ -504,8 +527,6 @@ function buildModBar() {
 
 function setMod(val) {
   activeMod = val;
-  document.getElementById('searchInput').value = '';
-  searchVal = '';
   buildModBar();
   render();
 }
@@ -518,10 +539,11 @@ function renderCard(q, delay) {
   const chosen = answered[key];
   const isDone = chosen !== undefined;
 
-  // Image
-  const imgHtml = q.qimg
+  // Image (collapsed by default, click to expand)
+  const imgInner = q.qimg
     ? `<img class="exam-q-img" src="${q.qimg}" alt="${q.year}年第${q.qnum}题" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'no-img-placeholder\\'>图片加载中...</div>'">`
     : `<div class="no-img-placeholder">📄 图片整理中</div>`;
+  const imgHtml = `<button class="img-toggle-btn" onclick="toggleImg(this)"><span class="toggle-arrow">▶</span> 查看题目图片</button><div class="exam-q-img-body">${imgInner}</div>`;
 
   // Option buttons
   const optHtml = OPTS.map((letter, i) => {
@@ -564,7 +586,7 @@ function renderCard(q, delay) {
       ${modTag}
       <span class="meta-pts">${q.pts}分题</span>
     </div>
-    <div class="exam-q-img-wrap">${imgHtml}</div>
+    <div class="exam-q-img-wrap" id="imgwrap-${key}">${imgHtml}</div>
     <div class="exam-answer">
       <div class="answer-label">选择答案</div>
       <div class="opt-row">${optHtml}</div>
@@ -636,8 +658,6 @@ function quickSearch(val) {
 // ── Search input ──
 document.getElementById('searchInput').addEventListener('input', e => {
   searchVal = e.target.value;
-  activeYear = 'all';
-  buildYearBar();
   render();
 });
 
