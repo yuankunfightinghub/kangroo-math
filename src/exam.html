@@ -784,6 +784,8 @@ function renderStats() {
         return qKeyToMod[key] === +modId;
       }).length;
       const pctM = Math.round(correctM/totalM*100);
+      const redoPctM = totalM ? Math.round((correctM + redoCorrectM)/totalM*100) : 0;
+      const pctColor = pctM>=80?'#34d399':pctM>=60?'#f59e0b':'#f87171';
       const diffBars = ['★','★★','★★★'].filter(d => diffs[d]).map(d => {
         const v = diffs[d]; const p = Math.round(v.correct/v.total*100);
         return `<div class="diff-row" style="margin-bottom:5px">
@@ -802,7 +804,10 @@ function renderStats() {
         <div class="mod-stat-hd">
           <span class="mod-stat-name">${mod.emoji} ${mod.label}</span>
           <span style="font-size:11px;color:var(--muted)">共${totalInDB}题</span>
-          <span class="mod-stat-pct" style="color:${pctM>=80?'#34d399':pctM>=60?'#f59e0b':'#f87171'}">${pctM}%</span>
+          <span style="display:flex;flex-direction:column;align-items:flex-end;gap:1px">
+            <span class="mod-stat-pct" style="color:${pctColor}">${pctM}%</span>
+            ${redoCorrectM > 0 ? `<span style="font-size:12px;color:${pctColor};opacity:0.75">${redoPctM}%</span>` : ''}
+          </span>
         </div>
         <div class="mod-stat-counts" title="${countTitle}">${countLine}</div>
         <div class="mod-stat-bars">${diffBars}</div>
