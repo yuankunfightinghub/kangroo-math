@@ -159,7 +159,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Noto San
 /* Answer buttons area */
 .exam-answer { padding: 16px 20px 18px; }
 .answer-label { font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
-.opt-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.opt-row-wrap { display: flex; align-items: stretch; gap: 12px; flex-wrap: wrap; }
+.opt-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .opt-btn {
   display: inline-flex; align-items: center; justify-content: center;
   width: 48px; height: 48px; border-radius: 12px; font-size: 15px; font-weight: 800;
@@ -307,11 +308,11 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Noto San
 
 /* redo btn */
 .redo-btn {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 6px 14px; border-radius: 9px; margin-top: 10px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+  padding: 0 16px; border-radius: 12px; align-self: stretch;
   background: rgba(16,185,129,0.1); border: 1.5px solid rgba(16,185,129,0.35);
-  color: #6ee7b7; font-size: 12px; font-weight: 700; font-family: inherit;
-  cursor: pointer; transition: all 0.2s;
+  color: #6ee7b7; font-size: 13px; font-weight: 700; font-family: inherit;
+  cursor: pointer; transition: all 0.2s; white-space: nowrap;
 }
 .redo-btn:hover { background: rgba(16,185,129,0.2); border-color: #10b981; }
 .redo-btn.done { background: rgba(16,185,129,0.18); border-color: #10b981; color: #34d399; cursor: default; opacity: 0.8; }
@@ -587,24 +588,24 @@ function renderCard(q, delay) {
     return `<button class="${cls}" ${isDone?'disabled':''} onclick="answer('${key}',${i})">${letter}</button>`;
   }).join('');
 
-  // Feedback + redo button
+  // Feedback
   let fbHtml = '';
   if (isDone) {
-    const isRedo = !!redoMap[key];
     if (q.ans !== null) {
       const ok = chosen === q.ans;
-      const redoBtnHtml = !ok
-        ? (isRedo
-          ? `<button class="redo-btn done" disabled>已重做对 ✅</button>`
-          : `<button class="redo-btn" onclick="markRedo('${key}')">重做 ✅</button>`)
-        : '';
-      fbHtml = `<div class="exam-fb show ${ok?'ok':'no'}">${ok ? q.ok : q.no}${redoBtnHtml}</div>`;
+      fbHtml = `<div class="exam-fb show ${ok?'ok':'no'}">${ok ? q.ok : q.no}</div>`;
     } else {
-      const redoBtnHtml = isRedo
-        ? `<button class="redo-btn done" disabled>已重做对 ✅</button>`
-        : `<button class="redo-btn" onclick="markRedo('${key}')">重做 ✅</button>`;
-      fbHtml = `<div class="exam-fb show neutral">已记录！请对照上方原题图片核对答案。${redoBtnHtml}</div>`;
+      fbHtml = `<div class="exam-fb show neutral">已记录！请对照上方原题图片核对答案。</div>`;
     }
+  }
+
+  // Redo button (always shown when answered, placed beside opt-row)
+  let redoBtnHtml = '';
+  if (isDone) {
+    const isRedo = !!redoMap[key];
+    redoBtnHtml = isRedo
+      ? `<button class="redo-btn done" disabled>已重做对 ✅</button>`
+      : `<button class="redo-btn" onclick="markRedo('${key}')">重做 ✅</button>`;
   }
 
   const modInfo = MODULES.find(m => m.id === (q.mod || 0));
@@ -622,7 +623,10 @@ function renderCard(q, delay) {
     <div class="exam-q-img-wrap" id="imgwrap-${key}">${imgHtml}</div>
     <div class="exam-answer">
       <div class="answer-label">选择答案</div>
-      <div class="opt-row">${optHtml}</div>
+      <div class="opt-row-wrap">
+        <div class="opt-row">${optHtml}</div>
+        ${redoBtnHtml}
+      </div>
       ${fbHtml}
     </div>
   </div>`;
