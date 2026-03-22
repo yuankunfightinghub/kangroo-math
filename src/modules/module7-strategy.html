@@ -245,6 +245,16 @@ body {
 }
 .reveal-btn:hover { background: rgba(139,92,246,0.18); transform: scale(1.03); }
 
+/* ── 例题四~六 选项按钮 ── */
+.opt-btn4, .opt-btn5, .opt-btn6 {
+  padding: 10px 22px; border-radius: 10px; font-size: 15px; font-weight: 700;
+  border: 1.5px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.04);
+  color: #f8fafc; cursor: pointer; transition: all .2s; font-family: 'Noto Sans SC', sans-serif;
+}
+.opt-btn4:hover, .opt-btn5:hover, .opt-btn6:hover {
+  background: rgba(139,92,246,0.12); border-color: #a78bfa;
+}
+
 /* ── excard ── */
 .excard {
   background: var(--card); border: 1px solid var(--card-border);
@@ -516,8 +526,8 @@ canvas { display: block; border-radius: 12px; background: rgba(255,255,255,0.02)
       <p class="hero-sub">学会找规律、用逆推、做最优选择！这是袋鼠数学里最考验"思维灵活度"的模块 🦘</p>
       <div class="hero-stats">
         <div class="hstat"><span class="hstat-num">3</span><span class="hstat-label">核心概念</span></div>
-        <div class="hstat"><span class="hstat-num">4</span><span class="hstat-label">学习技巧</span></div>
-        <div class="hstat"><span class="hstat-num">3</span><span class="hstat-label">例题精讲</span></div>
+        <div class="hstat"><span class="hstat-num">5</span><span class="hstat-label">学习技巧</span></div>
+        <div class="hstat"><span class="hstat-num">6</span><span class="hstat-label">例题精讲</span></div>
         <div class="hstat"><span class="hstat-num">10</span><span class="hstat-label">闯关题目</span></div>
       </div>
       <nav class="tab-nav">
@@ -991,6 +1001,96 @@ canvas { display: block; border-radius: 12px; background: rgba(255,255,255,0.02)
     </div>
   </div>
 
+  <!-- 技巧5 -->
+  <div class="mcard" id="mc5">
+    <div class="mcard-hd" onclick="toggleCard(this)">
+      <span>🐑 技巧五：两条件找等量（差值+倍数建方程）</span><span class="arr">▶</span>
+    </div>
+    <div class="mcard-body">
+      <div class="mcard-figure">
+        <div class="fig-label">挑战：🐑 农场里绵羊比奶牛多 8 只，奶牛是绵羊的一半。各有多少只？</div>
+        <!-- 可视化：动态条形图 -->
+        <div id="farm-vis" style="margin:16px auto;max-width:360px">
+          <svg id="farm-svg" viewBox="0 0 320 140" width="100%" style="overflow:visible">
+            <defs>
+              <marker id="arrowG" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+                <path d="M0,0 L0,8 L8,4 Z" fill="#6ee7b7"/>
+              </marker>
+              <marker id="arrowP" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+                <path d="M0,0 L0,8 L8,4 Z" fill="#a78bfa"/>
+              </marker>
+            </defs>
+            <!-- 标题 -->
+            <text x="160" y="16" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Noto Sans SC,sans-serif">拖动滑块，感受数量变化</text>
+            <!-- 绵羊条 -->
+            <text x="8" y="48" font-size="13" fill="#a78bfa" font-family="Noto Sans SC,sans-serif">🐑 绵羊</text>
+            <rect x="70" y="34" id="bar-sheep" width="160" height="24" rx="6" fill="rgba(139,92,246,0.35)" stroke="#a78bfa" stroke-width="1.5"/>
+            <text x="236" y="50" id="lbl-sheep" font-size="13" fill="#a78bfa" font-family="Noto Sans SC,sans-serif">16</text>
+            <!-- 奶牛条 -->
+            <text x="8" y="86" font-size="13" fill="#6ee7b7" font-family="Noto Sans SC,sans-serif">🐄 奶牛</text>
+            <rect x="70" y="72" id="bar-cow" width="80" height="24" rx="6" fill="rgba(16,185,129,0.35)" stroke="#6ee7b7" stroke-width="1.5"/>
+            <text x="156" y="88" id="lbl-cow" font-size="13" fill="#6ee7b7" font-family="Noto Sans SC,sans-serif">8</text>
+            <!-- 差值标注 -->
+            <line id="diff-line" x1="150" y1="60" x2="230" y2="60" stroke="#fdba74" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <text id="diff-lbl" x="190" y="57" text-anchor="middle" font-size="11" fill="#fdba74" font-family="Noto Sans SC,sans-serif">差 = 8</text>
+            <!-- 倍数标注 -->
+            <text id="ratio-lbl" x="160" y="118" text-anchor="middle" font-size="12" fill="#67e8f9" font-family="Noto Sans SC,sans-serif">奶牛 = 绵羊 × ½</text>
+            <!-- 总数 -->
+            <text id="total-lbl" x="160" y="136" text-anchor="middle" font-size="13" fill="#f8fafc" font-family="Noto Sans SC,sans-serif" font-weight="bold">总计：16 + 8 = 24 只</text>
+          </svg>
+          <!-- 滑块：奶牛数量 -->
+          <div style="display:flex;align-items:center;gap:10px;margin-top:8px;padding:0 8px">
+            <span style="font-size:12px;color:#6ee7b7;white-space:nowrap">奶牛数</span>
+            <input type="range" id="cow-slider" min="2" max="20" value="8" step="1"
+              style="flex:1;accent-color:#6ee7b7"
+              oninput="updateFarmVis(this.value)">
+            <span id="cow-val" style="font-size:12px;color:#6ee7b7;width:24px">8</span>
+          </div>
+          <div id="farm-check" style="text-align:center;font-size:13px;margin-top:6px;min-height:20px;font-family:'Noto Sans SC',sans-serif"></div>
+        </div>
+      </div>
+      <button class="reveal-btn" onclick="revealSteps('ms5')">👆 点我看解法！</button>
+      <div id="ms5" class="steps-row">
+        <div class="step">
+          <div class="step-vis">
+            <svg viewBox="0 0 160 100" width="100%" height="auto">
+              <rect class="sv" x="5" y="10" width="150" height="36" rx="10" fill="rgba(139,92,246,0.1)" stroke="#a78bfa" stroke-width="2"/>
+              <text class="sv" x="80" y="26" text-anchor="middle" font-size="11" font-family="Noto Sans SC,sans-serif" fill="#a78bfa">设奶牛 = x 只</text>
+              <text class="sv" x="80" y="42" text-anchor="middle" font-size="11" font-family="Noto Sans SC,sans-serif" fill="#f8fafc">绵羊 = 2x 只</text>
+              <text class="sv" x="80" y="72" text-anchor="middle" font-size="12" fill="#94a3b8" style="animation-delay:.2s">奶牛是绵羊一半</text>
+              <text class="sv" x="80" y="88" text-anchor="middle" font-size="11" fill="#67e8f9" style="animation-delay:.4s">→ 绵羊 = 2 × 奶牛</text>
+            </svg>
+          </div>
+          <div class="step-label">① 设未知数</div>
+        </div>
+        <div class="step">
+          <div class="step-vis">
+            <svg viewBox="0 0 160 100" width="100%" height="auto">
+              <rect class="sv pop" x="5" y="10" width="150" height="40" rx="10" fill="rgba(245,158,11,0.12)" stroke="rgba(245,158,11,0.4)" stroke-width="2" style="animation-delay:.15s"/>
+              <text class="sv pop" x="80" y="28" text-anchor="middle" font-size="11" font-family="Noto Sans SC,sans-serif" fill="#fcd34d" style="animation-delay:.25s">2x − x = 8</text>
+              <text class="sv pop" x="80" y="44" text-anchor="middle" font-size="12" font-family="Noto Sans SC,sans-serif" fill="#fcd34d" style="animation-delay:.35s">x = 8</text>
+              <text class="sv" x="80" y="72" text-anchor="middle" font-size="11" fill="#94a3b8" style="animation-delay:.5s">绵羊比奶牛多8</text>
+              <text class="sv" x="80" y="88" text-anchor="middle" font-size="11" fill="#67e8f9" style="animation-delay:.65s">→ 差值列方程</text>
+            </svg>
+          </div>
+          <div class="step-label">② 用差值列式</div>
+        </div>
+        <div class="step">
+          <div class="step-vis">
+            <svg viewBox="0 0 160 100" width="100%" height="auto">
+              <rect class="sv pop" x="10" y="12" width="140" height="70" rx="14" fill="rgba(16,185,129,0.15)" stroke="#6ee7b7" stroke-width="2" style="animation-delay:.2s"/>
+              <text class="sv pop" x="80" y="36" text-anchor="middle" font-size="12" font-family="Noto Sans SC,sans-serif" fill="#f8fafc" style="animation-delay:.35s">🐑 绵羊 = 16 只</text>
+              <text class="sv pop" x="80" y="56" text-anchor="middle" font-size="12" font-family="Noto Sans SC,sans-serif" fill="#f8fafc" style="animation-delay:.5s">🐄 奶牛 = 8 只</text>
+              <text class="sv pop" x="80" y="76" text-anchor="middle" font-size="13" fill="#6ee7b7" style="animation-delay:.65s">总计 24 只 🎉</text>
+            </svg>
+          </div>
+          <div class="step-label">③ 求出答案</div>
+        </div>
+      </div>
+      <button class="vbtn-inline vbtn-sky" onclick="toggleVoice(this,'这类题有两个条件：一个告诉你差值，一个告诉你倍数关系。解题诀窍是：先用倍数关系设未知数，再用差值列方程。比如奶牛是绵羊的一半，就设奶牛等于x，绵羊等于2x。差值是8，所以2x减x等于8，解出x等于8。绵羊16只，奶牛8只，加起来就是24只！')">🔊 听讲解</button>
+    </div>
+  </div>
+
       </div>
     </div>
 
@@ -1064,7 +1164,7 @@ canvas { display: block; border-radius: 12px; background: rgba(255,255,255,0.02)
     </div>
   </div>
 
-  <!-- 例题3 -->
+  <!-- 例题3（原） -->
   <div class="excard">
     <div class="excard-hdr">
       <span class="ex-num">例题三</span>
@@ -1086,6 +1186,160 @@ canvas { display: block; border-radius: 12px; background: rgba(255,255,255,0.02)
         <p>② 从最终结果，逆序执行这些反操作。</p>
         <p>③ 到达起点，就是我们要找的初始值！</p>
         <button class="vbtn-inline vbtn-mint" style="margin-top:10px" onclick="toggleVoice(this,'倒推就是时光机！先看最后发生了什么，然后把时间倒回去。加法变减法，减法变加法，乘法变除法，一步步往前推，就找到了起点！')">🔊 听我讲</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 技巧五专题例题 ══ -->
+
+  <!-- 例题四：直接求总数 -->
+  <div class="excard" id="excard4">
+    <div class="excard-hdr">
+      <span class="ex-num">例题四</span>
+      <span class="ex-tag">差值+倍数 · 求总数</span>
+    </div>
+    <div class="excard-body">
+      <div class="qbox">
+        🐑 <strong>农场动物问题</strong><br><br>
+        一个农场里只有绵羊和奶牛。绵羊比奶牛多 <strong>8</strong> 只，奶牛的数量是绵羊的一半。<br>
+        农场里共有多少只动物？
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
+      <div class="ex4-opts" style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="opt-btn4" onclick="checkEx4(this,16,'ex4-result')">A. 16</button>
+        <button class="opt-btn4" onclick="checkEx4(this,24,'ex4-result')">B. 24</button>
+        <button class="opt-btn4" onclick="checkEx4(this,32,'ex4-result')">C. 32</button>
+        <button class="opt-btn4" onclick="checkEx4(this,40,'ex4-result')">D. 40</button>
+      </div>
+      <div class="ex-result" id="ex4-result"></div>
+
+      <!-- 可视化解析：条形对比动画 -->
+      <div id="ex4-visual" style="display:none;margin-top:16px">
+        <div style="padding:16px;background:rgba(255,255,255,0.02);border-radius:14px;border:1px solid var(--card-border)">
+          <div style="font-size:13px;color:#a78bfa;margin-bottom:12px;font-weight:600">📊 数量可视化</div>
+          <svg id="ex4-svg" viewBox="0 0 300 160" width="100%" style="overflow:visible">
+            <!-- 绵羊条：从0动画到16格 -->
+            <text x="8" y="36" font-size="12" fill="#a78bfa" font-family="Noto Sans SC,sans-serif">🐑 绵羊</text>
+            <g id="ex4-sheep-blocks"></g>
+            <text x="8" y="80" font-size="12" fill="#6ee7b7" font-family="Noto Sans SC,sans-serif">🐄 奶牛</text>
+            <g id="ex4-cow-blocks"></g>
+            <!-- 差值箭头 -->
+            <line id="ex4-diff-line" x1="0" y1="0" x2="0" y2="0" stroke="#fdba74" stroke-width="1.5" stroke-dasharray="4,3" opacity="0"/>
+            <text id="ex4-diff-text" x="0" y="0" font-size="11" fill="#fdba74" font-family="Noto Sans SC,sans-serif" opacity="0">多8只</text>
+            <!-- 公式 -->
+            <text id="ex4-formula" x="150" y="128" text-anchor="middle" font-size="13" fill="#f8fafc" font-family="Noto Sans SC,sans-serif" opacity="0">设奶牛=x，绵羊=2x，2x-x=8，x=8</text>
+            <text id="ex4-answer" x="150" y="150" text-anchor="middle" font-size="15" fill="#6ee7b7" font-family="Noto Sans SC,sans-serif" font-weight="bold" opacity="0">总计：16 + 8 = 24 只 🎉</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="feynman-box" id="ex4-feynman" style="display:none">
+        <div class="feynman-title">🧠 费曼讲解：等量建方程！</div>
+        <p>① 奶牛是绵羊一半 → 设奶牛 = x，绵羊 = 2x</p>
+        <p>② 绵羊 - 奶牛 = 8 → 2x - x = 8 → x = 8</p>
+        <p>③ 奶牛 8 只，绵羊 16 只，总数 = <strong>24 只</strong></p>
+        <button class="vbtn-inline vbtn-mint" style="margin-top:10px"
+          onclick="toggleVoice(this,'这道题给了两个条件：差值8和倍数关系一半。我们设奶牛等于x，因为奶牛是绵羊的一半，所以绵羊等于2x。差值是8，写成方程就是2x减x等于8，解出x等于8。所以奶牛8只，绵羊16只，总数是24只！')">🔊 听我讲</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 例题五：求单类数量 -->
+  <div class="excard" id="excard5">
+    <div class="excard-hdr">
+      <span class="ex-num">例题五</span>
+      <span class="ex-tag">差值+倍数 · 求单类数量</span>
+    </div>
+    <div class="excard-body">
+      <div class="qbox">
+        🚗 <strong>停车场问题</strong><br><br>
+        停车场里只有轿车和卡车。轿车比卡车多 <strong>12</strong> 辆，卡车的数量是轿车的三分之一。<br>
+        停车场里有多少辆轿车？
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
+      <div class="ex5-opts" style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="opt-btn5" onclick="checkEx5(this,12,'ex5-result')">A. 12</button>
+        <button class="opt-btn5" onclick="checkEx5(this,15,'ex5-result')">B. 15</button>
+        <button class="opt-btn5" onclick="checkEx5(this,18,'ex5-result')">C. 18</button>
+        <button class="opt-btn5" onclick="checkEx5(this,21,'ex5-result')">D. 21</button>
+      </div>
+      <div class="ex-result" id="ex5-result"></div>
+
+      <!-- 可视化：分格动画 -->
+      <div id="ex5-visual" style="display:none;margin-top:16px">
+        <div style="padding:16px;background:rgba(255,255,255,0.02);border-radius:14px;border:1px solid var(--card-border)">
+          <div style="font-size:13px;color:#67e8f9;margin-bottom:12px;font-weight:600">📊 等分可视化</div>
+          <!-- 轿车18格 分3组，每组6格=卡车数量 -->
+          <svg viewBox="0 0 300 140" width="100%">
+            <text x="8" y="22" font-size="12" fill="#67e8f9" font-family="Noto Sans SC,sans-serif">🚗 轿车 18 辆</text>
+            <!-- 18个小格动画出现 -->
+            <g id="ex5-car-blocks"></g>
+            <text x="8" y="80" font-size="12" fill="#fdba74" font-family="Noto Sans SC,sans-serif">🚛 卡车 6 辆</text>
+            <g id="ex5-truck-blocks"></g>
+            <text id="ex5-formula" x="150" y="112" text-anchor="middle" font-size="12" fill="#f8fafc" font-family="Noto Sans SC,sans-serif" opacity="0">设轿车=x，卡车=x/3，差=x-x/3=2x/3=12</text>
+            <text id="ex5-answer" x="150" y="132" text-anchor="middle" font-size="14" fill="#6ee7b7" font-family="Noto Sans SC,sans-serif" font-weight="bold" opacity="0">轿车 = 18 辆 🎉</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="feynman-box" id="ex5-feynman" style="display:none">
+        <div class="feynman-title">🧠 费曼讲解：三等分找差！</div>
+        <p>① 卡车是轿车的 1/3 → 设轿车 = x，卡车 = x÷3</p>
+        <p>② 轿车 - 卡车 = 12 → x - x/3 = 12 → 2x/3 = 12 → x = 18</p>
+        <p>③ 轿车 = <strong>18 辆</strong>，卡车 = 6 辆</p>
+        <button class="vbtn-inline vbtn-mint" style="margin-top:10px"
+          onclick="toggleVoice(this,'这道题问的是轿车有多少辆。卡车是轿车的三分之一，所以设轿车等于x，卡车等于x除以3。差值12，方程是x减x除以3等于12，也就是三分之二x等于12，解出x等于18。轿车18辆！')">🔊 听我讲</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 例题六：已知总数反推比例 -->
+  <div class="excard" id="excard6">
+    <div class="excard-hdr">
+      <span class="ex-num">例题六</span>
+      <span class="ex-tag">已知总数 · 反推比例</span>
+    </div>
+    <div class="excard-body">
+      <div class="qbox">
+        📚 <strong>图书馆问题</strong><br><br>
+        图书馆里只有中文书和英文书，共 <strong>50</strong> 本。中文书比英文书多 <strong>30</strong> 本。<br>
+        中文书是英文书的几倍？
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px">选择你的答案 ↓</p>
+      <div class="ex6-opts" style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="opt-btn6" onclick="checkEx6(this,2,'ex6-result')">A. 2 倍</button>
+        <button class="opt-btn6" onclick="checkEx6(this,3,'ex6-result')">B. 3 倍</button>
+        <button class="opt-btn6" onclick="checkEx6(this,4,'ex6-result')">C. 4 倍</button>
+        <button class="opt-btn6" onclick="checkEx6(this,5,'ex6-result')">D. 5 倍</button>
+      </div>
+      <div class="ex-result" id="ex6-result"></div>
+
+      <!-- 可视化：饼图/条形比例动画 -->
+      <div id="ex6-visual" style="display:none;margin-top:16px">
+        <div style="padding:16px;background:rgba(255,255,255,0.02);border-radius:14px;border:1px solid var(--card-border)">
+          <div style="font-size:13px;color:#ec4899;margin-bottom:12px;font-weight:600">📊 比例可视化</div>
+          <svg id="ex6-svg" viewBox="0 0 300 150" width="100%">
+            <!-- 总量50格 -->
+            <text x="150" y="18" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Noto Sans SC,sans-serif">共50本书</text>
+            <!-- 中文书40 -->
+            <rect x="10" y="28" id="ex6-cn-bar" width="0" height="28" rx="6" fill="rgba(139,92,246,0.4)" style="transition:width 0.8s ease"/>
+            <text x="10" y="72" font-size="11" fill="#a78bfa" font-family="Noto Sans SC,sans-serif">📘 中文书：40 本</text>
+            <!-- 英文书10 -->
+            <rect x="10" y="82" id="ex6-en-bar" width="0" height="28" rx="6" fill="rgba(236,72,153,0.4)" style="transition:width 0.8s 0.4s ease"/>
+            <text x="10" y="126" font-size="11" fill="#f9a8d4" font-family="Noto Sans SC,sans-serif">📗 英文书：10 本</text>
+            <!-- 倍数标注 -->
+            <text id="ex6-ratio-lbl" x="150" y="148" text-anchor="middle" font-size="14" fill="#6ee7b7" font-family="Noto Sans SC,sans-serif" font-weight="bold" opacity="0">40 ÷ 10 = 4 倍 🎉</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="feynman-box" id="ex6-feynman" style="display:none">
+        <div class="feynman-title">🧠 费曼讲解：总数+差值联立！</div>
+        <p>① 设英文书 = x，中文书 = x + 30</p>
+        <p>② 总数 = 50 → x + (x+30) = 50 → 2x = 20 → x = 10</p>
+        <p>③ 英文书 10 本，中文书 40 本，倍数 = 40÷10 = <strong>4 倍</strong></p>
+        <button class="vbtn-inline vbtn-mint" style="margin-top:10px"
+          onclick="toggleVoice(this,'这道题反过来考！已知总数和差值，求倍数。设英文书等于x，中文书比英文书多30，所以中文书等于x加30。两者加起来等于50，列方程x加x加30等于50，解出x等于10。英文书10本，中文书40本，40除以10等于4，中文书是英文书的4倍！')">🔊 听我讲</button>
       </div>
     </div>
   </div>
@@ -1647,6 +1901,203 @@ function renderQuiz() {
 function quizNav(dir) {
   quizCurrent = Math.max(0, Math.min(quizData.length-1, quizCurrent + dir));
   renderQuiz();
+}
+
+// ═══════════ 技巧五滑块可视化 ═══════════
+function updateFarmVis(cowVal) {
+  const cow = parseInt(cowVal);
+  const sheep = cow * 2;
+  const diff = sheep - cow;
+  const total = sheep + cow;
+  const scale = 140 / Math.max(sheep, 20); // px per animal, max 140px
+  const sheepW = Math.round(sheep * scale);
+  const cowW = Math.round(cow * scale);
+
+  document.getElementById('bar-sheep').setAttribute('width', sheepW);
+  document.getElementById('bar-cow').setAttribute('width', cowW);
+  document.getElementById('lbl-sheep').textContent = sheep;
+  document.getElementById('lbl-sheep').setAttribute('x', 70 + sheepW + 6);
+  document.getElementById('lbl-cow').textContent = cow;
+  document.getElementById('lbl-cow').setAttribute('x', 70 + cowW + 6);
+  document.getElementById('cow-val').textContent = cow;
+
+  // 差值标注
+  const diffLine = document.getElementById('diff-line');
+  diffLine.setAttribute('x1', 70 + cowW);
+  diffLine.setAttribute('x2', 70 + sheepW);
+  diffLine.setAttribute('y1', 60); diffLine.setAttribute('y2', 60);
+  const diffLbl = document.getElementById('diff-lbl');
+  diffLbl.setAttribute('x', 70 + cowW + (sheepW - cowW) / 2);
+  diffLbl.textContent = `差 = ${diff}`;
+
+  document.getElementById('ratio-lbl').textContent = `奶牛(${cow}) = 绵羊(${sheep}) × ½`;
+  document.getElementById('total-lbl').textContent = `总计：${sheep} + ${cow} = ${total} 只`;
+
+  // 答案提示
+  const check = document.getElementById('farm-check');
+  if (diff === 8) {
+    check.innerHTML = '<span style="color:#6ee7b7">✅ 差值恰好是 8！绵羊16，奶牛8，总数24只</span>';
+  } else {
+    check.innerHTML = `<span style="color:#fdba74">当前差值 = ${diff}，试试调到差值等于 8 的位置~</span>`;
+  }
+}
+updateFarmVis(8);
+
+// ─── 例题四 ───
+function checkEx4(btn, val, resultId) {
+  const correct = 24;
+  const btns = btn.parentElement.querySelectorAll('button');
+  btns.forEach(b => { b.disabled = true; b.style.opacity = '0.5'; });
+  btn.style.opacity = '1';
+  const result = document.getElementById(resultId);
+  if (val === correct) {
+    btn.style.background = 'rgba(16,185,129,0.2)'; btn.style.borderColor = '#6ee7b7'; btn.style.color = '#6ee7b7';
+    result.innerHTML = '<span style="color:#6ee7b7">🎉 答对了！绵羊16只 + 奶牛8只 = 24只！</span>';
+    showEx4Visual();
+  } else {
+    btn.style.background = 'rgba(239,68,68,0.12)'; btn.style.borderColor = '#fca5a5'; btn.style.color = '#fca5a5';
+    btns.forEach(b => { if (b.textContent.includes('24')) { b.style.background='rgba(16,185,129,0.15)'; b.style.borderColor='#6ee7b7'; b.style.color='#6ee7b7'; b.style.opacity='1'; } });
+    result.innerHTML = '<span style="color:#fca5a5">💡 再想想！设奶牛=x，绵羊=2x，差值8，所以x=8，总数=24</span>';
+    showEx4Visual();
+  }
+  document.getElementById('ex4-feynman').style.display = 'block';
+}
+
+function showEx4Visual() {
+  const vis = document.getElementById('ex4-visual');
+  vis.style.display = 'block';
+  const svg = document.getElementById('ex4-svg');
+  const sheepG = document.getElementById('ex4-sheep-blocks');
+  const cowG = document.getElementById('ex4-cow-blocks');
+  sheepG.innerHTML = ''; cowG.innerHTML = '';
+  // 绵羊16格，每格10px宽
+  for (let i = 0; i < 16; i++) {
+    const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    rect.setAttribute('x', 70 + i * 13); rect.setAttribute('y', 22);
+    rect.setAttribute('width', 11); rect.setAttribute('height', 22); rect.setAttribute('rx', 3);
+    rect.setAttribute('fill', i < 8 ? 'rgba(139,92,246,0.6)' : 'rgba(139,92,246,0.3)');
+    rect.setAttribute('stroke', '#a78bfa'); rect.setAttribute('stroke-width', '1');
+    rect.style.opacity = '0';
+    rect.style.transition = `opacity 0.15s ease ${i * 60}ms`;
+    sheepG.appendChild(rect);
+    setTimeout(() => { rect.style.opacity = '1'; }, 50 + i * 60);
+  }
+  // 奶牛8格
+  for (let i = 0; i < 8; i++) {
+    const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    rect.setAttribute('x', 70 + i * 13); rect.setAttribute('y', 62);
+    rect.setAttribute('width', 11); rect.setAttribute('height', 22); rect.setAttribute('rx', 3);
+    rect.setAttribute('fill', 'rgba(16,185,129,0.6)');
+    rect.setAttribute('stroke', '#6ee7b7'); rect.setAttribute('stroke-width', '1');
+    rect.style.opacity = '0';
+    rect.style.transition = `opacity 0.15s ease ${1000 + i * 80}ms`;
+    cowG.appendChild(rect);
+    setTimeout(() => { rect.style.opacity = '1'; }, 1050 + i * 80);
+  }
+  // 差值线：绵羊第9~16格上方
+  setTimeout(() => {
+    const dl = document.getElementById('ex4-diff-line');
+    dl.setAttribute('x1', 70 + 8*13); dl.setAttribute('x2', 70 + 16*13);
+    dl.setAttribute('y1', 18); dl.setAttribute('y2', 18);
+    dl.setAttribute('opacity', '1');
+    const dt = document.getElementById('ex4-diff-text');
+    dt.setAttribute('x', 70 + 12*13 - 20); dt.setAttribute('y', 14);
+    dt.setAttribute('opacity', '1');
+  }, 1200);
+  setTimeout(() => {
+    const f = document.getElementById('ex4-formula'); f.setAttribute('opacity','1');
+  }, 2000);
+  setTimeout(() => {
+    const a = document.getElementById('ex4-answer'); a.setAttribute('opacity','1');
+  }, 2800);
+}
+
+// ─── 例题五 ───
+function checkEx5(btn, val, resultId) {
+  const correct = 18;
+  const btns = btn.parentElement.querySelectorAll('button');
+  btns.forEach(b => { b.disabled = true; b.style.opacity = '0.5'; });
+  btn.style.opacity = '1';
+  const result = document.getElementById(resultId);
+  if (val === correct) {
+    btn.style.background = 'rgba(16,185,129,0.2)'; btn.style.borderColor = '#6ee7b7'; btn.style.color = '#6ee7b7';
+    result.innerHTML = '<span style="color:#6ee7b7">🎉 答对了！轿车 18 辆，卡车 6 辆！</span>';
+  } else {
+    btn.style.background = 'rgba(239,68,68,0.12)'; btn.style.borderColor = '#fca5a5'; btn.style.color = '#fca5a5';
+    btns.forEach(b => { if (b.textContent.includes('18')) { b.style.background='rgba(16,185,129,0.15)'; b.style.borderColor='#6ee7b7'; b.style.color='#6ee7b7'; b.style.opacity='1'; } });
+    result.innerHTML = '<span style="color:#fca5a5">💡 设轿车=x，卡车=x/3，差x-x/3=2x/3=12，x=18</span>';
+  }
+  showEx5Visual();
+  document.getElementById('ex5-feynman').style.display = 'block';
+}
+
+function showEx5Visual() {
+  const vis = document.getElementById('ex5-visual');
+  vis.style.display = 'block';
+  const carG = document.getElementById('ex5-car-blocks');
+  const truckG = document.getElementById('ex5-truck-blocks');
+  carG.innerHTML = ''; truckG.innerHTML = '';
+  // 轿车18格，分3组（每组6格，用不同透明度区分）
+  for (let i = 0; i < 18; i++) {
+    const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    const grp = Math.floor(i / 6);
+    rect.setAttribute('x', 70 + i * 12 + Math.floor(i/6) * 4);
+    rect.setAttribute('y', 28); rect.setAttribute('width', 10); rect.setAttribute('height', 20); rect.setAttribute('rx', 3);
+    rect.setAttribute('fill', grp === 0 ? 'rgba(6,182,212,0.65)' : grp === 1 ? 'rgba(6,182,212,0.4)' : 'rgba(6,182,212,0.2)');
+    rect.setAttribute('stroke', '#67e8f9'); rect.setAttribute('stroke-width', '1');
+    rect.style.opacity = '0'; rect.style.transition = `opacity 0.1s ease ${i*55}ms`;
+    carG.appendChild(rect);
+    setTimeout(() => { rect.style.opacity = '1'; }, 50 + i * 55);
+  }
+  // 卡车6格
+  for (let i = 0; i < 6; i++) {
+    const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    rect.setAttribute('x', 70 + i * 12); rect.setAttribute('y', 86);
+    rect.setAttribute('width', 10); rect.setAttribute('height', 20); rect.setAttribute('rx', 3);
+    rect.setAttribute('fill', 'rgba(253,186,116,0.6)');
+    rect.setAttribute('stroke', '#fdba74'); rect.setAttribute('stroke-width', '1');
+    rect.style.opacity = '0'; rect.style.transition = `opacity 0.1s ease ${1100 + i*80}ms`;
+    truckG.appendChild(rect);
+    setTimeout(() => { rect.style.opacity = '1'; }, 1150 + i * 80);
+  }
+  setTimeout(() => { document.getElementById('ex5-formula').setAttribute('opacity','1'); }, 1700);
+  setTimeout(() => { document.getElementById('ex5-answer').setAttribute('opacity','1'); }, 2400);
+}
+
+// ─── 例题六 ───
+function checkEx6(btn, val, resultId) {
+  const correct = 4;
+  const btns = btn.parentElement.querySelectorAll('button');
+  btns.forEach(b => { b.disabled = true; b.style.opacity = '0.5'; });
+  btn.style.opacity = '1';
+  const result = document.getElementById(resultId);
+  if (val === correct) {
+    btn.style.background = 'rgba(16,185,129,0.2)'; btn.style.borderColor = '#6ee7b7'; btn.style.color = '#6ee7b7';
+    result.innerHTML = '<span style="color:#6ee7b7">🎉 答对了！中文书40本 ÷ 英文书10本 = 4倍！</span>';
+  } else {
+    btn.style.background = 'rgba(239,68,68,0.12)'; btn.style.borderColor = '#fca5a5'; btn.style.color = '#fca5a5';
+    btns.forEach(b => { if (b.textContent.includes('4')) { b.style.background='rgba(16,185,129,0.15)'; b.style.borderColor='#6ee7b7'; b.style.color='#6ee7b7'; b.style.opacity='1'; } });
+    result.innerHTML = '<span style="color:#fca5a5">💡 设英文=x，中文=x+30，总数50 → x=10，中文40，40÷10=4倍</span>';
+  }
+  showEx6Visual();
+  document.getElementById('ex6-feynman').style.display = 'block';
+}
+
+function showEx6Visual() {
+  const vis = document.getElementById('ex6-visual');
+  vis.style.display = 'block';
+  // 中文书40格，英文书10格，用条形宽度表示（总宽260px对应50本）
+  setTimeout(() => {
+    const cnBar = document.getElementById('ex6-cn-bar');
+    cnBar.setAttribute('width', Math.round(40/50 * 260));
+  }, 100);
+  setTimeout(() => {
+    const enBar = document.getElementById('ex6-en-bar');
+    enBar.setAttribute('width', Math.round(10/50 * 260));
+  }, 500);
+  setTimeout(() => {
+    document.getElementById('ex6-ratio-lbl').setAttribute('opacity','1');
+  }, 1400);
 }
 </script>
 </body>

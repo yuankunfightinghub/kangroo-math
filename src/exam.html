@@ -305,6 +305,20 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Noto San
 }
 .clear-btn:hover { background: rgba(239,68,68,0.14); }
 
+/* redo btn */
+.redo-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px 14px; border-radius: 9px; margin-top: 10px;
+  background: rgba(16,185,129,0.1); border: 1.5px solid rgba(16,185,129,0.35);
+  color: #6ee7b7; font-size: 12px; font-weight: 700; font-family: inherit;
+  cursor: pointer; transition: all 0.2s;
+}
+.redo-btn:hover { background: rgba(16,185,129,0.2); border-color: #10b981; }
+.redo-btn.done { background: rgba(16,185,129,0.18); border-color: #10b981; color: #34d399; cursor: default; opacity: 0.8; }
+
+/* mod stat count line */
+.mod-stat-counts { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
 /* empty state */
 .stats-empty { text-align: center; padding: 40px 0; color: var(--muted); font-size: 14px; }
 
@@ -411,7 +425,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Noto San
 //  Answer Log — localStorage persistence
 //  Record format: { year, qnum, chosen, ans, pts, d, ts }
 // ════════════════════════════════════════════════════════════════
-const LOG_KEY = 'km_exam_log_v1';
+const LOG_KEY  = 'km_exam_log_v1';
+const REDO_KEY = 'km_redo_log_v1';
 
 function loadLog() {
   try { return JSON.parse(localStorage.getItem(LOG_KEY) || '[]'); } catch { return []; }
@@ -419,11 +434,20 @@ function loadLog() {
 function saveLog(log) {
   localStorage.setItem(LOG_KEY, JSON.stringify(log));
 }
+function loadRedoLog() {
+  try { return JSON.parse(localStorage.getItem(REDO_KEY) || '{}'); } catch { return {}; }
+}
+function saveRedoLog(m) {
+  localStorage.setItem(REDO_KEY, JSON.stringify(m));
+}
 
 // Build answered map from log on startup
 const answerLog = loadLog();  // array of records
 const answered = {};          // key: "year-qnum" → chosen index (0-4)
 answerLog.forEach(r => { answered[`${r.year}-${r.qnum}`] = r.chosen; });
+
+// redoMap: key "year-qnum" → true (已重做对)
+const redoMap = loadRedoLog();
 
 // ── Module definitions ──
 const MODULES = [
@@ -563,14 +587,23 @@ function renderCard(q, delay) {
     return `<button class="${cls}" ${isDone?'disabled':''} onclick="answer('${key}',${i})">${letter}</button>`;
   }).join('');
 
-  // Feedback
+  // Feedback + redo button
   let fbHtml = '';
   if (isDone) {
+    const isRedo = !!redoMap[key];
     if (q.ans !== null) {
       const ok = chosen === q.ans;
-      fbHtml = `<div class="exam-fb show ${ok?'ok':'no'}">${ok ? q.ok : q.no}</div>`;
+      const redoBtnHtml = !ok
+        ? (isRedo
+          ? `<button class="redo-btn done" disabled>已重做对 ✅</button>`
+          : `<button class="redo-btn" onclick="markRedo('${key}')">重做 ✅</button>`)
+        : '';
+      fbHtml = `<div class="exam-fb show ${ok?'ok':'no'}">${ok ? q.ok : q.no}${redoBtnHtml}</div>`;
     } else {
-      fbHtml = `<div class="exam-fb show neutral">✅ 已记录！请对照上方原题图片核对答案。</div>`;
+      const redoBtnHtml = isRedo
+        ? `<button class="redo-btn done" disabled>已重做对 ✅</button>`
+        : `<button class="redo-btn" onclick="markRedo('${key}')">重做 ✅</button>`;
+      fbHtml = `<div class="exam-fb show neutral">已记录！请对照上方原题图片核对答案。${redoBtnHtml}</div>`;
     }
   }
 
@@ -642,6 +675,13 @@ function answer(key, chosen) {
     updateFabBadge();
   }
 
+  render();
+}
+
+// ── Mark redo correct ──
+function markRedo(key) {
+  redoMap[key] = true;
+  saveRedoLog(redoMap);
   render();
 }
 
@@ -733,6 +773,12 @@ function renderStats() {
       const mod = MODULES.find(m => m.id === +modId) || MODULES[0];
       const totalM = Object.values(diffs).reduce((s,v)=>s+v.total, 0);
       const correctM = Object.values(diffs).reduce((s,v)=>s+v.correct, 0);
+      // Count redo-correct for this module
+      const redoCorrectM = Object.keys(redoMap).filter(key => {
+        if (!redoMap[key]) return false;
+        const [yr, qn] = key.split('-');
+        return qKeyToMod[key] === +modId;
+      }).length;
       const pctM = Math.round(correctM/totalM*100);
       const diffBars = ['★','★★','★★★'].filter(d => diffs[d]).map(d => {
         const v = diffs[d]; const p = Math.round(v.correct/v.total*100);
@@ -744,13 +790,17 @@ function renderStats() {
         </div>`;
       }).join('');
       const totalInDB = examData.filter(q => (q.mod||0) === +modId).length;
+      const countLine = redoCorrectM > 0
+        ? `<span style="color:#34d399;font-weight:700">${correctM}</span><span style="color:var(--muted)"> / </span><span style="color:#6ee7b7">${redoCorrectM + correctM}</span><span style="color:var(--muted)"> / ${totalM}</span>`
+        : `<span style="color:#34d399;font-weight:700">${correctM}</span><span style="color:var(--muted)"> / ${totalM}</span>`;
+      const countTitle = redoCorrectM > 0 ? '已对 / (重做+已对) / 已答' : '已对 / 已答';
       return `<div class="mod-stat-block">
         <div class="mod-stat-hd">
           <span class="mod-stat-name">${mod.emoji} ${mod.label}</span>
           <span style="font-size:11px;color:var(--muted)">共${totalInDB}题</span>
           <span class="mod-stat-pct" style="color:${pctM>=80?'#34d399':pctM>=60?'#f59e0b':'#f87171'}">${pctM}%</span>
-          <span class="mod-stat-cnt">${correctM}/${totalM}已答</span>
         </div>
+        <div class="mod-stat-counts" title="${countTitle}">${countLine}</div>
         <div class="mod-stat-bars">${diffBars}</div>
       </div>`;
     }).join('');
@@ -915,6 +965,8 @@ function clearLog() {
   answerLog.length = 0;
   saveLog(answerLog);
   Object.keys(answered).forEach(k => delete answered[k]);
+  Object.keys(redoMap).forEach(k => delete redoMap[k]);
+  saveRedoLog(redoMap);
   updateFabBadge();
   render();
   renderStats();
