@@ -40,6 +40,20 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Noto San
 .back-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
 .topbar-title { font-size: 16px; font-weight: 700; }
 
+/* ── Tab胶囊 ── */
+.tab-capsule {
+  display: flex; gap: 2px; padding: 3px;
+  background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); border-radius: 10px;
+}
+.tab-btn {
+  padding: 7px 18px; border-radius: 8px; border: none; background: transparent;
+  color: var(--muted); font-size: 13px; font-weight: 700; font-family: inherit;
+  cursor: pointer; transition: all 0.2s; white-space: nowrap;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+}
+.tab-btn:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+.tab-btn.active { background: rgba(139,92,246,0.2); color: var(--purple-light); }
+
 /* ── Search hero ── */
 .search-hero { padding: 48px 24px 24px; text-align: center; max-width: 720px; margin: 0 auto; }
 .search-hero h1 { font-size: clamp(28px,5vw,44px); font-weight: 900; letter-spacing: -0.03em; margin-bottom: 8px; }
@@ -348,8 +362,12 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Noto San
 
 <!-- Header -->
 <header class="topbar">
-  <a class="back-btn" href="../index.html">← 返回首页</a>
-  <div class="topbar-title">📋 历年真题库</div>
+  <a class="back-btn" href="../index.html">← 首页</a>
+
+  <div class="tab-capsule">
+    <a class="tab-btn active" href="exam.html">📋 历年真题</a>
+    <a class="tab-btn" href="../practice_index.html">🎯 模拟练习</a>
+  </div>
 </header>
 
 <!-- Search hero -->

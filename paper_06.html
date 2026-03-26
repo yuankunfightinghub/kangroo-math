@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>袋鼠数学 模拟真题卷 第6套</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f5f5f5;
+    color: #333;
+  }
+  .cover {
+    background: linear-gradient(135deg, #ff6b35, #f7931e);
+    color: white;
+    padding: 40px 30px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .cover h1 { font-size: 28px; margin-bottom: 8px; }
+  .cover p { font-size: 14px; opacity: 0.9; }
+  .nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: white;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 4px;
+  }
+  .nav-back {
+    font-size: 13px; color: #ff6b35; text-decoration: none; font-weight: 600;
+    padding: 6px 14px; border: 1.5px solid #ff6b35; border-radius: 8px;
+    transition: all 0.2s;
+  }
+  .nav-back:hover { background: #fff3ee; }
+  .nav-pages {
+    display: flex; gap: 6px;
+  }
+  .nav-page {
+    font-size: 12px; font-weight: 700; text-decoration: none;
+    padding: 5px 12px; border-radius: 999px;
+    background: #f0f0f0; color: #666; transition: all 0.2s;
+  }
+  .nav-page:hover { background: #ffe5d8; color: #ff6b35; }
+  .nav-page.current { background: #ff6b35; color: white; }
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 16px 20px;
+    background: white;
+    margin: 0 0 20px;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat .num { font-size: 24px; font-weight: bold; color: #ff6b35; }
+  .stat .label { font-size: 12px; color: #999; }
+  .questions {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 16px 40px;
+  }
+  .star-section { margin-bottom: 30px; }
+  .star-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 16px; border-radius: 8px 8px 0 0;
+    font-weight: bold; font-size: 15px;
+  }
+  .star-1 .star-header { background: #e8f5e9; color: #2e7d32; }
+  .star-2 .star-header { background: #e3f2fd; color: #1565c0; }
+  .star-3 .star-header { background: #fff3e0; color: #e65100; }
+  .star-4 .star-header { background: #fce4ec; color: #880e4f; }
+  .star-5 .star-header { background: #f3e5f5; color: #4a148c; }
+  .question-card {
+    background: white; border: 1px solid #e0e0e0; border-top: none;
+    padding: 20px; margin-bottom: 2px;
+  }
+  .question-card:last-child { border-radius: 0 0 8px 8px; margin-bottom: 0; }
+  .q-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .q-num {
+    background: #ff6b35; color: white; width: 32px; height: 32px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: bold; flex-shrink: 0;
+  }
+  .q-id { font-size: 13px; color: #666; font-weight: 500; }
+  .q-stars { font-size: 13px; margin-left: auto; }
+  .star-1 .q-stars { color: #2e7d32; }
+  .star-2 .q-stars { color: #1565c0; }
+  .star-3 .q-stars { color: #e65100; }
+  .star-4 .q-stars { color: #880e4f; }
+  .star-5 .q-stars { color: #4a148c; }
+  .q-image img { max-width: 100%; border-radius: 4px; display: block; }
+
+  /* 答案对照 */
+  .answer-section {
+    max-width: 900px; margin: 0 auto 40px; padding: 0 16px;
+  }
+  .answer-toggle-btn {
+    width: 100%; padding: 14px; border-radius: 10px;
+    background: linear-gradient(135deg, #ff6b35, #f7931e);
+    color: white; font-size: 15px; font-weight: 700;
+    border: none; cursor: pointer; margin-bottom: 0;
+    transition: opacity 0.2s;
+  }
+  .answer-toggle-btn:hover { opacity: 0.9; }
+  .answer-sheet {
+    display: none;
+    background: white; border: 1px solid #e0e0e0; border-top: none;
+    border-radius: 0 0 10px 10px; padding: 20px;
+  }
+  .answer-sheet.show { display: block; }
+  .answer-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px;
+  }
+  .answer-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px; background: #fafafa; border: 1px solid #eee; border-radius: 8px;
+    font-size: 13px;
+  }
+  .ai-num { font-weight: 800; color: #ff6b35; width: 24px; flex-shrink: 0; }
+  .ai-src { color: #888; font-size: 11px; flex: 1; }
+  .ai-ans { font-weight: 800; color: #2e7d32; margin-left: auto; font-size: 14px; }
+  .ai-ans.unknown { color: #999; font-size: 12px; }
+
+  @media print {
+    body { background: white; }
+    .question-card { break-inside: avoid; }
+    .nav-bar, .answer-section { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>🦘 袋鼠数学 模拟真题卷</h1>
+  <p>第6套 · 共 24 题 · 难度均衡（1★ 至 5★）</p>
+  <p style="margin-top:8px; font-size:12px; opacity:0.7;">题目来自 2013–2025 年真题（未作答题目）</p>
+</div>
+
+<div class="nav-bar">
+  <a class="nav-back" href="practice_index.html">← 返回套卷列表</a>
+  <div class="nav-pages">
+    <a class="nav-page" href="paper_01.html">第1套</a>
+    <a class="nav-page" href="paper_02.html">第2套</a>
+    <a class="nav-page" href="paper_03.html">第3套</a>
+    <a class="nav-page" href="paper_04.html">第4套</a>
+    <a class="nav-page" href="paper_05.html">第5套</a>
+    <a class="nav-page current" href="paper_06.html">第6套</a>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat"><div class="num">24</div><div class="label">题目总数</div></div>
+  <div class="stat"><div class="num">185</div><div class="label">未作答真题池</div></div>
+  <div class="stat"><div class="num">5</div><div class="label">难度梯度</div></div>
+  <div class="stat"><div class="num">292</div><div class="label">题库总量</div></div>
+</div>
+
+<div class="questions">
+
+  <div class="star-section star-1">
+    <div class="star-header"><span class="stars-emoji">⭐</span> 1 星题（共 5 题）</div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">1</div>
+        <div class="q-id">2020 年 · 第 1 题</div>
+        <div class="q-stars">⭐</div>
+      </div>
+      <div class="q-image">
+        <img src="src/assets/exam-images/2020/q01.png" alt="2020 Q01">
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">2</div>
+        <div class="q-id">2013 年 · 第 3 题</div>
+        <div class="q-stars">⭐</div>
+      </div>
+      <div class="q-image">
+        <img src="src/assets/exam-images/2013/q03.png" alt="2013 Q03">
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">3</div>
+        <div class="q-id">2024 年 · 第 1 题</div>
+        <div class="q-stars">⭐</div>
+      </div>
+      <div class="q-image">
+        <img src="src/assets/exam-images/2024/q01.png" alt="2024 Q01">
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">4</div>
+        <div class="q-id">2015 年 · 第 5 题</div>
+        <div class="q-stars">⭐</div>
+      </div>
+      <div class="q-image">
+        <img src="src/assets/exam-images/2015/q05.png" alt="2015 Q05">
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">5</div>
+        <div class="q-id">2025 年 · 第 1 题</div>
+        <div class="q-stars">⭐</div>
+      </div>
+      <div class="q-image">
+        <img src="src/assets/exam-images/2025/q01.png" alt="2025 Q01">
+      </div>
+    </div>
+  </div>
+
+  <div class="star-section star-2">
+    <div class="star-header"><span class="stars-emoji">⭐⭐</span> 2 星题（共 5 题）</div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">6</div>
+        <div class="q-id">2020 年 · 第 9 题</div>
+        <div class="q-stars">⭐⭐</div>
+      </div>
+      <div class="q-image">
+        <img src="src/assets/exam-images/2020/q09.png" alt="2020 Q09">
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">7</div>
+        <div class="q-id">2018 年 · 第 6 题</div>
+        <div class="q-stars">⭐⭐</div>
+      </div>
+      <div class="q-image">
+        <img src="src/assets/exam-images/2018/q06.png" alt="2018 Q06">
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">8</div>
+        <div class="q-id">2019 年 · 第 8 题</div>
+        <div class="q-stars">⭐⭐</div>
+      </div>
+      <div class="q-image">
+        <img src="src/assets/exam-images/2019/q08.png" alt="2019 Q08">
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">9</div>
+        <div class="q-id">2017 年 · 第 2 题</div>
+        <div class="q-stars">⭐⭐</div>
+      </div>
+      <div class="q-image">
+        <img src="src/assets/exam-images/2017/q02.png" alt="2017 Q02">
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">10</div>
+        <div class="q-id">2016 年 · 第 2 题</div>
+        <div class="q-stars">⭐⭐</div>
+      </div>
+      <div class="q-image">
+        <img src="src/assets/exam-images/2016/q02.png" alt="2016 Q02">
+      </div>
+    </div>
+  </div>
+
+  <div class="star-section star-3">
+    <div class="star-header"><span class="stars-emoji">⭐⭐⭐</span> 3 星题（共 5 题）</div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">11</div>
+        <div class="q-id">2022 年 · 第 12 题</div>
+        <div class="q-stars">⭐⭐⭐</div>
+      </div>
+      <div class="q-image">
+        <img src="src/assets/exam-images/2022/q12.png" alt="2022 Q12">
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">12</div>
+        <div class="q-id">2024 年 · 第 14 题</div>
+        <div class="q-stars">⭐⭐⭐</div>
+      </div>
+      <div class="q-image">
+        <img src="src/assets/exam-images/2024/q14.png" alt="2024 Q14">
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">13</div>
+        <div class="q-id">2021 年 · 第 15 题</div>
+        <div class="q-stars">⭐⭐⭐</div>
+      </div>
+      <div class="q-image">
+        <img src="src/assets/exam-images/2021/q15.png" alt="2021 Q15">
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">14</div>
+        <div class="q-id">2020 年 · 第 14 题</div>
+        <div class="q-stars">⭐⭐⭐</div>
+      </div>
+      <div class="q-image">
+        <img src="src/assets/exam-images/2020/q14.png" alt="2020 Q14">
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">15</div>
+        <div class="q-id">2019 年 · 第 13 题</div>
+        <div class="q-stars">⭐⭐⭐</div>
+      </div>
+      <div class="q-image">
+        <img src="src/assets/exam-images/2019/q13.png" alt="2019 Q13">
+      </div>
+    </div>
+  </div>
+
+  <div class="star-section star-4">
+    <div class="star-header"><span class="stars-emoji">⭐⭐⭐⭐</span> 4 星题（共 5 题）</div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">16</div>
+        <div class="q-id">2021 年 · 第 20 题</div>
+        <div class="q-stars">⭐⭐⭐⭐</div>
+      </div>
+      <div class="q-image">
+        <img src="src/assets/exam-images/2021/q20.png" alt="2021 Q20">
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">17</div>
+        <div class="q-id">2020 年 · 第 16 题</div>
+        <div class="q-stars">⭐⭐⭐⭐</div>
+      </div>
+      <div class="q-image">
+        <img src="src/assets/exam-images/2020/q16.png" alt="2020 Q16">
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">18</div>
+        <div class="q-id">2022 年 · 第 19 题</div>
+        <div class="q-stars">⭐⭐⭐⭐</div>
+      </div>
+      <div class="q-image">
+        <img src="src/assets/exam-images/2022/q19.png" alt="2022 Q19">
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">19</div>
+        <div class="q-id">2017 年 · 第 13 题</div>
+        <div class="q-stars">⭐⭐⭐⭐</div>
+      </div>
+      <div class="q-image">
+        <img src="src/assets/exam-images/2017/q13.png" alt="2017 Q13">
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">20</div>
+        <div class="q-id">2017 年 · 第 16 题</div>
+        <div class="q-stars">⭐⭐⭐⭐</div>
+      </div>
+      <div class="q-image">
+        <img src="src/assets/exam-images/2017/q16.png" alt="2017 Q16">
+      </div>
+    </div>
+  </div>
+
+  <div class="star-section star-5">
+    <div class="star-header"><span class="stars-emoji">⭐⭐⭐⭐⭐</span> 5 星题（共 4 题）</div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">21</div>
+        <div class="q-id">2022 年 · 第 24 题</div>
+        <div class="q-stars">⭐⭐⭐⭐⭐</div>
+      </div>
+      <div class="q-image">
+        <img src="src/assets/exam-images/2022/q24.png" alt="2022 Q24">
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">22</div>
+        <div class="q-id">2018 年 · 第 17 题</div>
+        <div class="q-stars">⭐⭐⭐⭐⭐</div>
+      </div>
+      <div class="q-image">
+        <img src="src/assets/exam-images/2018/q17.png" alt="2018 Q17">
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">23</div>
+        <div class="q-id">2023 年 · 第 24 题</div>
+        <div class="q-stars">⭐⭐⭐⭐⭐</div>
+      </div>
+      <div class="q-image">
+        <img src="src/assets/exam-images/2023/q24.png" alt="2023 Q24">
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">24</div>
+        <div class="q-id">2024 年 · 第 24 题</div>
+        <div class="q-stars">⭐⭐⭐⭐⭐</div>
+      </div>
+      <div class="q-image">
+        <img src="src/assets/exam-images/2024/q24.png" alt="2024 Q24">
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="answer-section">
+  <button class="answer-toggle-btn" onclick="toggleAnswers(this)">📋 查看答案</button>
+  <div class="answer-sheet" id="answerSheet">
+    <div class="answer-grid">
+      <div class="answer-item"><span class="ai-num">1</span><span class="ai-src">2020·第1题</span><span class="ai-ans">D</span></div>
+      <div class="answer-item"><span class="ai-num">2</span><span class="ai-src">2013·第3题</span><span class="ai-ans">A</span></div>
+      <div class="answer-item"><span class="ai-num">3</span><span class="ai-src">2024·第1题</span><span class="ai-ans">C</span></div>
+      <div class="answer-item"><span class="ai-num">4</span><span class="ai-src">2015·第5题</span><span class="ai-ans">B</span></div>
+      <div class="answer-item"><span class="ai-num">5</span><span class="ai-src">2025·第1题</span><span class="ai-ans">A</span></div>
+      <div class="answer-item"><span class="ai-num">6</span><span class="ai-src">2020·第9题</span><span class="ai-ans">C</span></div>
+      <div class="answer-item"><span class="ai-num">7</span><span class="ai-src">2018·第6题</span><span class="ai-ans">B</span></div>
+      <div class="answer-item"><span class="ai-num">8</span><span class="ai-src">2019·第8题</span><span class="ai-ans">C</span></div>
+      <div class="answer-item"><span class="ai-num">9</span><span class="ai-src">2017·第2题</span><span class="ai-ans">C</span></div>
+      <div class="answer-item"><span class="ai-num">10</span><span class="ai-src">2016·第2题</span><span class="ai-ans">B</span></div>
+      <div class="answer-item"><span class="ai-num">11</span><span class="ai-src">2022·第12题</span><span class="ai-ans">D</span></div>
+      <div class="answer-item"><span class="ai-num">12</span><span class="ai-src">2024·第14题</span><span class="ai-ans">D</span></div>
+      <div class="answer-item"><span class="ai-num">13</span><span class="ai-src">2021·第15题</span><span class="ai-ans">B</span></div>
+      <div class="answer-item"><span class="ai-num">14</span><span class="ai-src">2020·第14题</span><span class="ai-ans">A</span></div>
+      <div class="answer-item"><span class="ai-num">15</span><span class="ai-src">2019·第13题</span><span class="ai-ans">B</span></div>
+      <div class="answer-item"><span class="ai-num">16</span><span class="ai-src">2021·第20题</span><span class="ai-ans">C</span></div>
+      <div class="answer-item"><span class="ai-num">17</span><span class="ai-src">2020·第16题</span><span class="ai-ans">D</span></div>
+      <div class="answer-item"><span class="ai-num">18</span><span class="ai-src">2022·第19题</span><span class="ai-ans">C</span></div>
+      <div class="answer-item"><span class="ai-num">19</span><span class="ai-src">2017·第13题</span><span class="ai-ans">A</span></div>
+      <div class="answer-item"><span class="ai-num">20</span><span class="ai-src">2017·第16题</span><span class="ai-ans">E</span></div>
+      <div class="answer-item"><span class="ai-num">21</span><span class="ai-src">2022·第24题</span><span class="ai-ans">C</span></div>
+      <div class="answer-item"><span class="ai-num">22</span><span class="ai-src">2018·第17题</span><span class="ai-ans">C</span></div>
+      <div class="answer-item"><span class="ai-num">23</span><span class="ai-src">2023·第24题</span><span class="ai-ans">C</span></div>
+      <div class="answer-item"><span class="ai-num">24</span><span class="ai-src">2024·第24题</span><span class="ai-ans">B</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleAnswers(btn) {
+  const sheet = document.getElementById('answerSheet');
+  const showing = sheet.classList.toggle('show');
+  btn.textContent = showing ? '🙈 隐藏答案' : '📋 查看答案';
+  if (showing) sheet.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+</script>
+</body>
+</html>

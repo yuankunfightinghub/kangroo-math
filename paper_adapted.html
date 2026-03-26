@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>袋鼠数学 错题改编练习卷</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f5f5f5;
+    color: #333;
+  }
+  .cover {
+    background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+    color: white;
+    padding: 40px 30px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .cover h1 { font-size: 28px; margin-bottom: 8px; }
+  .cover p { font-size: 14px; opacity: 0.9; }
+  .nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: white;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 4px;
+  }
+  .nav-back {
+    font-size: 13px; color: #ff6b35; text-decoration: none; font-weight: 600;
+    padding: 6px 14px; border: 1.5px solid #ff6b35; border-radius: 8px;
+    transition: all 0.2s;
+  }
+  .nav-back:hover { background: #fff3ee; }
+  .nav-pages { display: flex; gap: 6px; }
+  .nav-page {
+    font-size: 12px; font-weight: 700; text-decoration: none;
+    padding: 5px 12px; border-radius: 999px;
+    background: #f0f0f0; color: #666; transition: all 0.2s;
+  }
+  .nav-page:hover { background: #ede9fe; color: #8b5cf6; }
+  .nav-page.current { background: #8b5cf6; color: white; }
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 16px 20px;
+    background: white;
+    margin: 0 0 20px;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat .num { font-size: 24px; font-weight: bold; color: #8b5cf6; }
+  .stat .label { font-size: 12px; color: #999; }
+  .questions {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 16px 40px;
+  }
+  .star-section { margin-bottom: 30px; }
+  .star-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 16px; border-radius: 8px 8px 0 0;
+    font-weight: bold; font-size: 15px;
+  }
+  .star-1 .star-header { background: #e8f5e9; color: #2e7d32; }
+  .star-2 .star-header { background: #e3f2fd; color: #1565c0; }
+  .star-5 .star-header { background: #f3e5f5; color: #4a148c; }
+  .question-card {
+    background: white; border: 1px solid #e0e0e0; border-top: none;
+    padding: 20px; margin-bottom: 2px;
+  }
+  .question-card:last-child { border-radius: 0 0 8px 8px; margin-bottom: 0; }
+  .q-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .q-num {
+    background: #8b5cf6; color: white; width: 32px; height: 32px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: bold; flex-shrink: 0;
+  }
+  .q-id { font-size: 13px; color: #666; font-weight: 500; }
+  .q-stars { font-size: 13px; margin-left: auto; }
+  .star-1 .q-stars { color: #2e7d32; }
+  .star-2 .q-stars { color: #1565c0; }
+  .star-5 .q-stars { color: #4a148c; }
+  .q-image img { max-width: 100%; border-radius: 4px; display: block; }
+
+  /* 答案对照 */
+  .answer-section {
+    max-width: 900px; margin: 0 auto 40px; padding: 0 16px;
+  }
+  .answer-toggle-btn {
+    width: 100%; padding: 14px; border-radius: 10px;
+    background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+    color: white; font-size: 15px; font-weight: 700;
+    border: none; cursor: pointer; margin-bottom: 0;
+    transition: opacity 0.2s;
+  }
+  .answer-toggle-btn:hover { opacity: 0.9; }
+  .answer-sheet {
+    display: none;
+    background: white; border: 1px solid #e0e0e0; border-top: none;
+    border-radius: 0 0 10px 10px; padding: 20px;
+  }
+  .answer-sheet.show { display: block; }
+  .answer-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px;
+  }
+  .answer-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px; background: #fafafa; border: 1px solid #eee; border-radius: 8px;
+    font-size: 13px;
+  }
+  .ai-num { font-weight: 800; color: #8b5cf6; width: 24px; flex-shrink: 0; }
+  .ai-src { color: #888; font-size: 11px; flex: 1; }
+  .ai-ans { font-weight: 800; color: #2e7d32; margin-left: auto; font-size: 14px; }
+
+  @media print {
+    body { background: white; }
+    .question-card { break-inside: avoid; }
+    .nav-bar, .answer-section { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>✏️ 错题改编练习卷</h1>
+  <p>共 32 题 · 针对历年错题知识点重新出题</p>
+  <p style="margin-top:8px; font-size:12px; opacity:0.7;">1–2★：换成生活化场景，锻炼读题理解能力 · 5★：同考察点略增难度</p>
+</div>
+
+<div class="nav-bar">
+  <a class="nav-back" href="practice_index.html">← 返回套卷列表</a>
+  <div class="nav-pages">
+    <a class="nav-page current" href="paper_adapted.html">改编练习卷</a>
+    <a class="nav-page" href="paper_adapted_origin.html">对应原题卷</a>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat"><div class="num">32</div><div class="label">题目总数</div></div>
+  <div class="stat"><div class="num">9</div><div class="label">1★ 改编题</div></div>
+  <div class="stat"><div class="num">15</div><div class="label">2★ 改编题</div></div>
+  <div class="stat"><div class="num">8</div><div class="label">5★ 改编题</div></div>
+</div>
+
+<div class="questions">
+
+  <!-- ── 1★ ── -->
+  <div class="star-section star-1">
+    <div class="star-header"><span>⭐</span> 1 星改编题（共 9 题）</div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">1</div>
+        <div class="q-id">W01 · 立体图形·格子计数</div>
+        <div class="q-stars">⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w01.png" alt="W01"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">2</div>
+        <div class="q-id">W02 · 立体图形·缺失计数</div>
+        <div class="q-stars">⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w02.png" alt="W02"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">3</div>
+        <div class="q-id">W03 · 逻辑推理·集合排除</div>
+        <div class="q-stars">⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w03.png" alt="W03"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">4</div>
+        <div class="q-id">W04 · 逻辑推理·图形共同元素</div>
+        <div class="q-stars">⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w04.png" alt="W04"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">5</div>
+        <div class="q-id">W05 · 图形计数·嵌套三角形</div>
+        <div class="q-stars">⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w05.png" alt="W05"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">6</div>
+        <div class="q-id">W06 · 数与运算·两步计算</div>
+        <div class="q-stars">⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w06.png" alt="W06"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">7</div>
+        <div class="q-id">W07 · 路径方向·转向追踪</div>
+        <div class="q-stars">⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w07.png" alt="W07"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">8</div>
+        <div class="q-id">W08 · 图形组合·计数</div>
+        <div class="q-stars">⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w08.png" alt="W08"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">9</div>
+        <div class="q-id">W09 · 立体图形·格子缺失</div>
+        <div class="q-stars">⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w09.png" alt="W09"></div>
+    </div>
+  </div>
+
+  <!-- ── 2★ ── -->
+  <div class="star-section star-2">
+    <div class="star-header"><span>⭐⭐</span> 2 星改编题（共 15 题）</div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">10</div>
+        <div class="q-id">W10 · 平面图形·旋转规律</div>
+        <div class="q-stars">⭐⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w10.png" alt="W10"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">11</div>
+        <div class="q-id">W11 · 平面图形·剪拼</div>
+        <div class="q-stars">⭐⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w11.png" alt="W11"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">12</div>
+        <div class="q-id">W12 · 立体图形·表面积</div>
+        <div class="q-stars">⭐⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w12.png" alt="W12"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">13</div>
+        <div class="q-id">W13 · 逻辑推理·叠放顺序</div>
+        <div class="q-stars">⭐⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w13.png" alt="W13"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">14</div>
+        <div class="q-id">W14 · 路径方向·折纸剪切</div>
+        <div class="q-stars">⭐⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w14.png" alt="W14"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">15</div>
+        <div class="q-id">W15 · 路径方向·最短路径</div>
+        <div class="q-stars">⭐⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w15.png" alt="W15"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">16</div>
+        <div class="q-id">W16 · 路径方向·最短路径+序列</div>
+        <div class="q-stars">⭐⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w16.png" alt="W16"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">17</div>
+        <div class="q-id">W17 · 数数策略·重叠计数</div>
+        <div class="q-stars">⭐⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w17.png" alt="W17"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">18</div>
+        <div class="q-id">W18 · 数数策略·排列约束</div>
+        <div class="q-stars">⭐⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w18.png" alt="W18"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">19</div>
+        <div class="q-id">W19 · 数数策略·逻辑计算</div>
+        <div class="q-stars">⭐⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w19.png" alt="W19"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">20</div>
+        <div class="q-id">W20 · 数数策略·等价换算</div>
+        <div class="q-stars">⭐⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w20.png" alt="W20"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">21</div>
+        <div class="q-id">W21 · 立体图形·俯视图</div>
+        <div class="q-stars">⭐⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w21.png" alt="W21"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">22</div>
+        <div class="q-id">W22 · 度量单位·空间路径长度</div>
+        <div class="q-stars">⭐⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w22.png" alt="W22"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">23</div>
+        <div class="q-id">W23 · 度量单位·时间推算</div>
+        <div class="q-stars">⭐⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w23.png" alt="W23"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">24</div>
+        <div class="q-id">W24 · 度量单位·时钟计算</div>
+        <div class="q-stars">⭐⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w24.png" alt="W24"></div>
+    </div>
+  </div>
+
+  <!-- ── 5★ ── -->
+  <div class="star-section star-5">
+    <div class="star-header"><span>⭐⭐⭐⭐⭐</span> 5 星改编题（共 8 题）</div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">25</div>
+        <div class="q-id">W25 · 路径方向·等差数列间隔</div>
+        <div class="q-stars">⭐⭐⭐⭐⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w25.png" alt="W25"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">26</div>
+        <div class="q-id">W26 · 路径方向·约束路径计数</div>
+        <div class="q-stars">⭐⭐⭐⭐⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w26.png" alt="W26"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">27</div>
+        <div class="q-id">W27 · 路径方向·方向约束路线</div>
+        <div class="q-stars">⭐⭐⭐⭐⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w27.png" alt="W27"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">28</div>
+        <div class="q-id">W28 · 逻辑推理·等差数列+方程</div>
+        <div class="q-stars">⭐⭐⭐⭐⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w28.png" alt="W28"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">29</div>
+        <div class="q-id">W29 · 逻辑推理·传递性推理</div>
+        <div class="q-stars">⭐⭐⭐⭐⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w29.png" alt="W29"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">30</div>
+        <div class="q-id">W30 · 逻辑推理·逆向计算</div>
+        <div class="q-stars">⭐⭐⭐⭐⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w30.png" alt="W30"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">31</div>
+        <div class="q-id">W31 · 平面图形·不规则面积</div>
+        <div class="q-stars">⭐⭐⭐⭐⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w31.png" alt="W31"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">32</div>
+        <div class="q-id">W32 · 平面图形·图形拼接</div>
+        <div class="q-stars">⭐⭐⭐⭐⭐</div>
+      </div>
+      <div class="q-image"><img src="src/assets/adapted-images/w32.png" alt="W32"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="answer-section">
+  <button class="answer-toggle-btn" onclick="toggleAnswers(this)">📋 查看答案</button>
+  <div class="answer-sheet" id="answerSheet">
+    <div class="answer-grid">
+      <div class="answer-item"><span class="ai-num">1</span><span class="ai-src">W01·格子计数</span><span class="ai-ans">C</span></div>
+      <div class="answer-item"><span class="ai-num">2</span><span class="ai-src">W02·缺失计数</span><span class="ai-ans">C</span></div>
+      <div class="answer-item"><span class="ai-num">3</span><span class="ai-src">W03·集合排除</span><span class="ai-ans">C</span></div>
+      <div class="answer-item"><span class="ai-num">4</span><span class="ai-src">W04·共同元素</span><span class="ai-ans">B</span></div>
+      <div class="answer-item"><span class="ai-num">5</span><span class="ai-src">W05·嵌套三角形</span><span class="ai-ans">D</span></div>
+      <div class="answer-item"><span class="ai-num">6</span><span class="ai-src">W06·两步计算</span><span class="ai-ans">B</span></div>
+      <div class="answer-item"><span class="ai-num">7</span><span class="ai-src">W07·转向追踪</span><span class="ai-ans">D</span></div>
+      <div class="answer-item"><span class="ai-num">8</span><span class="ai-src">W08·图形计数</span><span class="ai-ans">C</span></div>
+      <div class="answer-item"><span class="ai-num">9</span><span class="ai-src">W09·格子缺失</span><span class="ai-ans">C</span></div>
+      <div class="answer-item"><span class="ai-num">10</span><span class="ai-src">W10·旋转规律</span><span class="ai-ans">D</span></div>
+      <div class="answer-item"><span class="ai-num">11</span><span class="ai-src">W11·剪拼</span><span class="ai-ans">D</span></div>
+      <div class="answer-item"><span class="ai-num">12</span><span class="ai-src">W12·表面积</span><span class="ai-ans">B</span></div>
+      <div class="answer-item"><span class="ai-num">13</span><span class="ai-src">W13·叠放顺序</span><span class="ai-ans">D</span></div>
+      <div class="answer-item"><span class="ai-num">14</span><span class="ai-src">W14·折纸剪切</span><span class="ai-ans">C</span></div>
+      <div class="answer-item"><span class="ai-num">15</span><span class="ai-src">W15·最短路径</span><span class="ai-ans">C</span></div>
+      <div class="answer-item"><span class="ai-num">16</span><span class="ai-src">W16·路径序列</span><span class="ai-ans">B</span></div>
+      <div class="answer-item"><span class="ai-num">17</span><span class="ai-src">W17·重叠计数</span><span class="ai-ans">C</span></div>
+      <div class="answer-item"><span class="ai-num">18</span><span class="ai-src">W18·排列约束</span><span class="ai-ans">A</span></div>
+      <div class="answer-item"><span class="ai-num">19</span><span class="ai-src">W19·逻辑计算</span><span class="ai-ans">D</span></div>
+      <div class="answer-item"><span class="ai-num">20</span><span class="ai-src">W20·等价换算</span><span class="ai-ans">C</span></div>
+      <div class="answer-item"><span class="ai-num">21</span><span class="ai-src">W21·俯视图</span><span class="ai-ans">E</span></div>
+      <div class="answer-item"><span class="ai-num">22</span><span class="ai-src">W22·路径长度</span><span class="ai-ans">C</span></div>
+      <div class="answer-item"><span class="ai-num">23</span><span class="ai-src">W23·时间推算</span><span class="ai-ans">D</span></div>
+      <div class="answer-item"><span class="ai-num">24</span><span class="ai-src">W24·时钟计算</span><span class="ai-ans">C</span></div>
+      <div class="answer-item"><span class="ai-num">25</span><span class="ai-src">W25·等差间隔</span><span class="ai-ans">C</span></div>
+      <div class="answer-item"><span class="ai-num">26</span><span class="ai-src">W26·路径计数</span><span class="ai-ans">D</span></div>
+      <div class="answer-item"><span class="ai-num">27</span><span class="ai-src">W27·方向约束</span><span class="ai-ans">C</span></div>
+      <div class="answer-item"><span class="ai-num">28</span><span class="ai-src">W28·等差+方程</span><span class="ai-ans">B</span></div>
+      <div class="answer-item"><span class="ai-num">29</span><span class="ai-src">W29·传递推理</span><span class="ai-ans">B</span></div>
+      <div class="answer-item"><span class="ai-num">30</span><span class="ai-src">W30·逆向计算</span><span class="ai-ans">B</span></div>
+      <div class="answer-item"><span class="ai-num">31</span><span class="ai-src">W31·不规则面积</span><span class="ai-ans">D</span></div>
+      <div class="answer-item"><span class="ai-num">32</span><span class="ai-src">W32·图形拼接</span><span class="ai-ans">C</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleAnswers(btn) {
+  const sheet = document.getElementById('answerSheet');
+  const showing = sheet.classList.toggle('show');
+  btn.textContent = showing ? '🙈 隐藏答案' : '📋 查看答案';
+  if (showing) sheet.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>模拟练习 · 袋鼠数学乐园</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #030712; --card: rgba(255,255,255,0.03); --card-border: rgba(255,255,255,0.08);
+  --text: #f8fafc; --muted: #94a3b8; --purple: #8b5cf6; --purple-light: #a78bfa;
+  --blue: #3b82f6; --emerald: #10b981; --amber: #f59e0b; --pink: #ec4899; --cyan: #06b6d4;
+}
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter','Noto Sans SC',sans-serif; min-height: 100vh; overflow-x: hidden; }
+.aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.aurora-blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.12; animation: auroraF linear infinite; }
+.ab1 { width: 700px; height: 700px; background: radial-gradient(circle,#8b5cf6,transparent 70%); top: -200px; left: -100px; animation-duration: 22s; }
+.ab2 { width: 600px; height: 600px; background: radial-gradient(circle,#06b6d4,transparent 70%); top: 100px; right: -150px; animation-duration: 28s; animation-delay:-10s; }
+.ab3 { width: 500px; height: 500px; background: radial-gradient(circle,#ec4899,transparent 70%); bottom: 0; left: 30%; animation-duration: 20s; animation-delay:-5s; }
+@keyframes auroraF { 0%{transform:translate(0,0)} 33%{transform:translate(35px,-28px)} 66%{transform:translate(-18px,38px)} 100%{transform:translate(0,0)} }
+.dot-grid { position: fixed; inset: 0; z-index: 0; pointer-events: none; background-image: radial-gradient(rgba(255,255,255,0.05) 1px,transparent 1px); background-size: 30px 30px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%,black 40%,transparent 100%); }
+.page { position: relative; z-index: 1; }
+
+/* ── Sticky header ── */
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; gap: 12px; padding: 12px 24px;
+  background: rgba(3,7,18,0.88); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--card-border);
+}
+.back-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--muted); font-size: 13px; font-weight: 600; text-decoration: none;
+  padding: 7px 14px; border: 1px solid var(--card-border); border-radius: 8px; transition: all 0.2s; white-space: nowrap;
+}
+.back-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+/* ── Tab胶囊导航 ── */
+.tab-capsule {
+  display: flex; gap: 2px; padding: 3px;
+  background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); border-radius: 10px;
+}
+.tab-btn {
+  padding: 7px 18px; border-radius: 8px; border: none; background: transparent;
+  color: var(--muted); font-size: 13px; font-weight: 700; font-family: inherit;
+  cursor: pointer; transition: all 0.2s; white-space: nowrap;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+}
+.tab-btn:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+.tab-btn.active { background: rgba(139,92,246,0.2); color: var(--purple-light); }
+.topbar-right { margin-left: auto; font-size: 12px; color: var(--muted); white-space: nowrap; }
+
+/* ── Hero ── */
+.hero { padding: 48px 24px 32px; text-align: center; max-width: 720px; margin: 0 auto; }
+.hero h1 { font-size: clamp(28px,5vw,42px); font-weight: 900; letter-spacing: -0.03em; margin-bottom: 10px; }
+.grad-orange { background: linear-gradient(135deg,#f59e0b 0%,#ec4899 50%,#8b5cf6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.hero-desc { color: var(--muted); font-size: 14px; line-height: 1.7; margin-bottom: 20px; }
+.hero-stats { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 8px; }
+.hero-stat { text-align: center; }
+.hero-stat .num { font-size: 28px; font-weight: 900; color: var(--amber); }
+.hero-stat .lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* ── View switcher ── */
+.view-switch { display: flex; gap: 8px; justify-content: center; margin: 0 24px 28px; }
+.view-btn {
+  padding: 8px 22px; border-radius: 999px; border: 1.5px solid var(--card-border);
+  background: transparent; color: var(--muted); font-size: 13px; font-weight: 700;
+  font-family: inherit; cursor: pointer; transition: all 0.2s;
+}
+.view-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+.view-btn.active { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.4); color: #fcd34d; }
+
+/* ── Paper list view ── */
+.paper-grid {
+  max-width: 960px; margin: 0 auto; padding: 0 24px 100px;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;
+}
+.paper-card {
+  background: var(--card); border: 1.5px solid var(--card-border); border-radius: 20px;
+  padding: 24px; cursor: pointer; transition: all 0.2s;
+  animation: fadeUp 0.3s ease both;
+}
+.paper-card:hover { border-color: rgba(245,158,11,0.35); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(245,158,11,0.1); }
+.paper-card.done { border-color: rgba(16,185,129,0.3); }
+.paper-num { font-size: 13px; font-weight: 700; color: var(--amber); margin-bottom: 6px; letter-spacing: 0.05em; }
+.paper-title { font-size: 20px; font-weight: 800; margin-bottom: 12px; }
+.paper-meta { font-size: 12px; color: var(--muted); margin-bottom: 16px; line-height: 1.7; }
+.paper-stars { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+.star-badge {
+  font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; color: #fff;
+}
+.s1 { background: rgba(16,185,129,0.2); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+.s2 { background: rgba(59,130,246,0.2); color: #93c5fd; border: 1px solid rgba(59,130,246,0.3); }
+.s3 { background: rgba(245,158,11,0.2); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); }
+.s4 { background: rgba(236,72,153,0.2); color: #f9a8d4; border: 1px solid rgba(236,72,153,0.3); }
+.s5 { background: rgba(139,92,246,0.2); color: var(--purple-light); border: 1px solid rgba(139,92,246,0.3); }
+.paper-progress { height: 5px; background: rgba(255,255,255,0.07); border-radius: 99px; overflow: hidden; margin-bottom: 12px; }
+.paper-progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg,#f59e0b,#ec4899); transition: width 0.5s ease; }
+.paper-cta {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 13px; font-weight: 700; color: var(--amber);
+}
+.paper-cta-arrow { font-size: 16px; }
+.paper-done-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 700; color: #34d399;
+  background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25);
+  padding: 3px 10px; border-radius: 999px;
+}
+
+/* ── Adapted questions section ── */
+.adapted-section { max-width: 960px; margin: 0 auto 60px; padding: 0 24px; }
+.section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.section-title { font-size: 18px; font-weight: 800; }
+.section-badge {
+  font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px;
+  background: rgba(236,72,153,0.12); color: var(--pink); border: 1px solid rgba(236,72,153,0.3);
+}
+.adapted-grid { display: flex; flex-direction: column; gap: 16px; }
+.adapted-card {
+  background: var(--card); border: 1.5px solid var(--card-border); border-radius: 16px;
+  overflow: hidden; animation: fadeUp 0.3s ease both;
+}
+.adapted-card:hover { border-color: rgba(255,255,255,0.13); }
+.adapted-meta {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 14px 20px 12px; border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.adapted-category { font-size: 12px; color: var(--muted); margin-left: auto; }
+.adapted-body { padding: 16px 20px 20px; }
+.adapted-text { font-size: 14px; line-height: 1.8; margin-bottom: 16px; white-space: pre-wrap; }
+.adapted-hint { font-size: 12px; color: var(--muted); background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; display: none; }
+.adapted-hint.show { display: block; }
+.adapted-opts { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.adapted-opt {
+  padding: 8px 18px; border-radius: 10px; border: 1.5px solid var(--card-border);
+  background: rgba(255,255,255,0.04); color: var(--text); font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all 0.18s; font-family: inherit;
+}
+.adapted-opt:hover:not(:disabled) { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.09); }
+.adapted-opt.correct { background: rgba(16,185,129,0.15); border-color: #10b981; color: #6ee7b7; }
+.adapted-opt.wrong { background: rgba(239,68,68,0.15); border-color: #ef4444; color: #fca5a5; }
+.adapted-opt.reveal { background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.4); color: #6ee7b7; }
+.adapted-opt.dim { opacity: 0.35; cursor: default; }
+.adapted-fb { font-size: 13px; padding: 10px 14px; border-radius: 8px; display: none; margin-bottom: 10px; }
+.adapted-fb.show { display: block; }
+.adapted-fb.ok { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2); color: #6ee7b7; }
+.adapted-fb.no { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); color: #fcd34d; }
+.adapted-actions { display: flex; gap: 8px; }
+.hint-toggle-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700;
+  border: 1px solid var(--card-border); background: transparent; color: var(--muted);
+  cursor: pointer; font-family: inherit; transition: all 0.2s;
+}
+.hint-toggle-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+.origin-tag { font-size: 11px; color: var(--muted); margin-left: auto; padding: 4px 0; }
+
+/* ── Paper detail view ── */
+.paper-detail { max-width: 900px; margin: 0 auto; padding: 0 24px 100px; }
+.paper-detail-header {
+  display: flex; align-items: center; gap: 12px; padding: 20px 0 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.07); margin-bottom: 28px;
+}
+.detail-back {
+  background: none; border: 1.5px solid var(--card-border); border-radius: 8px;
+  color: var(--muted); font-size: 13px; font-weight: 700; padding: 7px 14px;
+  cursor: pointer; font-family: inherit; transition: all 0.2s;
+}
+.detail-back:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+.detail-title { font-size: 20px; font-weight: 800; }
+.detail-progress { margin-left: auto; font-size: 13px; color: var(--muted); }
+.question-list { display: flex; flex-direction: column; gap: 20px; }
+
+/* ── Question card (inside paper) ── */
+.q-card {
+  background: var(--card); border: 1.5px solid var(--card-border); border-radius: 18px;
+  overflow: hidden; animation: fadeUp 0.3s ease both;
+}
+.q-card:hover { border-color: rgba(255,255,255,0.12); }
+.q-meta {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 14px 20px 12px; border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.meta-seq {
+  font-size: 15px; font-weight: 900; color: var(--amber);
+  width: 28px; height: 28px; border-radius: 8px;
+  background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.meta-tag {
+  font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; color: #fff;
+}
+.meta-year-q { font-size: 11px; color: var(--muted); font-weight: 600; }
+.meta-pts { font-size: 11px; color: var(--muted); margin-left: auto; }
+
+/* Question image */
+.q-img-wrap { padding: 0 20px; }
+.img-toggle-btn {
+  display: flex; align-items: center; gap: 6px;
+  width: 100%; padding: 10px 20px;
+  background: none; border: none; border-top: 1px solid rgba(255,255,255,0.05);
+  color: var(--muted); font-size: 12px; font-weight: 600; font-family: inherit;
+  cursor: pointer; text-align: left; transition: color 0.2s;
+}
+.img-toggle-btn:hover { color: var(--text); }
+.toggle-arrow { font-size: 10px; transition: transform 0.2s; }
+.img-toggle-btn.open .toggle-arrow { transform: rotate(90deg); }
+.q-img-body { display: none; padding-bottom: 12px; }
+.q-img-body.show { display: block; }
+.q-img-body img { display: block; width: 100%; border-radius: 10px; border: 1px solid rgba(255,255,255,0.07); background: #fff; }
+
+/* Answer buttons */
+.q-answer { padding: 14px 20px 18px; }
+.answer-label { font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
+.opt-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.opt-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 48px; height: 48px; border-radius: 12px; font-size: 15px; font-weight: 800;
+  border: 1.5px solid var(--card-border); background: rgba(255,255,255,0.04);
+  color: var(--text); cursor: pointer; transition: all 0.18s; font-family: inherit;
+}
+.opt-btn:hover:not(:disabled) { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.09); transform: translateY(-1px); }
+.opt-btn.selected-correct { background: rgba(16,185,129,0.15); border-color: #10b981; color: #6ee7b7; }
+.opt-btn.selected-wrong { background: rgba(239,68,68,0.15); border-color: #ef4444; color: #fca5a5; }
+.opt-btn.reveal-correct { background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.4); color: #6ee7b7; }
+.opt-btn.dim { opacity: 0.35; cursor: default; }
+.opt-btn:disabled { cursor: default; }
+.q-fb { margin-top: 12px; padding: 10px 14px; border-radius: 10px; font-size: 13px; line-height: 1.6; display: none; }
+.q-fb.show { display: block; }
+.q-fb.ok { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2); color: #6ee7b7; }
+.q-fb.no { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); color: #fcd34d; }
+.q-fb.neutral { background: rgba(148,163,184,0.08); border: 1px solid rgba(148,163,184,0.15); color: var(--muted); }
+
+/* Answer sheet at bottom */
+.answer-sheet {
+  margin-top: 40px; background: rgba(255,255,255,0.02); border: 1.5px solid var(--card-border);
+  border-radius: 16px; overflow: hidden;
+}
+.answer-sheet-header {
+  padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.07);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.answer-sheet-title { font-size: 15px; font-weight: 800; }
+.show-answers-btn {
+  padding: 8px 20px; border-radius: 10px; border: 1.5px solid rgba(245,158,11,0.4);
+  background: rgba(245,158,11,0.1); color: #fcd34d;
+  font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.2s;
+}
+.show-answers-btn:hover { background: rgba(245,158,11,0.2); }
+.answer-sheet-body { padding: 20px; display: none; }
+.answer-sheet-body.show { display: block; }
+.answer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.answer-item {
+  display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); border-radius: 10px;
+  font-size: 13px;
+}
+.answer-item .ai-num { font-weight: 800; color: var(--amber); width: 20px; flex-shrink: 0; }
+.answer-item .ai-src { color: var(--muted); font-size: 11px; flex: 1; }
+.answer-item .ai-ans { font-weight: 800; margin-left: auto; }
+.answer-item .ai-ans.known { color: #34d399; }
+.answer-item .ai-ans.unknown { color: var(--muted); }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:none} }
+
+@media (max-width: 480px) {
+  .paper-grid { grid-template-columns: 1fr; padding: 0 16px 80px; }
+  .paper-detail { padding: 0 16px 80px; }
+  .opt-btn { width: 44px; height: 44px; font-size: 14px; }
+  .adapted-opts { flex-direction: column; }
+  .adapted-opt { text-align: left; }
+}
+</style>
+</head>
+<body>
+<div class="aurora">
+  <div class="aurora-blob ab1"></div>
+  <div class="aurora-blob ab2"></div>
+  <div class="aurora-blob ab3"></div>
+</div>
+<div class="dot-grid"></div>
+<div class="page">
+
+<!-- Header -->
+<header class="topbar">
+  <a class="back-btn" href="../index.html">← 首页</a>
+
+  <div class="tab-capsule">
+    <a class="tab-btn" href="exam.html">📋 历年真题</a>
+    <a class="tab-btn active" href="practice.html">🎯 模拟练习</a>
+  </div>
+
+  <div class="topbar-right" id="topbarProgress"></div>
+</header>
+
+<!-- Hero -->
+<div class="hero">
+  <h1>🎯 <span class="grad-orange">模拟</span>练习</h1>
+  <p class="hero-desc">
+    从 185 道历年未作答真题 + 32 道错题改编题中精心组卷<br>
+    每套 24 题 · 1★ 至 5★ 均匀分布 · 共 6 套完整试卷
+  </p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">6</div><div class="lbl">套试卷</div></div>
+    <div class="hero-stat"><div class="num">144</div><div class="lbl">套卷题目</div></div>
+    <div class="hero-stat"><div class="num">32</div><div class="lbl">改编题</div></div>
+    <div class="hero-stat"><div class="num">176</div><div class="lbl">题目总计</div></div>
+  </div>
+</div>
+
+<!-- View switcher -->
+<div class="view-switch">
+  <button class="view-btn active" id="btnPapers" onclick="switchView('papers')">📄 模拟试卷</button>
+  <button class="view-btn" id="btnAdapted" onclick="switchView('adapted')">✏️ 改编练习题</button>
+</div>
+
+<!-- Paper list view -->
+<div id="viewPapers">
+  <div class="paper-grid" id="paperGrid"></div>
+</div>
+
+<!-- Adapted questions view -->
+<div id="viewAdapted" style="display:none">
+  <div class="adapted-section">
+    <div class="section-header">
+      <div class="section-title">✏️ 错题改编练习</div>
+      <div class="section-badge">32 道</div>
+    </div>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:20px;line-height:1.7">
+      针对历年错题的考察点重新出题，1–3★ 换成生活化场景（锻炼读题理解），4–5★ 略增难度（同类型进阶）。
+    </p>
+    <div class="adapted-grid" id="adaptedGrid"></div>
+  </div>
+</div>
+
+<!-- Paper detail view (hidden initially) -->
+<div id="viewDetail" style="display:none">
+  <div class="paper-detail">
+    <div class="paper-detail-header">
+      <button class="detail-back" onclick="backToList()">← 返回列表</button>
+      <div class="detail-title" id="detailTitle"></div>
+      <div class="detail-progress" id="detailProgress"></div>
+    </div>
+    <div class="question-list" id="questionList"></div>
+    <!-- Answer sheet -->
+    <div class="answer-sheet">
+      <div class="answer-sheet-header">
+        <div class="answer-sheet-title">📋 答案对照表</div>
+        <button class="show-answers-btn" id="showAnswersBtn" onclick="toggleAnswers()">查看答案</button>
+      </div>
+      <div class="answer-sheet-body" id="answerSheetBody">
+        <div class="answer-grid" id="answerGrid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- .page -->
+
+<script src="assets/practice-data.js"></script>
+<script>
+// ════════════════════════════════════════════════════════════════
+//  State & Storage
+// ════════════════════════════════════════════════════════════════
+const PR_LOG_KEY = 'km_practice_log_v1';
+const PR_ADP_KEY = 'km_adapted_log_v1';
+
+function loadPracticeLog() {
+  try { return JSON.parse(localStorage.getItem(PR_LOG_KEY) || '{}'); } catch { return {}; }
+}
+function savePracticeLog(m) { localStorage.setItem(PR_LOG_KEY, JSON.stringify(m)); }
+function loadAdaptedLog() {
+  try { return JSON.parse(localStorage.getItem(PR_ADP_KEY) || '{}'); } catch { return {}; }
+}
+function saveAdaptedLog(m) { localStorage.setItem(PR_ADP_KEY, JSON.stringify(m)); }
+
+const practiceLog = loadPracticeLog();   // { "p0_q5": {chosen, correct, ts}, ... }
+const adaptedLog  = loadAdaptedLog();    // { "W01": {chosen, correct, ts}, ... }
+
+let currentPaper = -1;
+let answersShown = false;
+
+// ════════════════════════════════════════════════════════════════
+//  Star rendering helpers
+// ════════════════════════════════════════════════════════════════
+const STAR_LABELS = ['','⭐','⭐⭐','⭐⭐⭐','⭐⭐⭐⭐','⭐⭐⭐⭐⭐'];
+const STAR_COLORS = ['','s1','s2','s3','s4','s5'];
+const LETTERS = ['A','B','C','D','E'];
+
+function starBadge(n) {
+  return `<span class="star-badge ${STAR_COLORS[n]}">${STAR_LABELS[n]} ${n}★</span>`;
+}
+function diffColor(n) {
+  const colors = ['','#10b981','#3b82f6','#f59e0b','#ec4899','#8b5cf6'];
+  return colors[n] || '#94a3b8';
+}
+
+// ════════════════════════════════════════════════════════════════
+//  View switcher
+// ════════════════════════════════════════════════════════════════
+function switchView(view) {
+  document.getElementById('viewPapers').style.display   = view === 'papers'  ? '' : 'none';
+  document.getElementById('viewAdapted').style.display  = view === 'adapted' ? '' : 'none';
+  document.getElementById('viewDetail').style.display   = 'none';
+  document.getElementById('btnPapers').classList.toggle('active', view === 'papers');
+  document.getElementById('btnAdapted').classList.toggle('active', view === 'adapted');
+  if (view === 'adapted') renderAdapted();
+}
+
+function backToList() {
+  document.getElementById('viewDetail').style.display  = 'none';
+  document.getElementById('viewPapers').style.display  = '';
+  document.getElementById('viewAdapted').style.display = 'none';
+  document.getElementById('view-switch') && null;
+  // show view-switch
+  document.querySelector('.view-switch').style.display = '';
+  currentPaper = -1;
+  answersShown = false;
+  renderPapers(); // refresh progress
+}
+
+// ════════════════════════════════════════════════════════════════
+//  Paper list
+// ════════════════════════════════════════════════════════════════
+function getPaperProgress(pi) {
+  const paper = PRACTICE_PAPERS[pi];
+  let done = 0;
+  paper.forEach((q, qi) => {
+    if (practiceLog[`p${pi}_q${qi}`]) done++;
+  });
+  return { done, total: paper.length };
+}
+
+function renderPapers() {
+  const grid = document.getElementById('paperGrid');
+  grid.innerHTML = '';
+  const names = ['混合精选·第一套','混合精选·第二套','混合精选·第三套','混合精选·第四套','混合精选·第五套','混合精选·第六套'];
+
+  PRACTICE_PAPERS.forEach((paper, pi) => {
+    const { done, total } = getPaperProgress(pi);
+    const pct = Math.round(done / total * 100);
+    const isDone = done === total;
+    const starCounts = {};
+    paper.forEach(q => { starCounts[q.star] = (starCounts[q.star] || 0) + 1; });
+
+    const starsHtml = Object.entries(starCounts).sort((a,b)=>+a[0]-+b[0])
+      .map(([s, c]) => `<span class="star-badge ${STAR_COLORS[+s]}">${STAR_LABELS[+s]} ×${c}</span>`).join('');
+
+    const card = document.createElement('div');
+    card.className = 'paper-card' + (isDone ? ' done' : '');
+    card.style.animationDelay = (pi * 0.05) + 's';
+    card.onclick = () => openPaper(pi);
+    card.innerHTML = `
+      <div class="paper-num">第 ${pi + 1} 套</div>
+      <div class="paper-title">${names[pi]}</div>
+      <div class="paper-meta">共 ${total} 题 · 来自历年真题<br>已完成 ${done}/${total} 题</div>
+      <div class="paper-stars">${starsHtml}</div>
+      <div class="paper-progress"><div class="paper-progress-fill" style="width:${pct}%"></div></div>
+      <div class="paper-cta">
+        <span>${isDone ? '✅ 已完成，再练一遍' : done > 0 ? '继续练习 →' : '开始练习 →'}</span>
+        ${isDone ? '<span class="paper-done-badge">✓ 完成</span>' : `<span style="color:var(--muted);font-size:12px">${pct}%</span>`}
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  updateTopbarProgress();
+}
+
+function updateTopbarProgress() {
+  let totalDone = 0, totalQ = 0;
+  PRACTICE_PAPERS.forEach((p, pi) => {
+    totalQ += p.length;
+    p.forEach((q, qi) => { if (practiceLog[`p${pi}_q${qi}`]) totalDone++; });
+  });
+  document.getElementById('topbarProgress').textContent = `套卷进度 ${totalDone}/${totalQ}`;
+}
+
+// ════════════════════════════════════════════════════════════════
+//  Open paper detail
+// ════════════════════════════════════════════════════════════════
+function openPaper(pi) {
+  currentPaper = pi;
+  answersShown = false;
+  const paper = PRACTICE_PAPERS[pi];
+  const names = ['混合精选·第一套','混合精选·第二套','混合精选·第三套','混合精选·第四套','混合精选·第五套','混合精选·第六套'];
+
+  document.getElementById('viewPapers').style.display  = 'none';
+  document.getElementById('viewAdapted').style.display = 'none';
+  document.querySelector('.view-switch').style.display = 'none';
+  document.getElementById('viewDetail').style.display  = '';
+
+  document.getElementById('detailTitle').textContent = `第 ${pi + 1} 套 · ${names[pi]}`;
+
+  const { done, total } = getPaperProgress(pi);
+  document.getElementById('detailProgress').textContent = `${done}/${total} 已完成`;
+
+  // Answer sheet toggle reset
+  const body = document.getElementById('answerSheetBody');
+  body.classList.remove('show');
+  document.getElementById('showAnswersBtn').textContent = '查看答案';
+
+  renderQuestions(pi);
+  renderAnswerSheet(pi);
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ════════════════════════════════════════════════════════════════
+//  Render questions
+// ════════════════════════════════════════════════════════════════
+function renderQuestions(pi) {
+  const paper = PRACTICE_PAPERS[pi];
+  const list = document.getElementById('questionList');
+  list.innerHTML = '';
+
+  paper.forEach((q, qi) => {
+    const key = `p${pi}_q${qi}`;
+    const record = practiceLog[key];
+    const chosen  = record ? record.chosen : null;
+
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = `qcard_${qi}`;
+    card.style.animationDelay = (qi * 0.03) + 's';
+
+    // Star display
+    const starStr = '★'.repeat(q.star);
+    const starLabel = `${q.star}★`;
+    const pts = q.star <= 1 ? 3 : q.star <= 2 ? 4 : q.star <= 3 ? 4 : q.star <= 4 ? 4 : 5;
+    const ptsMap = {1:3, 2:3, 3:4, 4:4, 5:5};
+    const qpts = ptsMap[q.star] || 4;
+
+    // Option buttons
+    const optBtns = ['A','B','C','D','E'].map((ltr, idx) => {
+      let cls = 'opt-btn';
+      if (chosen !== null) {
+        if (idx === chosen && q.ans !== null) {
+          cls += (idx === q.ans) ? ' selected-correct' : ' selected-wrong';
+        } else if (q.ans !== null && idx === q.ans && chosen !== q.ans) {
+          cls += ' reveal-correct';
+        } else if (chosen !== null) {
+          cls += ' dim';
+        }
+      }
+      const disabled = chosen !== null ? 'disabled' : '';
+      return `<button class="${cls}" ${disabled} onclick="answerPractice(${pi},${qi},${idx})">${ltr}</button>`;
+    }).join('');
+
+    // Feedback
+    let fbCls = 'q-fb', fbText = '';
+    if (chosen !== null) {
+      if (q.ans === null) {
+        fbCls += ' show neutral'; fbText = '💡 暂未收录标准答案，请自行对照解析。';
+      } else if (chosen === q.ans) {
+        fbCls += ' show ok'; fbText = `🎉 回答正确！（${qpts}分题）`;
+      } else {
+        fbCls += ' show no'; fbText = `💡 回答错误，正确答案是 ${LETTERS[q.ans]}。`;
+      }
+    }
+
+    card.innerHTML = `
+      <div class="q-meta">
+        <div class="meta-seq">${qi + 1}</div>
+        <span class="meta-tag" style="background:rgba(${starColor(q.star)},0.15);color:${diffColor(q.star)};border:1px solid rgba(${starColor(q.star)},0.3)">${starLabel}</span>
+        <span class="meta-year-q">${q.year} 年 · 第 ${q.qnum} 题</span>
+        <span class="meta-pts">${qpts} 分</span>
+      </div>
+      <div class="q-img-wrap" id="imgwrap_${qi}"></div>
+      <button class="img-toggle-btn" id="imgtoggle_${qi}" onclick="toggleImg(${qi})">
+        <span class="toggle-arrow">▶</span> 查看题目图片
+      </button>
+      <div class="q-answer">
+        <div class="answer-label">选择答案</div>
+        <div class="opt-row">${optBtns}</div>
+        <div class="${fbCls}">${fbText}</div>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+function starColor(n) {
+  const c = ['148,163,184','16,185,129','59,130,246','245,158,11','236,72,153','139,92,246'];
+  return c[n] || c[0];
+}
+
+function toggleImg(qi) {
+  const wrap = document.getElementById(`imgwrap_${qi}`);
+  const btn  = document.getElementById(`imgtoggle_${qi}`);
+  if (btn.classList.contains('open')) {
+    btn.classList.remove('open');
+    btn.querySelector('.toggle-arrow').style.transform = '';
+    wrap.innerHTML = '';
+  } else {
+    btn.classList.add('open');
+    btn.querySelector('.toggle-arrow').style.transform = 'rotate(90deg)';
+    const paper = PRACTICE_PAPERS[currentPaper];
+    const q = paper[qi];
+    wrap.innerHTML = `<div class="q-img-body show"><img src="${q.img}" alt="题目图片" loading="lazy"></div>`;
+  }
+}
+
+function answerPractice(pi, qi, chosen) {
+  const key = `p${pi}_q${qi}`;
+  if (practiceLog[key]) return;
+  const q = PRACTICE_PAPERS[pi][qi];
+  const correct = q.ans !== null ? chosen === q.ans : null;
+  practiceLog[key] = { chosen, correct, ts: Date.now() };
+  savePracticeLog(practiceLog);
+  // Re-render just this card
+  renderQuestions(pi);
+  // Update progress
+  const { done, total } = getPaperProgress(pi);
+  document.getElementById('detailProgress').textContent = `${done}/${total} 已完成`;
+  updateTopbarProgress();
+}
+
+// ════════════════════════════════════════════════════════════════
+//  Answer sheet
+// ════════════════════════════════════════════════════════════════
+function renderAnswerSheet(pi) {
+  const paper = PRACTICE_PAPERS[pi];
+  const grid = document.getElementById('answerGrid');
+  grid.innerHTML = '';
+  paper.forEach((q, qi) => {
+    const ptsMap = {1:3, 2:3, 3:4, 4:4, 5:5};
+    const item = document.createElement('div');
+    item.className = 'answer-item';
+    const ansHtml = q.ans !== null
+      ? `<span class="ai-ans known">${LETTERS[q.ans]}</span>`
+      : `<span class="ai-ans unknown">待收录</span>`;
+    item.innerHTML = `
+      <span class="ai-num">${qi + 1}</span>
+      <span class="ai-src">${q.year}·第${q.qnum}题 <span class="star-badge ${STAR_COLORS[q.star]}" style="font-size:10px;padding:1px 6px">${q.star}★</span></span>
+      ${ansHtml}
+    `;
+    grid.appendChild(item);
+  });
+}
+
+function toggleAnswers() {
+  answersShown = !answersShown;
+  const body = document.getElementById('answerSheetBody');
+  const btn  = document.getElementById('showAnswersBtn');
+  body.classList.toggle('show', answersShown);
+  btn.textContent = answersShown ? '隐藏答案' : '查看答案';
+  if (answersShown) {
+    body.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+//  Adapted questions
+// ════════════════════════════════════════════════════════════════
+function renderAdapted() {
+  const grid = document.getElementById('adaptedGrid');
+  if (grid.dataset.rendered) return;
+  grid.dataset.rendered = '1';
+  grid.innerHTML = '';
+
+  ADAPTED_QUESTIONS.forEach((q, idx) => {
+    const record = adaptedLog[q.id];
+    const chosen = record ? record.chosen : null;
+
+    const optBtns = q.options.map((opt, i) => {
+      let cls = 'adapted-opt';
+      if (chosen !== null) {
+        if (i === chosen) {
+          cls += (i === q.ans) ? ' correct' : ' wrong';
+        } else if (i === q.ans && chosen !== q.ans) {
+          cls += ' reveal';
+        } else {
+          cls += ' dim';
+        }
+      }
+      const disabled = chosen !== null ? 'disabled' : '';
+      return `<button class="${cls}" ${disabled} onclick="answerAdapted('${q.id}',${i})">${opt}</button>`;
+    }).join('');
+
+    let fbCls = 'adapted-fb', fbText = '';
+    if (chosen !== null) {
+      if (chosen === q.ans) {
+        fbCls += ' show ok'; fbText = `🎉 正确！答案是 ${q.ansLetter}。`;
+      } else {
+        fbCls += ' show no'; fbText = `💡 答案是 ${q.ansLetter}。${q.hint}`;
+      }
+    }
+
+    const card = document.createElement('div');
+    card.className = 'adapted-card';
+    card.id = `acard_${q.id}`;
+    card.style.animationDelay = (idx * 0.03) + 's';
+    card.innerHTML = `
+      <div class="adapted-meta">
+        <span class="star-badge ${STAR_COLORS[q.star]}">${q.star}★</span>
+        <span class="meta-tag" style="background:rgba(139,92,246,0.12);color:var(--purple-light);border:1px solid rgba(139,92,246,0.3);font-size:11px;padding:3px 10px;border-radius:999px">${q.category}</span>
+        <span class="adapted-category">改编自：${q.origin}</span>
+      </div>
+      <div class="adapted-body">
+        <div class="adapted-text">${q.text}</div>
+        <div class="${fbCls}" id="afb_${q.id}">${fbText}</div>
+        <div class="adapted-opts">${optBtns}</div>
+        <div class="adapted-actions">
+          <button class="hint-toggle-btn" onclick="toggleHint('${q.id}')">💡 提示</button>
+          <span class="origin-tag">原题：${q.origin}</span>
+        </div>
+        <div class="adapted-hint" id="ahint_${q.id}">${q.hint}</div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function answerAdapted(id, chosen) {
+  if (adaptedLog[id]) return;
+  const q = ADAPTED_QUESTIONS.find(x => x.id === id);
+  const correct = chosen === q.ans;
+  adaptedLog[id] = { chosen, correct, ts: Date.now() };
+  saveAdaptedLog(adaptedLog);
+  // Re-render adapted
+  document.getElementById('adaptedGrid').dataset.rendered = '';
+  renderAdapted();
+}
+
+function toggleHint(id) {
+  const el = document.getElementById(`ahint_${id}`);
+  el.classList.toggle('show');
+}
+
+// ════════════════════════════════════════════════════════════════
+//  Init
+// ════════════════════════════════════════════════════════════════
+renderPapers();
+if (location.hash === '#adapted') switchView('adapted');
+</script>
+</body>
+</html>

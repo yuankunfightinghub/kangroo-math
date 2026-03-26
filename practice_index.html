@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>模拟练习 · 袋鼠数学乐园</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f5f5f5;
+    color: #333;
+    min-height: 100vh;
+  }
+
+  /* ── 顶部导航 ── */
+  .topbar {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 20px; background: white;
+    border-bottom: 1px solid #e0e0e0;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .back-btn {
+    font-size: 13px; color: #ff6b35; text-decoration: none; font-weight: 600;
+    padding: 6px 14px; border: 1.5px solid #ff6b35; border-radius: 8px;
+    transition: all 0.2s; white-space: nowrap;
+  }
+  .back-btn:hover { background: #fff3ee; }
+  .tab-capsule {
+    display: flex; gap: 2px; padding: 3px;
+    background: #f0f0f0; border-radius: 10px; border: 1px solid #e0e0e0;
+  }
+  .tab-btn {
+    padding: 6px 16px; border-radius: 8px; border: none; background: transparent;
+    color: #888; font-size: 13px; font-weight: 700; cursor: pointer;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 5px;
+    transition: all 0.2s; white-space: nowrap;
+  }
+  .tab-btn:hover { color: #333; background: rgba(0,0,0,0.05); }
+  .tab-btn.active { background: #ff6b35; color: white; }
+
+  /* ── Hero ── */
+  .hero {
+    background: linear-gradient(135deg, #ff6b35, #f7931e);
+    color: white; padding: 40px 24px 32px; text-align: center;
+  }
+  .hero h1 { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+  .hero p { font-size: 14px; opacity: 0.9; line-height: 1.7; }
+  .hero-stats {
+    display: flex; gap: 24px; justify-content: center;
+    margin-top: 20px; flex-wrap: wrap;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat .num { font-size: 28px; font-weight: 900; }
+  .hero-stat .lbl { font-size: 11px; opacity: 0.85; margin-top: 2px; }
+
+  /* ── Paper grid ── */
+  .papers-wrap {
+    max-width: 900px; margin: 0 auto;
+    padding: 28px 16px 60px;
+  }
+  .section-title {
+    font-size: 14px; font-weight: 700; color: #888;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .paper-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .paper-card {
+    background: white; border: 1.5px solid #e0e0e0; border-radius: 16px;
+    padding: 20px; cursor: pointer; text-decoration: none; color: #333;
+    transition: all 0.2s; display: block;
+  }
+  .paper-card:hover {
+    border-color: #ff6b35; transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(255,107,53,0.12);
+  }
+  .paper-no {
+    font-size: 11px; font-weight: 800; color: #ff6b35;
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .paper-name { font-size: 17px; font-weight: 800; margin-bottom: 10px; }
+  .paper-meta { font-size: 12px; color: #888; line-height: 1.7; margin-bottom: 14px; }
+  .paper-stars { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .star-badge {
+    font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px;
+  }
+  .s1 { background: #e8f5e9; color: #2e7d32; }
+  .s2 { background: #e3f2fd; color: #1565c0; }
+  .s3 { background: #fff3e0; color: #e65100; }
+  .s4 { background: #fce4ec; color: #880e4f; }
+  .s5 { background: #f3e5f5; color: #4a148c; }
+  .paper-cta {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px; font-weight: 700; color: #ff6b35;
+    padding-top: 14px; border-top: 1px solid #f0f0f0;
+  }
+
+  /* ── 改编练习入口 ── */
+  .adapted-card {
+    background: white; border: 1.5px solid #e0e0e0; border-radius: 16px;
+    padding: 22px 24px; text-decoration: none; color: #333; display: block;
+    transition: all 0.2s;
+  }
+  .adapted-card:hover {
+    border-color: #8b5cf6; transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(139,92,246,0.12);
+  }
+  .adapted-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 700; color: #8b5cf6;
+    background: #f3e8ff; border: 1px solid #d8b4fe;
+    padding: 3px 10px; border-radius: 999px; margin-bottom: 10px;
+  }
+  .adapted-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+  .adapted-desc { font-size: 13px; color: #888; line-height: 1.7; margin-bottom: 16px; }
+  .adapted-row {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;
+  }
+  .adapted-cta {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px; font-weight: 700; color: #8b5cf6;
+    padding-top: 14px; border-top: 1px solid #f0f0f0;
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部导航 -->
+<div class="topbar">
+  <a class="back-btn" href="index.html">← 首页</a>
+  <div class="tab-capsule">
+    <a class="tab-btn" href="src/exam.html">📋 历年真题</a>
+    <a class="tab-btn active" href="practice_index.html">🎯 模拟练习</a>
+  </div>
+</div>
+
+<!-- Hero -->
+<div class="hero">
+  <h1>🎯 模拟练习</h1>
+  <p>从 185 道历年未作答真题精心组卷<br>每套 24 题 · 1★ 至 5★ 均匀分布</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">6</div><div class="lbl">套试卷</div></div>
+    <div class="hero-stat"><div class="num">144</div><div class="lbl">真题题目</div></div>
+    <div class="hero-stat"><div class="num">32</div><div class="lbl">改编练习题</div></div>
+    <div class="hero-stat"><div class="num">5</div><div class="lbl">难度梯度</div></div>
+  </div>
+</div>
+
+<!-- Paper list -->
+<div class="papers-wrap">
+
+  <div class="section-title">模拟试卷（共 6 套）</div>
+
+  <div class="paper-grid">
+
+    <a class="paper-card" href="paper_01.html">
+      <div class="paper-no">第 1 套</div>
+      <div class="paper-name">混合精选·第一套</div>
+      <div class="paper-meta">共 24 题 · 来自 2013–2025 年真题<br>按 1★→5★ 难度梯度排列</div>
+      <div class="paper-stars">
+        <span class="star-badge s1">⭐ ×5</span>
+        <span class="star-badge s2">⭐⭐ ×5</span>
+        <span class="star-badge s3">⭐⭐⭐ ×5</span>
+        <span class="star-badge s4">⭐⭐⭐⭐ ×5</span>
+        <span class="star-badge s5">⭐⭐⭐⭐⭐ ×4</span>
+      </div>
+      <div class="paper-cta"><span>开始练习</span><span>→</span></div>
+    </a>
+
+    <a class="paper-card" href="paper_02.html">
+      <div class="paper-no">第 2 套</div>
+      <div class="paper-name">混合精选·第二套</div>
+      <div class="paper-meta">共 24 题 · 来自 2013–2025 年真题<br>按 1★→5★ 难度梯度排列</div>
+      <div class="paper-stars">
+        <span class="star-badge s1">⭐ ×5</span>
+        <span class="star-badge s2">⭐⭐ ×5</span>
+        <span class="star-badge s3">⭐⭐⭐ ×5</span>
+        <span class="star-badge s4">⭐⭐⭐⭐ ×5</span>
+        <span class="star-badge s5">⭐⭐⭐⭐⭐ ×4</span>
+      </div>
+      <div class="paper-cta"><span>开始练习</span><span>→</span></div>
+    </a>
+
+    <a class="paper-card" href="paper_03.html">
+      <div class="paper-no">第 3 套</div>
+      <div class="paper-name">混合精选·第三套</div>
+      <div class="paper-meta">共 24 题 · 来自 2013–2025 年真题<br>按 1★→5★ 难度梯度排列</div>
+      <div class="paper-stars">
+        <span class="star-badge s1">⭐ ×5</span>
+        <span class="star-badge s2">⭐⭐ ×5</span>
+        <span class="star-badge s3">⭐⭐⭐ ×5</span>
+        <span class="star-badge s4">⭐⭐⭐⭐ ×5</span>
+        <span class="star-badge s5">⭐⭐⭐⭐⭐ ×4</span>
+      </div>
+      <div class="paper-cta"><span>开始练习</span><span>→</span></div>
+    </a>
+
+    <a class="paper-card" href="paper_04.html">
+      <div class="paper-no">第 4 套</div>
+      <div class="paper-name">混合精选·第四套</div>
+      <div class="paper-meta">共 24 题 · 来自 2013–2025 年真题<br>按 1★→5★ 难度梯度排列</div>
+      <div class="paper-stars">
+        <span class="star-badge s1">⭐ ×5</span>
+        <span class="star-badge s2">⭐⭐ ×5</span>
+        <span class="star-badge s3">⭐⭐⭐ ×5</span>
+        <span class="star-badge s4">⭐⭐⭐⭐ ×5</span>
+        <span class="star-badge s5">⭐⭐⭐⭐⭐ ×4</span>
+      </div>
+      <div class="paper-cta"><span>开始练习</span><span>→</span></div>
+    </a>
+
+    <a class="paper-card" href="paper_05.html">
+      <div class="paper-no">第 5 套</div>
+      <div class="paper-name">混合精选·第五套</div>
+      <div class="paper-meta">共 24 题 · 来自 2013–2025 年真题<br>按 1★→5★ 难度梯度排列</div>
+      <div class="paper-stars">
+        <span class="star-badge s1">⭐ ×5</span>
+        <span class="star-badge s2">⭐⭐ ×5</span>
+        <span class="star-badge s3">⭐⭐⭐ ×5</span>
+        <span class="star-badge s4">⭐⭐⭐⭐ ×5</span>
+        <span class="star-badge s5">⭐⭐⭐⭐⭐ ×4</span>
+      </div>
+      <div class="paper-cta"><span>开始练习</span><span>→</span></div>
+    </a>
+
+    <a class="paper-card" href="paper_06.html">
+      <div class="paper-no">第 6 套</div>
+      <div class="paper-name">混合精选·第六套</div>
+      <div class="paper-meta">共 24 题 · 来自 2013–2025 年真题<br>按 1★→5★ 难度梯度排列</div>
+      <div class="paper-stars">
+        <span class="star-badge s1">⭐ ×5</span>
+        <span class="star-badge s2">⭐⭐ ×5</span>
+        <span class="star-badge s3">⭐⭐⭐ ×5</span>
+        <span class="star-badge s4">⭐⭐⭐⭐ ×5</span>
+        <span class="star-badge s5">⭐⭐⭐⭐⭐ ×4</span>
+      </div>
+      <div class="paper-cta"><span>开始练习</span><span>→</span></div>
+    </a>
+
+  </div>
+
+  <!-- 改编练习入口 -->
+  <div class="section-title">改编练习题</div>
+  <a class="adapted-card" href="paper_adapted.html">
+    <div class="adapted-tag">✏️ 错题改编</div>
+    <div class="adapted-title">错题知识点改编练习卷</div>
+    <div class="adapted-desc">
+      针对 32 道历年错题重新出题：<br>
+      · 1–2★：换成自然、生活场景，锻炼读题理解能力<br>
+      · 5★：同考察点略增难度，根据解题思路再出一道
+    </div>
+    <div class="adapted-row">
+      <span class="star-badge s1">⭐ ×9</span>
+      <span class="star-badge s2">⭐⭐ ×15</span>
+      <span class="star-badge s5">⭐⭐⭐⭐⭐ ×8</span>
+    </div>
+    <div class="adapted-cta"><span>进入改编练习</span><span>→</span></div>
+  </a>
+
+  <div style="margin-top: 12px;">
+    <a class="adapted-card" href="paper_adapted_origin.html" style="border-color: #d8b4fe;">
+      <div class="adapted-tag" style="background: #ede9fe; color: #6d28d9; border-color: #c4b5fd;">📋 对应真题</div>
+      <div class="adapted-title">改编题对应原始真题卷</div>
+      <div class="adapted-desc">
+        32 道改编练习题的原始真题，按改编难度分组排列：<br>
+        · 先做改编练习，再对照原题，加深理解<br>
+        · 含答案对照，支持打印
+      </div>
+      <div class="adapted-row">
+        <span class="star-badge s1">⭐ ×9</span>
+        <span class="star-badge s2">⭐⭐ ×15</span>
+        <span class="star-badge s5">⭐⭐⭐⭐⭐ ×8</span>
+      </div>
+      <div class="adapted-cta" style="color: #6d28d9;"><span>查看对应真题</span><span>→</span></div>
+    </a>
+  </div>
+
+</div>
+
+</body>
+</html>
