@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>袋鼠数学 模拟真题卷 第7套</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f5f5f5;
+    color: #333;
+  }
+  .cover {
+    background: linear-gradient(135deg, #06b6d4, #0284c7);
+    color: white;
+    padding: 40px 30px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .cover h1 { font-size: 28px; margin-bottom: 8px; }
+  .cover p { font-size: 14px; opacity: 0.9; }
+  .nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: white;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 4px;
+  }
+  .nav-back {
+    font-size: 13px; color: #ff6b35; text-decoration: none; font-weight: 600;
+    padding: 6px 14px; border: 1.5px solid #ff6b35; border-radius: 8px;
+    transition: all 0.2s;
+  }
+  .nav-back:hover { background: #fff3ee; }
+  .nav-pages { display: flex; gap: 6px; flex-wrap: wrap; }
+  .nav-page {
+    font-size: 12px; font-weight: 700; text-decoration: none;
+    padding: 5px 12px; border-radius: 999px;
+    background: #f0f0f0; color: #666; transition: all 0.2s;
+  }
+  .nav-page:hover { background: #e0f2fe; color: #0284c7; }
+  .nav-page.current { background: #0284c7; color: white; }
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 16px 20px;
+    background: white;
+    margin: 0 0 20px;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat .num { font-size: 24px; font-weight: bold; color: #0284c7; }
+  .stat .label { font-size: 12px; color: #999; }
+  .questions {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 16px 40px;
+  }
+  .star-section { margin-bottom: 30px; }
+  .star-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 16px; border-radius: 8px 8px 0 0;
+    font-weight: bold; font-size: 15px;
+  }
+  .star-1 .star-header { background: #e8f5e9; color: #2e7d32; }
+  .star-2 .star-header { background: #e3f2fd; color: #1565c0; }
+  .star-5 .star-header { background: #f3e5f5; color: #4a148c; }
+  .question-card {
+    background: white; border: 1px solid #e0e0e0; border-top: none;
+    padding: 20px; margin-bottom: 2px;
+  }
+  .question-card:last-child { border-radius: 0 0 8px 8px; margin-bottom: 0; }
+  .q-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .q-num {
+    background: #0284c7; color: white; width: 32px; height: 32px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: bold; flex-shrink: 0;
+  }
+  .q-id { font-size: 13px; color: #666; font-weight: 500; }
+  .q-stars { font-size: 13px; margin-left: auto; }
+  .star-1 .q-stars { color: #2e7d32; }
+  .star-2 .q-stars { color: #1565c0; }
+  .star-5 .q-stars { color: #4a148c; }
+  .q-title {
+    font-size: 14px; font-weight: 600; color: #444;
+    margin-bottom: 10px; padding: 6px 10px;
+    background: #f0f9ff; border-left: 3px solid #0284c7;
+    border-radius: 0 4px 4px 0;
+  }
+  .q-image img { max-width: 100%; border-radius: 4px; display: block; }
+
+  /* 答案对照 */
+  .answer-section {
+    max-width: 900px; margin: 0 auto 40px; padding: 0 16px;
+  }
+  .answer-toggle-btn {
+    width: 100%; padding: 14px; border-radius: 10px;
+    background: linear-gradient(135deg, #06b6d4, #0284c7);
+    color: white; font-size: 15px; font-weight: 700;
+    border: none; cursor: pointer; margin-bottom: 0;
+    transition: opacity 0.2s;
+  }
+  .answer-toggle-btn:hover { opacity: 0.9; }
+  .answer-sheet {
+    display: none;
+    background: white; border: 1px solid #e0e0e0; border-top: none;
+    border-radius: 0 0 10px 10px; padding: 20px;
+  }
+  .answer-sheet.show { display: block; }
+  .answer-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px;
+  }
+  .answer-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px; background: #fafafa; border: 1px solid #eee; border-radius: 8px;
+    font-size: 13px;
+  }
+  .ai-num { font-weight: 800; color: #0284c7; width: 24px; flex-shrink: 0; }
+  .ai-src { color: #888; font-size: 11px; flex: 1; }
+  .ai-ans { font-weight: 800; color: #2e7d32; margin-left: auto; font-size: 14px; }
+
+  @media print {
+    body { background: white; }
+    .question-card { break-inside: avoid; }
+    .nav-bar, .answer-section { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>🦘 袋鼠数学 模拟真题卷</h1>
+  <p>第7套 · 共 12 题 · 2026年真题翻译版（3–4年级）</p>
+  <p style="margin-top:8px; font-size:12px; opacity:0.7;">题目来自 2026 年袋鼠数学竞赛（德国，3–4年级组）</p>
+</div>
+
+<div class="nav-bar">
+  <a class="nav-back" href="practice_index.html">← 返回套卷列表</a>
+  <div class="nav-pages">
+    <a class="nav-page" href="paper_01.html">第1套</a>
+    <a class="nav-page" href="paper_02.html">第2套</a>
+    <a class="nav-page" href="paper_03.html">第3套</a>
+    <a class="nav-page" href="paper_04.html">第4套</a>
+    <a class="nav-page" href="paper_05.html">第5套</a>
+    <a class="nav-page" href="paper_06.html">第6套</a>
+    <a class="nav-page current" href="paper_07.html">第7套</a>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat"><div class="num">12</div><div class="label">题目总数</div></div>
+  <div class="stat"><div class="num">2026</div><div class="label">真题年份</div></div>
+  <div class="stat"><div class="num">3</div><div class="label">难度梯度</div></div>
+  <div class="stat"><div class="num">3–4</div><div class="label">适合年级</div></div>
+</div>
+
+<div class="questions">
+
+  <!-- 3分题 A部分 -->
+  <div class="star-section star-1">
+    <div class="star-header"><span>⭐</span> 3分题（共 6 题）</div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">1</div>
+        <div class="q-id">2026年 · A1 · 拼图游戏</div>
+        <div class="q-stars">⭐</div>
+      </div>
+      <div class="q-title">哪一块拼图能填入空缺处？</div>
+      <div class="q-image" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+        <img src="src/assets/exam-images/2026/a01_pieces.png" alt="A1 拼图选项" style="max-width:65%;border-radius:8px;">
+        <img src="src/assets/exam-images/2026/a01_puzzle.png" alt="A1 拼图主图" style="max-width:30%;border-radius:8px;">
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">2</div>
+        <div class="q-id">2026年 · A2 · 幸运转盘</div>
+        <div class="q-stars">⭐</div>
+      </div>
+      <div class="q-title">双箭头可以同时指向哪两个数字？</div>
+      <div class="q-image"><img src="src/assets/exam-images/2026/a02.png" alt="A2 幸运转盘"></div>
+      <div style="margin-top:10px;font-size:14px;color:#444;padding:8px 10px;background:#fafafa;border-radius:6px;border:1px solid #eee;">
+        <strong>(A)</strong> 11 和 19 &nbsp;&nbsp;
+        <strong>(B)</strong> 11 和 23 &nbsp;&nbsp;
+        <strong>(C)</strong> 13 和 19 &nbsp;&nbsp;
+        <strong>(D)</strong> 13 和 23 &nbsp;&nbsp;
+        <strong>(E)</strong> 19 和 23
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">3</div>
+        <div class="q-id">2026年 · A3 · 迷宫寻路</div>
+        <div class="q-stars">⭐</div>
+      </div>
+      <div class="q-title">迷宫中哪两个数字之间可以画出一条连通路径？</div>
+      <div class="q-image"><img src="src/assets/exam-images/2026/a03.png" alt="A3 迷宫寻路"></div>
+      <div style="margin-top:10px;font-size:14px;color:#444;padding:8px 10px;background:#fafafa;border-radius:6px;border:1px solid #eee;">
+        <strong>(A)</strong> 1 和 3 &nbsp;&nbsp;
+        <strong>(B)</strong> 2 和 4 &nbsp;&nbsp;
+        <strong>(C)</strong> 2 和 6 &nbsp;&nbsp;
+        <strong>(D)</strong> 3 和 5 &nbsp;&nbsp;
+        <strong>(E)</strong> 3 和 6
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">4</div>
+        <div class="q-id">2026年 · A4 · 游戏硬币</div>
+        <div class="q-stars">⭐</div>
+      </div>
+      <div class="q-title">12枚硬币写着1到12，9枚正面朝上如图所示。缺失的数字中最大的是哪个？</div>
+      <div class="q-image">
+        <svg width="320" height="100" viewBox="0 0 320 100" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto;">
+          <!-- 第一排: 2, 10, 7, 4 -->
+          <circle cx="44" cy="28" r="22" fill="#2d2d2d" stroke="#555" stroke-width="1.5"/>
+          <text x="44" y="34" text-anchor="middle" fill="white" font-size="16" font-weight="bold" font-family="Arial">2</text>
+          <circle cx="96" cy="28" r="22" fill="#2d2d2d" stroke="#555" stroke-width="1.5"/>
+          <text x="96" y="34" text-anchor="middle" fill="white" font-size="14" font-weight="bold" font-family="Arial">10</text>
+          <circle cx="148" cy="28" r="22" fill="#2d2d2d" stroke="#555" stroke-width="1.5"/>
+          <text x="148" y="34" text-anchor="middle" fill="white" font-size="16" font-weight="bold" font-family="Arial">7</text>
+          <circle cx="200" cy="28" r="22" fill="#2d2d2d" stroke="#555" stroke-width="1.5"/>
+          <text x="200" y="34" text-anchor="middle" fill="white" font-size="16" font-weight="bold" font-family="Arial">4</text>
+          <!-- 第二排: 6, 12, 9, 11, 3 -->
+          <circle cx="20" cy="74" r="22" fill="#2d2d2d" stroke="#555" stroke-width="1.5"/>
+          <text x="20" y="80" text-anchor="middle" fill="white" font-size="16" font-weight="bold" font-family="Arial">6</text>
+          <circle cx="72" cy="74" r="22" fill="#2d2d2d" stroke="#555" stroke-width="1.5"/>
+          <text x="72" y="80" text-anchor="middle" fill="white" font-size="14" font-weight="bold" font-family="Arial">12</text>
+          <circle cx="124" cy="74" r="22" fill="#2d2d2d" stroke="#555" stroke-width="1.5"/>
+          <text x="124" y="80" text-anchor="middle" fill="white" font-size="16" font-weight="bold" font-family="Arial">9</text>
+          <circle cx="176" cy="74" r="22" fill="#2d2d2d" stroke="#555" stroke-width="1.5"/>
+          <text x="176" y="80" text-anchor="middle" fill="white" font-size="14" font-weight="bold" font-family="Arial">11</text>
+          <circle cx="228" cy="74" r="22" fill="#2d2d2d" stroke="#555" stroke-width="1.5"/>
+          <text x="228" y="80" text-anchor="middle" fill="white" font-size="16" font-weight="bold" font-family="Arial">3</text>
+        </svg>
+        <!-- 选项 -->
+        <div style="display:flex;justify-content:center;gap:32px;margin-top:14px;background:#e8e8e8;border-radius:20px;padding:10px 24px;max-width:360px;margin-left:auto;margin-right:auto;">
+          <span style="font-size:14px;color:#333;"><strong>(A)</strong> 5</span>
+          <span style="font-size:14px;color:#333;"><strong>(B)</strong> 6</span>
+          <span style="font-size:14px;color:#333;"><strong>(C)</strong> 7</span>
+          <span style="font-size:14px;color:#333;"><strong>(D)</strong> 8</span>
+          <span style="font-size:14px;color:#333;"><strong>(E)</strong> 9</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">5</div>
+        <div class="q-id">2026年 · A5 · 彩色铅笔</div>
+        <div class="q-stars">⭐</div>
+      </div>
+      <div class="q-title">最短是紫色，绿色和红色一样长，蓝色比黄色短。哪支是蓝色？</div>
+      <div class="q-image">
+        <!-- A5 彩色铅笔：5支铅笔，高度各不同，底部对齐，标字母A-E -->
+        <!-- 高度(从底到笔尖): A=110, B=75, C=145, D=120, E=90 -->
+        <svg viewBox="0 0 280 200" width="280" height="200" xmlns="http://www.w3.org/2000/svg" style="display:block;max-width:100%;font-family:sans-serif;">
+          <rect width="280" height="200" rx="10" fill="#f8f8f8" stroke="#ccc" stroke-width="1.5"/>
+
+          <!-- 基准底部 y=172，铅笔宽16，间距44，起始x=28 -->
+          <!-- 铅笔A: 高110, x=28, top=62 -->
+          <rect x="28" y="62" width="16" height="94" rx="2" fill="white" stroke="#333" stroke-width="1.8"/>
+          <!-- 笔尖三角 -->
+          <polygon points="28,62 44,62 36,46" fill="white" stroke="#333" stroke-width="1.8"/>
+          <!-- 笔芯点 -->
+          <circle cx="36" cy="46" r="2" fill="#555"/>
+          <!-- 笔顶橡皮 -->
+          <rect x="30" y="152" width="12" height="4" rx="1" fill="#ccc" stroke="#999" stroke-width="1"/>
+          <text x="36" y="188" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">A</text>
+
+          <!-- 铅笔B: 高75, x=72, top=97 -->
+          <rect x="72" y="97" width="16" height="59" rx="2" fill="white" stroke="#333" stroke-width="1.8"/>
+          <polygon points="72,97 88,97 80,81" fill="white" stroke="#333" stroke-width="1.8"/>
+          <circle cx="80" cy="81" r="2" fill="#555"/>
+          <rect x="74" y="152" width="12" height="4" rx="1" fill="#ccc" stroke="#999" stroke-width="1"/>
+          <text x="80" y="188" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">B</text>
+
+          <!-- 铅笔C: 高145, x=116, top=27 -->
+          <rect x="116" y="27" width="16" height="129" rx="2" fill="white" stroke="#333" stroke-width="1.8"/>
+          <polygon points="116,27 132,27 124,11" fill="white" stroke="#333" stroke-width="1.8"/>
+          <circle cx="124" cy="11" r="2" fill="#555"/>
+          <rect x="118" y="152" width="12" height="4" rx="1" fill="#ccc" stroke="#999" stroke-width="1"/>
+          <text x="124" y="188" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">C</text>
+
+          <!-- 铅笔D: 高120, x=160, top=52 -->
+          <rect x="160" y="52" width="16" height="104" rx="2" fill="white" stroke="#333" stroke-width="1.8"/>
+          <polygon points="160,52 176,52 168,36" fill="white" stroke="#333" stroke-width="1.8"/>
+          <circle cx="168" cy="36" r="2" fill="#555"/>
+          <rect x="162" y="152" width="12" height="4" rx="1" fill="#ccc" stroke="#999" stroke-width="1"/>
+          <text x="168" y="188" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">D</text>
+
+          <!-- 铅笔E: 高90, x=204, top=82，有橡皮头在顶部 -->
+          <rect x="204" y="82" width="16" height="70" rx="2" fill="white" stroke="#333" stroke-width="1.8"/>
+          <polygon points="204,82 220,82 212,66" fill="white" stroke="#333" stroke-width="1.8"/>
+          <circle cx="212" cy="66" r="2" fill="#555"/>
+          <!-- 顶部橡皮（E特有，在顶端） -->
+          <rect x="204" y="152" width="16" height="6" rx="2" fill="#e8a0a0" stroke="#c06060" stroke-width="1"/>
+          <text x="212" y="188" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">E</text>
+        </svg>
+      </div>
+      <div style="margin-top:10px;font-size:14px;color:#444;padding:8px 10px;background:#fafafa;border-radius:6px;border:1px solid #eee;">
+        <strong>(A)</strong> A &nbsp;&nbsp;
+        <strong>(B)</strong> B &nbsp;&nbsp;
+        <strong>(C)</strong> C &nbsp;&nbsp;
+        <strong>(D)</strong> D &nbsp;&nbsp;
+        <strong>(E)</strong> E
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">6</div>
+        <div class="q-id">2026年 · A6 · 拼砖路径</div>
+        <div class="q-stars">⭐</div>
+      </div>
+      <div class="q-title">哪一块可以插入图形中，使得形成一条连续的铺砖小路？</div>
+      <div class="q-image">
+        <!--
+          A6 拼砖路径（按原图）：10列×3行
+            行0: _ ■ ■ _ _ _ _ ■ ■ _
+            行1: ■ ■ □ ■ ■ _ _ ■ ■ _   (□=缺口)
+            行2: 全空
+        -->
+        <svg viewBox="0 0 360 130" width="380" xmlns="http://www.w3.org/2000/svg" style="display:block;max-width:100%;font-family:sans-serif;">
+          <rect width="360" height="130" rx="12" fill="#c0c0c0"/>
+          <defs>
+            <pattern id="bk6" x="0" y="0" width="34" height="34" patternUnits="userSpaceOnUse">
+              <rect width="34" height="34" fill="#7a7a7a"/>
+              <rect x="1"  y="1"  width="15" height="14" fill="#8a8a8a" stroke="#555" stroke-width="0.8"/>
+              <rect x="18" y="1"  width="15" height="14" fill="#8a8a8a" stroke="#555" stroke-width="0.8"/>
+              <rect x="9"  y="17" width="16" height="14" fill="#8a8a8a" stroke="#555" stroke-width="0.8"/>
+              <rect x="1"  y="17" width="7"  height="14" fill="#8a8a8a" stroke="#555" stroke-width="0.8"/>
+              <rect x="27" y="17" width="6"  height="14" fill="#8a8a8a" stroke="#555" stroke-width="0.8"/>
+            </pattern>
+          </defs>
+
+          <!-- 网格线：10列×3行，每格32×32，起点(8,8) -->
+          <g stroke="#999" stroke-width="0.8" fill="none">
+            <line x1="8"   y1="8"   x2="328" y2="8"/>
+            <line x1="8"   y1="40"  x2="328" y2="40"/>
+            <line x1="8"   y1="72"  x2="328" y2="72"/>
+            <line x1="8"   y1="104" x2="328" y2="104"/>
+            <line x1="8"   y1="8"   x2="8"   y2="104"/>
+            <line x1="40"  y1="8"   x2="40"  y2="104"/>
+            <line x1="72"  y1="8"   x2="72"  y2="104"/>
+            <line x1="104" y1="8"   x2="104" y2="104"/>
+            <line x1="136" y1="8"   x2="136" y2="104"/>
+            <line x1="168" y1="8"   x2="168" y2="104"/>
+            <line x1="200" y1="8"   x2="200" y2="104"/>
+            <line x1="232" y1="8"   x2="232" y2="104"/>
+            <line x1="264" y1="8"   x2="264" y2="104"/>
+            <line x1="296" y1="8"   x2="296" y2="104"/>
+            <line x1="328" y1="8"   x2="328" y2="104"/>
+          </g>
+
+          <!-- 每格宽32，列x = 8 + col*32 -->
+          <!-- 行0 (y=8): 列1,2,7,8 有砖 -->
+          <rect x="40"  y="8" width="32" height="32" fill="url(#bk6)" stroke="#444" stroke-width="1.2"/>
+          <rect x="72"  y="8" width="32" height="32" fill="url(#bk6)" stroke="#444" stroke-width="1.2"/>
+          <rect x="232" y="8" width="32" height="32" fill="url(#bk6)" stroke="#444" stroke-width="1.2"/>
+          <rect x="264" y="8" width="32" height="32" fill="url(#bk6)" stroke="#444" stroke-width="1.2"/>
+
+          <!-- 行1 (y=40): 列0,1有砖，列2=缺口，列3,4有砖，列5,6空，列7,8有砖 -->
+          <rect x="8"   y="40" width="32" height="32" fill="url(#bk6)" stroke="#444" stroke-width="1.2"/>
+          <rect x="40"  y="40" width="32" height="32" fill="url(#bk6)" stroke="#444" stroke-width="1.2"/>
+          <!-- 缺口 -->
+          <rect x="72"  y="40" width="32" height="32" fill="white" stroke="#aaa" stroke-width="1.5" stroke-dasharray="5,3"/>
+          <rect x="104" y="40" width="32" height="32" fill="url(#bk6)" stroke="#444" stroke-width="1.2"/>
+          <rect x="136" y="40" width="32" height="32" fill="url(#bk6)" stroke="#444" stroke-width="1.2"/>
+          <rect x="232" y="40" width="32" height="32" fill="url(#bk6)" stroke="#444" stroke-width="1.2"/>
+          <rect x="264" y="40" width="32" height="32" fill="url(#bk6)" stroke="#444" stroke-width="1.2"/>
+        </svg>
+
+        <!-- 选项：5块候选拼块（独立SVG含自己的defs） -->
+        <div style="margin-top:10px;">
+          <svg viewBox="0 0 340 80" width="340" xmlns="http://www.w3.org/2000/svg" style="display:block;max-width:100%;font-family:sans-serif;">
+            <defs>
+              <pattern id="bk6b" x="0" y="0" width="34" height="34" patternUnits="userSpaceOnUse">
+                <rect width="34" height="34" fill="#7a7a7a"/>
+                <rect x="0"  y="0"  width="17" height="15" fill="none" stroke="#4a4a4a" stroke-width="1"/>
+                <rect x="17" y="0"  width="17" height="15" fill="none" stroke="#4a4a4a" stroke-width="1"/>
+                <rect x="8"  y="15" width="18" height="15" fill="none" stroke="#4a4a4a" stroke-width="1"/>
+                <rect x="0"  y="15" width="8"  height="15" fill="none" stroke="#4a4a4a" stroke-width="0.8"/>
+                <rect x="26" y="15" width="8"  height="15" fill="none" stroke="#4a4a4a" stroke-width="0.8"/>
+              </pattern>
+            </defs>
+            <rect width="340" height="80" rx="8" fill="#f0f0f0"/>
+
+            <!-- (A): 单格砖块（正确答案，刚好填入缺口） -->
+            <text x="10" y="74" font-size="11" fill="#333" font-weight="bold">(A)</text>
+            <rect x="10" y="8" width="34" height="34" fill="url(#bk6b)" stroke="#555" stroke-width="1.5"/>
+
+            <!-- (B): 横向2格 -->
+            <text x="70" y="74" font-size="11" fill="#333" font-weight="bold">(B)</text>
+            <rect x="70" y="20" width="34" height="34" fill="url(#bk6b)" stroke="#555" stroke-width="1.5"/>
+            <rect x="104" y="20" width="34" height="34" fill="url(#bk6b)" stroke="#555" stroke-width="1.5"/>
+
+            <!-- (C): 竖向2格 -->
+            <text x="155" y="74" font-size="11" fill="#333" font-weight="bold">(C)</text>
+            <rect x="155" y="6"  width="34" height="34" fill="url(#bk6b)" stroke="#555" stroke-width="1.5"/>
+            <rect x="155" y="40" width="34" height="34" fill="url(#bk6b)" stroke="#555" stroke-width="1.5"/>
+
+            <!-- (D): L形（1格+右下1格） -->
+            <text x="210" y="74" font-size="11" fill="#333" font-weight="bold">(D)</text>
+            <rect x="210" y="8"  width="34" height="34" fill="url(#bk6b)" stroke="#555" stroke-width="1.5"/>
+            <rect x="244" y="42" width="34" height="34" fill="url(#bk6b)" stroke="#555" stroke-width="1.5" opacity="0.5"/>
+
+            <!-- (E): 空白格 -->
+            <text x="295" y="74" font-size="11" fill="#333" font-weight="bold">(E)</text>
+            <rect x="295" y="20" width="34" height="34" fill="white" stroke="#bbb" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <text x="312" y="41" text-anchor="middle" font-size="13" fill="#ccc">∅</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 4分题 B部分 -->
+  <div class="star-section star-2">
+    <div class="star-header"><span>⭐⭐</span> 4分题（共 4 题）</div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">7</div>
+        <div class="q-id">2026年 · B5 · 怪兽家族</div>
+        <div class="q-stars">⭐⭐</div>
+      </div>
+      <div class="q-title">每只怪兽要么有1只眼睛4条腿，要么有3只眼睛2条腿。合计9只眼睛16条腿。家族里有多少只怪兽？</div>
+      <div class="q-image">
+        <!-- B5 怪兽家族：SVG内联绘图，左=1眼4腿，右=3眼2腿 -->
+        <svg viewBox="0 0 340 160" width="340" height="160" xmlns="http://www.w3.org/2000/svg" style="display:block;max-width:100%;font-family:sans-serif;">
+          <rect width="340" height="160" rx="12" fill="#e8e8e8"/>
+
+          <!-- ===== 左侧怪兽：1只眼睛，4条腿 ===== -->
+          <!-- 身体 -->
+          <rect x="30" y="30" width="80" height="70" rx="18" fill="#555"/>
+          <!-- 眼睛（1只，居中） -->
+          <circle cx="70" cy="52" r="12" fill="white"/>
+          <circle cx="70" cy="52" r="6" fill="#222"/>
+          <circle cx="73" cy="49" r="2" fill="white"/>
+          <!-- 腿（4条） -->
+          <line x1="45" y1="100" x2="38" y2="130" stroke="#444" stroke-width="7" stroke-linecap="round"/>
+          <line x1="57" y1="100" x2="52" y2="130" stroke="#444" stroke-width="7" stroke-linecap="round"/>
+          <line x1="72" y1="100" x2="77" y2="130" stroke="#444" stroke-width="7" stroke-linecap="round"/>
+          <line x1="85" y1="100" x2="92" y2="130" stroke="#444" stroke-width="7" stroke-linecap="round"/>
+          <!-- 标注 -->
+          <text x="70" y="152" text-anchor="middle" font-size="11" fill="#333">1眼 4腿</text>
+
+          <!-- ===== 右侧怪兽：3只眼睛，2条腿 ===== -->
+          <!-- 身体 -->
+          <rect x="200" y="30" width="100" height="70" rx="18" fill="#555"/>
+          <!-- 眼睛（3只） -->
+          <circle cx="220" cy="52" r="11" fill="white"/>
+          <circle cx="220" cy="52" r="5.5" fill="#222"/>
+          <circle cx="222" cy="49" r="2" fill="white"/>
+
+          <circle cx="250" cy="48" r="13" fill="white"/>
+          <circle cx="250" cy="48" r="6" fill="#222"/>
+          <circle cx="253" cy="45" r="2.5" fill="white"/>
+
+          <circle cx="281" cy="52" r="11" fill="white"/>
+          <circle cx="281" cy="52" r="5.5" fill="#222"/>
+          <circle cx="283" cy="49" r="2" fill="white"/>
+          <!-- 腿（2条） -->
+          <line x1="227" y1="100" x2="218" y2="130" stroke="#444" stroke-width="8" stroke-linecap="round"/>
+          <line x1="272" y1="100" x2="281" y2="130" stroke="#444" stroke-width="8" stroke-linecap="round"/>
+          <!-- 标注 -->
+          <text x="250" y="152" text-anchor="middle" font-size="11" fill="#333">3眼 2腿</text>
+        </svg>
+
+        <!-- 选项 -->
+        <div style="margin-top:10px;font-size:14px;color:#444;padding:8px 10px;background:#fafafa;border-radius:6px;border:1px solid #eee;">
+          <strong>(A)</strong> 9 &nbsp;&nbsp;
+          <strong>(B)</strong> 8 &nbsp;&nbsp;
+          <strong>(C)</strong> 7 &nbsp;&nbsp;
+          <strong>(D)</strong> 6 &nbsp;&nbsp;
+          <strong>(E)</strong> 5
+        </div>
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">8</div>
+        <div class="q-id">2026年 · B6 · 积木塔</div>
+        <div class="q-stars">⭐⭐</div>
+      </div>
+      <div class="q-title">露丝从正前方看棋盘上的积木塔，高塔会遮住后面矮塔。她能看到多少座塔？</div>
+      <div class="q-image">
+        <!-- B6 积木塔：4×4数字网格 + 底部箭头"从正前方" -->
+        <svg viewBox="0 0 300 290" width="300" height="290" xmlns="http://www.w3.org/2000/svg" style="display:block;max-width:100%;font-family:sans-serif;">
+          <rect width="300" height="290" rx="10" fill="#f8f8f8" stroke="#ccc" stroke-width="1.5"/>
+
+          <!-- 网格：4行4列，每格54×44，起点 x=28,y=18 -->
+          <rect x="28"  y="18" width="54" height="44" fill="white" stroke="#555" stroke-width="2"/>
+          <rect x="82"  y="18" width="54" height="44" fill="white" stroke="#555" stroke-width="2"/>
+          <rect x="136" y="18" width="54" height="44" fill="white" stroke="#555" stroke-width="2"/>
+          <rect x="190" y="18" width="54" height="44" fill="white" stroke="#555" stroke-width="2"/>
+          <rect x="28"  y="62" width="54" height="44" fill="white" stroke="#555" stroke-width="2"/>
+          <rect x="82"  y="62" width="54" height="44" fill="white" stroke="#555" stroke-width="2"/>
+          <rect x="136" y="62" width="54" height="44" fill="white" stroke="#555" stroke-width="2"/>
+          <rect x="190" y="62" width="54" height="44" fill="white" stroke="#555" stroke-width="2"/>
+          <rect x="28"  y="106" width="54" height="44" fill="white" stroke="#555" stroke-width="2"/>
+          <rect x="82"  y="106" width="54" height="44" fill="white" stroke="#555" stroke-width="2"/>
+          <rect x="136" y="106" width="54" height="44" fill="white" stroke="#555" stroke-width="2"/>
+          <rect x="190" y="106" width="54" height="44" fill="white" stroke="#555" stroke-width="2"/>
+          <rect x="28"  y="150" width="54" height="44" fill="white" stroke="#555" stroke-width="2"/>
+          <rect x="82"  y="150" width="54" height="44" fill="white" stroke="#555" stroke-width="2"/>
+          <rect x="136" y="150" width="54" height="44" fill="white" stroke="#555" stroke-width="2"/>
+          <rect x="190" y="150" width="54" height="44" fill="white" stroke="#555" stroke-width="2"/>
+
+          <!-- 行1: 4 8 8 6 -->
+          <text x="55"  y="47" text-anchor="middle" font-size="22" font-weight="bold" fill="#222">4</text>
+          <text x="109" y="47" text-anchor="middle" font-size="22" font-weight="bold" fill="#222">8</text>
+          <text x="163" y="47" text-anchor="middle" font-size="22" font-weight="bold" fill="#222">8</text>
+          <text x="217" y="47" text-anchor="middle" font-size="22" font-weight="bold" fill="#222">6</text>
+          <!-- 行2: 2 6 6 8 -->
+          <text x="55"  y="91" text-anchor="middle" font-size="22" font-weight="bold" fill="#222">2</text>
+          <text x="109" y="91" text-anchor="middle" font-size="22" font-weight="bold" fill="#222">6</text>
+          <text x="163" y="91" text-anchor="middle" font-size="22" font-weight="bold" fill="#222">6</text>
+          <text x="217" y="91" text-anchor="middle" font-size="22" font-weight="bold" fill="#222">8</text>
+          <!-- 行3: 6 4 2 4 -->
+          <text x="55"  y="135" text-anchor="middle" font-size="22" font-weight="bold" fill="#222">6</text>
+          <text x="109" y="135" text-anchor="middle" font-size="22" font-weight="bold" fill="#222">4</text>
+          <text x="163" y="135" text-anchor="middle" font-size="22" font-weight="bold" fill="#222">2</text>
+          <text x="217" y="135" text-anchor="middle" font-size="22" font-weight="bold" fill="#222">4</text>
+          <!-- 行4（最前排）: 2 2 4 6 -->
+          <text x="55"  y="179" text-anchor="middle" font-size="22" font-weight="bold" fill="#222">2</text>
+          <text x="109" y="179" text-anchor="middle" font-size="22" font-weight="bold" fill="#222">2</text>
+          <text x="163" y="179" text-anchor="middle" font-size="22" font-weight="bold" fill="#222">4</text>
+          <text x="217" y="179" text-anchor="middle" font-size="22" font-weight="bold" fill="#222">6</text>
+
+          <!-- 底部4个向上箭头 -->
+          <line x1="55"  y1="236" x2="55"  y2="206" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+          <polygon points="49,208 55,194 61,208" fill="#333"/>
+          <line x1="109" y1="236" x2="109" y2="206" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+          <polygon points="103,208 109,194 115,208" fill="#333"/>
+          <line x1="163" y1="236" x2="163" y2="206" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+          <polygon points="157,208 163,194 169,208" fill="#333"/>
+          <line x1="217" y1="236" x2="217" y2="206" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+          <polygon points="211,208 217,194 223,208" fill="#333"/>
+
+          <!-- 标注"从正前方" -->
+          <text x="136" y="262" text-anchor="middle" font-size="15" font-weight="bold" fill="#444">从正前方</text>
+        </svg>
+      </div>
+      <div style="margin-top:10px;font-size:14px;color:#444;padding:8px 10px;background:#fafafa;border-radius:6px;border:1px solid #eee;">
+        <strong>(A)</strong> 8 &nbsp;&nbsp;
+        <strong>(B)</strong> 9 &nbsp;&nbsp;
+        <strong>(C)</strong> 10 &nbsp;&nbsp;
+        <strong>(D)</strong> 11 &nbsp;&nbsp;
+        <strong>(E)</strong> 12
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">9</div>
+        <div class="q-id">2026年 · B7 · 跳格子游戏</div>
+        <div class="q-stars">⭐⭐</div>
+      </div>
+      <div class="q-title">艾拉按箭头方向跳格子，每个格子恰好经过一次。她必须从哪个格子出发？</div>
+      <div class="q-image">
+        <!-- B7 跳格子：3行4列箭头表格 -->
+        <svg viewBox="0 0 340 280" width="340" height="280" xmlns="http://www.w3.org/2000/svg" style="display:block;max-width:100%;font-family:sans-serif;">
+          <!-- 背景 -->
+          <rect width="340" height="280" rx="10" fill="#f8f8f8" stroke="#ccc" stroke-width="1.5"/>
+
+          <!-- 列标题 A B C D -->
+          <text x="90"  y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="#333">A</text>
+          <text x="160" y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="#333">B</text>
+          <text x="230" y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="#333">C</text>
+          <text x="300" y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="#333">D</text>
+
+          <!-- 行标题 1 2 3 -->
+          <text x="48" y="100" text-anchor="middle" font-size="18" font-weight="bold" fill="#333">1</text>
+          <text x="48" y="170" text-anchor="middle" font-size="18" font-weight="bold" fill="#333">2</text>
+          <text x="48" y="240" text-anchor="middle" font-size="18" font-weight="bold" fill="#333">3</text>
+
+          <!-- 格子：每格65×65，起点 x=58, y=45 -->
+          <!-- 行1 -->
+          <rect x="58"  y="45" width="65" height="65" rx="5" fill="white" stroke="#888" stroke-width="2"/>
+          <rect x="123" y="45" width="65" height="65" rx="5" fill="white" stroke="#888" stroke-width="2"/>
+          <rect x="188" y="45" width="65" height="65" rx="5" fill="white" stroke="#888" stroke-width="2"/>
+          <rect x="253" y="45" width="65" height="65" rx="5" fill="white" stroke="#888" stroke-width="2"/>
+          <!-- 行2 -->
+          <rect x="58"  y="110" width="65" height="65" rx="5" fill="white" stroke="#888" stroke-width="2"/>
+          <rect x="123" y="110" width="65" height="65" rx="5" fill="white" stroke="#888" stroke-width="2"/>
+          <rect x="188" y="110" width="65" height="65" rx="5" fill="white" stroke="#888" stroke-width="2"/>
+          <rect x="253" y="110" width="65" height="65" rx="5" fill="white" stroke="#888" stroke-width="2"/>
+          <!-- 行3 -->
+          <rect x="58"  y="175" width="65" height="65" rx="5" fill="white" stroke="#888" stroke-width="2"/>
+          <rect x="123" y="175" width="65" height="65" rx="5" fill="white" stroke="#888" stroke-width="2"/>
+          <rect x="188" y="175" width="65" height="65" rx="5" fill="white" stroke="#888" stroke-width="2"/>
+          <rect x="253" y="175" width="65" height="65" rx="5" fill="white" stroke="#888" stroke-width="2"/>
+
+          <!-- 箭头宏：用path画，格子中心 cx,cy，方向: R右/L左/U上/D下 -->
+          <!-- A1(cx=90,cy=77): 右 → -->
+          <line x1="70" y1="77" x2="106" y2="77" stroke="#222" stroke-width="5" stroke-linecap="round"/>
+          <polygon points="106,70 118,77 106,84" fill="#222"/>
+
+          <!-- B1(cx=155,cy=77): 下 ↓ -->
+          <line x1="155" y1="57" x2="155" y2="93" stroke="#222" stroke-width="5" stroke-linecap="round"/>
+          <polygon points="148,93 155,105 162,93" fill="#222"/>
+
+          <!-- C1(cx=220,cy=77): 右 → -->
+          <line x1="200" y1="77" x2="236" y2="77" stroke="#222" stroke-width="5" stroke-linecap="round"/>
+          <polygon points="236,70 248,77 236,84" fill="#222"/>
+
+          <!-- D1(cx=285,cy=77): 右 → -->
+          <line x1="265" y1="77" x2="301" y2="77" stroke="#222" stroke-width="5" stroke-linecap="round"/>
+          <polygon points="301,70 313,77 301,84" fill="#222"/>
+
+          <!-- A2(cx=90,cy=142): 上 ↑ -->
+          <line x1="90" y1="162" x2="90" y2="126" stroke="#222" stroke-width="5" stroke-linecap="round"/>
+          <polygon points="83,126 90,114 97,126" fill="#222"/>
+
+          <!-- B2(cx=155,cy=142): 右 → -->
+          <line x1="135" y1="142" x2="171" y2="142" stroke="#222" stroke-width="5" stroke-linecap="round"/>
+          <polygon points="171,135 183,142 171,149" fill="#222"/>
+
+          <!-- C2(cx=220,cy=142): 上 ↑ -->
+          <line x1="220" y1="162" x2="220" y2="126" stroke="#222" stroke-width="5" stroke-linecap="round"/>
+          <polygon points="213,126 220,114 227,126" fill="#222"/>
+
+          <!-- D2(cx=285,cy=142): 下 ↓ -->
+          <line x1="285" y1="122" x2="285" y2="158" stroke="#222" stroke-width="5" stroke-linecap="round"/>
+          <polygon points="278,158 285,170 292,158" fill="#222"/>
+
+          <!-- A3(cx=90,cy=207): 上 ↑ -->
+          <line x1="90" y1="227" x2="90" y2="191" stroke="#222" stroke-width="5" stroke-linecap="round"/>
+          <polygon points="83,191 90,179 97,191" fill="#222"/>
+
+          <!-- B3(cx=155,cy=207): 左 ← -->
+          <line x1="175" y1="207" x2="139" y2="207" stroke="#222" stroke-width="5" stroke-linecap="round"/>
+          <polygon points="139,200 127,207 139,214" fill="#222"/>
+
+          <!-- C3(cx=220,cy=207): 左 ← -->
+          <line x1="240" y1="207" x2="204" y2="207" stroke="#222" stroke-width="5" stroke-linecap="round"/>
+          <polygon points="204,200 192,207 204,214" fill="#222"/>
+
+          <!-- D3(cx=285,cy=207): 上 ↑ -->
+          <line x1="285" y1="227" x2="285" y2="191" stroke="#222" stroke-width="5" stroke-linecap="round"/>
+          <polygon points="278,191 285,179 292,191" fill="#222"/>
+        </svg>
+      </div>
+      <div style="margin-top:10px;font-size:14px;color:#444;padding:8px 10px;background:#fafafa;border-radius:6px;border:1px solid #eee;">
+        <strong>(A)</strong> A1 &nbsp;&nbsp;
+        <strong>(B)</strong> B3 &nbsp;&nbsp;
+        <strong>(C)</strong> C2 &nbsp;&nbsp;
+        <strong>(D)</strong> D2 &nbsp;&nbsp;
+        <strong>(E)</strong> A3
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">10</div>
+        <div class="q-id">2026年 · B8 · 剪纸游戏</div>
+        <div class="q-stars">⭐⭐</div>
+      </div>
+      <div class="q-title">三张正方形纸叠放后沿虚线剪开，法比安现在有多少个正方形？</div>
+      <div class="q-image">
+        <!--
+          布局（贴近原题图）：
+          大纸（深色）: x=20,y=60, 140×140  → 右下主体
+          中纸（灰色）: x=80,y=10, 100×100  → 叠在大纸右上，右下角=(180,110)与大纸右上(160,60)不完全重合，偏右上
+          小纸（白色）: x=140,y=10, 50×50   → 叠在中纸右上角
+          切割：
+            横切 y=75：穿大纸(60-200✓)，穿中纸(10-110✓)，不穿小纸(10-60:75>60✓穿了)
+            改：横切 y=55 穿大(60>55✗不穿大！)
+            改布局：大纸y=30~170, 中纸y=10~110, 小纸y=10~60
+            横切y=80: 大✓ 中✓ 小(10-60:80>60✓不穿)
+            竖切x=?: 穿大(20-160)，不穿中(80-180), 需x<80→穿大左侧
+            竖切x=50: 大✓ 中(80>50✗不穿) 小(140>50✗不穿)
+            → 大4块+中2块+小1块=7 ✓
+        -->
+        <svg viewBox="0 0 240 220" width="240" height="220" xmlns="http://www.w3.org/2000/svg" style="display:block;max-width:100%;">
+          <rect width="240" height="220" rx="12" fill="#e0e0e0"/>
+
+          <!-- 大纸（深色，底层）: 140×140, x=20,y=30 -->
+          <rect x="20" y="30" width="140" height="140" fill="#2a2a2a"/>
+
+          <!-- 中纸（灰色，中层）: 100×100, x=80,y=10 -->
+          <rect x="80" y="10" width="100" height="100" fill="#888"/>
+
+          <!-- 小纸（白色，顶层）: 50×50, x=130,y=10 -->
+          <rect x="130" y="10" width="50" height="50" fill="#f0f0f0" stroke="#aaa" stroke-width="1.5"/>
+
+          <!-- 横切线 y=80（穿大纸30-170✓，穿中纸10-110✓，不穿小纸10-60: 80>60✓不穿） -->
+          <line x1="5" y1="80" x2="225" y2="80" stroke="#444" stroke-width="1.5" stroke-dasharray="6,4"/>
+          <!-- 左侧剪刀 -->
+          <text x="-4" y="88" font-size="18" fill="#222" font-family="sans-serif">✂</text>
+
+          <!-- 竖切线 x=50（穿大纸20-160✓，不穿中纸80-180: 50<80✓，不穿小纸130-180: 50<130✓） -->
+          <line x1="50" y1="5" x2="50" y2="210" stroke="#444" stroke-width="1.5" stroke-dasharray="6,4"/>
+          <!-- 上方剪刀（旋转90°朝下） -->
+          <text x="38" y="16" font-size="18" fill="#222" font-family="sans-serif" transform="rotate(90,46,12)">✂</text>
+        </svg>
+      </div>
+      <div style="margin-top:10px;font-size:14px;color:#444;padding:8px 10px;background:#fafafa;border-radius:6px;border:1px solid #eee;">
+        <strong>(A)</strong> 5 &nbsp;&nbsp;
+        <strong>(B)</strong> 6 &nbsp;&nbsp;
+        <strong>(C)</strong> 7 &nbsp;&nbsp;
+        <strong>(D)</strong> 8 &nbsp;&nbsp;
+        <strong>(E)</strong> 9
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 5分题 C部分 -->
+  <div class="star-section star-5">
+    <div class="star-header"><span>⭐⭐⭐</span> 5分题（共 2 题）</div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">11</div>
+        <div class="q-id">2026年 · C1 · 数字卡片</div>
+        <div class="q-stars">⭐⭐⭐</div>
+      </div>
+      <div class="q-title">约沙用6张卡片摆出正确算式后盖住上半部分，图示为下半部分。他用的四个数字之和是多少？</div>
+      <div class="q-image">
+        <!-- 6张卡片算式下半部分：9 + 5 = 14，四个数字之和 = 9+5+1+4 = 19 -->
+        <svg viewBox="0 0 372 96" width="372" height="96" xmlns="http://www.w3.org/2000/svg" style="display:block;max-width:100%;">
+          <!-- 外边框 -->
+          <rect x="2" y="2" width="368" height="92" rx="6" fill="white" stroke="#444" stroke-width="2.5"/>
+          <!-- 覆盖上半部分的灰色条 -->
+          <rect x="2" y="2" width="368" height="44" rx="6" fill="#ccc" stroke="#444" stroke-width="2.5"/>
+          <!-- 底部白色补丁（遮住圆角）-->
+          <rect x="2" y="38" width="368" height="8" fill="#ccc"/>
+          <!-- 6个卡片分隔线 x = 2, 63, 124, 185, 246, 307, 370 -->
+          <line x1="63"  y1="2"  x2="63"  y2="94" stroke="#444" stroke-width="2"/>
+          <line x1="124" y1="2"  x2="124" y2="94" stroke="#444" stroke-width="2"/>
+          <line x1="185" y1="2"  x2="185" y2="94" stroke="#444" stroke-width="2"/>
+          <line x1="246" y1="2"  x2="246" y2="94" stroke="#444" stroke-width="2"/>
+          <line x1="307" y1="2"  x2="307" y2="94" stroke="#444" stroke-width="2"/>
+
+          <!-- 卡片1：数字 9，下半 = 中横 + 右竖 + 下横 (∃形) -->
+          <!-- 区域 x:2~63，可用宽61，中心x=32.5 -->
+          <line x1="14"  y1="52" x2="51"  y2="52" stroke="#222" stroke-width="6" stroke-linecap="round"/>
+          <line x1="51"  y1="52" x2="51"  y2="84" stroke="#222" stroke-width="6" stroke-linecap="round"/>
+          <line x1="14"  y1="84" x2="51"  y2="84" stroke="#222" stroke-width="6" stroke-linecap="round"/>
+
+          <!-- 卡片2：+ 号，下半 = ⊥ 形（下竖）-->
+          <!-- 区域 x:63~124 -->
+          <line x1="75"  y1="52" x2="112" y2="52" stroke="#222" stroke-width="6" stroke-linecap="round"/>
+          <line x1="93"  y1="52" x2="93"  y2="84" stroke="#222" stroke-width="6" stroke-linecap="round"/>
+
+          <!-- 卡片3：数字 5，下半 = 中横 + 右竖 + 下横 (∃形，与9相同) -->
+          <!-- 区域 x:124~185 -->
+          <line x1="136" y1="52" x2="173" y2="52" stroke="#222" stroke-width="6" stroke-linecap="round"/>
+          <line x1="173" y1="52" x2="173" y2="84" stroke="#222" stroke-width="6" stroke-linecap="round"/>
+          <line x1="136" y1="84" x2="173" y2="84" stroke="#222" stroke-width="6" stroke-linecap="round"/>
+
+          <!-- 卡片4：= 号，两条横线 -->
+          <!-- 区域 x:185~246 -->
+          <line x1="197" y1="58" x2="234" y2="58" stroke="#222" stroke-width="5" stroke-linecap="round"/>
+          <line x1="197" y1="74" x2="234" y2="74" stroke="#222" stroke-width="5" stroke-linecap="round"/>
+
+          <!-- 卡片5：数字 1，下半 = 右竖 (|形) -->
+          <!-- 区域 x:246~307 -->
+          <line x1="282" y1="50" x2="282" y2="84" stroke="#222" stroke-width="6" stroke-linecap="round"/>
+
+          <!-- 卡片6：数字 4，下半 = 中横 + 右竖 (⌐形) -->
+          <!-- 区域 x:307~370 -->
+          <line x1="319" y1="52" x2="358" y2="52" stroke="#222" stroke-width="6" stroke-linecap="round"/>
+          <line x1="358" y1="52" x2="358" y2="84" stroke="#222" stroke-width="6" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div style="margin-top:10px;font-size:14px;color:#444;padding:8px 10px;background:#fafafa;border-radius:6px;border:1px solid #eee;">
+        <strong>(A)</strong> 17 &nbsp;&nbsp;
+        <strong>(B)</strong> 19 &nbsp;&nbsp;
+        <strong>(C)</strong> 21 &nbsp;&nbsp;
+        <strong>(D)</strong> 23 &nbsp;&nbsp;
+        <strong>(E)</strong> 25
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-num">12</div>
+        <div class="q-id">2026年 · C2 · 手拉手跳舞</div>
+        <div class="q-stars">⭐⭐⭐</div>
+      </div>
+      <div class="q-title">金姆、托尼、博、查理和路围圈跳舞。托尼站在查理和金姆之间，博站在路和金姆之间。查理拉着哪两个小朋友的手？</div>
+      <div class="q-image">
+        <!-- 5人手拉手围圈：顺时针 托尼→查理→路→博→金姆→托尼 -->
+        <svg viewBox="0 0 320 300" width="300" height="282" xmlns="http://www.w3.org/2000/svg" style="display:block;max-width:100%;">
+          <rect width="320" height="300" rx="14" fill="#f7f7f7"/>
+
+          <!-- 手拉手连线（相邻两人之间） -->
+          <!-- 托尼(160,50)–查理(252,118) -->
+          <line x1="178" y1="64"  x2="236" y2="107" stroke="#bbb" stroke-width="4" stroke-linecap="round"/>
+          <!-- 查理(252,118)–路(216,228) -->
+          <line x1="246" y1="136" x2="222" y2="210" stroke="#bbb" stroke-width="4" stroke-linecap="round"/>
+          <!-- 路(216,228)–博(104,228) -->
+          <line x1="196" y1="234" x2="124" y2="234" stroke="#bbb" stroke-width="4" stroke-linecap="round"/>
+          <!-- 博(104,228)–金姆(68,118) -->
+          <line x1="98"  y1="210" x2="74"  y2="136" stroke="#bbb" stroke-width="4" stroke-linecap="round"/>
+          <!-- 金姆(68,118)–托尼(160,50) -->
+          <line x1="84"  y1="107" x2="142" y2="64"  stroke="#bbb" stroke-width="4" stroke-linecap="round"/>
+
+          <!-- ====== 托尼（顶部, 160,50）深色发髻 ====== -->
+          <!-- 身体 -->
+          <ellipse cx="160" cy="76" rx="13" ry="16" fill="#5a3a1a"/>
+          <!-- 头 -->
+          <circle cx="160" cy="50" r="19" fill="#c8946a"/>
+          <!-- 发髻 -->
+          <ellipse cx="160" cy="32" rx="7" ry="6" fill="#2a1a08"/>
+          <!-- 眼睛 -->
+          <circle cx="154" cy="48" r="2.5" fill="#2a1a08"/>
+          <circle cx="166" cy="48" r="2.5" fill="#2a1a08"/>
+          <!-- 左臂(向金姆方向) -->
+          <line x1="148" y1="64" x2="136" y2="72" stroke="#c8946a" stroke-width="4" stroke-linecap="round"/>
+          <!-- 右臂(向查理方向) -->
+          <line x1="172" y1="64" x2="184" y2="72" stroke="#c8946a" stroke-width="4" stroke-linecap="round"/>
+          <!-- 名字 -->
+          <text x="160" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#222" font-family="sans-serif">托尼</text>
+
+          <!-- ====== 查理（右上, 252,118）浅色短发 ====== -->
+          <ellipse cx="252" cy="144" rx="13" ry="16" fill="#4a7ab0"/>
+          <circle cx="252" cy="118" r="19" fill="#f0c88a"/>
+          <!-- 短发 -->
+          <path d="M234,112 Q252,100 270,112" fill="#c8a060" stroke="none"/>
+          <circle cx="244" cy="116" r="2.5" fill="#3a2a0a"/>
+          <circle cx="260" cy="116" r="2.5" fill="#3a2a0a"/>
+          <!-- 左臂(向托尼) -->
+          <line x1="240" y1="132" x2="230" y2="120" stroke="#f0c88a" stroke-width="4" stroke-linecap="round"/>
+          <!-- 右臂(向路) -->
+          <line x1="252" y1="162" x2="248" y2="174" stroke="#f0c88a" stroke-width="4" stroke-linecap="round"/>
+
+          <!-- ====== 路（右下, 216,228）中等发色 ====== -->
+          <ellipse cx="216" cy="254" rx="13" ry="16" fill="#6aaa60"/>
+          <circle cx="216" cy="228" r="19" fill="#e8b880"/>
+          <path d="M198,220 Q216,210 234,220" fill="#8a6040" stroke="none"/>
+          <circle cx="208" cy="226" r="2.5" fill="#3a2a0a"/>
+          <circle cx="224" cy="226" r="2.5" fill="#3a2a0a"/>
+          <!-- 左臂(向博) -->
+          <line x1="204" y1="242" x2="192" y2="242" stroke="#e8b880" stroke-width="4" stroke-linecap="round"/>
+          <!-- 右臂(向查理) -->
+          <line x1="228" y1="218" x2="236" y2="206" stroke="#e8b880" stroke-width="4" stroke-linecap="round"/>
+
+          <!-- ====== 博（左下, 104,228）深色发 ====== -->
+          <ellipse cx="104" cy="254" rx="13" ry="16" fill="#9a70c0"/>
+          <circle cx="104" cy="228" r="19" fill="#d4a070"/>
+          <path d="M86,218 Q104,206 122,218" fill="#3a2010" stroke="none"/>
+          <circle cx="96"  cy="226" r="2.5" fill="#2a1a0a"/>
+          <circle cx="112" cy="226" r="2.5" fill="#2a1a0a"/>
+          <!-- 右臂(向路) -->
+          <line x1="116" y1="242" x2="128" y2="242" stroke="#d4a070" stroke-width="4" stroke-linecap="round"/>
+          <!-- 左臂(向金姆) -->
+          <line x1="92"  y1="218" x2="84"  y2="206" stroke="#d4a070" stroke-width="4" stroke-linecap="round"/>
+
+          <!-- ====== 金姆（左上, 68,118）黄色发 ====== -->
+          <ellipse cx="68" cy="144" rx="13" ry="16" fill="#d0a030"/>
+          <circle cx="68" cy="118" r="19" fill="#f5d0a0"/>
+          <path d="M50,108 Q68,96 86,108" fill="#d4b060" stroke="none"/>
+          <circle cx="60" cy="116" r="2.5" fill="#3a2a0a"/>
+          <circle cx="76" cy="116" r="2.5" fill="#3a2a0a"/>
+          <!-- 右臂(向托尼) -->
+          <line x1="80"  y1="132" x2="90"  y2="120" stroke="#f5d0a0" stroke-width="4" stroke-linecap="round"/>
+          <!-- 左臂(向博) -->
+          <line x1="68"  y1="162" x2="72"  y2="174" stroke="#f5d0a0" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div style="margin-top:10px;font-size:14px;color:#444;padding:8px 10px;background:#fafafa;border-radius:6px;border:1px solid #eee;">
+        <strong>(A)</strong> 托尼 和 路 &nbsp;&nbsp;
+        <strong>(B)</strong> 金姆 和 托尼 &nbsp;&nbsp;
+        <strong>(C)</strong> 托尼 和 博 &nbsp;&nbsp;
+        <strong>(D)</strong> 金姆 和 博 &nbsp;&nbsp;
+        <strong>(E)</strong> 博 和 路
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="answer-section">
+  <button class="answer-toggle-btn" onclick="toggleAnswers(this)">📋 查看答案</button>
+  <div class="answer-sheet" id="answerSheet">
+    <div class="answer-grid">
+      <div class="answer-item"><span class="ai-num">1</span><span class="ai-src">2026·A1·拼图游戏</span><span class="ai-ans">E</span></div>
+      <div class="answer-item"><span class="ai-num">2</span><span class="ai-src">2026·A2·幸运转盘</span><span class="ai-ans">D</span></div>
+      <div class="answer-item"><span class="ai-num">3</span><span class="ai-src">2026·A3·迷宫寻路</span><span class="ai-ans">B</span></div>
+      <div class="answer-item"><span class="ai-num">4</span><span class="ai-src">2026·A4·游戏硬币</span><span class="ai-ans">D</span></div>
+      <div class="answer-item"><span class="ai-num">5</span><span class="ai-src">2026·A5·彩色铅笔</span><span class="ai-ans">B</span></div>
+      <div class="answer-item"><span class="ai-num">6</span><span class="ai-src">2026·A6·拼砖路径</span><span class="ai-ans">A</span></div>
+      <div class="answer-item"><span class="ai-num">7</span><span class="ai-src">2026·B5·怪兽家族</span><span class="ai-ans">C</span></div>
+      <div class="answer-item"><span class="ai-num">8</span><span class="ai-src">2026·B6·积木塔</span><span class="ai-ans">B</span></div>
+      <div class="answer-item"><span class="ai-num">9</span><span class="ai-src">2026·B7·跳格子</span><span class="ai-ans">B</span></div>
+      <div class="answer-item"><span class="ai-num">10</span><span class="ai-src">2026·B8·剪纸游戏</span><span class="ai-ans">C</span></div>
+      <div class="answer-item"><span class="ai-num">11</span><span class="ai-src">2026·C1·数字卡片</span><span class="ai-ans">B</span></div>
+      <div class="answer-item"><span class="ai-num">12</span><span class="ai-src">2026·C2·手拉手跳舞</span><span class="ai-ans">A</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleAnswers(btn) {
+  const sheet = document.getElementById('answerSheet');
+  const showing = sheet.classList.toggle('show');
+  btn.textContent = showing ? '🙈 隐藏答案' : '📋 查看答案';
+  if (showing) sheet.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+</script>
+</body>
+</html>

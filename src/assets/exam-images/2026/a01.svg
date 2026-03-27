@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 570 165" width="570" height="165">
+  <rect width="570" height="165" fill="white"/>
+
+  <!-- ===== OPTION A: Z-step shape (upper-right staircase) ===== -->
+  <g transform="translate(12,10)">
+    <path d="M0,22 L38,22 L38,0 L76,0 L76,65 L38,65 L38,43 L0,43 Z" fill="#2c2c2c"/>
+    <text x="38" y="82" font-size="13" fill="#444" font-family="Arial,sans-serif" text-anchor="middle">(A)</text>
+  </g>
+
+  <!-- ===== OPTION B: Wide compact shape ===== -->
+  <g transform="translate(103,20)">
+    <path d="M12,0 L100,0 L100,16 L116,16 L116,52 L0,52 L0,16 L12,16 Z" fill="#1e1e1e"/>
+    <text x="58" y="68" font-size="13" fill="#444" font-family="Arial,sans-serif" text-anchor="middle">(B)</text>
+  </g>
+
+  <!-- ===== OPTION C: Very tall narrow shape ===== -->
+  <g transform="translate(234,5)">
+    <path d="M0,0 L36,0 L36,42 L50,42 L50,135 L0,135 Z" fill="#2c2c2c"/>
+    <text x="25" y="151" font-size="13" fill="#444" font-family="Arial,sans-serif" text-anchor="middle">(C)</text>
+  </g>
+
+  <!-- ===== OPTION D: Different step shape ===== -->
+  <g transform="translate(12,100)">
+    <path d="M0,0 L58,0 L58,20 L76,20 L76,45 L18,45 L18,20 L0,20 Z" fill="#2c2c2c"/>
+    <text x="38" y="61" font-size="13" fill="#444" font-family="Arial,sans-serif" text-anchor="middle">(D)</text>
+  </g>
+
+  <!-- ===== OPTION E: L-shape — CORRECT (matches the gap) ===== -->
+  <g transform="translate(103,98)">
+    <path d="M0,0 L65,0 L65,47 L20,47 L20,22 L0,22 Z" fill="#2c2c2c"/>
+    <text x="32" y="63" font-size="13" fill="#444" font-family="Arial,sans-serif" text-anchor="middle">(E)</text>
+  </g>
+
+  <!-- ===== MAIN PUZZLE IMAGE ===== -->
+  <g transform="translate(293,3)">
+    <!-- Dark background -->
+    <rect width="272" height="157" fill="#1c1c1c" rx="3"/>
+
+    <!-- Toucan body (large dark ellipse) -->
+    <ellipse cx="155" cy="115" rx="112" ry="42" fill="#111"/>
+
+    <!-- Toucan head (dark circle) -->
+    <circle cx="105" cy="65" r="52" fill="#111"/>
+
+    <!-- White chest/throat -->
+    <ellipse cx="178" cy="105" rx="76" ry="50" fill="#e6e6e6"/>
+    <!-- Neck connection -->
+    <ellipse cx="143" cy="78" rx="28" ry="20" fill="#e6e6e6"/>
+
+    <!-- Beak — large colorful, pointing left -->
+    <!-- Orange main section -->
+    <path d="M 68,54 L 8,62 L 8,82 L 68,75 Z" fill="#f5a020"/>
+    <!-- Red tip section -->
+    <path d="M 8,62 L 8,82 L 26,82 L 26,62 Z" fill="#cc1500"/>
+    <!-- Beak base divider -->
+    <line x1="68" y1="54" x2="68" y2="75" stroke="#000" stroke-width="2"/>
+
+    <!-- Eye white -->
+    <circle cx="90" cy="58" r="9" fill="white"/>
+    <!-- Pupil -->
+    <circle cx="90" cy="58" r="5.5" fill="#000"/>
+    <!-- Eye highlight -->
+    <circle cx="88" cy="56" r="2.5" fill="white"/>
+    <!-- Blue eye ring -->
+    <circle cx="90" cy="58" r="9" fill="none" stroke="#2c7cd6" stroke-width="2.5"/>
+
+    <!-- Tail / wing area -->
+    <path d="M 195,120 L 272,140 L 272,157 L 170,157 L 165,132 Z" fill="#0d250d"/>
+    <!-- Green accent on wing -->
+    <ellipse cx="228" cy="143" rx="40" ry="14" fill="#1a5c1a"/>
+
+    <!-- ===== THE GAP (missing piece — same L-shape as piece E: 65×47, step at bottom-left 20×25) ===== -->
+    <path d="M 30,105 L 95,105 L 95,152 L 50,152 L 50,127 L 30,127 Z" fill="white"/>
+    <!-- Subtle gap border -->
+    <path d="M 30,105 L 95,105 L 95,152 L 50,152 L 50,127 L 30,127 Z"
+          fill="none" stroke="#ccc" stroke-width="0.8"/>
+
+    <!-- Puzzle border -->
+    <rect width="272" height="157" fill="none" stroke="#888" stroke-width="1.5" rx="3"/>
+  </g>
+</svg>
